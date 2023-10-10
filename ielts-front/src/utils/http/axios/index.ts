@@ -3,6 +3,8 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, Inte
 import { showMessage } from './status';
 import { IResponse } from './type';
 import { getToken } from '@/utils/auth';
+import { ElMessage } from 'element-plus'
+import { message } from 'ant-design-vue';
 
 const service: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_BASEURL,
@@ -25,11 +27,14 @@ service.interceptors.request.use(
 
 // axios实例拦截响应
 service.interceptors.response.use(
-  (response: AxiosResponse) => {
+  (response: any) => {
     if (response.status === 200) {
-      return response;
+      if(!response.data.code) {
+        ElMessage.error(response.data.msg)
+        return Promise.reject(response.data)
+      }
+      // 统一处理 失败问题
     }
-    showMessage(response.status);
     return response;
   },
   // 请求失败

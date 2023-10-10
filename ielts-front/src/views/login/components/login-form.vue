@@ -58,10 +58,9 @@
     await formEl.validate((valid) => {
       console.log(valid);
       if (valid) {
-        ElMessage.success('欢迎使用');
         userStore.login(userFormData);
         userStore.info();
-        router.push('/demo');
+        // router.push('/demo');
       } else {
         ElMessage.error('错误信息');
       }

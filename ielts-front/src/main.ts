@@ -13,8 +13,11 @@ import '@arco-design/web-vue/dist/arco.css';
 import Idux from '@/config/idux';
 
 // DevUI
-import 'vue-devui/style.css';
-import '@devui-design/icons/icomoon/devui-icon.css';
+// import 'vue-devui/style.css';
+// import '@devui-design/icons/icomoon/devui-icon.css';
+
+// elementUI
+import 'element-plus/dist/index.css'
 
 import { ThemeServiceInit, devuiDarkTheme } from 'devui-theme';
 

@@ -3,7 +3,7 @@ import { get, post } from '@/utils/http/axios';
 import { UserState } from '@/store/modules/user/types';
 // import axios from 'axios';
 enum URL {
-  login = '/user/login',
+  login = '/api/user/login',
   logout = '/user/logout',
   profile = '/user/profile',
 }

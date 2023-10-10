@@ -1,55 +1,69 @@
 <template>
   <div class="dark:text-slate-400 dark:bg-slate-900">
     <Header />
-    <main class="max-w-5xl px-4 mx-auto pb-22 sm:px-6 md:px-8 xl:px-12 xl:max-w-6xl">
-      <div class="pt-8 pb-7 sm:pb-8 sm:text-center">
-        <h1 class="relative mb-4 text-4xl tracking-tight font-blimone sm:text-5xl lg:text-6xl text-slate-900 dark:text-slate-200">
-          {{ appStore.h1 }}
-        </h1>
-        <p class="text-2xl text-slate-800 dark:text-slate-400">最新Vue3技术流，超全配置，大厂协作规范，大佬必备神器</p>
-      </div>
-    </main>
-    <article class="space-y-20 sm:space-y-32 md:space-y-40 lg:space-y-44">
-      <ul class="flex flex-wrap items-center justify-center py-6 sm:px-20 lg:px-36 xl:px-20 sm:justify-start lg:justify-start">
-        <li v-for="(item, index) in data" :key="index * 1.1" class="px-3 pt-4 md:px-4 sm:pt-5 md:pb-8">
-          <figure class="flex-none shadow-lg rounded-xl w-80 md:w-100">
-            <blockquote
-              class="px-6 py-8 text-lg font-semibold leading-8 bg-white rounded-t-xl md:p-5 md:text-base md:leading-8 text-slate-700 dark:text-slate-300 dark:bg-slate-800 dark:highlight-white/5"
-            >
-              <SvgIcon name="svg-marks" />
-              <p v-html="item.content"></p>
-            </blockquote>
-            <figcaption :class="`flex items-center p-6 space-x-4 leading-6 text-white md:px-10 md:py-6 rounded-b-xl ${item.color}`">
-              <div class="flex items-center justify-center flex-none bg-white rounded-full w-14 h-14">
-                <img :src="item.avatar" class="w-12 h-12 rounded-full" loading="lazy" />
-              </div>
-              <div class="flex-auto">
-                <div class="text-base font-semibold dark:text-slate-200">
-                  {{ item.title }}
-                  <p>{{ item.author }}</p>
-                </div>
-              </div>
-              <cite class="flex">
-                <a :href="item.github" class="transition-opacity duration-200 opacity-50 hover:opacity-75">
-                  <SvgIcon name="svg-github" />
-                </a>
-              </cite>
-            </figcaption>
-          </figure>
-        </li>
-      </ul>
-    </article>
+
+    <!-- 主体区域 写单词 -->
+    <div class="p-12">
+      <el-table :data="tableData.data" border style="width: 100%" :height="tableData.maxHeight" stripe
+        :max-height="tableData.maxHeight">
+        <el-table-column prop="idx" label="序号" width="80" />
+        <el-table-column prop="user_input" label="听写输入" width="280">
+          <template #default="scope">
+            <el-input placeholder="请输入"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="word" label="正确拼写">
+          <template #header>
+            <span>正确拼写 </span>
+            <span class="text-xs text-cyan-500 underline underline-offset-2 cursor-pointer">隐藏</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="translate" label="中文翻译">
+          <template #header>
+            <span>中文翻译</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="result" label="结果">
+          <template #header>
+            <span>结果</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="error_total" label="累计错误次数">
+          <template #header>
+            <span>累计错误次数</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
-<script setup lang="ts">
-  import SvgIcon from '@/components/SvgIcon/index.vue';
-  import { useAppStore } from '@/store/modules/app';
-  import { framework } from './data';
-  import Header from '@/components/Header/index.vue';
+<script setup>
+import SvgIcon from '@/components/SvgIcon/index.vue';
+import { useAppStore } from '@/store/modules/app';
+import Header from '@/components/Header/index.vue';
 
-  const appStore = useAppStore();
-  const data = ref(framework);
+const appStore = useAppStore();
+
+const tableData = reactive({
+  maxHeight: document.body.clientHeight - 184 + 'px',
+  data: [],
+  
+})
+console.log(document.body.clientHeight - 84);
+const arr = []
+for (let i = 0; i < 300; i++) {
+  const item = {
+    idx: i,
+    user_input: '',
+    word: Math.random(),
+    translate: Math.random(),
+    result: 0,
+    error_total: 0
+  }
+  arr.push(item)
+}
+tableData.data = arr
 </script>
 
 <style lang="less" scoped></style>
