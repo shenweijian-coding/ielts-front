@@ -4,11 +4,11 @@
       class="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-slate-900/10 dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent drop-shadow"
     >
       <div class="mx-auto max-w-8xl">
-        <div class="px-4 py-4 border-b border-slate-900/10 lg:px-8 lg:border-0 dark:border-slate-300/10">
+        <div class="px-4 py-4 border-b border-slate-900/10 lg:px-12 lg:border-0 dark:border-slate-300/10">
           <div class="relative flex items-center text-2xl sm:text-2xl font-blimone">
             <div class="relative items-center hidden ml-auto lg:flex w-full justify-between">
               <nav class="text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">
-                <ul class="flex space-x-8 tag">
+                <ul class="flex space-x-10 tag">
                   <li>
                     <router-link to="/" class="hover:text-sky-500 dark:hover:text-sky-400">听写</router-link>
                   </li>
