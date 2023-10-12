@@ -33,9 +33,10 @@ service.interceptors.response.use(
         ElMessage.error(response.data.msg)
         return Promise.reject(response.data)
       }
+      
       // 统一处理 失败问题
+      return response;
     }
-    return response;
   },
   // 请求失败
   (error: any) => {
@@ -53,10 +54,12 @@ const request = <T = any>(config: AxiosRequestConfig): Promise<T> => {
   const conf = config;
   return new Promise((resolve) => {
     service.request<any, AxiosResponse<IResponse>>(conf).then((res: AxiosResponse<IResponse>) => {
+      
       const {
-        data: { result },
+        data: { data },
       } = res;
-      resolve(result as T);
+      
+      resolve(data as T);
     });
   });
 };
