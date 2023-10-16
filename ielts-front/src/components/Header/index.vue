@@ -33,14 +33,7 @@
                     @click="toggleTheme()"
                   />
                 </el-tooltip> -->
-                <a
-                  href="https://github.com/MaleWeb/fast-vue3"
-                  target="_bank"
-                  class="block ml-6 text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 text-sm"
-                >
-                  <!-- <SvgIcon name="svg-github" size="small" color="#999999" /> -->
-                  退出登录
-                </a>
+                <el-button type="danger" text>退出登录</el-button>
               </div>
             </div>
           </div>

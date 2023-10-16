@@ -42,6 +42,7 @@
   const chapterChange = (chapter) => {
     emits('currentChapter', { bookId: config.id, chapter: chapter });
   };
+  // 获取书籍及对应章节信息
   getBookList().then((res) => {
     bookInfo.books = res;
     bookInfo.chapters = res[0].chapters;

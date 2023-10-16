@@ -59,8 +59,8 @@
       console.log(valid);
       if (valid) {
         userStore.login(userFormData);
-        userStore.info();
-        // router.push('/demo');
+        // userStore.info();
+        router.push('/');
       } else {
         ElMessage.error('错误信息');
       }
