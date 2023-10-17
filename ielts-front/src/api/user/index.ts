@@ -1,9 +1,8 @@
 // 权限问题后期增加
 import { get, post } from '@/utils/http/axios';
-import { UserState } from '@/store/modules/user/types';
 // import axios from 'axios';
 enum URL {
-  login = '/api/user/login',
+  login = '/user/login',
   logout = '/user/logout',
   profile = '/user/profile',
 }
@@ -16,7 +15,8 @@ export interface LoginData {
   password: string;
 }
 
-const getUserProfile = async () => get<UserState>({ url: URL.profile });
+const getUserProfile = async () => get({ url: '/user/getUserInfo' });
 const login = async (data: LoginData) => post<any>({ url: URL.login, data });
 const logout = async () => post<LoginRes>({ url: URL.logout });
-export { getUserProfile, logout, login };
+const saveConfig = async (data) => post({ url: '/user/saveConfig', data })
+export { getUserProfile, logout, login, saveConfig };

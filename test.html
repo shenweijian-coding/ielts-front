@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>单词播放</title>
+</head>
+
+<body>
+  <button onclick="playWords()">播放单词</button>
+
+  <script>
+    // 定义一个数组存储单词对应的音频文件路径  
+    var words = [
+      'https://dict.youdao.com/dictvoice?audio=movement&le=en', 'https://dict.youdao.com/dictvoice?audio=environment&le=en',
+      'https://dict.youdao.com/dictvoice?audio=Map&le=en',
+    ];
+
+    // 设置播放参数  
+    var playSpeed = 1.0; // 播放速度（1.0为正常速度）  
+    var interval = 1000; // 播放间隔（毫秒）  
+    var repeatTimes = 3; // 重复播放次数  
+
+    function playWords() {  
+        var index = 0;  
+        var count = 0;  
+        var audio = new Audio();  
+        audio.playbackRate = playSpeed;  
+        audio.addEventListener('ended', function() {  
+            count++;  
+            if (count < repeatTimes) {  
+                audio.src = words[index];  
+                audio.play();  
+            } else {  
+
+                index++;  
+                count = 0;  
+                console.log(index);
+
+                if (index < words.length) {  
+                    audio.src = words[index];  
+                    audio.play();  
+                } else {  
+
+                    // 所有单词都已播放完毕，停止播放  
+                    return;  
+                }  
+            }  
+        }, false);  
+        audio.src = words[index];  
+        audio.play();  
+    } 
+  </script>
+</body>
+
+</html>

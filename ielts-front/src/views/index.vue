@@ -5,7 +5,15 @@
     <div class="flex p-8">
       <!-- 主体区域 写单词 -->
       <div class="w-6/8">
-        <el-table :data="tableData.data" border style="width: 100%" :height="tableData.maxHeight" stripe :max-height="tableData.maxHeight">
+        <el-table
+          :data="tableData.data"
+          border
+          style="width: 100%"
+          :height="tableData.maxHeight"
+          stripe
+          :max-height="tableData.maxHeight"
+          highlight-current-row
+        >
           <el-table-column prop="idx" type="index" label="序号" width="80" />
           <el-table-column prop="user_input" label="听写输入" width="380">
             <template #default="{ row }">
@@ -73,6 +81,7 @@
         <WordConfig @current-chapter="getWords" />
         <div>
           <el-button type="primary" status="success" @click="start">开始听写</el-button>
+          <audio controls ref="audio"> <source :src="currentWord" /> </audio>
         </div>
       </div>
     </div>
@@ -88,6 +97,8 @@
   import { getWordList } from '@/api/book';
 
   const appStore = useAppStore();
+
+  const currentWord = ref('');
 
   const tableData = reactive({
     maxHeight: '1080px',
@@ -118,6 +129,43 @@
 
   // 开始听写
   const start = () => {};
+
+  // 设置播放参数
+  //   var playSpeed = 1.0; // 播放速度（1.0为正常速度）
+  // var interval = 1000; // 播放间隔（毫秒）
+  // var repeatTimes = 3; // 重复播放次数
+
+  const playWords = () => {
+    var index = 0;
+    var count = 0;
+    var audio = new Audio();
+    audio.playbackRate = playSpeed;
+    audio.addEventListener(
+      'ended',
+      function () {
+        count++;
+        if (count < repeatTimes) {
+          audio.src = words[index];
+          audio.play();
+        } else {
+          index++;
+          count = 0;
+          console.log(index);
+
+          if (index < words.length) {
+            audio.src = words[index];
+            audio.play();
+          } else {
+            // 所有单词都已播放完毕，停止播放
+            return;
+          }
+        }
+      },
+      false,
+    );
+    audio.src = words[index];
+    audio.play();
+  };
 </script>
 
 <style lang="less" scoped></style>

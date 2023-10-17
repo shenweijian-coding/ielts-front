@@ -29,6 +29,9 @@
   </div>
 </template>
 <script setup>
+  import { saveConfig } from '@/api/user/index';
+  import { ElMessage } from 'element-plus';
+
   const config = reactive({
     speed: 1,
     interval: 1,
@@ -38,5 +41,9 @@
   });
 
   // 保存听写配置
-  const handleSaveConfig = () => {};
+  const handleSaveConfig = () => {
+    saveConfig(config).then((res) => {
+      ElMessage.success(res.msg);
+    });
+  };
 </script>

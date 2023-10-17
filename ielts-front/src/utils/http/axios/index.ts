@@ -4,10 +4,10 @@ import { showMessage } from './status';
 import { IResponse } from './type';
 import { getToken } from '@/utils/auth';
 import { ElMessage } from 'element-plus'
-import { message } from 'ant-design-vue';
+console.log(import.meta.env);
 
 const service: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_BASEURL,
+  baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 10000,
 });
 
