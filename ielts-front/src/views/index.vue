@@ -81,7 +81,6 @@
         <WordConfig @current-chapter="getWords" />
         <div>
           <el-button type="primary" status="success" @click="start">开始听写</el-button>
-          <audio controls ref="audio"> <source :src="currentWord" /> </audio>
         </div>
       </div>
     </div>
@@ -91,14 +90,17 @@
 <script setup>
   import SvgIcon from '@/components/SvgIcon/index.vue';
   import { useAppStore } from '@/store/modules/app';
+  import { useUserStore } from '@/store/modules/user';
   import Header from '@/components/Header/index.vue';
   import DictationSetting from '@/components/DictationSetting/index.vue';
   import WordConfig from '@/components/WordConfig/index.vue';
   import { getWordList } from '@/api/book';
 
   const appStore = useAppStore();
+  const userStore = useUserStore();
 
-  const currentWord = ref('');
+  // 有道的翻译api
+  const YDAPI = 'https://dict.youdao.com/dictvoice?le=en&audio=';
 
   const tableData = reactive({
     maxHeight: '1080px',
@@ -110,7 +112,6 @@
       error_total: true,
     },
   });
-
   // 获取设备宽高
   const getWindowInfo = () => {
     tableData.maxHeight = document.body.clientHeight - 184 + 'px';
@@ -126,16 +127,20 @@
       console.log(res);
     });
   };
-
+  var playSpeed = 1;
+  var interval = 1000; // 播放间隔（毫秒）
+  var repeatTimes = 1;
   // 开始听写
-  const start = () => {};
+  const start = () => {
+    // 设置播放参数
+    playSpeed = userStore.config.speed; // 播放速度（1.0为正常速度）
+    interval = userStore.config.interval; // 播放间隔（毫秒）
+    repeatTimes = userStore.config.repeat; // 重复播放次数
+    console.log(userStore.config, 'playSpeed');
+    playWords(tableData.data);
+  };
 
-  // 设置播放参数
-  //   var playSpeed = 1.0; // 播放速度（1.0为正常速度）
-  // var interval = 1000; // 播放间隔（毫秒）
-  // var repeatTimes = 3; // 重复播放次数
-
-  const playWords = () => {
+  const playWords = (words) => {
     var index = 0;
     var count = 0;
     var audio = new Audio();
@@ -145,15 +150,15 @@
       function () {
         count++;
         if (count < repeatTimes) {
-          audio.src = words[index];
+          // 这里是播放
+          audio.src = YDAPI + words[index].word;
           audio.play();
         } else {
           index++;
           count = 0;
-          console.log(index);
 
           if (index < words.length) {
-            audio.src = words[index];
+            audio.src = YDAPI + words[index].word;
             audio.play();
           } else {
             // 所有单词都已播放完毕，停止播放
@@ -163,7 +168,7 @@
       },
       false,
     );
-    audio.src = words[index];
+    audio.src = YDAPI + words[index].word;
     audio.play();
   };
 </script>

@@ -1,21 +1,13 @@
 import { defineStore } from 'pinia';
-import { login as userLogin, logout as userLogout, getUserProfile, LoginData } from '@/api/user/index';
+import { login as userLogin, logout as userLogout, getUserProfile, LoginData, saveConfig } from '@/api/user/index';
 import { setToken, clearToken } from '@/utils/auth';
 import { UserState } from './types';
 
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    user_name: undefined,
-    avatar: undefined,
-    organization: undefined,
-    location: undefined,
-    email: undefined,
-    blogJuejin: undefined,
-    blogZhihu: undefined,
-    blogGithub: undefined,
-    profileBio: undefined,
-    devLanguages: undefined,
-    role: '',
+    user: '',
+    config: {},
+    create_time: ''
   }),
   getters: {
     userProfile(state: UserState): UserState {
@@ -23,15 +15,19 @@ export const useUserStore = defineStore('user', {
     },
   },
   actions: {
-    switchRoles() {
-      return new Promise((resolve) => {
-        this.role = this.role === 'user' ? 'user' : 'admin';
-        resolve(this.role);
-      });
-    },
+    // switchRoles() {
+    //   return new Promise((resolve) => {
+    //     this.role = this.role === 'user' ? 'user' : 'admin';
+    //     resolve(this.role);
+    //   });
+    // },
     // 设置用户的信息
     setInfo(partial: Partial<UserState>) {
       this.$patch(partial);
+    },
+    // 保存用户的听写配置
+    async saveUserConfig() {
+      return saveConfig(this.$state.config)      
     },
     // 重置用户信息
     resetInfo() {
@@ -40,6 +36,8 @@ export const useUserStore = defineStore('user', {
     // 获取用户信息
     async info() {
       const result = await getUserProfile();
+      console.log(result);
+      
       this.setInfo(result);
     },
     // 异步登录并存储token

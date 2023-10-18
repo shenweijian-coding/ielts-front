@@ -31,19 +31,19 @@
 <script setup>
   import { saveConfig } from '@/api/user/index';
   import { ElMessage } from 'element-plus';
+  import { useUserStore } from '@/store/modules/user';
 
-  const config = reactive({
-    speed: 1,
-    interval: 1,
-    repeat: 1,
-    pronounce: 1, // 英音-1 美英-2
-    mode: 1, // 连续播放-1 单个播放-2
-  });
+  const userStore = useUserStore();
+  // 获取用户信息
+  userStore.info();
+
+  // 响应用户的听写配置
+  const config = computed(() => userStore.config);
 
   // 保存听写配置
   const handleSaveConfig = () => {
-    saveConfig(config).then((res) => {
-      ElMessage.success(res.msg);
+    userStore.saveUserConfig(config).then((res) => {
+      ElMessage.success('设置成功');
     });
   };
 </script>
