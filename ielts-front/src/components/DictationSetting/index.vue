@@ -2,13 +2,13 @@
   <div>
     <el-form :model="config" label-width="120px">
       <el-form-item label="当前播放速度">
-        <el-input-number v-model="config.speed" :min="0.1" :max="10" />
+        <el-input-number v-model="config.speed" :min="0.1" :max="10" :precision="1" />
       </el-form-item>
       <el-form-item label="单词播放间隔">
-        <el-input-number v-model="config.interval" :min="0.1" :max="10" />
+        <el-input-number v-model="config.interval" :min="0.1" :max="10" :precision="1" />
       </el-form-item>
       <el-form-item label="单词重复播放">
-        <el-input-number v-model="config.repeat" :min="1" :max="10" :precision="1" />
+        <el-input-number v-model="config.repeat" :min="1" :max="10" :precision="0" />
       </el-form-item>
       <el-form-item label="发音">
         <el-radio-group v-model="config.pronounce" size="default">

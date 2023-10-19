@@ -134,7 +134,7 @@
   const start = () => {
     // 设置播放参数
     playSpeed = userStore.config.speed; // 播放速度（1.0为正常速度）
-    interval = userStore.config.interval; // 播放间隔（毫秒）
+    interval = userStore.config.interval * 1000; // 播放间隔（毫秒）
     repeatTimes = userStore.config.repeat; // 重复播放次数
     console.log(userStore.config, 'playSpeed');
     playWords(tableData.data);
@@ -152,14 +152,18 @@
         if (count < repeatTimes) {
           // 这里是播放
           audio.src = YDAPI + words[index].word;
-          audio.play();
+          setTimeout(() => {
+            audio.play();
+          }, interval);
         } else {
           index++;
           count = 0;
 
           if (index < words.length) {
             audio.src = YDAPI + words[index].word;
-            audio.play();
+            setTimeout(() => {
+              audio.play();
+            }, interval);
           } else {
             // 所有单词都已播放完毕，停止播放
             return;
@@ -169,7 +173,9 @@
       false,
     );
     audio.src = YDAPI + words[index].word;
-    audio.play();
+    setTimeout(() => {
+      audio.play();
+    }, interval);
   };
 </script>
 
