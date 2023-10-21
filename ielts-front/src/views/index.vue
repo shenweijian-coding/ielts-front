@@ -10,14 +10,24 @@
           border
           style="width: 100%"
           :height="tableData.maxHeight"
-          stripe
           :max-height="tableData.maxHeight"
           highlight-current-row
+          ref="tableRef"
+          @row-click="rowClick"
+          :row-class-name="tableRowClassName"
+          row-key="idx"
         >
           <el-table-column prop="idx" type="index" label="序号" width="80" />
           <el-table-column prop="user_input" label="听写输入" width="380">
-            <template #default="{ row }">
-              <el-input v-model="row.user_input" placeholder="请输入" />
+            <template #default="{ row, $index }">
+              <el-input
+                v-model="row.user_input"
+                placeholder="请输入"
+                @keyup.enter="handleFocus(row, $index + 1)"
+                :ref="getInputRef($index)"
+                @keyup.up="handleFocus(row, $index - 1)"
+                @keyup.down="handleFocus(row, $index + 1)"
+              />
             </template>
           </el-table-column>
           <el-table-column prop="word" label="正确拼写">
@@ -111,7 +121,22 @@
       result: true,
       error_total: true,
     },
+    currentIndex: 0, // 目前输入框聚焦的
   });
+
+  const refs = []; // 单词输入框ref
+  const tableRef = ref(); // 表格ref
+
+  // 获取输入框的ref
+  const getInputRef = (i) => {
+    refs[+i] = ref(`inputRef${i}`);
+    return refs[+i];
+  };
+
+  const tableRowClassName = ({ row, rowIndex }) => {
+    row.index = rowIndex;
+  };
+
   // 获取设备宽高
   const getWindowInfo = () => {
     tableData.maxHeight = document.body.clientHeight - 184 + 'px';
@@ -127,19 +152,47 @@
       console.log(res);
     });
   };
+
   var playSpeed = 1;
   var interval = 1000; // 播放间隔（毫秒）
   var repeatTimes = 1;
+
   // 开始听写
   const start = () => {
     // 设置播放参数
     playSpeed = userStore.config.speed; // 播放速度（1.0为正常速度）
     interval = userStore.config.interval * 1000; // 播放间隔（毫秒）
     repeatTimes = userStore.config.repeat; // 重复播放次数
-    console.log(userStore.config, 'playSpeed');
+    if (userStore.config.mode == 1) {
+      // 连续播放
+      playWords(tableData.data);
+    } else {
+      // 单个播放
+      manualPlay();
+    }
+  };
+
+  // 单个单词播放 通过回车或者鼠标选择触发
+  const manualPlay = () => {
     playWords(tableData.data);
   };
 
+  // 焦点移动
+  const handleFocus = (row, i) => {
+    if (+i >= tableData.data.length || +i < 0) {
+      return;
+    }
+    refs[i].value.focus();
+    tableRef.value.setCurrentRow(row, false);
+    tableRef.value.setCurrentRow(tableData.data[i], true);
+    tableData.currentIndex = i;
+  };
+
+  // 点击表格行
+  const rowClick = (row) => {
+    handleFocus(tableData.data[row.index], row.index);
+  };
+  // 播放音频的方法
   const playWords = (words) => {
     var index = 0;
     var count = 0;
