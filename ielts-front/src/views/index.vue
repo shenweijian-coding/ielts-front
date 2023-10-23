@@ -27,6 +27,8 @@
                 :ref="getInputRef($index)"
                 @keyup.up="handleFocus(row, $index - 1)"
                 @keyup.down="handleFocus(row, $index + 1)"
+                @blur="handleResult(row, $index)"
+                @focus="handleFocusInit(row, $index)"
               />
             </template>
           </el-table-column>
@@ -66,7 +68,12 @@
               >
             </template>
             <template #default="{ row }">
-              <span>{{ tableData.headerShowToggle.result ? row.result : '***' }}</span>
+              <span v-if="tableData.headerShowToggle.result">
+                <el-icon v-if="row.result == undefined" color="gray"><SemiSelect /></el-icon>
+                <el-icon v-else-if="row.result" color="green"><Select /></el-icon>
+                <el-icon v-else color="red"><CloseBold /></el-icon>
+              </span>
+              <span v-else>***</span>
             </template>
           </el-table-column>
           <el-table-column prop="error_total" label="累计错误次数">
@@ -90,7 +97,8 @@
         <DictationSetting />
         <WordConfig @current-chapter="getWords" />
         <div>
-          <el-button type="primary" status="success" @click="start">开始听写</el-button>
+          <el-button v-if="!tableData.playStatus" type="primary" status="success" @click="start">开始听写</el-button>
+          <el-button v-else-if="tableData.playStatus == 1" type="primary" status="success" @click="start">开始听写</el-button>
         </div>
       </div>
     </div>
@@ -105,6 +113,7 @@
   import DictationSetting from '@/components/DictationSetting/index.vue';
   import WordConfig from '@/components/WordConfig/index.vue';
   import { getWordList } from '@/api/book';
+  import { Select, CloseBold, SemiSelect } from '@element-plus/icons-vue';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -121,11 +130,14 @@
       result: true,
       error_total: true,
     },
+    playStatus: 0, // 0-未开始 1-播放中 2-已暂停
     currentIndex: 0, // 目前输入框聚焦的
   });
 
   const refs = []; // 单词输入框ref
   const tableRef = ref(); // 表格ref
+
+  const config = computed(() => userStore.config);
 
   // 获取输入框的ref
   const getInputRef = (i) => {
@@ -153,28 +165,37 @@
     });
   };
 
-  var playSpeed = 1;
-  var interval = 1000; // 播放间隔（毫秒）
-  var repeatTimes = 1;
+  var playSpeed = config.value.speed || 1;
+  var interval = (config.value.interval || 3) * 1000; // 播放间隔（毫秒）
+  var repeatTimes = config.value.repeat || 1;
 
   // 开始听写
   const start = () => {
-    // 设置播放参数
-    playSpeed = userStore.config.speed; // 播放速度（1.0为正常速度）
-    interval = userStore.config.interval * 1000; // 播放间隔（毫秒）
-    repeatTimes = userStore.config.repeat; // 重复播放次数
+    tableData.playStatus = 1;
     if (userStore.config.mode == 1) {
       // 连续播放
       playWords(tableData.data);
     } else {
       // 单个播放
-      manualPlay();
+      // manualPlay();
     }
   };
 
   // 单个单词播放 通过回车或者鼠标选择触发
-  const manualPlay = () => {
-    playWords(tableData.data);
+  // const manualPlay = () => {
+  //   playWords(tableData.data);
+  // };
+
+  // 处理失焦时的输入框的结果
+  const handleResult = (row, i) => {
+    row.result = row.user_input === row.word;
+  };
+
+  // 获得焦点开始播放
+  const handleFocusInit = (row, i) => {
+    if (userStore.config.mode == 2) {
+      playWords([row]);
+    }
   };
 
   // 焦点移动
@@ -192,6 +213,7 @@
   const rowClick = (row) => {
     handleFocus(tableData.data[row.index], row.index);
   };
+
   // 播放音频的方法
   const playWords = (words) => {
     var index = 0;
