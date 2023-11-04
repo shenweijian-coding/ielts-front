@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <div class="logo">
-      <img :src="logo" width="240" />
-    </div>
     <LoginBanner />
     <div class="content">
       <div class="content-inner">
@@ -35,7 +32,7 @@
 
     .banner {
       width: 550px;
-      background: linear-gradient(163.85deg, #1d2129 0%, #00308f 100%);
+      background-image: url(https://pic.imgdb.cn/item/6545aeb9c458853aef9b1bba.png);
     }
 
     .content {

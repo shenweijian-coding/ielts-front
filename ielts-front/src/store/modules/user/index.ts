@@ -7,12 +7,19 @@ export const useUserStore = defineStore('user', {
   state: (): UserState => ({
     user: '',
     config: {},
-    create_time: ''
+    create_time: '',
+    _id: ''
   }),
   getters: {
     userProfile(state: UserState): UserState {
       return { ...state };
     },
+    token(state: UserState) {
+      return state._id
+    },
+    getConfig(state: UserState) {
+      return state.config
+    }
   },
   actions: {
     // switchRoles() {
@@ -51,11 +58,11 @@ export const useUserStore = defineStore('user', {
     },
     // Logout
     async logout() {
-      await userLogout();
+      // await userLogout();
       this.resetInfo();
       clearToken();
       // 路由表重置
-      // location.reload();
+      location.reload();
     },
   },
 });

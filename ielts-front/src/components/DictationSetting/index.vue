@@ -38,12 +38,13 @@
   userStore.info();
 
   // 响应用户的听写配置
-  const config = computed(() => userStore.config);
+  const config = computed(() => userStore.getConfig);
 
   // 保存听写配置
   const handleSaveConfig = () => {
     userStore.saveUserConfig(config).then((res) => {
       ElMessage.success('设置成功');
+      userStore.info();
     });
   };
 </script>
