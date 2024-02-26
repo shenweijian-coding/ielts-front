@@ -27,7 +27,7 @@ export const AutoRegistryComponents = () => {
     include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
     exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
     resolvers: [
-      ElementPlusResolver(),
+      ElementPlusResolver({ importStyle: "sass" }),
       VueUseComponentsResolver(),
       AntDesignVueResolver({ resolveIcons: true }),
       TDesignResolver({

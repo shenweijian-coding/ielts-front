@@ -22,7 +22,13 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     plugins: createVitePlugins(viteEnv, isBuild),
 
     // css
-    css: {},
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "@/assets/styles/base.scss" as *;`,
+        },
+      }
+    },
 
     // server
     server: {
