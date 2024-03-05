@@ -14,14 +14,18 @@
       </el-form-item>
       <el-form-item
         prop="password"
-        :rules="[{ required: true, message: '密码不能为空' }]"
+        :rules="[{ required: true, message: '验证码不能为空' }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
-        <el-input v-model="userFormData.password" placeholder="密码" allow-clear />
+        <el-input v-model="userFormData.password" placeholder="验证码" allow-clear>
+          <template #append>
+            <span class="cursor-pointer" @click="senYzm">发送验证码</span>
+          </template>
+        </el-input>
       </el-form-item>
-      <el-button type="primary" @click="handleSubmit(ruleFormRef)">登录</el-button>
-      <el-button type="text" class="forget-pwd" @click="handleToChangePwd">忘记密码?</el-button>
+      <el-button type="primary" @click="handleSubmit(ruleFormRef)">注册</el-button>
+      <el-button type="text" class="forget-pwd" @click="handleToChangePwd" />
       <!-- <el-button @click="resetForm(ruleFormRef)" block>重置</el-button> -->
     </el-form>
   </div>
@@ -63,7 +67,7 @@
         await userStore.info();
         router.push('/');
       } else {
-        ElMessage.error('错误信息:请填写手机号和密码');
+        ElMessage.error('错误信息:请填写手机号和验证码');
       }
     });
   };
@@ -75,6 +79,9 @@
   const handleToChangePwd = () => {
     router.push('/forgetPassword');
   };
+
+  // 发送验证码
+  const senYzm = () => {};
 </script>
 
 <style lang="less" scoped>

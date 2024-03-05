@@ -46,9 +46,13 @@ declare module 'vue-router/auto/routes' {
     '/contain/components/main': RouteRecordInfo<'/contain/components/main', '/contain/components/main', Record<never, never>, Record<never, never>>,
     '/contain/components/subAside': RouteRecordInfo<'/contain/components/subAside', '/contain/components/subAside', Record<never, never>, Record<never, never>>,
     '/demo/': RouteRecordInfo<'/demo/', '/demo', Record<never, never>, Record<never, never>>,
+    '/gallery/': RouteRecordInfo<'/gallery/', '/gallery', Record<never, never>, Record<never, never>>,
+    '/gallery/chapter-dialog': RouteRecordInfo<'/gallery/chapter-dialog', '/gallery/chapter-dialog', Record<never, never>, Record<never, never>>,
+    '/home/': RouteRecordInfo<'/home/', '/home', Record<never, never>, Record<never, never>>,
     '/login/': RouteRecordInfo<'/login/', '/login', Record<never, never>, Record<never, never>>,
     '/login/components/banner': RouteRecordInfo<'/login/components/banner', '/login/components/banner', Record<never, never>, Record<never, never>>,
     '/login/components/login-form': RouteRecordInfo<'/login/components/login-form', '/login/components/login-form', Record<never, never>, Record<never, never>>,
+    '/login/components/sign-in': RouteRecordInfo<'/login/components/sign-in', '/login/components/sign-in', Record<never, never>, Record<never, never>>,
   }
 }
 

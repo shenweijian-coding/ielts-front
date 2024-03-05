@@ -5,13 +5,13 @@
     </div>
     <LoginBanner />
     <div class="content">
-      <div class="content-inner">
+      <div class="content-inner bg-white">
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="登录" name="login">
             <LoginForm />
           </el-tab-pane>
           <el-tab-pane label="注册" name="register">
-            <LoginForm />
+            <SignIn />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -23,6 +23,7 @@
   import LoginBanner from './components/banner.vue';
   import LoginForm from './components/login-form.vue';
   import logo from '@/assets/icons/svg/logo.svg';
+  import SignIn from './components/sign-in.vue';
 
   const theme = localStorage.getItem('theme');
 
