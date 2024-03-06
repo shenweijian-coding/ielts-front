@@ -1,6 +1,6 @@
 <template>
   <div class="content-inner bg-white">
-    <div class="login-form-wrapper">
+    <div v-if="step == 1" class="login-form-wrapper">
       <div class="text-bold">重置密码</div>
       <div class="login-form-error-msg">{{ errorMessage }}</div>
       <el-form ref="ruleFormRef" :model="userFormData" class="login-form" layout="vertical" :rules="rules" size="large">
@@ -20,11 +20,39 @@
         >
           <el-input v-model="userFormData.password" placeholder="验证码" allow-clear>
             <template #append>
-              <span class="cursor-pointer" @click="senYzm">发送验证码</span>
+              <el-button style="margin: 0; padding: 0" type="primary" @click="senYzm">发送验证码</el-button>
             </template>
           </el-input>
         </el-form-item>
-        <el-button type="primary" @click="handleSubmit(ruleFormRef)">下一步</el-button>
+        <el-button type="primary" @click="handleNuxt(ruleFormRef)">下一步</el-button>
+        <el-button type="text" class="forget-pwd" @click="handleToChangePwd" />
+      </el-form>
+    </div>
+    <div v-if="step == 2" class="login-form-wrapper">
+      <div class="text-bold">重设您的账号密码</div>
+      <div class="login-form-error-msg">{{ errorMessage }}</div>
+      <el-form ref="ruleFormRef" :model="userFormData" class="login-form" layout="vertical" :rules="rules" size="large">
+        <el-form-item
+          prop="username"
+          :rules="[{ required: true, message: '手机号不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <el-input v-model="userFormData.username" placeholder="手机号" />
+        </el-form-item>
+        <el-form-item
+          prop="password"
+          :rules="[{ required: true, message: '验证码不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <el-input v-model="userFormData.password" placeholder="验证码" allow-clear>
+            <template #append>
+              <el-button style="margin: 0; padding: 0" type="primary" @click="senYzm">发送验证码</el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-button type="primary" @click="handleSubmit(ruleFormRef)">提交</el-button>
         <el-button type="text" class="forget-pwd" @click="handleToChangePwd" />
       </el-form>
     </div>
@@ -38,6 +66,8 @@
   const router = useRouter();
   const errorMessage = ref('');
   const userStore = useUserStore();
+  const step = ref('1');
+
   const userFormData = reactive({
     username: '',
     password: '',
@@ -53,11 +83,24 @@
     password: [
       {
         required: true,
-        message: '密码不能为空',
+        message: '验证码不能为空',
       },
     ],
   });
 
+  const handleNuxt = async (formEl: FormInstance | undefined) => {
+    if (!formEl) return;
+    await formEl.validate(async (valid) => {
+      console.log(valid);
+      if (valid) {
+        // await userStore.login(userFormData);
+        step.value = 2;
+        router.push('/');
+      } else {
+        ElMessage.error('错误信息:请填写手机号和验证码');
+      }
+    });
+  };
   const handleSubmit = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     await formEl.validate(async (valid) => {
@@ -67,7 +110,7 @@
         await userStore.info();
         router.push('/');
       } else {
-        ElMessage.error('错误信息:请填写手机号和密码');
+        ElMessage.error('错误信息:请填写手机号和验证码');
       }
     });
   };

@@ -17,7 +17,7 @@
               class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
               href="/gallery"
             >
-              CET-4
+              语思资料库
             </a>
           </div>
         </div>
@@ -31,9 +31,51 @@
               aria-haspopup="listbox"
               aria-expanded="false"
               data-headlessui-state=""
-              >第 2 章</button
+              >3-1</button
             >
           </div>
+        </div>
+
+        <div class="relative" data-headlessui-state=""
+          ><button
+            class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+            type="button"
+            aria-expanded="false"
+            data-headlessui-state=""
+            id="headlessui-popover-button-:rdc:"
+          >
+            <div class="relative">
+              <div>x1倍</div>
+            </div>
+          </button>
+        </div>
+
+        <div class="relative" data-headlessui-state=""
+          ><button
+            class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+            type="button"
+            aria-expanded="false"
+            data-headlessui-state=""
+            id="headlessui-popover-button-:rdc:"
+          >
+            <div class="relative">
+              <div>5秒</div>
+            </div>
+          </button>
+        </div>
+
+        <div class="relative" data-headlessui-state=""
+          ><button
+            class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+            type="button"
+            aria-expanded="false"
+            data-headlessui-state=""
+            id="headlessui-popover-button-:rdc:"
+          >
+            <div class="relative">
+              <div>1遍</div>
+            </div>
+          </button>
         </div>
 
         <div class="relative" data-headlessui-state=""
@@ -77,37 +119,6 @@
               class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
             >
               <span class="tooltip">音效设置</span></div
-            >
-          </div>
-
-          <div class="relative h-7 w-7">
-            <div>
-              <div class="relative" data-headlessui-state=""
-                ><button
-                  class="flex items-center justify-center rounded p-[2px] text-lg text-gray-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
-                  type="button"
-                  aria-label="开关默写模式"
-                  aria-expanded="false"
-                  data-headlessui-state=""
-                  id="headlessui-popover-button-:rdi:"
-                  ><svg viewBox="0 0 24 24" width="1.2em" height="1.2em" class="icon">
-                    <g fill="currentColor">
-                      <path
-                        d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18Zm19.146 10.083a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69c.12.362.12.752 0 1.113Z"
-                      />
-                      <path
-                        d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12Zm-3.22 3.713l-4.243-4.244a3.75 3.75 0 0 0 4.243 4.243Z"
-                      />
-                      <path
-                        d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114c1.489 4.467 5.704 7.69 10.675 7.69c1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z"
-                      />
-                    </g></svg></button
-              ></div>
-            </div>
-            <div
-              class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
-            >
-              <span class="tooltip">开关默写模式（Ctrl + V）</span></div
             >
           </div>
 
