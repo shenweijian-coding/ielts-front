@@ -8,7 +8,7 @@
   const props = defineProps({
     prefix: {
       type: String,
-      default: 'icon',
+      default: 'icon-svg',
     },
     name: {
       type: String,
@@ -17,6 +17,10 @@
     color: {
       type: String,
       default: '#333',
+    },
+    hoverColor: {
+      type: String,
+      default: '',
     },
     size: {
       type: String,
@@ -32,6 +36,10 @@
   const fontSize = reactive({ default: '32px', small: '20px', large: '48px' });
 </script>
 <style lang="less" scoped>
+  svg:hover {
+    fill: v-bind(hoverColor);
+    color: v-bind(hoverColor);
+  }
   .svg-icon-spin {
     width: v-bind('fontSize.default');
     height: v-bind('fontSize.default');

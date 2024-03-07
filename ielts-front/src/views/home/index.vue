@@ -45,7 +45,7 @@
           </div>
 
           <div class="relative" data-headlessui-state="">
-            <el-popover placement="bottom" trigger="hover">
+            <el-popover placement="bottom" :width="100" trigger="hover">
               <template #reference>
                 <button
                   class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
@@ -55,58 +55,91 @@
                   id="headlessui-popover-button-:rdc:"
                 >
                   <div class="relative">
-                    <div>x{{ config.speed }}倍</div>
+                    <div>x{{ config.speed }} 倍</div>
                   </div>
                 </button>
               </template>
               <div>
                 <el-radio-group v-model="config.speed" size="default" @change="bookChange">
-                  <el-radio v-for="speed in config.speedList" :key="speed" :label="speed" border>{{ speed }}</el-radio>
+                  <el-radio v-for="speed in config.speedList" :key="speed" :label="speed" border class="w-full mb-2 mr-0"
+                    >{{ speed }} 倍</el-radio
+                  >
                 </el-radio-group>
               </div>
             </el-popover>
           </div>
 
-          <div class="relative" data-headlessui-state=""
-            ><button
-              class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-              type="button"
-              aria-expanded="false"
-              data-headlessui-state=""
-              id="headlessui-popover-button-:rdc:"
-            >
-              <div class="relative">
-                <div>5秒</div>
+          <div class="relative" data-headlessui-state="">
+            <el-popover placement="bottom" :width="100" trigger="hover">
+              <template #reference>
+                <button
+                  class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                  type="button"
+                  aria-expanded="false"
+                  data-headlessui-state=""
+                  id="headlessui-popover-button-:rdc:"
+                >
+                  <div class="relative">
+                    <div>{{ config.gap }} 秒</div>
+                  </div>
+                </button>
+              </template>
+              <div>
+                <el-radio-group v-model="config.gap" size="default" @change="bookChange">
+                  <el-radio v-for="gap in config.gapList" :key="gap" :label="gap" border class="w-full mb-2 mr-0">{{ gap }} 秒</el-radio>
+                </el-radio-group>
               </div>
-            </button>
+            </el-popover>
           </div>
 
-          <div class="relative" data-headlessui-state=""
-            ><button
-              class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-              type="button"
-              aria-expanded="false"
-              data-headlessui-state=""
-              id="headlessui-popover-button-:rdc:"
-            >
-              <div class="relative">
-                <div>1遍</div>
+          <div class="relative" data-headlessui-state="">
+            <el-popover placement="bottom" :width="100" trigger="hover">
+              <template #reference>
+                <button
+                  class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                  type="button"
+                  aria-expanded="false"
+                  data-headlessui-state=""
+                  id="headlessui-popover-button-:rdc:"
+                >
+                  <div class="relative">
+                    <div>{{ config.repeat }} 遍</div>
+                  </div>
+                </button>
+              </template>
+              <div>
+                <el-radio-group v-model="config.repeat" size="default" @change="bookChange">
+                  <el-radio v-for="repeat in config.repeatList" :key="repeat" :label="repeat" border class="w-full mb-2 mr-0"
+                    >{{ repeat }} 秒</el-radio
+                  >
+                </el-radio-group>
               </div>
-            </button>
+            </el-popover>
           </div>
 
-          <div class="relative" data-headlessui-state=""
-            ><button
-              class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-              type="button"
-              aria-expanded="false"
-              data-headlessui-state=""
-              id="headlessui-popover-button-:rdc:"
-            >
-              <div class="relative">
-                <div>美音</div>
+          <div class="relative" data-headlessui-state="">
+            <el-popover placement="bottom" :width="100" trigger="hover">
+              <template #reference>
+                <button
+                  class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                  type="button"
+                  aria-expanded="false"
+                  data-headlessui-state=""
+                  id="headlessui-popover-button-:rdc:"
+                >
+                  <div class="relative">
+                    <div>{{ config.pronounce }}</div>
+                  </div>
+                </button>
+              </template>
+              <div>
+                <el-radio-group v-model="config.pronounce" size="default" @change="bookChange">
+                  <el-radio v-for="pronounce in config.pronounceList" :key="pronounce" :label="pronounce" border class="w-full mb-2 mr-0">{{
+                    pronounce
+                  }}</el-radio>
+                </el-radio-group>
               </div>
-            </button>
+            </el-popover>
           </div>
 
           <div class="flex items-center justify-center gap-2">
@@ -121,15 +154,14 @@
                     aria-expanded="false"
                     data-headlessui-state=""
                     id="headlessui-popover-button-:rde:"
-                    ><svg viewBox="0 0 24 24" width="1.2em" height="1.2em" class="icon">
-                      <g fill="currentColor">
-                        <path
-                          d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595c.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06Zm5.084 1.046a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 1 1-1.06-1.06a8.25 8.25 0 0 0 0-11.668a.75.75 0 0 1 0-1.06Z"
-                        />
-                        <path
-                          d="M15.932 7.757a.75.75 0 0 1 1.061 0a6 6 0 0 1 0 8.486a.75.75 0 0 1-1.06-1.061a4.5 4.5 0 0 0 0-6.364a.75.75 0 0 1 0-1.06Z"
-                        />
-                      </g></svg></button
+                  >
+                    <SvgIcon
+                      name="sound"
+                      prefix="icon-svg"
+                      size="small"
+                      hoverColor="#fff"
+                      :color="config.isSoundMute ? '' : '#ff5c00'"
+                    /> </button
                 ></div>
               </div>
               <div
@@ -145,12 +177,10 @@
                   type="button"
                   class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
                   title="查看错题本"
-                  ><svg viewBox="0 0 24 24" width="1.2em" height="1.2em" class="icon">
-                    <path
-                      fill="currentColor"
-                      d="M6.012 18H21V4a2 2 0 0 0-2-2H6c-1.206 0-3 .799-3 3v14c0 2.201 1.794 3 3 3h15v-2H6.012C5.55 19.988 5 19.805 5 19s.55-.988 1.012-1zM8 6h9v2H8V6z"
-                    /></svg></button
-              ></div>
+                >
+                  <SvgIcon name="book" prefix="icon-svg" size="small" color="hover:text-white" />
+                </button>
+              </div>
               <div
                 class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
               >
@@ -167,44 +197,40 @@
         <div class="container flex flex-grow items-center justify-center">
           <div class="container flex h-full w-full flex-col items-center justify-center">
             <div class="container flex h-24 w-full shrink-0 grow-0 justify-between px-12 pt-10"
-              ><div class="relative"
+              ><div class="relative" @click="handleMove(-1)"
                 ><div
                   ><div
+                    v-if="nearWords.lastWord"
                     class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
-                    ><svg viewBox="0 0 24 24" width="1.2em" height="1.2em" class="mr-4 shrink-0 grow-0 text-2xl">
-                      <path
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M5 12h14M5 12l4 4m-4-4l4-4"
-                      /></svg
-                    ><div class="grow-1 flex w-full flex-col"
-                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">cancel</p
-                      ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">取消， 撤销； 删去</p></div
+                  >
+                    <SvgIcon name="left" />
+                    <div class="grow-1 flex w-full flex-col ml-2"
+                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">{{
+                        nearWords.lastWord.word
+                      }}</p
+                      ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
+                        nearWords.lastWord.zh
+                      }}</p></div
                     ></div
                   ></div
                 ><div
                   class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
                   ><span class="tooltip">快捷键: Control + Shift + ArrowLeft</span></div
                 ></div
-              ><div class="relative"
-                ><div
-                  ><div
+              ><div class="relative" @click="handleMove(1)"
+                ><div>
+                  <div
+                    v-if="nearWords.nextWord"
                     class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
-                    ><div class="grow-1 flex w-full flex-col items-end text-right"
-                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">numerous</p
-                      ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">众多的</p></div
-                    ><svg viewBox="0 0 24 24" width="1.2em" height="1.2em" class="ml-4 shrink-0 grow-0 text-2xl">
-                      <path
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M5 12h14m-4 4l4-4m-4-4l4 4"
-                      /></svg></div></div
+                    ><div class="grow-1 flex w-full flex-col items-end text-right mr-2"
+                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">{{
+                        nearWords.nextWord.word
+                      }}</p
+                      ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
+                        nearWords.nextWord.zh
+                      }}</p></div
+                    >
+                    <SvgIcon name="right" /> </div></div
                 ><div
                   class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
                   ><span class="tooltip">快捷键: Control + Shift + ArrowRight</span></div
@@ -213,11 +239,11 @@
             >
             <div class="container flex flex-grow flex-col items-center justify-center">
               <div class="relative flex w-full justify-center">
-                <div class="absolute flex h-full w-full justify-center">
+                <!-- <div class="absolute flex h-full w-full justify-center">
                   <div class="z-10 flex w-full items-center backdrop-blur-sm">
                     <p class="w-full select-none text-center text-xl text-gray-600 dark:text-gray-50">按任意键开始</p>
                   </div>
-                </div>
+                </div> -->
 
                 <div class="relative">
                   <div lang="en" class="flex flex-col items-center justify-center pb-1 pt-4">
@@ -225,52 +251,23 @@
                       class="tooltip-info relative w-fit bg-transparent p-0 leading-normal shadow-none dark:bg-transparent"
                       data-tip="按 Tab 快捷键显示完整单词"
                     >
-                      <div class="flex items-center false justify-center"
-                        ><span
+                      <div class="flex items-center false justify-center">
+                        <span
+                          v-for="word in wordsData.currentWord.word"
+                          :key="word + Math.random()"
                           class="m-0 p-0 font-mono font-normal text-gray-600 dark:text-gray-50 pr-0.8 duration-0 dark:text-opacity-80"
                           style="font-size: 48px"
-                          >p</span
-                        ><span
-                          class="m-0 p-0 font-mono font-normal text-gray-600 dark:text-gray-50 pr-0.8 duration-0 dark:text-opacity-80"
-                          style="font-size: 48px"
-                          >o</span
-                        ><span
-                          class="m-0 p-0 font-mono font-normal text-gray-600 dark:text-gray-50 pr-0.8 duration-0 dark:text-opacity-80"
-                          style="font-size: 48px"
-                          >s</span
-                        ><span
-                          class="m-0 p-0 font-mono font-normal text-gray-600 dark:text-gray-50 pr-0.8 duration-0 dark:text-opacity-80"
-                          style="font-size: 48px"
-                          >s</span
-                        ><span
-                          class="m-0 p-0 font-mono font-normal text-gray-600 dark:text-gray-50 pr-0.8 duration-0 dark:text-opacity-80"
-                          style="font-size: 48px"
-                          >e</span
-                        ><span
-                          class="m-0 p-0 font-mono font-normal text-gray-600 dark:text-gray-50 pr-0.8 duration-0 dark:text-opacity-80"
-                          style="font-size: 48px"
-                          >s</span
-                        ><span
-                          class="m-0 p-0 font-mono font-normal text-gray-600 dark:text-gray-50 pr-0.8 duration-0 dark:text-opacity-80"
-                          style="font-size: 48px"
-                          >s</span
-                        ></div
-                      >
-                      <div class="absolute -right-12 top-1/2 h-9 w-9 -translate-y-1/2 transform">
+                          >{{ word }}</span
+                        >
+                      </div>
+
+                      <!-- <div class="absolute -right-12 top-1/2 h-9 w-9 -translate-y-1/2 transform">
                         <div class="relative">
                           <div
                             ><button
                               type="button"
                               class="focus:outline-none dark:fill-gray-400 dark:opacity-80 cursor-pointer text-gray-600 h-full w-full"
-                              ><svg
-                                class="prefix__icon undefined"
-                                viewBox="0 0 1024 1024"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor"
-                              >
-                                <path
-                                  d="M417.28 164.198c-12.646 0-25.293 5.325-37.683 15.821L169.779 358.35H76.8c-42.342 0-76.8 34.457-76.8 76.8v204.8c0 42.342 34.458 76.8 76.8 76.8h92.98l209.817 178.33c12.339 10.495 25.037 15.82 37.683 15.82a40.755 40.755 0 0034.304-18.534c6.093-9.165 9.216-20.89 9.216-34.816v-640c0-36.864-21.862-53.402-43.52-53.402zM51.2 640V435.2a25.6 25.6 0 0125.6-25.6h76.8v256H76.8A25.6 25.6 0 0151.2 640zm358.4 213.453l-204.8-174.08V395.827l204.8-174.08v631.706z"
-                                /></svg></button
+                              ></button
                           ></div>
                           <div
                             class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
@@ -278,21 +275,33 @@
                             <span class="tooltip">快捷键Ctrl + J</span></div
                           >
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
-                  <div
+                  <!-- <div
                     class="space-x-5 text-center text-sm font-normal text-gray-600 transition-colors duration-300 dark:text-gray-400 false"
                   >
-                    <span>AmE: [pə'zɛs]</span></div
+                    <span>{{ wordsData.currentWord.mark }}</span></div
                   >
-                  <div class="flex items-center justify-center pb-4 pt-5"
-                    ><span
+                  <div class="flex items-center justify-center pb-4 pt-5">
+                    <span
                       class="max-w-4xl text-center font-sans transition-colors duration-300 dark:text-white dark:text-opacity-80 false false"
                       style="font-size: 18px"
-                      >占用， 拥有</span
-                    ></div
-                  >
+                      >{{ wordsData.currentWord.zh }}</span
+                    >
+                  </div> -->
+                  <div class="space-x-8 flex mt-10 duration-300 text-center justify-center transition-colors font-sans cursor-pointer">
+                    <div>
+                      <SvgIcon name="play-left" color="grey" />
+                    </div>
+                    <div>
+                      <SvgIcon name="play-start" color="grey" />
+                      <SvgIcon name="play-stop" color="grey" />
+                    </div>
+                    <div>
+                      <SvgIcon name="play-again" color="grey" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -307,7 +316,9 @@
           </div>
         </div>
         <div class="my-card flex w-3/5 rounded-xl bg-white p-4 py-10 opacity-50 transition-colors duration-300 dark:bg-gray-800">
-          <el-progress :percentage="50" class="w-full" :stroke-width="18" />
+          <el-progress :percentage="(wordsData.currentIndex * 100) / wordsData.words.length" class="w-full" :stroke-width="16">
+            <span>{{ wordsData.currentIndex }}/{{ wordsData.words.length }}</span>
+          </el-progress>
         </div>
       </div>
     </div>
@@ -315,19 +326,72 @@
 </template>
 
 <script setup>
+  import SvgIcon from '@/components/SvgIcon/index.vue';
+
   const config = reactive({
     id: 1,
     chapter: '1-1',
     speed: '1.0',
+    gap: '5',
     num: 1,
+    repeat: '1',
+    pronounce: '美音',
+    isSoundMute: false,
     chapterList: ['1-1', '1-2', '2-1'],
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
+    gapList: ['2', '3', '4', '5', '6', '7'],
+    repeatList: ['1', '2', '3', '无限'],
+    pronounceList: ['美音', '英音'],
   });
+  const wordsData = reactive({
+    words: [{}],
+    currentWord: { zh: '', word: '', mark: '' },
+    currentIndex: 0,
+  });
+
+  const nearWords = computed(() => {
+    let lastWord = '';
+    let nextWord = '';
+    let index = wordsData.currentIndex;
+    if (wordsData.currentIndex > 0) {
+      lastWord = wordsData.words[index - 1];
+    }
+    if (index < wordsData.words.length) {
+      nextWord = wordsData.words[index + 1];
+    }
+    return {
+      lastWord,
+      nextWord,
+    };
+  });
+  const getWords = (params) => {
+    wordsData.words = [
+      { zh: '中文', word: 'chinese', mark: `AmE: [pə'zɛs]` },
+      { zh: '英文', word: 'english', mark: `AmE: [pə'zɛs]` },
+    ];
+    wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+  };
+  getWords();
+
+  const handleMove = (type) => {
+    const sign = wordsData.currentIndex + type;
+
+    if (sign < wordsData.words.length && sign >= 0) {
+      wordsData.currentIndex = sign;
+      wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+    }
+  };
 </script>
 
-<style>
+<style scoped lang="less">
   .my-card {
     box-shadow: 0 100px 80px #814c2e12, 0 41.7776px 33.4221px #814c2e0d, 0 22.3363px 17.869px #814c2e12, 0 12.5216px 10.0172px #814c2e0d,
       0 6.6501px 5.32008px #814c2e12, 0 2.76726px 2.21381px #814c2e0d;
+  }
+  .el-radio {
+    margin-right: 0;
+  }
+  .el-popover .el-popper {
+    min-width: 100px !important;
   }
 </style>
