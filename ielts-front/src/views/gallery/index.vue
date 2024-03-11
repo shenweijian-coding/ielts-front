@@ -3,7 +3,7 @@
     <!-- tab切换 -->
     <!-- <div style="height: 10rem"> -->
     <!-- <el-affix :offset="14"> -->
-    <el-tabs class="mt-20" v-model="galleryState.activeTab" @tab-click="handleClick">
+    <el-tabs v-model="galleryState.activeTab" @tab-click="handleClick">
       <el-tab-pane :name="item.id" v-for="item in galleryState.tabs" :key="item.id">
         <template #label>
           <img :src="item.icon" alt="" />&nbsp;
@@ -16,7 +16,15 @@
 
     <div v-for="item in 3" :key="item" class="mt-10">
       <!-- 选项 -->
-      <el-radio-group v-model="galleryState.activeType" size="large">
+      <div class="flex items-center space-x-4">
+        <div
+          v-for="(item, index) in galleryState.tabs[galleryState.activeTab].childs"
+          :key="index"
+          class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 bg-white hover:bg-indigo-100 text-black false"
+          ><span class="font-normal">大学英语</span></div
+        >
+      </div>
+      <!-- <el-radio-group v-model="galleryState.activeType" size="large">
         <el-radio-button
           :label="item.title"
           :value="item.id"
@@ -24,7 +32,7 @@
           :key="index"
           class="pr-10 border"
         />
-      </el-radio-group>
+      </el-radio-group> -->
 
       <!-- 书籍 -->
       <div class="mt-8 grid gap-x-5 gap-y-10 px-1 pb-4 sm:grid-cols-1 md:grid-cols-6 dic3:grid-cols-3 dic4:grid-cols-4">

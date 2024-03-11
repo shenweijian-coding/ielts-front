@@ -7,7 +7,7 @@
           href="https://qwerty.kaiyi.cool/"
         >
           <!-- <img src="" class="mr-3 h-16 w-16" alt="" /> -->
-          <!-- <h1>logo</h1> -->
+          <h3>logo</h3>
         </a>
         <nav
           class="my-card on element flex w-auto content-center items-center justify-end space-x-3 rounded-xl bg-white p-4 transition-colors duration-300 dark:bg-gray-800"
@@ -38,7 +38,7 @@
               </template>
               <div>
                 <el-radio-group v-model="config.chapter" size="default" @change="bookChange">
-                  <el-radio-button v-for="chapter in config.chapterList" :key="chapter" :label="chapter">{{ chapter }}</el-radio-button>
+                  <el-radio-button v-for="chapter in config.chapterList" :key="chapter" :value="chapter">{{ chapter }}</el-radio-button>
                 </el-radio-group>
               </div>
             </el-popover>
@@ -61,7 +61,7 @@
               </template>
               <div>
                 <el-radio-group v-model="config.speed" size="default" @change="bookChange">
-                  <el-radio v-for="speed in config.speedList" :key="speed" :label="speed" border class="w-full mb-2 mr-0"
+                  <el-radio v-for="speed in config.speedList" :key="speed" :value="speed" border class="w-full mb-2 mr-0"
                     >{{ speed }} 倍</el-radio
                   >
                 </el-radio-group>
@@ -86,7 +86,7 @@
               </template>
               <div>
                 <el-radio-group v-model="config.gap" size="default" @change="bookChange">
-                  <el-radio v-for="gap in config.gapList" :key="gap" :label="gap" border class="w-full mb-2 mr-0">{{ gap }} 秒</el-radio>
+                  <el-radio v-for="gap in config.gapList" :key="gap" :value="gap" border class="w-full mb-2 mr-0">{{ gap }} 秒</el-radio>
                 </el-radio-group>
               </div>
             </el-popover>
@@ -109,7 +109,7 @@
               </template>
               <div>
                 <el-radio-group v-model="config.repeat" size="default" @change="bookChange">
-                  <el-radio v-for="repeat in config.repeatList" :key="repeat" :label="repeat" border class="w-full mb-2 mr-0"
+                  <el-radio v-for="repeat in config.repeatList" :key="repeat" :value="repeat" border class="w-full mb-2 mr-0"
                     >{{ repeat }} 秒</el-radio
                   >
                 </el-radio-group>
@@ -134,7 +134,7 @@
               </template>
               <div>
                 <el-radio-group v-model="config.pronounce" size="default" @change="bookChange">
-                  <el-radio v-for="pronounce in config.pronounceList" :key="pronounce" :label="pronounce" border class="w-full mb-2 mr-0">{{
+                  <el-radio v-for="pronounce in config.pronounceList" :key="pronounce" :value="pronounce" border class="w-full mb-2 mr-0">{{
                     pronounce
                   }}</el-radio>
                 </el-radio-group>
@@ -145,15 +145,12 @@
           <div class="flex items-center justify-center gap-2">
             <div class="relative">
               <div>
-                <div class="relative" data-headlessui-state=""
+                <div class="relative"
                   ><button
                     class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
-                    aria-label="音效设置"
                     title="音效设置"
                     type="button"
-                    aria-expanded="false"
-                    data-headlessui-state=""
-                    id="headlessui-popover-button-:rde:"
+                    @click="handleSoundEffect"
                   >
                     <SvgIcon
                       name="sound"
@@ -247,7 +244,7 @@
 
                 <div class="relative">
                   <div lang="en" class="flex flex-col items-center justify-center pb-1 pt-4">
-                    <div
+                    <!-- <div
                       class="tooltip-info relative w-fit bg-transparent p-0 leading-normal shadow-none dark:bg-transparent"
                       data-tip="按 Tab 快捷键显示完整单词"
                     >
@@ -260,22 +257,19 @@
                           >{{ word }}</span
                         >
                       </div>
+                    </div> -->
 
-                      <!-- <div class="absolute -right-12 top-1/2 h-9 w-9 -translate-y-1/2 transform">
-                        <div class="relative">
-                          <div
-                            ><button
-                              type="button"
-                              class="focus:outline-none dark:fill-gray-400 dark:opacity-80 cursor-pointer text-gray-600 h-full w-full"
-                              ></button
-                          ></div>
-                          <div
-                            class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
-                          >
-                            <span class="tooltip">快捷键Ctrl + J</span></div
-                          >
-                        </div>
-                      </div> -->
+                    <div class="user-input text-center">
+                      <input
+                        v-model="wordsData.currentWord.userInput"
+                        type="text"
+                        ref="inputRef"
+                        class="font-mono font-normal text-center"
+                        @keydown.enter="inputEnter"
+                        @focus="handleFocus"
+                        @blur="handleBlur"
+                        @keydown="handleKeyDown"
+                      />
                     </div>
                   </div>
                   <!-- <div
@@ -295,11 +289,11 @@
                       <SvgIcon name="play-left" color="grey" />
                     </div>
                     <div>
-                      <SvgIcon name="play-start" color="grey" />
-                      <SvgIcon name="play-stop" color="grey" />
+                      <SvgIcon v-if="playStatus == 0 || playStatus == 2" @click="start" name="play-start" color="grey" />
+                      <SvgIcon v-if="playStatus == 1" @click="stop" name="play-stop" color="grey" />
                     </div>
                     <div>
-                      <SvgIcon name="play-again" color="grey" />
+                      <SvgIcon @click="() => playWords()" name="play-again" color="grey" />
                     </div>
                   </div>
                 </div>
@@ -322,11 +316,19 @@
         </div>
       </div>
     </div>
+    <mistakeDialog ref="mistakeRef" />
   </main>
 </template>
 
 <script setup>
   import SvgIcon from '@/components/SvgIcon/index.vue';
+  import beep from '@/assets/beep.wav';
+  import correct from '@/assets/correct.wav';
+  import defaultAudio from '@/assets/Default.wav';
+  import { ElMessage } from 'element-plus';
+  import mistakeDialog from './mistakeDialog.vue';
+  // 有道的翻译api
+  const YDAPI = 'https://dict.youdao.com/dictvoice?le=en&audio=';
 
   const config = reactive({
     id: 1,
@@ -343,12 +345,19 @@
     repeatList: ['1', '2', '3', '无限'],
     pronounceList: ['美音', '英音'],
   });
+
   const wordsData = reactive({
     words: [{}],
     currentWord: { zh: '', word: '', mark: '' },
     currentIndex: 0,
   });
 
+  const playStatus = ref(0); // 0-未开始 1-播放中 2-已暂停
+  const inputRef = ref(null); // 输入框聚焦
+  const beepRef = ref(new Audio(beep));
+  const correctRef = ref(new Audio(correct));
+  const defaultAudioRef = ref(new Audio(defaultAudio));
+  const mistakeRef = ref(null);
   const nearWords = computed(() => {
     let lastWord = '';
     let nextWord = '';
@@ -366,21 +375,122 @@
   });
   const getWords = (params) => {
     wordsData.words = [
-      { zh: '中文', word: 'chinese', mark: `AmE: [pə'zɛs]` },
-      { zh: '英文', word: 'english', mark: `AmE: [pə'zɛs]` },
+      { zh: '中文', word: 'chinese', mark: `AmE: [pə'zɛs]`, userInput: '' },
+      { zh: '英文', word: 'english', mark: `AmE: [pə'zɛs]`, userInput: '' },
     ];
     wordsData.currentWord = wordsData.words[wordsData.currentIndex];
   };
   getWords();
 
   const handleMove = (type) => {
+    playStatus.value = 1;
     const sign = wordsData.currentIndex + type;
 
     if (sign < wordsData.words.length && sign >= 0) {
       wordsData.currentIndex = sign;
       wordsData.currentWord = wordsData.words[wordsData.currentIndex];
     }
+    playWords();
   };
+
+  const bookChange = () => {};
+  // 开始听写
+  const start = () => {
+    playStatus.value = 1;
+    playWords();
+  };
+
+  // 暂停
+  const stop = () => {
+    playStatus.value = 2;
+  };
+
+  // 回车
+  const inputEnter = () => {
+    const { word, userInput } = wordsData.currentWord;
+    if (word === userInput) {
+      inputRef.value.style.color = 'green';
+      inputRef.value.style.borderColor = 'green';
+      correctRef.value.play();
+    } else {
+      inputRef.value.style.color = 'red';
+      inputRef.value.style.borderColor = 'red';
+      beepRef.value.play();
+    }
+    setTimeout(() => {
+      inputRef.value.style.color = '';
+      inputRef.value.style.borderColor = '';
+      // 判断是不是最后一个单词
+      if (wordsData.words.length <= wordsData.currentIndex + 1) {
+        alert('111');
+      } else {
+        handleMove(1);
+      }
+    }, 500);
+  };
+  // 聚焦
+  const handleFocus = () => {
+    start();
+  };
+  // 失去焦点
+  const handleBlur = () => {
+    stop();
+  };
+  // 处理音效
+  const handleSoundEffect = () => {
+    config.isSoundMute = !config.isSoundMute;
+    ElMessage.success(`音效已 ${config.isSoundMute ? '关闭' : '开启'}`);
+  };
+  const handleKeyDown = (event) => {
+    const key = event.key.toLowerCase();
+    if (/^[a-z]$/.test(key)) {
+      defaultAudioRef.value.play();
+    }
+  };
+  // 播放音频的方法
+  const playWords = (words = [wordsData.currentWord]) => {
+    inputRef.value.focus();
+    var index = 0;
+    var count = 0;
+    var audio = new Audio();
+    var interval = config.gap * 1000; // 播放间隔（毫秒）
+    var repeatTimes = config.repeat;
+
+    // 播放第一个单词
+    audio.src = YDAPI + words[index].word;
+    audio.playbackRate = +config.speed;
+
+    audio.play();
+
+    audio.addEventListener(
+      'ended',
+      function () {
+        count++;
+        if (count < repeatTimes) {
+          // 这里是播放
+          audio.src = YDAPI + words[index].word;
+          setTimeout(() => {
+            audio.play();
+          }, interval);
+        } else {
+          index++;
+          count = 0;
+
+          if (index < words.length) {
+            audio.src = YDAPI + words[index].word;
+            setTimeout(() => {
+              audio.play();
+            }, interval);
+          } else {
+            // 所有单词都已播放完毕，停止播放
+            return;
+          }
+        }
+      },
+      false,
+    );
+  };
+  onMounted(() => {});
 </script>
 
 <style scoped lang="less">
@@ -393,5 +503,19 @@
   }
   .el-popover .el-popper {
     min-width: 100px !important;
+  }
+  .user-input {
+    input {
+      font-size: 3rem;
+      border-bottom: 2px solid black;
+      padding: 10px;
+      width: 50%;
+    }
+    .error {
+      border-bottom: 2px solid red;
+    }
+    .success {
+      border-bottom: 2px solid green;
+    }
   }
 </style>
