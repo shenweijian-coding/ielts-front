@@ -1,59 +1,64 @@
 <template>
-  <div class="pl-20">
-    <!-- tab切换 -->
-    <!-- <div style="height: 10rem"> -->
-    <!-- <el-affix :offset="14"> -->
-    <el-tabs v-model="galleryState.activeTab" @tab-click="handleClick">
-      <el-tab-pane :name="item.id" v-for="item in galleryState.tabs" :key="item.id">
-        <template #label>
-          <img :src="item.icon" alt="" />&nbsp;
-          <span class="text-lg"> {{ item.title }} </span>
-        </template>
-      </el-tab-pane>
-    </el-tabs>
-    <!-- </el-affix> -->
-    <!-- </div> -->
+  <div class="flex h-screen w-full flex-col items-center pb-4">
+    <div class="relative mb-auto mt-auto flex w-full flex-1 flex-col overflow-y-auto pl-20">
+      <div class="mt-20 flex w-full flex-1 flex-col items-center justify-center overflow-y-auto">
+        <!-- tab切换 -->
+        <!-- <div style="height: 10rem"> -->
+        <!-- <el-affix :offset="14"> -->
+        <el-tabs v-model="galleryState.activeTab" @tab-click="handleClick" class="flex h-20 w-full items-center justify-between pb-6">
+          <el-tab-pane :name="item.id" v-for="item in galleryState.tabs" :key="item.id">
+            <template #label>
+              <img :src="item.icon" alt="" />&nbsp;
+              <span class="text-lg"> {{ item.title }} </span>
+            </template>
+          </el-tab-pane>
+        </el-tabs>
+        <!-- </el-affix> -->
+        <!-- </div> -->
+        <div class="flex-1 overflow-y-auto">
+          <div v-for="item in 3" :key="item" class="mt-10">
+            <!-- 选项 -->
+            <div class="flex items-center space-x-4">
+              <div
+                v-for="(item, index) in galleryState.tabs[galleryState.activeTab].childs"
+                :key="index"
+                class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 bg-white hover:bg-indigo-100 text-black false"
+                ><span class="font-normal">大学英语</span></div
+              >
+            </div>
+            <!-- <el-radio-group v-model="galleryState.activeType" size="large">
+      <el-radio-button
+        :label="item.title"
+        :value="item.id"
+        v-for="(item, index) in galleryState.tabs[galleryState.activeTab].childs"
+        :key="index"
+        class="pr-10 border"
+      />
+    </el-radio-group> -->
 
-    <div v-for="item in 3" :key="item" class="mt-10">
-      <!-- 选项 -->
-      <div class="flex items-center space-x-4">
-        <div
-          v-for="(item, index) in galleryState.tabs[galleryState.activeTab].childs"
-          :key="index"
-          class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 bg-white hover:bg-indigo-100 text-black false"
-          ><span class="font-normal">大学英语</span></div
-        >
-      </div>
-      <!-- <el-radio-group v-model="galleryState.activeType" size="large">
-        <el-radio-button
-          :label="item.title"
-          :value="item.id"
-          v-for="(item, index) in galleryState.tabs[galleryState.activeTab].childs"
-          :key="index"
-          class="pr-10 border"
-        />
-      </el-radio-group> -->
-
-      <!-- 书籍 -->
-      <div class="mt-8 grid gap-x-5 gap-y-10 px-1 pb-4 sm:grid-cols-1 md:grid-cols-6 dic3:grid-cols-3 dic4:grid-cols-4">
-        <div
-          v-for="item in 10"
-          :key="item"
-          class="group flex h-36 w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg p-4 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
-          @click="openChapter"
-        >
-          <div class="relative ml-1 mt-2 flex h-full w-full flex-col items-start justify-start"
-            ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:text-indigo-400 dark:text-gray-200">CET-4</h1
-            ><p class="mb-1 max-w-full truncate textdelayDuration-gray-600 dark:text-gray-200 whitespace-nowrap" data-state="closed"
-              >大学英语四级词库</p
-            ><p class="mb-0.5 font-bold text-gray-600 dark:text-gray-200">2607 词</p
-            ><div class="flex w-full items-center pt-2"
-              ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20" /></div
-          ></div>
+            <!-- 书籍 -->
+            <div class="mt-8 grid gap-x-5 gap-y-10 px-1 pb-4 sm:grid-cols-1 md:grid-cols-6 dic3:grid-cols-3 dic4:grid-cols-4">
+              <div
+                v-for="item in 10"
+                :key="item"
+                class="group flex h-36 w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg p-4 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700"
+                @click="openChapter"
+              >
+                <div class="relative ml-1 mt-2 flex h-full w-full flex-col items-start justify-start"
+                  ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:text-indigo-400 dark:text-gray-200">CET-4</h1
+                  ><p class="mb-1 max-w-full truncate textdelayDuration-gray-600 dark:text-gray-200 whitespace-nowrap" data-state="closed"
+                    >大学英语四级词库</p
+                  ><p class="mb-0.5 font-bold text-gray-600 dark:text-gray-200">2607 词</p
+                  ><div class="flex w-full items-center pt-2"
+                    ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20" /></div
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
+        <ChapterDialog ref="ChapterDialogRef" />
       </div>
     </div>
-    <ChapterDialog ref="ChapterDialogRef" />
   </div>
 </template>
 <script setup>

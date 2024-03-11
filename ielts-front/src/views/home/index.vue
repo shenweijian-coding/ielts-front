@@ -169,14 +169,16 @@
             </div>
 
             <div class="relative">
-              <div
-                ><button
-                  type="button"
-                  class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
-                  title="查看错题本"
-                >
-                  <SvgIcon name="book" prefix="icon-svg" size="small" color="hover:text-white" />
-                </button>
+              <div>
+                <a href="/errorBook">
+                  <button
+                    type="button"
+                    class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
+                    title="查看错题本"
+                  >
+                    <SvgIcon name="book" prefix="icon-svg" size="small" color="hover:text-white" />
+                  </button>
+                </a>
               </div>
               <div
                 class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"

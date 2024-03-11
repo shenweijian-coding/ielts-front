@@ -15,7 +15,7 @@
   import { reactive } from 'vue';
 
   const state = reactive({
-    dialogVisible: true,
+    dialogVisible: false,
   });
 
   const open = () => {
