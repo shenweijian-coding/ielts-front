@@ -92,19 +92,16 @@
   };
 
   const getBooks = () => {
-    getGroupBooks().then(res => {
+    getGroupBooks().then((res) => {});
+  };
 
-    })
-  }
-
-  const getSceneList
-  const handleClick = () => {
-    console.log();
+  const getScene = () => {
+    getSceneList().then((res) => {
+      getBooks();
+    });
   };
 
   onMounted(() => {
-    getSceneList({
-      c_id: 1,
-    }).then((res) => {});
+    getScene();
   });
 </script>
