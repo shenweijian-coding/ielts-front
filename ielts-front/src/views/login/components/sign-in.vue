@@ -5,12 +5,19 @@
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <el-form ref="ruleFormRef" :model="userFormData" class="login-form" layout="vertical" :rules="rules" size="large">
       <el-form-item
-        prop="username"
+        prop="phone_number"
         :rules="[{ required: true, message: '手机号不能为空' }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
-        <el-input v-model="userFormData.username" placeholder="手机号" />
+        <el-input v-model="userFormData.phone_number" placeholder="手机号" />
+      </el-form-item>
+      <el-form-item prop="code" :rules="[{ required: true, message: '验证码不能为空' }]" :validate-trigger="['change', 'blur']" hide-label>
+        <el-input v-model="userFormData.code" placeholder="验证码" allow-clear>
+          <template #append>
+            <span class="cursor-pointer" @click="senYzm">{{ countingDown ? `${countdown} 秒` : '发送验证码' }}</span>
+          </template>
+        </el-input>
       </el-form-item>
       <el-form-item
         prop="password"
@@ -18,15 +25,10 @@
         :validate-trigger="['change', 'blur']"
         hide-label
       >
-        <el-input v-model="userFormData.password" placeholder="验证码" allow-clear>
-          <template #append>
-            <span class="cursor-pointer" @click="senYzm">发送验证码</span>
-          </template>
-        </el-input>
+        <el-input v-model="userFormData.password" placeholder="密码" allow-clear />
       </el-form-item>
       <el-button type="primary" @click="handleSubmit(ruleFormRef)">注册</el-button>
       <el-button type="text" class="forget-pwd" @click="handleToChangePwd" />
-      <!-- <el-button @click="resetForm(ruleFormRef)" block>重置</el-button> -->
     </el-form>
   </div>
 </template>
@@ -34,17 +36,23 @@
 <script lang="ts" setup>
   import { ElMessage, FormInstance, FormRules } from 'element-plus';
   import { useUserStore } from '@/store';
+  import { sendyzm, signup } from '@/api/user/index';
 
   const router = useRouter();
   const errorMessage = ref('');
   const userStore = useUserStore();
+
+  const countdown = ref(60);
+  const countingDown = ref(false);
+
   const userFormData = reactive({
-    username: '',
+    phone_number: '',
+    code: '',
     password: '',
   });
   const ruleFormRef = ref<FormInstance>();
   const rules = reactive<FormRules>({
-    username: [
+    phone_number: [
       {
         required: true,
         message: '手机号不能为空',
@@ -61,27 +69,42 @@
   const handleSubmit = async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     await formEl.validate(async (valid) => {
-      console.log(valid);
       if (valid) {
-        await userStore.login(userFormData);
-        await userStore.info();
+        await signup(userFormData);
         router.push('/');
       } else {
-        ElMessage.error('错误信息:请填写手机号和验证码');
+        ElMessage.error('错误信息:请填写手机号、验证码、密码');
       }
     });
   };
 
-  const resetForm = (formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    formEl.resetFields();
-  };
   const handleToChangePwd = () => {
     router.push('/forgetPassword');
   };
 
+  let timer;
   // 发送验证码
-  const senYzm = () => {};
+  const senYzm = () => {
+    sendyzm({
+      phone_number: userFormData.phone_number,
+      action: 'code',
+    })
+      .then((res) => {
+        countingDown.value = true;
+        countdown.value = 60;
+
+        timer = setInterval(() => {
+          countdown.value--;
+          if (countdown.value === 0) {
+            countingDown.value = false;
+            clearInterval(timer);
+          }
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 </script>
 
 <style lang="less" scoped>

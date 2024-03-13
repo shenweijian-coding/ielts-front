@@ -5,12 +5,12 @@
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <el-form ref="ruleFormRef" :model="userFormData" class="login-form" layout="vertical" :rules="rules" size="large">
       <el-form-item
-        prop="username"
+        prop="phone_number"
         :rules="[{ required: true, message: '手机号不能为空' }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
-        <el-input v-model="userFormData.username" placeholder="手机号" />
+        <el-input v-model="userFormData.phone_number" placeholder="手机号" />
       </el-form-item>
       <el-form-item
         prop="password"
@@ -22,7 +22,6 @@
       </el-form-item>
       <el-button type="primary" @click="handleSubmit(ruleFormRef)">登录</el-button>
       <el-button type="text" class="forget-pwd" @click="handleToChangePwd">忘记密码?</el-button>
-      <!-- <el-button @click="resetForm(ruleFormRef)" block>重置</el-button> -->
     </el-form>
   </div>
 </template>
@@ -35,12 +34,12 @@
   const errorMessage = ref('');
   const userStore = useUserStore();
   const userFormData = reactive({
-    username: '',
+    phone_number: '',
     password: '',
   });
   const ruleFormRef = ref<FormInstance>();
   const rules = reactive<FormRules>({
-    username: [
+    phone_number: [
       {
         required: true,
         message: '手机号不能为空',
@@ -60,7 +59,6 @@
       console.log(valid);
       if (valid) {
         await userStore.login(userFormData);
-        await userStore.info();
         router.push('/');
       } else {
         ElMessage.error('错误信息:请填写手机号和密码');
@@ -68,10 +66,6 @@
     });
   };
 
-  const resetForm = (formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    formEl.resetFields();
-  };
   const handleToChangePwd = () => {
     router.push('/forgetPassword');
   };

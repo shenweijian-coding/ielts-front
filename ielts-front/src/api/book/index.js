@@ -5,4 +5,8 @@ const getBookList = async () => get({ url: '/book/getBookList' });
 
 const getWordList = async (data) => post({ url: '/book/getWordList', data });
 
-export { getBookList, getWordList };
+const getSceneList = async (data) => post({ url: '/api/study/lexicon/v1/scene/list', data });
+
+const getGroupBooks = async (data) => post({ url: '/api/study/lexicon/v1/group/list', data });
+
+export { getBookList, getWordList, getSceneList, getGroupBooks };

@@ -5,14 +5,14 @@
         <!-- tab切换 -->
         <!-- <div style="height: 10rem"> -->
         <!-- <el-affix :offset="14"> -->
-        <el-tabs v-model="galleryState.activeTab" @tab-click="handleClick" class="flex h-20 w-full items-center justify-between pb-6">
+        <!-- <el-tabs v-model="galleryState.activeTab" @tab-click="handleClick" class="flex h-20 w-full items-center justify-between pb-6">
           <el-tab-pane :name="item.id" v-for="item in galleryState.tabs" :key="item.id">
             <template #label>
               <img :src="item.icon" alt="" />&nbsp;
               <span class="text-lg"> {{ item.title }} </span>
             </template>
           </el-tab-pane>
-        </el-tabs>
+        </el-tabs> -->
         <!-- </el-affix> -->
         <!-- </div> -->
         <div class="flex-1 overflow-y-auto">
@@ -64,8 +64,10 @@
 <script setup>
   import ChapterDialog from './chapter-dialog.vue';
   import yg from '@/assets/images/yg.png';
-  import rb from '@/assets/images/rb.png';
-  import dg from '@/assets/images/dg.png';
+  // import rb from '@/assets/images/rb.png';
+  // import dg from '@/assets/images/dg.png';
+
+  import { getSceneList, getGroupBooks } from '@/api/book/index';
 
   const ChapterDialogRef = ref(null);
 
@@ -80,8 +82,6 @@
           { id: 1, title: '考研' },
         ],
       },
-      { id: 1, title: '英语', icon: rb },
-      { id: 2, title: '英语', icon: dg },
     ],
     activeTab: 0,
     activeType: 0,
@@ -91,7 +91,20 @@
     ChapterDialogRef.value.open();
   };
 
+  const getBooks = () => {
+    getGroupBooks().then(res => {
+
+    })
+  }
+
+  const getSceneList
   const handleClick = () => {
     console.log();
   };
+
+  onMounted(() => {
+    getSceneList({
+      c_id: 1,
+    }).then((res) => {});
+  });
 </script>
