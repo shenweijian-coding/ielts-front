@@ -44,6 +44,7 @@
   const errorMessage = ref('');
   const userStore = useUserStore();
 
+  const emit = defineEmits(['toggle']);
   const countdown = ref(60);
   const countingDown = ref(false);
 
@@ -72,12 +73,14 @@
     if (!formEl) return;
     await formEl.validate(async (valid) => {
       if (valid) {
-        await signup({
+        signup({
           phone_number: +userFormData.phone_number,
           code: userFormData.code,
           password: userFormData.password,
+        }).then((res) => {
+          emit('toggle');
+          ElMessage.success('恭喜您，注册成功！');
         });
-        router.push('/');
       } else {
         ElMessage.error('错误信息:请填写手机号、验证码、密码');
       }

@@ -18,7 +18,7 @@
                 class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
                 href="/gallery"
               >
-                语思资料库
+                {{ appStore?.dictationInfo?.booInfo.remarks }}
               </a>
             </div>
           </div>
@@ -33,12 +33,14 @@
                   aria-haspopup="listbox"
                   aria-expanded="false"
                   data-headlessui-state=""
-                  >{{ config.chapter }}</button
+                  >{{ appStore?.dictationInfo?.currentChapter.name }}</button
                 >
               </template>
               <div>
-                <el-radio-group v-model="config.chapter" size="default" @change="bookChange">
-                  <el-radio-button v-for="chapter in config.chapterList" :key="chapter" :value="chapter">{{ chapter }}</el-radio-button>
+                <el-radio-group v-model="config.chapterId" size="default">
+                  <el-radio-button v-for="chapter in chapterList" :key="chapter.id" :value="+chapter.id">{{
+                    chapter.name
+                  }}</el-radio-button>
                 </el-radio-group>
               </div>
             </el-popover>
@@ -329,22 +331,26 @@
   import defaultAudio from '@/assets/Default.wav';
   import { ElMessage } from 'element-plus';
   import mistakeDialog from './mistakeDialog.vue';
+  import { useAppStore } from '@/store';
+  import { getWordList } from '@/api/book/index';
+
+  const appStore = useAppStore();
 
   const route = useRoute();
+  const router = useRouter();
 
   // 有道的翻译api
   const YDAPI = 'https://dict.youdao.com/dictvoice?le=en&audio=';
 
   const config = reactive({
     id: 1,
-    chapter: '1-1',
+    chapterId: appStore.chapterId,
     speed: '1.0',
     gap: '5',
     num: 1,
     repeat: '1',
     pronounce: '美音',
     isSoundMute: false,
-    chapterList: ['1-1', '1-2', '2-1'],
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['2', '3', '4', '5', '6', '7'],
     repeatList: ['1', '2', '3', '无限'],
@@ -363,6 +369,7 @@
   const correctRef = ref(new Audio(correct));
   const defaultAudioRef = ref(new Audio(defaultAudio));
   const mistakeRef = ref(null);
+
   const nearWords = computed(() => {
     let lastWord = '';
     let nextWord = '';
@@ -378,7 +385,18 @@
       nextWord,
     };
   });
+
+  const chapterList = computed(() => {
+    return appStore?.dictationInfo?.chapterList || [];
+  });
+  // const currentChapter = computed(() => {
+  //   return appStore.dictationInfo.currentChapter;
+  // });
+
   const getWords = (params) => {
+    getWordList({ c_id: appStore.dictationInfo.currentChapter.id }).then((res) => {
+      console.log(res);
+    });
     wordsData.words = [
       { zh: '中文', word: 'chinese', mark: `AmE: [pə'zɛs]`, userInput: '' },
       { zh: '英文', word: 'english', mark: `AmE: [pə'zɛs]`, userInput: '' },
@@ -495,10 +513,12 @@
     );
   };
   onMounted(() => {
-    const { chapterId } = route.query;
-    console.log(chapterId);
+    console.log(appStore.dictationInfo);
+    if (!appStore?.dictationInfo?.currentChapter) {
+      router.push('/gallery');
+      return;
+    }
     getWords();
-
   });
 </script>
 

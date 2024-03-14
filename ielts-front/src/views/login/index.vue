@@ -11,7 +11,7 @@
             <LoginForm />
           </el-tab-pane>
           <el-tab-pane label="注册" name="register">
-            <SignIn />
+            <SignIn @toggle="toggle" />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -37,6 +37,9 @@
     document.body.removeAttribute('arco-theme');
   }
   function handleClick() {}
+  function toggle() {
+    activeName.value = 'login';
+  }
 </script>
 
 <style lang="less" scoped>

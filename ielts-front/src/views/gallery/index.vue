@@ -95,16 +95,21 @@
     galleryState.chapterList = [
       {
         id: 1,
-        name: 'CTE-4', // 词组昵称
-        remarks: '大学英语四级词库', // 备注
-        word_total: 0, // 单词数
-        chapter_total: 0, // 章节数
+        name: '第一章',
+        word_total: 0, //单词数
+        accuracy: 0, // 准确率 0 为未练习
       },
       {
         id: 2,
-        name: 'CTE-6',
-        remarks: '大学英语六级词库',
-        word_total: 0,
+        name: '第二章',
+      },
+      {
+        id: 3,
+        name: '第三章',
+      },
+      {
+        id: 4,
+        name: '第四章',
       },
     ];
     ChapterDialogRef.value.open(item, galleryState.chapterList);

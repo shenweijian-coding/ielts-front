@@ -41,6 +41,9 @@
 <script setup>
   import { reactive } from 'vue';
   import SvgIcon from '@/components/SvgIcon/index.vue';
+  import { useAppStore } from '@/store';
+
+  const appStore = useAppStore();
 
   const router = useRouter();
 
@@ -59,7 +62,12 @@
     state.dialogVisible = false;
   };
   const handleClickChapter = (item) => {
-    router.push('/home?chapterId=' + item.id);
+    appStore.setChapterInfo({
+      currentChapter: item,
+      chapterList: state.list,
+      booInfo: state.book,
+    });
+    router.push('/home');
   };
   defineExpose({
     open,
