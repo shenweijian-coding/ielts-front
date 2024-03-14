@@ -329,6 +329,9 @@
   import defaultAudio from '@/assets/Default.wav';
   import { ElMessage } from 'element-plus';
   import mistakeDialog from './mistakeDialog.vue';
+
+  const route = useRoute();
+
   // 有道的翻译api
   const YDAPI = 'https://dict.youdao.com/dictvoice?le=en&audio=';
 
@@ -382,7 +385,6 @@
     ];
     wordsData.currentWord = wordsData.words[wordsData.currentIndex];
   };
-  getWords();
 
   const handleMove = (type) => {
     playStatus.value = 1;
@@ -492,7 +494,12 @@
       false,
     );
   };
-  onMounted(() => {});
+  onMounted(() => {
+    const { chapterId } = route.query;
+    console.log(chapterId);
+    getWords();
+
+  });
 </script>
 
 <style scoped lang="less">

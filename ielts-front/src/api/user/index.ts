@@ -5,8 +5,8 @@ enum URL {
   login = '/api/study/customer/v1/login',
   logout = '/user/logout',
   profile = '/user/profile',
-  sendyzm = '/study/phone/send/sms',
-  signup = '/study/customer/v1/signup'
+  sendyzm = '/api/study/phone/send/sms',
+  signup = '/api/study/customer/v1/signup'
 }
 interface LoginRes {
   token: string;

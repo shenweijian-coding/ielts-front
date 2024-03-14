@@ -8,6 +8,7 @@ export default defineConfig({
   theme: {
     colors: {
       theme: '#ff5c00',
+      theme_hover: '#ffeee5',
       primary: 'var(--primary-color)',
       primary_hover: 'var(--primary-color-hover)',
       primary_pressed: 'var(--primary-color-pressed)',

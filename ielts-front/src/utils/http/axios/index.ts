@@ -29,8 +29,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: any) => {
     if (response.status === 200) {
-      if(!response.data.code) {
-        ElMessage.error(response.data.msg)
+      if(response.data.status) {
+        ElMessage.error(response.data.message)
         return Promise.reject(response.data)
       }
       

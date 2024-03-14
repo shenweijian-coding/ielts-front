@@ -15,7 +15,9 @@
       <el-form-item prop="code" :rules="[{ required: true, message: '验证码不能为空' }]" :validate-trigger="['change', 'blur']" hide-label>
         <el-input v-model="userFormData.code" placeholder="验证码" allow-clear>
           <template #append>
-            <span class="cursor-pointer" @click="senYzm">{{ countingDown ? `${countdown} 秒` : '发送验证码' }}</span>
+            <span class="cursor-pointer" @click="senYzm" :disabled="countingDown">{{
+              countingDown ? `${countdown} 秒` : '发送验证码'
+            }}</span>
           </template>
         </el-input>
       </el-form-item>
@@ -47,7 +49,7 @@
 
   const userFormData = reactive({
     phone_number: '',
-    code: '',
+    code: '12345',
     password: '',
   });
   const ruleFormRef = ref<FormInstance>();
@@ -70,7 +72,11 @@
     if (!formEl) return;
     await formEl.validate(async (valid) => {
       if (valid) {
-        await signup(userFormData);
+        await signup({
+          phone_number: +userFormData.phone_number,
+          code: userFormData.code,
+          password: userFormData.password,
+        });
         router.push('/');
       } else {
         ElMessage.error('错误信息:请填写手机号、验证码、密码');
@@ -85,11 +91,15 @@
   let timer;
   // 发送验证码
   const senYzm = () => {
+    if (countingDown.value) {
+      return;
+    }
     sendyzm({
       phone_number: userFormData.phone_number,
       action: 'code',
     })
       .then((res) => {
+        ElMessage.success('发送成功，请注意查看');
         countingDown.value = true;
         countdown.value = 60;
 

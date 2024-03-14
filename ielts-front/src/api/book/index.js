@@ -9,4 +9,8 @@ const getSceneList = async (data) => post({ url: '/api/study/lexicon/v1/scene/li
 
 const getGroupBooks = async (data) => post({ url: '/api/study/lexicon/v1/group/list', data });
 
-export { getBookList, getWordList, getSceneList, getGroupBooks };
+const getChapterList = async (data) => post({ url: '/api/study/lexicon/v1/group/list', data });
+
+const getLanguageList = async (data) => post({ url: '/api/study/lexicon/v1/language/list', data });
+
+export { getBookList, getWordList, getSceneList, getGroupBooks, getChapterList, getLanguageList };
