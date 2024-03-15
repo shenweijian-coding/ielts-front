@@ -32,12 +32,13 @@ export const useAppStore = defineStore(
       },
       setChapterInfo(data) {
         this.dictationInfo = data
+      },
+      async toggleCurrentChapter(data) {
+        this.dictationInfo.currentChapter = data
       }
     },
     persist: {
-      key: 'theme',
-      storage: localStorage,
-      paths: ['theme'],
+      enabled: true
     },
   },
 );

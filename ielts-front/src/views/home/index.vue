@@ -36,11 +36,17 @@
                   >{{ appStore?.dictationInfo?.currentChapter.name }}</button
                 >
               </template>
-              <div>
-                <el-radio-group v-model="config.chapterId" size="default">
-                  <el-radio-button v-for="chapter in chapterList" :key="chapter.id" :value="+chapter.id">{{
-                    chapter.name
-                  }}</el-radio-button>
+              <div class="h-50 overflow-y-auto">
+                <el-radio-group v-model="config.chapterId" size="default" @change="chapterChange">
+                  <el-radio
+                    v-for="chapter in chapterList"
+                    :key="chapter.id"
+                    :value="chapter.id"
+                    :label="chapter.id"
+                    border
+                    class="w-full mb-2 mr-0"
+                    >{{ chapter.name }}</el-radio
+                  >
                 </el-radio-group>
               </div>
             </el-popover>
@@ -62,8 +68,14 @@
                 </button>
               </template>
               <div>
-                <el-radio-group v-model="config.speed" size="default" @change="bookChange">
-                  <el-radio v-for="speed in config.speedList" :key="speed" :value="speed" border class="w-full mb-2 mr-0"
+                <el-radio-group v-model="config.speed" size="default">
+                  <el-radio
+                    v-for="(speed, index) in config.speedList"
+                    :key="index"
+                    :value="speed"
+                    :label="speed"
+                    border
+                    class="w-full mb-2 mr-0"
                     >{{ speed }} 倍</el-radio
                   >
                 </el-radio-group>
@@ -87,8 +99,10 @@
                 </button>
               </template>
               <div>
-                <el-radio-group v-model="config.gap" size="default" @change="bookChange">
-                  <el-radio v-for="gap in config.gapList" :key="gap" :value="gap" border class="w-full mb-2 mr-0">{{ gap }} 秒</el-radio>
+                <el-radio-group v-model="config.gap" size="default">
+                  <el-radio v-for="gap in config.gapList" :key="gap" :value="gap" border :label="gap" class="w-full mb-2 mr-0"
+                    >{{ gap }} 秒</el-radio
+                  >
                 </el-radio-group>
               </div>
             </el-popover>
@@ -110,8 +124,14 @@
                 </button>
               </template>
               <div>
-                <el-radio-group v-model="config.repeat" size="default" @change="bookChange">
-                  <el-radio v-for="repeat in config.repeatList" :key="repeat" :value="repeat" border class="w-full mb-2 mr-0"
+                <el-radio-group v-model="config.repeat" size="default">
+                  <el-radio
+                    v-for="repeat in config.repeatList"
+                    :key="repeat"
+                    :value="repeat"
+                    :label="repeat"
+                    border
+                    class="w-full mb-2 mr-0"
                     >{{ repeat }} 秒</el-radio
                   >
                 </el-radio-group>
@@ -135,10 +155,16 @@
                 </button>
               </template>
               <div>
-                <el-radio-group v-model="config.pronounce" size="default" @change="bookChange">
-                  <el-radio v-for="pronounce in config.pronounceList" :key="pronounce" :value="pronounce" border class="w-full mb-2 mr-0">{{
-                    pronounce
-                  }}</el-radio>
+                <el-radio-group v-model="config.pronounce" size="default">
+                  <el-radio
+                    v-for="pronounce in config.pronounceList"
+                    :key="pronounce"
+                    :value="pronounce"
+                    :label="pronounce"
+                    border
+                    class="w-full mb-2 mr-0"
+                    >{{ pronounce }}</el-radio
+                  >
                 </el-radio-group>
               </div>
             </el-popover>
@@ -191,7 +217,7 @@
 
             <div class="relative">
               <div>
-                <el-popover placement="bottom" :width="50" trigger="click" popper-class="popperClass">
+                <el-popover placement="bottom" :width="50" trigger="hover" popper-class="popperClass">
                   <template #reference>
                     <button
                       type="button"
@@ -229,7 +255,7 @@
                         nearWords.lastWord.word
                       }}</p
                       ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
-                        nearWords.lastWord.zh
+                        nearWords.lastWord.translate
                       }}</p></div
                     ></div
                   ></div
@@ -243,11 +269,9 @@
                     v-if="nearWords.nextWord"
                     class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
                     ><div class="grow-1 flex w-full flex-col items-end text-right mr-2"
-                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">{{
-                        nearWords.nextWord.word
-                      }}</p
+                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0"> **** </p
                       ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
-                        nearWords.nextWord.zh
+                        nearWords.nextWord.translate
                       }}</p></div
                     >
                     <SvgIcon name="right" /> </div></div
@@ -298,13 +322,13 @@
                   <!-- <div
                     class="space-x-5 text-center text-sm font-normal text-gray-600 transition-colors duration-300 dark:text-gray-400 false"
                   >
-                    <span>{{ wordsData.currentWord.mark }}</span></div
+                    <span>{{ wordsData.currentWord.phonetic_transcription }}</span></div
                   >
                   <div class="flex items-center justify-center pb-4 pt-5">
                     <span
                       class="max-w-4xl text-center font-sans transition-colors duration-300 dark:text-white dark:text-opacity-80 false false"
                       style="font-size: 18px"
-                      >{{ wordsData.currentWord.zh }}</span
+                      >{{ wordsData.currentWord.translate }}</span
                     >
                   </div> -->
                   <div class="space-x-8 flex mt-10 duration-300 text-center justify-center transition-colors font-sans cursor-pointer">
@@ -352,7 +376,7 @@
   import { UserFilled } from '@element-plus/icons-vue';
   import mistakeDialog from './mistakeDialog.vue';
   import { useAppStore, useUserStore } from '@/store';
-  import { getWordList } from '@/api/book/index';
+  import { getWordList, reportLexiRes } from '@/api/book/index';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -360,18 +384,18 @@
   const router = useRouter();
 
   // 有道的翻译api
-  const YDAPI = 'https://dict.youdao.com/dictvoice?le=en&audio=';
+  const YDAPI = 'https://dict.youdao.com/dictvoice?audio=';
 
   const config = reactive({
     id: 1,
     chapterId: appStore.chapterId,
-    speed: '1.0',
+    speed: 1,
     gap: '5',
     num: 1,
     repeat: '1',
     pronounce: '美音',
     isSoundMute: false,
-    speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
+    speedList: [0.8, 1, 1.2, 1.4, 1.6],
     gapList: ['2', '3', '4', '5', '6', '7'],
     repeatList: ['1', '2', '3', '无限'],
     pronounceList: ['美音', '英音'],
@@ -379,7 +403,7 @@
 
   const wordsData = reactive({
     words: [{}],
-    currentWord: { zh: '', word: '', mark: '' },
+    currentWord: { translate: '', word: '', phonetic_transcription: '' },
     currentIndex: 0,
   });
 
@@ -413,15 +437,17 @@
   //   return appStore.dictationInfo.currentChapter;
   // });
 
-  const getWords = (params) => {
+  const getWords = () => {
     getWordList({ c_id: appStore.dictationInfo.currentChapter.id }).then((res) => {
       console.log(res);
+      wordsData.words = res.data;
+      wordsData.currentWord = wordsData.words[wordsData.currentIndex];
     });
-    wordsData.words = [
-      { zh: '中文', word: 'chinese', mark: `AmE: [pə'zɛs]`, userInput: '' },
-      { zh: '英文', word: 'english', mark: `AmE: [pə'zɛs]`, userInput: '' },
-    ];
-    wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+    // wordsData.words = [
+    //   { zh: '中文', word: 'chinese', mark: `AmE: [pə'zɛs]`, userInput: '' },
+    //   { zh: '英文', word: 'english', mark: `AmE: [pə'zɛs]`, userInput: '' },
+    // ];
+    // wordsData.currentWord = wordsData.words[wordsData.currentIndex];
   };
 
   const handleMove = (type) => {
@@ -435,7 +461,6 @@
     playWords();
   };
 
-  const bookChange = () => {};
   // 开始听写
   const start = () => {
     playStatus.value = 1;
@@ -446,18 +471,27 @@
   const stop = () => {
     playStatus.value = 2;
   };
+  // 上报听写配置
+  const handleReport = (data) => {
+    reportLexiRes({
+      lexicon_id: '',
+      ...data,
+    }).then(() => {});
+  };
 
   // 回车
   const inputEnter = () => {
-    const { word, userInput } = wordsData.currentWord;
+    const { word, userInput, id } = wordsData.currentWord;
     if (word === userInput) {
       inputRef.value.style.color = 'green';
       inputRef.value.style.borderColor = 'green';
       correctRef.value.play();
+      handleReport({ type: 'success', lexicon_id: id });
     } else {
       inputRef.value.style.color = 'red';
       inputRef.value.style.borderColor = 'red';
       beepRef.value.play();
+      handleReport({ type: 'fail', error_word: userInput, lexicon_id: id });
     }
     setTimeout(() => {
       inputRef.value.style.color = '';
@@ -470,6 +504,7 @@
       }
     }, 500);
   };
+
   // 聚焦
   const handleFocus = () => {
     start();
@@ -534,12 +569,21 @@
   };
   onMounted(() => {
     console.log(appStore.dictationInfo);
+
     if (!appStore?.dictationInfo?.currentChapter) {
       router.push('/gallery');
       return;
     }
     getWords();
   });
+
+  // 章节切换
+  const chapterChange = async (id) => {
+    await appStore.toggleCurrentChapter(chapterList.value.find((chapter) => chapter.id == id));
+    setTimeout(() => {
+      getWords();
+    });
+  };
   const handleLogout = () => {
     userStore.logout();
   };

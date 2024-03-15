@@ -14,10 +14,10 @@ const service: AxiosInstance = axios.create({
 // axios实例拦截请求
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = getToken();
-    if (token) {
-      config.headers.authorization = `${token}`;
-    }
+    // const token = getToken();
+    // if (token) {
+    //   config.headers.authorization = `${token}`;
+    // }
     return config;
   },
   (error: AxiosError) => {
@@ -31,7 +31,7 @@ service.interceptors.response.use(
     if (response.status === 200) {
       if(response.data.status) {
         ElMessage.error(response.data.message)
-        return Promise.reject(response.data)
+        return Promise.reject(response.values)
       }
       
       // 统一处理 失败问题
@@ -56,10 +56,10 @@ const request = <T = any>(config: AxiosRequestConfig): Promise<T> => {
     service.request<any, AxiosResponse<IResponse>>(conf).then((res: AxiosResponse<IResponse>) => {
       
       const {
-        data: { data },
+        data: { values },
       } = res;
       
-      resolve(data as T);
+      resolve(values as T);
     });
   });
 };

@@ -1,11 +1,11 @@
 <template>
   <div class="flex h-screen w-full flex-col items-center pb-4">
     <div class="relative mb-auto mt-auto flex w-full flex-1 flex-col overflow-y-auto pl-20">
-      <div class="mt-20 flex w-full flex-1 flex-col items-center justify-center overflow-y-auto">
+      <div class="mt-20 flex w-full flex-1 flex-col justify-center overflow-y-auto">
         <!-- tab切换 -->
         <!-- <div style="height: 10rem"> -->
         <!-- <el-affix :offset="14"> -->
-        <el-tabs v-model="galleryState.activeTab" @tab-click="handleClick" class="flex h-20 w-full items-center justify-between pb-6">
+        <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-20 w-full items-center justify-between pb-6">
           <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
             <template #label>
               <img :src="galleryState.languageIcon[item.id]" alt="" />&nbsp;
@@ -92,90 +92,92 @@
   });
 
   const openChapter = (item) => {
-    galleryState.chapterList = [
-      {
-        id: 1,
-        name: '第一章',
-        word_total: 0, //单词数
-        accuracy: 0, // 准确率 0 为未练习
-      },
-      {
-        id: 2,
-        name: '第二章',
-      },
-      {
-        id: 3,
-        name: '第三章',
-      },
-      {
-        id: 4,
-        name: '第四章',
-      },
-    ];
+    // galleryState.chapterList = [
+    //   {
+    //     id: 1,
+    //     name: '第一章',
+    //     word_total: 0, //单词数
+    //     accuracy: 0, // 准确率 0 为未练习
+    //   },
+    //   {
+    //     id: 2,
+    //     name: '第二章',
+    //   },
+    //   {
+    //     id: 3,
+    //     name: '第三章',
+    //   },
+    //   {
+    //     id: 4,
+    //     name: '第四章',
+    //   },
+    // ];
     ChapterDialogRef.value.open(item, galleryState.chapterList);
     getChapterList({ g_id: '' }).then((res) => {});
   };
 
-  const getBooks = () => {
-    galleryState.booksList = [
-      {
-        id: 1,
-        name: 'CTE-4', // 词组昵称
-        remarks: '大学英语四级词库', // 备注
-        word_total: 11, // 单词数
-        chapter_total: 11, // 章节数
-      },
-      {
-        id: 2,
-        name: 'CTE-6',
-        remarks: '大学英语六级词库',
-        word_total: 11,
-      },
-    ];
-    getGroupBooks({ s_id: '' }).then((res) => {});
+  const getBooks = (s_id) => {
+    // galleryState.booksList = [
+    //   {
+    //     id: 1,
+    //     name: 'CTE-4', // 词组昵称
+    //     remarks: '大学英语四级词库', // 备注
+    //     word_total: 11, // 单词数
+    //     chapter_total: 11, // 章节数
+    //   },
+    //   {
+    //     id: 2,
+    //     name: 'CTE-6',
+    //     remarks: '大学英语六级词库',
+    //     word_total: 11,
+    //   },
+    // ];
+    getGroupBooks({ s_id: s_id }).then((res) => {});
   };
 
   const handleSceneSel = (item) => {
     galleryState.currentScene = item.id;
   };
-  const getScene = () => {
-    galleryState.sceneList = [
-      {
-        id: 1,
-        name: '大学英语',
-      },
-      {
-        id: 2,
-        name: '小学英语',
-      },
-      {
-        id: 3,
-        name: '4级考试',
-      },
-    ];
+  const getScene = (l_id) => {
+    // galleryState.sceneList = [
+    //   {
+    //     id: 1,
+    //     name: '大学英语',
+    //   },
+    //   {
+    //     id: 2,
+    //     name: '小学英语',
+    //   },
+    //   {
+    //     id: 3,
+    //     name: '4级考试',
+    //   },
+    // ];
     getSceneList({
-      l_id: 1,
+      l_id: l_id,
     }).then((res) => {
       // galleryState.sceneList = res;
-      getBooks();
+      getBooks(res[0].id);
     });
   };
   const getLanguage = () => {
-    galleryState.languageList = [
-      {
-        id: 1,
-        name: '英语',
-      },
-      {
-        id: 2,
-        name: '日语',
-      },
-    ];
-    getLanguageList().then((res) => {});
+    // galleryState.languageList = [
+    //   {
+    //     id: 1,
+    //     name: '英语',
+    //   },
+    //   {
+    //     id: 2,
+    //     name: '日语',
+    //   },
+    // ];
+    getLanguageList().then((res) => {
+      getScene(res[0].id);
+    });
   };
   onMounted(() => {
-    getScene();
-    getBooks();
     getLanguage();
+    // getScene();
+    // getBooks();
   });
 </script>

@@ -34,8 +34,8 @@
   const errorMessage = ref('');
   const userStore = useUserStore();
   const userFormData = reactive({
-    phone_number: '',
-    password: '',
+    phone_number: '18832373807',
+    password: 'swj250176',
   });
   const ruleFormRef = ref<FormInstance>();
   const rules = reactive<FormRules>({

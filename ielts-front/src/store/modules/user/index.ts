@@ -12,12 +12,15 @@ export const useUserStore = defineStore('user', {
     updated_at: '',
     session_ids: ''
   }),
+  persist: {
+    enabled: true
+  },
   getters: {
     userProfile(state: UserState): UserState {
       return { ...state };
     },
     token(state: UserState) {
-      return state._id
+      return state.session_ids
     },
     getConfig(state: UserState) {
       return state.config
@@ -52,10 +55,14 @@ export const useUserStore = defineStore('user', {
     // 异步登录并存储token
     async login(loginForm: LoginData) {
       const result = await userLogin(loginForm);
-      const token = result?._id;
+      console.log(result, '111');
+      
+      const token = result?.session_ids;
       if (token) {
         setToken(token);
       }
+      this.setInfo(result);
+
       return result;
     },
     // Logout

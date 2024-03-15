@@ -11,26 +11,28 @@ const router = createRouter({
   history: createWebHistory(),
 });
 
-// router.beforeEach(async (_to, _from, next) => {
-//   const user = useUserStore()
-//   const hasToken = !!user.token || getToken()
-//   console.log(hasToken);
+router.beforeEach(async (_to, _from, next) => {
+  const user = useUserStore()
+  console.log(user);
   
-//   if(hasToken){
-//     if(_to.path === '/login') {
-//       next('/')
-//     }else {
-//       NProgress.start();
-//       next();
-//     }
-//   }else {
-//     if(routesWhiteList.includes(_to.path)){
-//       next()
-//     }else {
-//       next({ path: '/login', replace: true })
-//     }
-//   }
-// });
+  const hasToken = !!user.token || getToken()
+  console.log(hasToken);
+  
+  if(hasToken){
+    if(_to.path === '/login') {
+      next('/home')
+    }else {
+      NProgress.start();
+      next();
+    }
+  }else {
+    if(routesWhiteList.includes(_to.path)){
+      next()
+    }else {
+      next({ path: '/login', replace: true })
+    }
+  }
+});
 
 router.afterEach((_to) => {
   NProgress.done();

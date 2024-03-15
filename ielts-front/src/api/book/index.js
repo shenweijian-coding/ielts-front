@@ -9,12 +9,12 @@ const getSceneList = async (data) => post({ url: '/api/study/lexicon/v1/scene/li
 
 const getGroupBooks = async (data) => post({ url: '/api/study/lexicon/v1/group/list', data });
 
-const getChapterList = async (data) => post({ url: '/api/study/lexicon/v1/group/list', data });
+const getChapterList = async (data) => post({ url: '/api/study/lexicon/v1/chapter/list', data });
 
 const getLanguageList = async (data) => post({ url: '/api/study/lexicon/v1/language/list', data });
 
 const getWordList = async (data) => post({ url: '/api/study/lexicon/v1/list', data });
 
-const reportLexiRes = async (data) => post({ url: '/api/study/lexicon/v1/list', data });
+const reportLexiRes = async (data) => post({ url: '/api/study/lexicon/v1/practice/result', data });
 
 export { getBookList, getSceneList, getGroupBooks, getChapterList, getLanguageList, getWordList, reportLexiRes };
