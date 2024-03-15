@@ -188,6 +188,25 @@
                 <span class="tooltip">错题本</span></div
               >
             </div>
+
+            <div class="relative">
+              <div>
+                <el-popover placement="bottom" :width="50" trigger="click" popper-class="popperClass">
+                  <template #reference>
+                    <button
+                      type="button"
+                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
+                      title="查看错题本"
+                    >
+                      <el-icon color="#000" :size="18"><UserFilled /></el-icon>
+                    </button>
+                  </template>
+                  <div class="full-w text-center">
+                    <el-button type="text" @click="handleLogout">退出登陆</el-button>
+                  </div>
+                </el-popover>
+              </div>
+            </div>
           </div>
         </nav>
       </div>
@@ -330,12 +349,13 @@
   import correct from '@/assets/correct.wav';
   import defaultAudio from '@/assets/Default.wav';
   import { ElMessage } from 'element-plus';
+  import { UserFilled } from '@element-plus/icons-vue';
   import mistakeDialog from './mistakeDialog.vue';
-  import { useAppStore } from '@/store';
+  import { useAppStore, useUserStore } from '@/store';
   import { getWordList } from '@/api/book/index';
 
   const appStore = useAppStore();
-
+  const userStore = useUserStore();
   const route = useRoute();
   const router = useRouter();
 
@@ -520,6 +540,9 @@
     }
     getWords();
   });
+  const handleLogout = () => {
+    userStore.logout();
+  };
 </script>
 
 <style scoped lang="less">
@@ -530,9 +553,7 @@
   .el-radio {
     margin-right: 0;
   }
-  .el-popover .el-popper {
-    min-width: 100px !important;
-  }
+
   .user-input {
     input {
       font-size: 3rem;

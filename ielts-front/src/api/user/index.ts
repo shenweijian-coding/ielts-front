@@ -3,7 +3,7 @@ import { get, post } from '@/utils/http/axios';
 // import axios from 'axios';
 enum URL {
   login = '/api/study/customer/v1/login',
-  logout = '/user/logout',
+  logout = '/api/study/customer/v1/logout',
   profile = '/user/profile',
   sendyzm = '/api/study/phone/send/sms',
   signup = '/api/study/customer/v1/signup'

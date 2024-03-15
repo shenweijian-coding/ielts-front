@@ -22,7 +22,7 @@
               <div
                 v-for="(item, index) in galleryState.sceneList"
                 :key="index"
-                class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 false"
+                class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 false border-color-theme"
                 :class="galleryState.currentScene == item.id ? 'bg-theme text-white' : 'bg-white text-black hover:bg-theme_hover'"
                 @click="handleSceneSel(item)"
                 ><span class="font-normal">{{ item.name }}</span></div

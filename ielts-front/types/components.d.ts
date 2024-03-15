@@ -30,6 +30,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SvgIcon: typeof import('./../src/components/SvgIcon/index.vue')['default']
+    UserFilled: typeof import('@ant-design/icons-vue')['UserFilled']
     WordConfig: typeof import('./../src/components/WordConfig/index.vue')['default']
   }
 }

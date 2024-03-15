@@ -5,10 +5,12 @@ import { UserState } from './types';
 
 export const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    user: '',
-    config: {},
-    create_time: '',
-    _id: ''
+    id: '',
+    phone_number: {},
+    password: '',
+    created_at: '',
+    updated_at: '',
+    session_ids: ''
   }),
   getters: {
     userProfile(state: UserState): UserState {
@@ -58,7 +60,7 @@ export const useUserStore = defineStore('user', {
     },
     // Logout
     async logout() {
-      // await userLogout();
+      await userLogout();
       this.resetInfo();
       clearToken();
       // 路由表重置

@@ -1,7 +1,9 @@
 export type RoleType = '' | '*' | 'admin' | 'user';
 export interface UserState {
-  user: String,
-  config: Object,
-  create_time: String,
-  _id: String
+  id: String,
+  phone_number: Object,
+  password: String,
+  created_at: String,
+  updated_at: String,
+  session_ids: String
 }
