@@ -17,4 +17,6 @@ const getWordList = async (data) => post({ url: '/api/study/lexicon/v1/list', da
 
 const reportLexiRes = async (data) => post({ url: '/api/study/lexicon/v1/practice/result', data });
 
-export { getBookList, getSceneList, getGroupBooks, getChapterList, getLanguageList, getWordList, reportLexiRes };
+const getErrorWordList = async (data) => post({ url: '/api/study/lexicon/v1/error/list', data });
+
+export { getBookList, getSceneList, getGroupBooks, getChapterList, getLanguageList, getWordList, reportLexiRes, getErrorWordList };

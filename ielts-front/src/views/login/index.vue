@@ -22,7 +22,7 @@
 <script setup>
   import LoginBanner from './components/banner.vue';
   import LoginForm from './components/login-form.vue';
-  import logo from '@/assets/icons/svg/logo.svg';
+  import logo from '@/assets/images/logo.png';
   import SignIn from './components/sign-in.vue';
 
   const theme = localStorage.getItem('theme');
@@ -47,6 +47,7 @@
     display: flex;
     height: 100vh;
     width: 100vw !important;
+    max-width: 100vw;
     .banner {
       width: 550px;
       background-image: url(https://pic.imgdb.cn/item/6545aeb9c458853aef9b1bba.png);

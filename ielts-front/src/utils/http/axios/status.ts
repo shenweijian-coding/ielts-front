@@ -5,7 +5,7 @@ export const showMessage = (status: number | string): string => {
       message = '请求错误(400)';
       break;
     case 401:
-      message = '未授权，请重新登录(401)';
+      message = '请重新登录(401)';
       break;
     case 403:
       message = '拒绝访问(403)';

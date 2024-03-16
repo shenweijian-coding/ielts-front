@@ -1,219 +1,234 @@
 <template>
   <main class="flex h-screen w-full flex-col items-center pb-4">
-    <header class="container z-20 mx-auto w-full px-10 py-6">
+    <header class="container z-20 mx-auto w-full px-10 py-8">
       <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0"
         ><a
           class="flex items-center text-2xl font-bold text-indigo-500 no-underline hover:no-underline lg:text-4xl"
           href="https://qwerty.kaiyi.cool/"
         >
-          <!-- <img src="" class="mr-3 h-16 w-16" alt="" /> -->
-          <h3>logo</h3>
+          <img src="@/assets/images/logo.png" class="h-18" alt="logo" />
+          <!-- <h3>logo</h3> -->
         </a>
         <nav
           class="my-card on element flex w-auto content-center items-center justify-end space-x-3 rounded-xl bg-white p-4 transition-colors duration-300 dark:bg-gray-800"
         >
-          <div class="relative">
-            <div>
-              <a
-                class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
-                href="/gallery"
-              >
-                {{ appStore?.dictationInfo?.booInfo.remarks }}
-              </a>
-            </div>
-          </div>
-
-          <div class="relative">
-            <el-popover placement="bottom" :width="200" trigger="hover">
-              <template #reference>
-                <button
-                  class="rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
-                  id="headlessui-listbox-button-:rdb:"
-                  type="button"
-                  aria-haspopup="listbox"
-                  aria-expanded="false"
-                  data-headlessui-state=""
-                  >{{ appStore?.dictationInfo?.currentChapter.name }}</button
-                >
-              </template>
-              <div class="h-50 overflow-y-auto">
-                <el-radio-group v-model="config.chapterId" size="default" @change="chapterChange">
-                  <el-radio
-                    v-for="chapter in chapterList"
-                    :key="chapter.id"
-                    :value="chapter.id"
-                    :label="chapter.id"
-                    border
-                    class="w-full mb-2 mr-0"
-                    >{{ chapter.name }}</el-radio
-                  >
-                </el-radio-group>
-              </div>
-            </el-popover>
-          </div>
-
-          <div class="relative" data-headlessui-state="">
-            <el-popover placement="bottom" :width="100" trigger="hover">
-              <template #reference>
-                <button
-                  class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                  type="button"
-                  aria-expanded="false"
-                  data-headlessui-state=""
-                  id="headlessui-popover-button-:rdc:"
-                >
-                  <div class="relative">
-                    <div>x{{ config.speed }} 倍</div>
-                  </div>
-                </button>
-              </template>
-              <div>
-                <el-radio-group v-model="config.speed" size="default">
-                  <el-radio
-                    v-for="(speed, index) in config.speedList"
-                    :key="index"
-                    :value="speed"
-                    :label="speed"
-                    border
-                    class="w-full mb-2 mr-0"
-                    >{{ speed }} 倍</el-radio
-                  >
-                </el-radio-group>
-              </div>
-            </el-popover>
-          </div>
-
-          <div class="relative" data-headlessui-state="">
-            <el-popover placement="bottom" :width="100" trigger="hover">
-              <template #reference>
-                <button
-                  class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                  type="button"
-                  aria-expanded="false"
-                  data-headlessui-state=""
-                  id="headlessui-popover-button-:rdc:"
-                >
-                  <div class="relative">
-                    <div>{{ config.gap }} 秒</div>
-                  </div>
-                </button>
-              </template>
-              <div>
-                <el-radio-group v-model="config.gap" size="default">
-                  <el-radio v-for="gap in config.gapList" :key="gap" :value="gap" border :label="gap" class="w-full mb-2 mr-0"
-                    >{{ gap }} 秒</el-radio
-                  >
-                </el-radio-group>
-              </div>
-            </el-popover>
-          </div>
-
-          <div class="relative" data-headlessui-state="">
-            <el-popover placement="bottom" :width="100" trigger="hover">
-              <template #reference>
-                <button
-                  class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                  type="button"
-                  aria-expanded="false"
-                  data-headlessui-state=""
-                  id="headlessui-popover-button-:rdc:"
-                >
-                  <div class="relative">
-                    <div>{{ config.repeat }} 遍</div>
-                  </div>
-                </button>
-              </template>
-              <div>
-                <el-radio-group v-model="config.repeat" size="default">
-                  <el-radio
-                    v-for="repeat in config.repeatList"
-                    :key="repeat"
-                    :value="repeat"
-                    :label="repeat"
-                    border
-                    class="w-full mb-2 mr-0"
-                    >{{ repeat }} 秒</el-radio
-                  >
-                </el-radio-group>
-              </div>
-            </el-popover>
-          </div>
-
-          <div class="relative" data-headlessui-state="">
-            <el-popover placement="bottom" :width="100" trigger="hover">
-              <template #reference>
-                <button
-                  class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                  type="button"
-                  aria-expanded="false"
-                  data-headlessui-state=""
-                  id="headlessui-popover-button-:rdc:"
-                >
-                  <div class="relative">
-                    <div>{{ config.pronounce }}</div>
-                  </div>
-                </button>
-              </template>
-              <div>
-                <el-radio-group v-model="config.pronounce" size="default">
-                  <el-radio
-                    v-for="pronounce in config.pronounceList"
-                    :key="pronounce"
-                    :value="pronounce"
-                    :label="pronounce"
-                    border
-                    class="w-full mb-2 mr-0"
-                    >{{ pronounce }}</el-radio
-                  >
-                </el-radio-group>
-              </div>
-            </el-popover>
-          </div>
-
-          <div class="flex items-center justify-center gap-2">
+          <el-tooltip content="词典切换" placement="top" effect="light">
             <div class="relative">
               <div>
-                <div class="relative"
-                  ><button
-                    class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
-                    title="音效设置"
-                    type="button"
-                    @click="handleSoundEffect"
-                  >
-                    <SvgIcon
-                      name="sound"
-                      prefix="icon-svg"
-                      size="small"
-                      hoverColor="#fff"
-                      :color="config.isSoundMute ? '' : '#ff5c00'"
-                    /> </button
-                ></div>
-              </div>
-              <div
-                class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
-              >
-                <span class="tooltip">音效设置</span></div
-              >
-            </div>
-
-            <div class="relative">
-              <div>
-                <a href="/errorBook">
-                  <button
-                    type="button"
-                    class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
-                    title="查看错题本"
-                  >
-                    <SvgIcon name="book" prefix="icon-svg" size="small" color="hover:text-white" />
-                  </button>
+                <a
+                  class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
+                  href="/gallery"
+                >
+                  {{ appStore?.dictationInfo?.booInfo.remarks }}
                 </a>
               </div>
-              <div
-                class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
-              >
-                <span class="tooltip">错题本</span></div
-              >
             </div>
+          </el-tooltip>
+          <el-tooltip content="章节切换" placement="top" effect="light">
+            <div class="relative">
+              <el-popover placement="bottom" :width="200" trigger="click">
+                <template #reference>
+                  <button
+                    class="rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
+                    id="headlessui-listbox-button-:rdb:"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    data-headlessui-state=""
+                    >{{ appStore?.dictationInfo?.currentChapter.name }}</button
+                  >
+                </template>
+                <div class="h-50 overflow-y-auto">
+                  <el-radio-group v-model="config.chapterId" size="default" @change="chapterChange">
+                    <el-radio
+                      v-for="chapter in chapterList"
+                      :key="chapter.id"
+                      :value="chapter.id"
+                      :label="chapter.id"
+                      border
+                      class="w-full mb-2 mr-0"
+                      >{{ chapter.name }}</el-radio
+                    >
+                  </el-radio-group>
+                </div>
+              </el-popover>
+            </div>
+          </el-tooltip>
+
+          <el-tooltip content="单词播放速度" placement="top" effect="light">
+            <div class="relative" data-headlessui-state="">
+              <el-popover placement="bottom" :width="100" trigger="click">
+                <template #reference>
+                  <button
+                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                    type="button"
+                    aria-expanded="false"
+                    data-headlessui-state=""
+                    id="headlessui-popover-button-:rdc:"
+                  >
+                    <div class="relative">
+                      <div>x{{ config.play_speed }} 倍</div>
+                    </div>
+                  </button>
+                </template>
+                <div>
+                  <el-radio-group v-model="config.play_speed" size="default" @change="(val) => handleConfigChange('play_speed', val)">
+                    <el-radio
+                      v-for="(speed, index) in config.speedList"
+                      :key="index"
+                      :value="speed"
+                      :label="speed"
+                      border
+                      class="w-full mb-2 mr-0"
+                      >{{ speed }} 倍</el-radio
+                    >
+                  </el-radio-group>
+                </div>
+              </el-popover>
+            </div>
+          </el-tooltip>
+
+          <el-tooltip content="单词播放间隔" placement="top" effect="light">
+            <div class="relative" data-headlessui-state="">
+              <el-popover placement="bottom" :width="100" trigger="click">
+                <template #reference>
+                  <button
+                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                    type="button"
+                    aria-expanded="false"
+                    data-headlessui-state=""
+                    id="headlessui-popover-button-:rdc:"
+                  >
+                    <div class="relative">
+                      <div>{{ config.play_interval }} 秒</div>
+                    </div>
+                  </button>
+                </template>
+                <div>
+                  <el-radio-group v-model="config.play_interval" size="default" @change="(val) => handleConfigChange('play_interval', val)">
+                    <el-radio v-for="gap in config.gapList" :key="gap" :value="+gap" border :label="+gap" class="w-full mb-2 mr-0"
+                      >{{ gap }} 秒</el-radio
+                    >
+                  </el-radio-group>
+                </div>
+              </el-popover>
+            </div>
+          </el-tooltip>
+
+          <el-tooltip content="单词重复次数" placement="top" effect="light">
+            <div class="relative" data-headlessui-state="">
+              <el-popover placement="bottom" :width="100" trigger="click">
+                <template #reference>
+                  <button
+                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                    type="button"
+                    aria-expanded="false"
+                    data-headlessui-state=""
+                    id="headlessui-popover-button-:rdc:"
+                  >
+                    <div class="relative">
+                      <div>{{ config.repetitions }} 遍</div>
+                    </div>
+                  </button>
+                </template>
+                <div>
+                  <el-radio-group v-model="config.repetitions" size="default" @change="(val) => handleConfigChange('repetitions', val)">
+                    <el-radio
+                      v-for="repeat in config.repeatList"
+                      :key="repeat"
+                      :value="+repeat"
+                      :label="+repeat"
+                      border
+                      class="w-full mb-2 mr-0"
+                      >{{ repeat }} 遍</el-radio
+                    >
+                  </el-radio-group>
+                </div>
+              </el-popover>
+            </div>
+          </el-tooltip>
+
+          <el-tooltip content="发音" placement="top" effect="light">
+            <div class="relative" data-headlessui-state="">
+              <el-popover placement="bottom" :width="100" trigger="click">
+                <template #reference>
+                  <button
+                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                    type="button"
+                    aria-expanded="false"
+                    data-headlessui-state=""
+                    id="headlessui-popover-button-:rdc:"
+                  >
+                    <div class="relative">
+                      <div>{{ config.pronounceList.find((o) => o.id == config.phonetic_type).name }}</div>
+                    </div>
+                  </button>
+                </template>
+                <div>
+                  <el-radio-group v-model="config.phonetic_type" size="default" @change="(val) => handleConfigChange('phonetic_type', val)">
+                    <el-radio
+                      v-for="pronounce in config.pronounceList"
+                      :key="pronounce.id"
+                      :value="pronounce.id"
+                      :label="pronounce.name"
+                      border
+                      class="w-full mb-2 mr-0"
+                      >{{ pronounce.name }}</el-radio
+                    >
+                  </el-radio-group>
+                </div>
+              </el-popover>
+            </div>
+          </el-tooltip>
+
+          <div class="flex items-center justify-center gap-2">
+            <el-tooltip content="音效设置" placement="top" effect="light">
+              <div class="relative">
+                <div>
+                  <div class="relative"
+                    ><button
+                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
+                      title="音效设置"
+                      type="button"
+                      @click="handleSoundEffect"
+                    >
+                      <SvgIcon
+                        name="sound"
+                        prefix="icon-svg"
+                        size="small"
+                        hoverColor="#fff"
+                        :color="config.error_sound ? '' : '#ff5c00'"
+                      /> </button
+                  ></div>
+                </div>
+                <div
+                  class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
+                >
+                  <span class="tooltip">音效设置</span></div
+                >
+              </div>
+            </el-tooltip>
+
+            <el-tooltip content="错词本" placement="top" effect="light">
+              <div class="relative">
+                <div>
+                  <a href="/errorBook">
+                    <button
+                      type="button"
+                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
+                      title="查看错题本"
+                    >
+                      <SvgIcon name="book" prefix="icon-svg" size="small" color="hover:text-white" />
+                    </button>
+                  </a>
+                </div>
+                <div
+                  class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
+                >
+                  <span class="tooltip">错题本</span></div
+                >
+              </div>
+            </el-tooltip>
 
             <div class="relative">
               <div>
@@ -222,7 +237,6 @@
                     <button
                       type="button"
                       class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
-                      title="查看错题本"
                     >
                       <el-icon color="#000" :size="18"><UserFilled /></el-icon>
                     </button>
@@ -242,28 +256,29 @@
       <div class="container relative mx-auto flex h-full flex-col items-center">
         <div class="container flex flex-grow items-center justify-center">
           <div class="container flex h-full w-full flex-col items-center justify-center">
-            <div class="container flex h-24 w-full shrink-0 grow-0 justify-between px-12 pt-10"
-              ><div class="relative" @click="handleMove(-1)"
-                ><div
+            <div class="container flex h-24 w-full shrink-0 grow-0 justify-between px-12 pt-10">
+              <el-tooltip content="快捷键 ctrl+j" placement="top" effect="light">
+                <div class="relative" @click="handleMove(-1)"
                   ><div
-                    v-if="nearWords.lastWord"
-                    class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
-                  >
-                    <SvgIcon name="left" />
-                    <div class="grow-1 flex w-full flex-col ml-2"
-                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">{{
-                        nearWords.lastWord.word
-                      }}</p
-                      ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
-                        nearWords.lastWord.translate
-                      }}</p></div
+                    ><div
+                      v-if="nearWords.lastWord"
+                      class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
+                    >
+                      <SvgIcon name="left" />
+                      <div class="grow-1 flex w-full flex-col ml-2"
+                        ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">{{
+                          nearWords.lastWord.word
+                        }}</p
+                        ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
+                          nearWords.lastWord.translate
+                        }}</p></div
+                      ></div
                     ></div
                   ></div
-                ><div
-                  class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
-                  ><span class="tooltip">快捷键: Control + Shift + ArrowLeft</span></div
-                ></div
-              ><div class="relative" @click="handleMove(1)"
+                >
+              </el-tooltip>
+
+              <div class="relative" @click="handleMove(1)"
                 ><div>
                   <div
                     v-if="nearWords.nextWord"
@@ -274,13 +289,8 @@
                         nearWords.nextWord.translate
                       }}</p></div
                     >
-                    <SvgIcon name="right" /> </div></div
-                ><div
-                  class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
-                  ><span class="tooltip">快捷键: Control + Shift + ArrowRight</span></div
-                ></div
-              ></div
-            >
+                    <SvgIcon name="right" /> </div></div></div
+            ></div>
             <div class="container flex flex-grow flex-col items-center justify-center">
               <div class="relative flex w-full justify-center">
                 <!-- <div class="absolute flex h-full w-full justify-center">
@@ -333,14 +343,20 @@
                   </div> -->
                   <div class="space-x-8 flex mt-10 duration-300 text-center justify-center transition-colors font-sans cursor-pointer">
                     <div>
-                      <SvgIcon name="play-left" color="grey" />
+                      <el-tooltip content="回退上一个单词，快捷键 ctrl+j" placement="top" effect="light">
+                        <SvgIcon name="play-left" color="grey" @click="handleMove(-1)" />
+                      </el-tooltip>
                     </div>
                     <div>
-                      <SvgIcon v-if="playStatus == 0 || playStatus == 2" @click="start" name="play-start" color="grey" />
-                      <SvgIcon v-if="playStatus == 1" @click="stop" name="play-stop" color="grey" />
+                      <el-tooltip content="快捷键 ctrl+p" placement="top" effect="light">
+                        <SvgIcon v-if="playStatus == 0 || playStatus == 2" @click="start" name="play-start" color="grey" />
+                        <SvgIcon v-if="playStatus == 1" @click="stop" name="play-stop" color="grey" />
+                      </el-tooltip>
                     </div>
                     <div>
-                      <SvgIcon @click="() => playWords()" name="play-again" color="grey" />
+                      <el-tooltip content="快捷键 ctrl+l" placement="top" effect="light">
+                        <SvgIcon @click="playAgain" name="play-again" color="grey" />
+                      </el-tooltip>
                     </div>
                   </div>
                 </div>
@@ -357,13 +373,13 @@
           </div>
         </div>
         <div class="my-card flex w-3/5 rounded-xl bg-white p-4 py-10 opacity-50 transition-colors duration-300 dark:bg-gray-800">
-          <el-progress :percentage="(wordsData.currentIndex * 100) / wordsData.words.length" class="w-full" :stroke-width="16">
+          <el-progress :percentage="(wordsData.currentIndex * 100) / (wordsData.words.length || 1)" class="w-full" :stroke-width="16">
             <span>{{ wordsData.currentIndex }}/{{ wordsData.words.length }}</span>
           </el-progress>
         </div>
       </div>
     </div>
-    <mistakeDialog ref="mistakeRef" />
+    <mistakeDialog ref="mistakeRef" @next="handleNextChapter" />
   </main>
 </template>
 
@@ -385,24 +401,25 @@
 
   // 有道的翻译api
   const YDAPI = 'https://dict.youdao.com/dictvoice?audio=';
-
+  const errSource = ref(false); // 默认空，错词表来的  err
   const config = reactive({
-    id: 1,
     chapterId: appStore.chapterId,
-    speed: 1,
-    gap: '5',
-    num: 1,
-    repeat: '1',
-    pronounce: '美音',
-    isSoundMute: false,
-    speedList: [0.8, 1, 1.2, 1.4, 1.6],
+    play_speed: userStore.getConfig.play_speed || 1.0,
+    play_interval: userStore.getConfig.play_interval || '5',
+    repetitions: userStore.getConfig.repetitions || '1',
+    phonetic_type: userStore.getConfig.phonetic_type || '美音',
+    error_sound: userStore.getConfig.error_sound || false,
+    speedList: [0.8, 1.0, 1.2, 1.4, 1.6],
     gapList: ['2', '3', '4', '5', '6', '7'],
     repeatList: ['1', '2', '3', '无限'],
-    pronounceList: ['美音', '英音'],
+    pronounceList: [
+      { name: '美音', id: 2 },
+      { name: '英音', id: 1 },
+    ],
   });
 
   const wordsData = reactive({
-    words: [{}],
+    words: [],
     currentWord: { translate: '', word: '', phonetic_transcription: '' },
     currentIndex: 0,
   });
@@ -438,16 +455,29 @@
   // });
 
   const getWords = () => {
-    getWordList({ c_id: appStore.dictationInfo.currentChapter.id }).then((res) => {
-      console.log(res);
-      wordsData.words = res.data;
-      wordsData.currentWord = wordsData.words[wordsData.currentIndex];
-    });
-    // wordsData.words = [
-    //   { zh: '中文', word: 'chinese', mark: `AmE: [pə'zɛs]`, userInput: '' },
-    //   { zh: '英文', word: 'english', mark: `AmE: [pə'zɛs]`, userInput: '' },
-    // ];
-    // wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+    if (errSource.value) {
+      const copyWords = JSON.parse(JSON.stringify(appStore.errWords));
+      wordsData.words = copyWords;
+      wordsData.currentWord = copyWords[wordsData.currentIndex];
+    } else {
+      getWordList({ c_id: appStore.dictationInfo.currentChapter.id }).then((res) => {
+        if (res.data.length) {
+          wordsData.words = res.data;
+          wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+        } else {
+          ElMessage.error('当前章节未配置词库');
+        }
+      });
+    }
+  };
+
+  // 重新播放
+  const playAgain = () => {
+    audio.src = config.phonetic_type == '美音' ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+    audio.playbackRate = +config.play_speed;
+
+    audio.play();
   };
 
   const handleMove = (type) => {
@@ -464,12 +494,23 @@
   // 开始听写
   const start = () => {
     playStatus.value = 1;
+    inputRef.value.focus();
     playWords();
   };
 
   // 暂停
   const stop = () => {
     playStatus.value = 2;
+    inputRef.value.blur();
+  };
+
+  // 切换暂停和播放
+  const toggleStopAndStart = () => {
+    if (playStatus.value == 1) {
+      stop();
+    } else {
+      start();
+    }
   };
   // 上报听写配置
   const handleReport = (data) => {
@@ -479,18 +520,30 @@
     }).then(() => {});
   };
 
+  // 处理计算结果
+  const handleResult = () => {
+    const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
+    console.log(correctness.toFixed(2), '计算答对');
+    mistakeRef.value.open(correctness.toFixed(2));
+  };
+
   // 回车
   const inputEnter = () => {
+    if (!wordsData.words.length) {
+      return;
+    }
     const { word, userInput, id } = wordsData.currentWord;
     if (word === userInput) {
       inputRef.value.style.color = 'green';
       inputRef.value.style.borderColor = 'green';
       correctRef.value.play();
+      wordsData.currentWord.isOk = true;
       handleReport({ type: 'success', lexicon_id: id });
     } else {
       inputRef.value.style.color = 'red';
       inputRef.value.style.borderColor = 'red';
       beepRef.value.play();
+      wordsData.currentWord.isOk = false;
       handleReport({ type: 'fail', error_word: userInput, lexicon_id: id });
     }
     setTimeout(() => {
@@ -498,7 +551,7 @@
       inputRef.value.style.borderColor = '';
       // 判断是不是最后一个单词
       if (wordsData.words.length <= wordsData.currentIndex + 1) {
-        alert('111');
+        handleResult();
       } else {
         handleMove(1);
       }
@@ -507,35 +560,37 @@
 
   // 聚焦
   const handleFocus = () => {
-    start();
+    // start();
   };
   // 失去焦点
   const handleBlur = () => {
-    stop();
+    // stop();
   };
   // 处理音效
   const handleSoundEffect = () => {
-    config.isSoundMute = !config.isSoundMute;
-    ElMessage.success(`音效已 ${config.isSoundMute ? '关闭' : '开启'}`);
+    config.error_sound = !config.error_sound;
+    ElMessage.success(`音效已 ${config.error_sound ? '关闭' : '开启'}`);
+    handleConfigChange('error_sound', config.error_sound);
   };
   const handleKeyDown = (event) => {
-    const key = event.key.toLowerCase();
-    if (/^[a-z]$/.test(key)) {
-      defaultAudioRef.value.play();
+    if (!config.error_sound) {
+      const key = event.key.toLowerCase();
+      if (/^[a-z]$/.test(key)) {
+        defaultAudioRef.value.play();
+      }
     }
   };
   // 播放音频的方法
+  var audio = new Audio();
   const playWords = (words = [wordsData.currentWord]) => {
-    inputRef.value.focus();
     var index = 0;
     var count = 0;
-    var audio = new Audio();
-    var interval = config.gap * 1000; // 播放间隔（毫秒）
-    var repeatTimes = config.repeat;
+    var interval = config.play_interval * 1000; // 播放间隔（毫秒）
+    var repeatTimes = config.repetitions;
 
     // 播放第一个单词
-    audio.src = YDAPI + words[index].word;
-    audio.playbackRate = +config.speed;
+    audio.src = config.phonetic_type == '美音' ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
+    audio.playbackRate = +config.play_speed;
 
     audio.play();
 
@@ -545,7 +600,8 @@
         count++;
         if (count < repeatTimes) {
           // 这里是播放
-          audio.src = YDAPI + words[index].word;
+          audio.src = config.phonetic_type == '美音' ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
+
           setTimeout(() => {
             audio.play();
           }, interval);
@@ -554,7 +610,8 @@
           count = 0;
 
           if (index < words.length) {
-            audio.src = YDAPI + words[index].word;
+            audio.src = config.phonetic_type == '美音' ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
+
             setTimeout(() => {
               audio.play();
             }, interval);
@@ -567,9 +624,28 @@
       false,
     );
   };
+
+  //播放时的组合按键触发;
+  const handleAllKeyDown = (event) => {
+    if (event.ctrlKey && event.key === 'j') {
+      event.preventDefault();
+      handleMove(-1);
+    } else if (event.ctrlKey && event.key === 'l') {
+      event.preventDefault();
+      playAgain();
+    } else if (event.ctrlKey && event.key === 'p') {
+      event.preventDefault();
+      toggleStopAndStart();
+    }
+  };
+
   onMounted(() => {
     console.log(appStore.dictationInfo);
+    console.log(route);
 
+    errSource.value = route.query?.source == 'err';
+
+    document.addEventListener('keydown', handleAllKeyDown);
     if (!appStore?.dictationInfo?.currentChapter) {
       router.push('/gallery');
       return;
@@ -582,10 +658,25 @@
     await appStore.toggleCurrentChapter(chapterList.value.find((chapter) => chapter.id == id));
     setTimeout(() => {
       getWords();
+      wordsData.currentWord = { translate: '', word: '', phonetic_transcription: '' };
+      wordsData.words = [];
+      wordsData.currentIndex = 0;
     });
   };
   const handleLogout = () => {
     userStore.logout();
+  };
+
+  // 听写下一章
+  const handleNextChapter = () => {
+    const chapterNum = chapterList.value.length;
+    const nextChapterIndex = chapterList.value.findIndex((o) => o.id == config.chapterId) + 1;
+    chapterChange(chapterList.value[nextChapterIndex].id);
+  };
+
+  // 切换配置
+  const handleConfigChange = (p, val) => {
+    userStore.handleConfig(p, val);
   };
 </script>
 

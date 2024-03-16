@@ -6,7 +6,8 @@ enum URL {
   logout = '/api/study/customer/v1/logout',
   profile = '/user/profile',
   sendyzm = '/api/study/phone/send/sms',
-  signup = '/api/study/customer/v1/signup'
+  signup = '/api/study/customer/v1/signup',
+  updateConfig='/api/study/customer/v1/update/config'
 }
 interface LoginRes {
   token: string;
@@ -23,4 +24,5 @@ const logout = async () => post<LoginRes>({ url: URL.logout });
 const saveConfig = async (data) => post({ url: '/user/saveConfig', data })
 const sendyzm = async (data) => post({ url: URL.sendyzm, data })
 const signup = async (data) => post({ url: URL.signup, data })
-export { getUserProfile, logout, login, saveConfig, sendyzm, signup };
+const updateConfig = async(data) => post({url: URL.updateConfig,data})
+export { getUserProfile, logout, login, saveConfig, sendyzm, signup, updateConfig };

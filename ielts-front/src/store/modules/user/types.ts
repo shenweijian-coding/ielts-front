@@ -5,5 +5,6 @@ export interface UserState {
   password: String,
   created_at: String,
   updated_at: String,
-  session_ids: String
+  session_ids: String,
+  config: Object
 }

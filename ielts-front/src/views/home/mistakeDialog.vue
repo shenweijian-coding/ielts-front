@@ -1,12 +1,14 @@
 <template>
   <el-dialog v-model="state.dialogVisible" width="26%" :before-close="handleClose">
     <div class="text-center p-6">
-      <div class="text-theme-color text-6xl">82.00%</div>
+      <div class="text-theme-color text-6xl">{{ state.correctness }}%</div>
       <div class="mt-4 text-2xl text-black">本次正确听写率</div>
-      <div class="text-grey mt-4">上次正确听写率：80%</div>
+      <!-- <div class="text-grey mt-4">上次正确听写率：80%</div> -->
       <div class="flex space-x-10 justify-center mt-8">
-        <el-button size="large">查看错词</el-button>
-        <el-button type="primary" size="large">继续听写下一章</el-button>
+        <a href="/errorBook">
+          <el-button size="large">查看错词</el-button>
+        </a>
+        <el-button type="primary" size="large" @click="nextChapter">继续听写下一章</el-button>
       </div>
     </div>
   </el-dialog>
@@ -14,15 +16,26 @@
 <script setup>
   import { reactive } from 'vue';
 
+  const emit = defineEmits(['next']);
   const state = reactive({
     dialogVisible: false,
+    correctness: 0,
   });
 
-  const open = () => {
+  const open = (data) => {
     state.dialogVisible = true;
+    state.correctness = data;
   };
   const handleClose = () => {
     state.dialogVisible = false;
+    state.correctness = 0;
+  };
+
+  const nextChapter = () => {
+    emit('next');
+    setTimeout(() => {
+      handleClose();
+    });
   };
   defineExpose({
     open,

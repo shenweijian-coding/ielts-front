@@ -47,13 +47,13 @@
                 @click="openChapter(item)"
               >
                 <div class="relative ml-1 mt-2 flex h-full w-full flex-col items-start justify-start"
-                  ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:text-indigo-400 dark:text-gray-200">{{ item.name }}</h1
+                  ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">{{ item.name }}</h1
                   ><p
-                    class="mb-1 max-w-full truncate textdelayDuration-gray-600 dark:text-gray-200 whitespace-nowrap"
+                    class="mb-3 max-w-full truncate textdelayDuration-gray-600 dark:text-gray-200 whitespace-nowrap"
                     data-state="closed"
                     >{{ item.remarks }}</p
                   >
-                  <p class="mb-1 font-bold text-gray-600 dark:text-gray-200">{{ item.word_total }} 词</p>
+                  <p class="mb-2 font-bold text-gray-600 dark:text-gray-200">{{ item.word_total }} 词</p>
                   <p class="mb-0.5 font-bold text-gray-600 dark:text-gray-200" v-if="item.chapter_total">{{ item.chapter_total }} 章</p>
                   <div class="flex w-full items-center pt-2"
                     ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20" /></div
@@ -65,12 +65,14 @@
         <ChapterDialog ref="ChapterDialogRef" />
       </div>
     </div>
+    <LastPage />
   </div>
 </template>
 <script setup>
   import ChapterDialog from './chapter-dialog.vue';
   import yg from '@/assets/images/yg.png';
   import rb from '@/assets/images/rb.png';
+  import LastPage from '@/components/lastPage/index.vue';
   // import dg from '@/assets/images/dg.png';
 
   import { getSceneList, getGroupBooks, getChapterList, getLanguageList } from '@/api/book/index';
@@ -92,92 +94,39 @@
   });
 
   const openChapter = (item) => {
-    // galleryState.chapterList = [
-    //   {
-    //     id: 1,
-    //     name: '第一章',
-    //     word_total: 0, //单词数
-    //     accuracy: 0, // 准确率 0 为未练习
-    //   },
-    //   {
-    //     id: 2,
-    //     name: '第二章',
-    //   },
-    //   {
-    //     id: 3,
-    //     name: '第三章',
-    //   },
-    //   {
-    //     id: 4,
-    //     name: '第四章',
-    //   },
-    // ];
-    ChapterDialogRef.value.open(item, galleryState.chapterList);
-    getChapterList({ g_id: '' }).then((res) => {});
+    getChapterList({ g_id: item.id }).then((res) => {
+      galleryState.chapterList = res;
+      ChapterDialogRef.value.open(item, res);
+    });
   };
 
   const getBooks = (s_id) => {
-    // galleryState.booksList = [
-    //   {
-    //     id: 1,
-    //     name: 'CTE-4', // 词组昵称
-    //     remarks: '大学英语四级词库', // 备注
-    //     word_total: 11, // 单词数
-    //     chapter_total: 11, // 章节数
-    //   },
-    //   {
-    //     id: 2,
-    //     name: 'CTE-6',
-    //     remarks: '大学英语六级词库',
-    //     word_total: 11,
-    //   },
-    // ];
-    getGroupBooks({ s_id: s_id }).then((res) => {});
+    getGroupBooks({ s_id: s_id }).then((res) => {
+      galleryState.booksList = res;
+    });
   };
 
   const handleSceneSel = (item) => {
     galleryState.currentScene = item.id;
+    getBooks(item.id);
   };
   const getScene = (l_id) => {
-    // galleryState.sceneList = [
-    //   {
-    //     id: 1,
-    //     name: '大学英语',
-    //   },
-    //   {
-    //     id: 2,
-    //     name: '小学英语',
-    //   },
-    //   {
-    //     id: 3,
-    //     name: '4级考试',
-    //   },
-    // ];
     getSceneList({
       l_id: l_id,
     }).then((res) => {
-      // galleryState.sceneList = res;
+      galleryState.sceneList = res;
       getBooks(res[0].id);
     });
   };
   const getLanguage = () => {
-    // galleryState.languageList = [
-    //   {
-    //     id: 1,
-    //     name: '英语',
-    //   },
-    //   {
-    //     id: 2,
-    //     name: '日语',
-    //   },
-    // ];
     getLanguageList().then((res) => {
+      galleryState.languageList = res;
       getScene(res[0].id);
     });
   };
+
+  const handleTabClick = () => {};
   onMounted(() => {
     getLanguage();
-    // getScene();
-    // getBooks();
   });
 </script>

@@ -8,7 +8,8 @@ export const useAppStore = defineStore(
   {
     state: () => ({
       theme: '',
-      dictationInfo: null
+      dictationInfo: null,
+      errWords: null
     }),
     getters: {
       chapterId(state) {
@@ -35,6 +36,9 @@ export const useAppStore = defineStore(
       },
       async toggleCurrentChapter(data) {
         this.dictationInfo.currentChapter = data
+      },
+      async setErrWords(data) {
+        this.errWords = data
       }
     },
     persist: {

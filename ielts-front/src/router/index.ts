@@ -4,7 +4,7 @@ import 'nprogress/nprogress.css';
 import { useUserStore } from '@/store'
 import { getToken } from '@/utils/auth';
 
-const routesWhiteList = ['/login']
+const routesWhiteList = ['/login', '/']
 
 //导入生成的路由数据
 const router = createRouter({

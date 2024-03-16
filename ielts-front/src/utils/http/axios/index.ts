@@ -44,6 +44,10 @@ service.interceptors.response.use(
     if (response) {
       // 请求已发出，但是不在2xx的范围
       showMessage(response.status);
+      if(response.status == 401) {
+        window.location.replace('/login')
+        return
+      }
       return Promise.reject(response.data);
     }
     showMessage('网络连接异常,请稍后再试!');

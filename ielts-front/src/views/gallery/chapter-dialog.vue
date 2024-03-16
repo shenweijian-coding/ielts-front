@@ -23,12 +23,14 @@
                   class="relative flex h-16 w-40 cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 pt-3 dark:bg-slate-800"
                   ><h3>{{ item.name }}</h3
                   ><p class="pt-[2px] text-xs text-slate-600">{{ item.accuracy ? `${item.accuracy}%` : '未练习' }}</p>
-                  <!-- <SvgIcon
+                  <SvgIcon
+                    v-if="item.id == appStore.chapterId"
                     name="tick"
                     color="#ff5c00"
-                    class="absolute -bottom-4 -right-4 h-18 w-18 text-6xl text-green-500 opacity-40 dark:text-green-300"
+                    hoverColor="#ff5c00"
+                    class="absolute -bottom-1 -right-1 text-8xl"
                     size="70"
-                  /> -->
+                  />
                 </div>
               </div>
             </div>

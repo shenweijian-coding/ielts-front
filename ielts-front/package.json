@@ -31,7 +31,7 @@
     "@vueuse/core": "^10.2.0",
     "ant-design-vue": "^3.2.19",
     "axios": "^1.4.0",
-    "dayjs": "^1.11.8",
+    "dayjs": "^1.11.10",
     "devui-theme": "^0.0.4",
     "echarts": "^5.4.2",
     "element-plus": "^2.3.7",
