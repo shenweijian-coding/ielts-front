@@ -40,6 +40,7 @@
     fill: v-bind(hoverColor);
     color: v-bind(hoverColor);
   }
+
   .svg-icon-spin {
     width: v-bind('fontSize.default');
     height: v-bind('fontSize.default');

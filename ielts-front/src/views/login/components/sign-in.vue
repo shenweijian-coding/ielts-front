@@ -37,12 +37,12 @@
 
 <script lang="ts" setup>
   import { ElMessage, FormInstance, FormRules } from 'element-plus';
-  import { useUserStore } from '@/store';
+  // import { useUserStore } from '@/store';
   import { sendyzm, signup } from '@/api/user/index';
 
   const router = useRouter();
   const errorMessage = ref('');
-  const userStore = useUserStore();
+  // const userStore = useUserStore();
 
   const emit = defineEmits(['toggle']);
   const countdown = ref(60);
@@ -77,7 +77,7 @@
           phone_number: +userFormData.phone_number,
           code: userFormData.code,
           password: userFormData.password,
-        }).then((res) => {
+        }).then(() => {
           emit('toggle');
           ElMessage.success('恭喜您，注册成功！');
         });
@@ -101,7 +101,7 @@
       phone_number: userFormData.phone_number,
       action: 'code',
     })
-      .then((res) => {
+      .then(() => {
         ElMessage.success('发送成功，请注意查看');
         countingDown.value = true;
         countdown.value = 60;
@@ -128,7 +128,6 @@
 
     &-title {
       color: var(--color-text-1);
-      font-weight: 500;
       font-size: 30px;
       font-weight: bold;
       line-height: 32px;
@@ -165,6 +164,7 @@
       margin-left: 0;
     }
   }
+
   .forget-pwd {
     float: right;
     width: auto;

@@ -4,11 +4,12 @@ export interface RequestOptions {
 }
 
 // 返回res.data的interface
-export interface IResponse<T = any> {
+export interface IResponse {
   code: number | string;
-  data: T;
+  data: any;
   message: string;
   status: string | number;
+  values: any;
 }
 
 /**用户登录 */

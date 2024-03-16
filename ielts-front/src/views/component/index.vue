@@ -6,7 +6,7 @@
       <a-button type="primary">Primary Button</a-button>
       <a-button>Default Button</a-button>
       <a-button type="dashed">Dashed Button</a-button>
-      <a-button type="link">Link Button</a-button>
+      <a-button type="text">Link Button</a-button>
     </a-space>
 
     <a-descriptions title="Element Plus" />
@@ -62,7 +62,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
   import Header from '@/components/Header/index.vue';
   // 因为和ant-design-vue前缀冲突，所以用import引入
   import { Button, Space } from '@arco-design/web-vue';

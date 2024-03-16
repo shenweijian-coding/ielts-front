@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import piniaStore from '@/store/index';
-import { AppState } from './types';
 
 export const useAppStore = defineStore(
   // 唯一ID
@@ -9,20 +8,23 @@ export const useAppStore = defineStore(
     state: () => ({
       theme: '',
       dictationInfo: null,
-      errWords: null
+      errWords: null,
     }),
+    persist: {
+      storage: sessionStorage,
+    },
     getters: {
       chapterId(state) {
-        return state?.dictationInfo?.currentChapter.id
-      }
+        return state?.dictationInfo?.currentChapter.id;
+      },
     },
     actions: {
-      updateSettings(partial: Partial<AppState>) {
+      updateSettings(partial) {
         this.$patch(partial);
       },
 
       // Change theme color
-      toggleTheme(dark: boolean) {
+      toggleTheme(dark) {
         if (dark) {
           this.theme = 'dark';
           document.documentElement.classList.add('dark');
@@ -32,18 +34,14 @@ export const useAppStore = defineStore(
         }
       },
       setChapterInfo(data) {
-        this.dictationInfo = data
+        this.dictationInfo = data;
       },
       async toggleCurrentChapter(data) {
-        this.dictationInfo.currentChapter = data
+        this.dictationInfo.currentChapter = data;
       },
       async setErrWords(data) {
-        this.errWords = data
-      }
-    },
-    persist: {
-      enabled: true,
-      storage: sessionStorage, // 存储方式
+        this.errWords = data;
+      },
     },
   },
 );

@@ -2,13 +2,14 @@ import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { showMessage } from './status';
 import { IResponse } from './type';
-import { getToken } from '@/utils/auth';
-import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus';
+
 console.log(import.meta.env);
 
 const service: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 10000,
+  withCredentials: true
 });
 
 // axios实例拦截请求
@@ -29,11 +30,11 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: any) => {
     if (response.status === 200) {
-      if(response.data.status) {
-        ElMessage.error(response.data.message)
-        return Promise.reject(response.values)
+      if (response.data.status) {
+        ElMessage.error(response.data.message);
+        return Promise.reject(response.values);
       }
-      
+
       // 统一处理 失败问题
       return response;
     }
@@ -44,9 +45,9 @@ service.interceptors.response.use(
     if (response) {
       // 请求已发出，但是不在2xx的范围
       showMessage(response.status);
-      if(response.status == 401) {
-        window.location.replace('/login')
-        return
+      if (response.status == 401) {
+        window.location.replace('/login');
+        return;
       }
       return Promise.reject(response.data);
     }
@@ -58,12 +59,9 @@ const request = <T = any>(config: AxiosRequestConfig): Promise<T> => {
   const conf = config;
   return new Promise((resolve) => {
     service.request<any, AxiosResponse<IResponse>>(conf).then((res: AxiosResponse<IResponse>) => {
-      
-      const {
-        data: { values },
-      } = res;
-      
-      resolve(values as T);
+      const { data } = res;
+
+      resolve(data.values as T);
     });
   });
 };

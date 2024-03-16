@@ -683,6 +683,7 @@
     box-shadow: 0 100px 80px #814c2e12, 0 41.7776px 33.4221px #814c2e0d, 0 22.3363px 17.869px #814c2e12, 0 12.5216px 10.0172px #814c2e0d,
       0 6.6501px 5.32008px #814c2e12, 0 2.76726px 2.21381px #814c2e0d;
   }
+
   .el-radio {
     margin-right: 0;
   }
@@ -694,9 +695,11 @@
       padding: 10px;
       width: 50%;
     }
+
     .error {
       border-bottom: 2px solid red;
     }
+
     .success {
       border-bottom: 2px solid green;
     }

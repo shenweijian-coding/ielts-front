@@ -1,6 +1,6 @@
 <template>
   <div class="content-inner bg-white">
-    <div v-if="step == 1" class="login-form-wrapper">
+    <div class="login-form-wrapper">
       <div class="text-bold">重置密码</div>
       <div class="login-form-error-msg">{{ errorMessage }}</div>
       <el-form ref="ruleFormRef" :model="userFormData" class="login-form" layout="vertical" :rules="rules" size="large">
@@ -28,7 +28,7 @@
         <el-button type="text" class="forget-pwd" @click="handleToChangePwd" />
       </el-form>
     </div>
-    <div v-if="step == 2" class="login-form-wrapper">
+    <div class="login-form-wrapper">
       <div class="text-bold">重设您的账号密码</div>
       <div class="login-form-error-msg">{{ errorMessage }}</div>
       <el-form ref="ruleFormRef" :model="userFormData" class="login-form" layout="vertical" :rules="rules" size="large">
@@ -59,8 +59,8 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-  import { ElMessage, FormInstance, FormRules } from 'element-plus';
+<script setup>
+  import { ElMessage, FormInstance } from 'element-plus';
   import { useUserStore } from '@/store';
 
   const router = useRouter();
@@ -72,8 +72,8 @@
     username: '',
     password: '',
   });
-  const ruleFormRef = ref<FormInstance>();
-  const rules = reactive<FormRules>({
+  const ruleFormRef = ref();
+  const rules = reactive({
     username: [
       {
         required: true,
@@ -88,25 +88,25 @@
     ],
   });
 
-  const handleNuxt = async (formEl: FormInstance | undefined) => {
+  const handleNuxt = async (formEl) => {
     if (!formEl) return;
     await formEl.validate(async (valid) => {
       console.log(valid);
       if (valid) {
         // await userStore.login(userFormData);
-        step.value = 2;
+        step.value = '2';
         router.push('/');
       } else {
         ElMessage.error('错误信息:请填写手机号和验证码');
       }
     });
   };
-  const handleSubmit = async (formEl: FormInstance | undefined) => {
+  const handleSubmit = async (formEl) => {
     if (!formEl) return;
     await formEl.validate(async (valid) => {
       console.log(valid);
       if (valid) {
-        await userStore.login(userFormData);
+        await userStore.login({ ...userFormData });
         await userStore.info();
         router.push('/');
       } else {
@@ -114,11 +114,8 @@
       }
     });
   };
+  const senYzm = () => {};
 
-  const resetForm = (formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    formEl.resetFields();
-  };
   const handleToChangePwd = () => {
     router.push('/forgetPassword');
   };
@@ -132,7 +129,6 @@
 
     &-title {
       color: var(--color-text-1);
-      font-weight: 500;
       font-size: 30px;
       font-weight: bold;
       line-height: 32px;
@@ -169,12 +165,14 @@
       margin-left: 0;
     }
   }
+
   .forget-pwd {
     float: right;
     width: auto;
     margin: 0;
     padding: 0;
   }
+
   .content-inner {
     transform: translate(-50%, -50%);
     top: 40%;
@@ -182,6 +180,6 @@
     left: 50%;
     width: max-content;
     padding: 30px;
-    box-shadow: 0 20px 50px 0 hsla(0, 0%, 64%, 0.1);
+    box-shadow: 0 20px 50px 0 hsl(0deg 0% 64% / 10%);
   }
 </style>

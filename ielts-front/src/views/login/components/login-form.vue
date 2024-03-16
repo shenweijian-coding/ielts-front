@@ -80,7 +80,6 @@
 
     &-title {
       color: var(--color-text-1);
-      font-weight: 500;
       font-size: 30px;
       font-weight: bold;
       line-height: 32px;
@@ -117,6 +116,7 @@
       margin-left: 0;
     }
   }
+
   .forget-pwd {
     float: right;
     width: auto;

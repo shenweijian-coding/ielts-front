@@ -48,9 +48,10 @@
     height: 100vh;
     width: 100vw !important;
     max-width: 100vw;
+
     .banner {
       width: 550px;
-      background-image: url(https://pic.imgdb.cn/item/65f52d019f345e8d036267ae.jpg);
+      background-image: url("https://pic.imgdb.cn/item/65f52d019f345e8d036267ae.jpg");
       background-position: center;
     }
 
@@ -68,9 +69,10 @@
       bottom: 0;
       width: 100%;
     }
+
     .content-inner {
       padding: 30px;
-      box-shadow: 0 20px 50px 0 hsla(0, 0%, 64%, 0.1);
+      box-shadow: 0 20px 50px 0 hsl(0deg 0% 64% / 10%);
     }
   }
 

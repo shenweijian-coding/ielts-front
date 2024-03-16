@@ -15,9 +15,10 @@ import '@arco-design/web-vue/dist/arco.css';
 // import '@devui-design/icons/icomoon/devui-icon.css';
 
 // elementUI
-import 'element-plus/dist/index.css'
+import 'element-plus/dist/index.css';
 
 import { ThemeServiceInit, devuiDarkTheme } from 'devui-theme';
+import Idux from '@/config/idux';
 
 const themeService = ThemeServiceInit({ devuiDarkTheme }, 'infinityTheme');
 
@@ -25,7 +26,6 @@ themeService?.applyTheme(devuiDarkTheme);
 
 //vue3的挂载方式
 const app = createApp(App);
-import Idux from '@/config/idux';
 
 app.use(router);
 app.use(piniaStore);
