@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen w-full flex-col items-center pb-4">
+  <div>
     <div class="relative mb-auto mt-auto flex w-full flex-1 flex-col overflow-y-auto pl-20">
       <div class="mt-20 flex w-full flex-1 flex-col justify-center overflow-y-auto">
         <!-- tab切换 -->
