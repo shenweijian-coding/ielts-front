@@ -7,7 +7,7 @@ const init: ProxyTargetList = {
   // test
   [API_BASE_URL]: {
     target: API_TARGET_URL,
-    changeOrigin: true,
+    // changeOrigin: true,
     rewrite: (path) => path.replace(new RegExp(`^${API_BASE_URL}`), ''),
   },
   // mock

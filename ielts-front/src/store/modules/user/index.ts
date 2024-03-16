@@ -20,7 +20,8 @@ export const useUserStore = defineStore('user', {
     }
   }),
   persist: {
-    enabled: true
+    enabled: true,
+    storage: sessionStorage, // 存储方式
   },
   getters: {
     userProfile(state: UserState): UserState {

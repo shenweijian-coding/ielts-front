@@ -5,7 +5,7 @@ import { useUserStore } from './modules/user';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 const pinia = createPinia();
-pinia.use(piniaPluginPersistedstate);
+pinia.use(piniaPluginPersistedstate)
 
 export { useAppStore, useUserStore };
 export default pinia;

@@ -1,5 +1,5 @@
 <template>
-  <div class="dark:text-slate-400 dark:bg-slate-900 relative">
+  <div class="dark:text-slate-400 dark:bg-slate-900 relative w-full">
     <div class="home-box h-screen w-full">
       <img :src="logo" class="absolute top-20 left-60 h-20" alt="logo" />
       <div class="flex justify-center items-center h-screen space-x-12">

@@ -50,7 +50,8 @@
     max-width: 100vw;
     .banner {
       width: 550px;
-      background-image: url(https://pic.imgdb.cn/item/6545aeb9c458853aef9b1bba.png);
+      background-image: url(https://pic.imgdb.cn/item/65f52d019f345e8d036267ae.jpg);
+      background-position: center;
     }
 
     .content {

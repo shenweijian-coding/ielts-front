@@ -42,7 +42,8 @@ export const useAppStore = defineStore(
       }
     },
     persist: {
-      enabled: true
+      enabled: true,
+      storage: sessionStorage, // 存储方式
     },
   },
 );

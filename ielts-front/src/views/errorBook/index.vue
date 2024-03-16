@@ -28,6 +28,7 @@
           <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
         </div>
         <el-table
+          ref="tableRef"
           :data="state.tableData"
           style="width: 100%"
           @selection-change="handleSelectionChange"
@@ -52,7 +53,7 @@
           <el-table-column prop="chapter.name" label="章节" />
           <el-table-column prop="updated_at" label="最近错误时间" sortable="custom" />
         </el-table>
-        <div class="py-5 flex justify-end">
+        <!-- <div class="py-5 flex justify-end">
           <el-pagination
             background
             v-model:current-page="state.page.currentPage"
@@ -63,7 +64,7 @@
             @size-change="handleSizeChange"
             @current-change="getErrorWords"
           />
-        </div>
+        </div> -->
       </div>
     </div>
     <LastPage />
@@ -80,6 +81,7 @@
   const appStore = useAppStore();
   const router = useRouter();
 
+  const tableRef = ref(null);
   const state = reactive({
     form: {
       errTime: 0,
@@ -103,7 +105,7 @@
     selWords: [],
     page: {
       total: 0,
-      pageSize: 50,
+      pageSize: 9999,
       currentPage: 1,
     },
   });
@@ -138,6 +140,9 @@
     getErrorWordList(params).then((res) => {
       state.tableData = res.data;
       state.page.total = res.total;
+      setTimeout(() => {
+        tableRef.value.toggleAllSelection();
+      });
     });
   };
   const handleSelectionChange = (val) => {
