@@ -645,7 +645,7 @@
 
     document.addEventListener('keydown', handleAllKeyDown);
     if (!appStore?.dictationInfo?.currentChapter) {
-      router.push('/#/gallery');
+      router.push('/gallery');
       return;
     }
     getWords();

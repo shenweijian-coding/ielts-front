@@ -30,6 +30,12 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: any) => {
     if (response.status === 200) {
+      console.log(response, 'response');
+      
+      if (response.data.status == 401) {
+        clearToken()
+        window.location.replace('/login');
+      }
       if (response.data.status) {
         ElMessage.error(response.data.message);
         return Promise.reject(response.values);
@@ -45,11 +51,6 @@ service.interceptors.response.use(
     if (response) {
       // 请求已发出，但是不在2xx的范围
       showMessage(response.status);
-      if (response.status == 401) {
-        clearToken()
-        window.location.replace('/#/login');
-        return;
-      }
       return Promise.reject(response.data);
     }
     showMessage('网络连接异常,请稍后再试!');

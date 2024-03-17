@@ -192,7 +192,7 @@
     });
     await appStore.setErrWords(errWords);
     setTimeout(() => {
-      router.push('/#/home?source=err');
+      router.push('/home?source=err');
     });
   };
   getErrorWords();
