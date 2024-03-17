@@ -1,10 +1,7 @@
 <template>
   <header class="container z-20 mx-auto w-full px-10 py-8">
     <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0"
-      ><a
-        class="flex items-center text-2xl font-bold text-indigo-500 no-underline hover:no-underline lg:text-4xl"
-        href="https://qwerty.kaiyi.cool/"
-      >
+      ><a class="flex items-center text-2xl font-bold text-indigo-500 no-underline hover:no-underline lg:text-4xl" href="/">
         <img src="@/assets/images/logo.png" class="h-18" alt="logo" />
         <!-- <h3>logo</h3> -->
       </a>
@@ -16,7 +13,7 @@
             <div>
               <a
                 class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
-                href="/gallery"
+                href="/#/gallery"
               >
                 {{ appStore?.dictationInfo?.booInfo.remarks }}
               </a>
@@ -211,13 +208,13 @@
           <el-tooltip content="错词本" placement="top" effect="light">
             <div class="relative">
               <div>
-                <a href="/errorBook">
+                <a href="/#/errorBook">
                   <button
                     type="button"
-                    class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
+                    class="flex items-center justify-center rounded p-[2px] text-lg outline-none transition-colors duration-300 ease-in-out"
                     title="查看错题本"
                   >
-                    <SvgIcon name="book" prefix="icon-svg" size="small" color="hover:text-white" />
+                    <el-icon color="#2c3e50" :size="20"><List /></el-icon>
                   </button>
                 </a>
               </div>
@@ -237,7 +234,7 @@
                     type="button"
                     class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
                   >
-                    <el-icon color="#000" :size="18"><UserFilled /></el-icon>
+                    <el-icon color="#2c3e50" :size="20"><UserFilled /></el-icon>
                   </button>
                 </template>
                 <div class="full-w text-center">
@@ -343,18 +340,18 @@
                 <div class="space-x-8 flex mt-10 duration-300 text-center justify-center transition-colors font-sans cursor-pointer">
                   <div>
                     <el-tooltip content="回退上一个单词，快捷键 ctrl+j" placement="top" effect="light">
-                      <SvgIcon name="play-left" color="grey" @click="handleMove(-1)" />
+                      <SvgIcon name="play-left" color="grey" @click="handleMove(-1)" size="large" />
                     </el-tooltip>
                   </div>
                   <div>
                     <el-tooltip content="快捷键 ctrl+p" placement="top" effect="light">
-                      <SvgIcon v-if="playStatus == 0 || playStatus == 2" @click="start" name="play-start" color="grey" />
-                      <SvgIcon v-if="playStatus == 1" @click="stop" name="play-stop" color="grey" />
+                      <SvgIcon v-if="playStatus == 0 || playStatus == 2" @click="start" name="play-start" color="grey" size="large" />
+                      <SvgIcon v-if="playStatus == 1" @click="stop" name="play-stop" color="grey" size="large" />
                     </el-tooltip>
                   </div>
                   <div>
-                    <el-tooltip content="快捷键 ctrl+l" placement="top" effect="light">
-                      <SvgIcon @click="playAgain" name="play-again" color="grey" />
+                    <el-tooltip content="快捷键 ctrl+L" placement="top" effect="light">
+                      <SvgIcon @click="playAgain" name="play-again" color="grey" size="large" />
                     </el-tooltip>
                   </div>
                 </div>
@@ -371,9 +368,12 @@
           </div>
         </div>
       </div>
-      <div class="my-card flex w-3/5 rounded-xl bg-white p-4 py-10 opacity-50 transition-colors duration-300 dark:bg-gray-800">
-        <el-progress :percentage="(wordsData.currentIndex * 100) / (wordsData.words.length || 1)" class="w-full" :stroke-width="16">
-          <span>{{ wordsData.currentIndex }}/{{ wordsData.words.length }}</span>
+      <div
+        class="my-card flex w-3/5 rounded-xl bg-white p-4 py-10 opacity-50 transition-colors duration-300 dark:bg-gray-800"
+        v-if="wordsData.words.length"
+      >
+        <el-progress :percentage="((wordsData.currentIndex + 1) * 100) / (wordsData.words.length || 1)" class="w-full" :stroke-width="16">
+          <span>{{ wordsData.currentIndex + 1 }}/{{ wordsData.words.length }}</span>
         </el-progress>
       </div>
     </div>
@@ -387,7 +387,7 @@
   import correct from '@/assets/correct.wav';
   import defaultAudio from '@/assets/Default.wav';
   import { ElMessage } from 'element-plus';
-  import { UserFilled } from '@element-plus/icons-vue';
+  import { UserFilled, List } from '@element-plus/icons-vue';
   import mistakeDialog from './mistakeDialog.vue';
   import { useAppStore, useUserStore } from '@/store';
   import { getWordList, reportLexiRes } from '@/api/book/index';
@@ -398,7 +398,7 @@
   const router = useRouter();
 
   // 有道的翻译api
-  const YDAPI = 'https://dict.youdao.com/dictvoice?audio=';
+  // const YDAPI = 'https://dict.youdao.com/dictvoice?audio=';
   const errSource = ref(false); // 默认空，错词表来的  err
   const config = reactive({
     chapterId: appStore.chapterId,
@@ -558,11 +558,11 @@
 
   // 聚焦
   const handleFocus = () => {
-    // start();
+    start();
   };
   // 失去焦点
   const handleBlur = () => {
-    // stop();
+    stop();
   };
   // 处理音效
   const handleSoundEffect = () => {
@@ -645,7 +645,7 @@
 
     document.addEventListener('keydown', handleAllKeyDown);
     if (!appStore?.dictationInfo?.currentChapter) {
-      router.push('/gallery');
+      router.push('/#/gallery');
       return;
     }
     getWords();
@@ -669,7 +669,11 @@
   const handleNextChapter = () => {
     const chapterNum = chapterList.value.length;
     const nextChapterIndex = chapterList.value.findIndex((o) => o.id == config.chapterId) + 1;
-    chapterChange(chapterList.value[nextChapterIndex].id);
+    if (chapterNum > nextChapterIndex) {
+      chapterChange(chapterList.value[nextChapterIndex].id);
+    } else {
+      ElMessage.error('已经是最后一章啦');
+    }
   };
 
   // 切换配置
@@ -693,7 +697,7 @@
       font-size: 3rem;
       border-bottom: 2px solid black;
       padding: 10px;
-      width: 50%;
+      width: 90%;
     }
 
     .error {

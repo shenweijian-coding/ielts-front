@@ -88,7 +88,7 @@
   };
 
   const handleToChangePwd = () => {
-    router.push('/forgetPassword');
+    router.push('/#/forgetPassword');
   };
 
   let timer;

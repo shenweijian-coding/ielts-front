@@ -21,7 +21,7 @@
 
 <style lang="less" scoped>
   .home-box {
-    background-image: url("https://pic.imgdb.cn/item/65f52d019f345e8d036267ae.jpg");
+    background-image: url('https://pic.imgdb.cn/item/65f52d019f345e8d036267ae.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

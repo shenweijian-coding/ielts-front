@@ -21,7 +21,7 @@
         <el-input v-model="userFormData.password" placeholder="密码" allow-clear type="password" />
       </el-form-item>
       <el-button type="primary" @click="handleSubmit(ruleFormRef)">登录</el-button>
-      <el-button type="text" class="forget-pwd" @click="handleToChangePwd">忘记密码?</el-button>
+      <!-- <el-button type="text" class="forget-pwd" @click="handleToChangePwd">忘记密码?</el-button> -->
     </el-form>
   </div>
 </template>
@@ -34,8 +34,8 @@
   const errorMessage = ref('');
   const userStore = useUserStore();
   const userFormData = reactive({
-    phone_number: '18832373807',
-    password: 'swj250176',
+    phone_number: '',
+    password: '',
   });
   const ruleFormRef = ref<FormInstance>();
   const rules = reactive<FormRules>({
@@ -68,7 +68,7 @@
   };
 
   const handleToChangePwd = () => {
-    router.push('/forgetPassword');
+    router.push('/#/forgetPassword');
   };
 </script>
 

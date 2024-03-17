@@ -3,7 +3,7 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError, Inte
 import { showMessage } from './status';
 import { IResponse } from './type';
 import { ElMessage } from 'element-plus';
-
+import { clearToken } from '@/utils/auth';
 console.log(import.meta.env);
 
 const service: AxiosInstance = axios.create({
@@ -46,7 +46,8 @@ service.interceptors.response.use(
       // 请求已发出，但是不在2xx的范围
       showMessage(response.status);
       if (response.status == 401) {
-        window.location.replace('/login');
+        clearToken()
+        window.location.replace('/#/login');
         return;
       }
       return Promise.reject(response.data);

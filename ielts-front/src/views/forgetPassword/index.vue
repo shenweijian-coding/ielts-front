@@ -117,7 +117,7 @@
   const senYzm = () => {};
 
   const handleToChangePwd = () => {
-    router.push('/forgetPassword');
+    router.push('/#/forgetPassword');
   };
 </script>
 

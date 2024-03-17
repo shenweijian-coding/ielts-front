@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router/auto';
+import { createRouter, createWebHashHistory } from 'vue-router/auto';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { useUserStore } from '@/store';
@@ -8,14 +8,14 @@ const routesWhiteList = ['/login', '/'];
 
 //导入生成的路由数据
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
 });
 
 router.beforeEach(async (_to, _from, next) => {
   const user = useUserStore();
   console.log(user);
 
-  const hasToken = !!user.token || getToken();
+  const hasToken = !!user.token || getToken()
   console.log(hasToken);
 
   if (hasToken) {
