@@ -5,12 +5,12 @@
         <el-form :model="state.form" size="large" label-width="80">
           <el-form-item label="错误时间">
             <el-radio-group v-model="state.form.errTime" @change="getErrorWords">
-              <el-radio-button v-for="o in state.errTimeOption" :key="o.id" :value="o.id" :label="o.name">{{ o.name }}</el-radio-button>
+              <el-radio-button v-for="o in state.errTimeOption" :key="o.id" :value="o.id" :label="o.id">{{ o.name }}</el-radio-button>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="错误次数">
             <el-radio-group v-model="state.form.error_num" size="large" @change="getErrorWords">
-              <el-radio-button v-for="o in state.errNumOption" :key="o.num" :value="o.num" :label="o.name">{{ o.name }}</el-radio-button>
+              <el-radio-button v-for="o in state.errNumOption" :key="o.num" :value="o.num" :label="o.num">{{ o.name }}</el-radio-button>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="章节">
@@ -75,7 +75,7 @@
   import { useAppStore, useUserStore } from '@/store';
   import { Headset } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
-
+  import { ElMessage } from 'element-plus';
   import dayjs from 'dayjs';
 
   const appStore = useAppStore();
@@ -176,6 +176,7 @@
   };
   const handleSelWords = async () => {
     if (!state.selWords.length) {
+      ElMessage.error('请选择错词');
       return;
     }
     const errWords = state.selWords.map((word) => {

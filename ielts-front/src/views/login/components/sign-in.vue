@@ -23,7 +23,7 @@
       </el-form-item>
       <el-form-item
         prop="password"
-        :rules="[{ required: true, message: '验证码不能为空' }]"
+        :rules="[{ required: true, message: '密码不能为空' }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
@@ -95,6 +95,10 @@
   // 发送验证码
   const senYzm = () => {
     if (countingDown.value) {
+      return;
+    }
+    if (!userFormData.phone_number) {
+      ElMessage.error('错误信息：请补充手机号');
       return;
     }
     sendyzm({

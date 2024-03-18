@@ -166,7 +166,7 @@
                     v-for="pronounce in config.pronounceList"
                     :key="pronounce.id"
                     :value="pronounce.id"
-                    :label="pronounce.name"
+                    :label="pronounce.id"
                     border
                     class="w-full mb-2 mr-0"
                     >{{ pronounce.name }}</el-radio
@@ -279,12 +279,12 @@
                 <div
                   v-if="nearWords.nextWord"
                   class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
-                  ><div class="grow-1 flex w-full flex-col items-end text-right mr-2"
-                    ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0"> **** </p
+                  ><div class="grow-1 flex w-full flex-col items-end text-right mr-2">
+                    <!-- <p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0"> **** </p
                     ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
                       nearWords.nextWord.translate
-                    }}</p></div
-                  >
+                    }}</p> -->
+                  </div>
                   <SvgIcon name="right" /> </div></div></div
           ></div>
           <div class="container flex flex-grow flex-col items-center justify-center">
@@ -468,6 +468,8 @@
       });
     }
   };
+  // 播放音频的方法
+  var audio = new Audio();
 
   // 重新播放
   const playAgain = () => {
@@ -558,7 +560,7 @@
 
   // 聚焦
   const handleFocus = () => {
-    start();
+    // start();
   };
   // 失去焦点
   const handleBlur = () => {
@@ -578,8 +580,6 @@
       }
     }
   };
-  // 播放音频的方法
-  var audio = new Audio();
   const playWords = (words = [wordsData.currentWord]) => {
     var index = 0;
     var count = 0;
@@ -596,7 +596,7 @@
       'ended',
       function () {
         count++;
-        if (count < repeatTimes) {
+        if (count < repeatTimes || repeatTimes == '无限') {
           // 这里是播放
           audio.src = config.phonetic_type == '美音' ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
 
@@ -680,6 +680,14 @@
   const handleConfigChange = (p, val) => {
     userStore.handleConfig(p, val);
   };
+  onUnmounted(() => {
+    audio.pause(); // 先暂停播放
+    audio.src = ''; // 清空src
+    audio.remove(); // 移除音频对象
+
+    // 或者将音频对象赋值为null
+    audio = null;
+  });
 </script>
 
 <style scoped lang="less">

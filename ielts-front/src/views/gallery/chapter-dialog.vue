@@ -21,8 +21,12 @@
                   :key="item.id"
                   @click="handleClickChapter(item)"
                   class="relative flex h-16 w-40 cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 pt-3 dark:bg-slate-800"
-                  ><h3>{{ item.name }}</h3
-                  ><p class="pt-[2px] text-xs text-slate-600">{{ item.accuracy ? `${item.accuracy.toFixed(2)}%` : '未练习' }}</p>
+                >
+                  <div class="flex justify-between w-full">
+                    <h3>{{ item.name }}</h3
+                    ><span>共{{ item.word_total }}词</span>
+                  </div>
+                  <p class="pt-[2px] text-xs text-slate-600">{{ item.accuracy ? `${item.accuracy.toFixed(2)}%` : '未练习' }}</p>
                   <SvgIcon
                     v-if="item.id == appStore.chapterId"
                     name="tick"

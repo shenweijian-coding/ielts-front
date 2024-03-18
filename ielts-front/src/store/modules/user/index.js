@@ -49,6 +49,8 @@ export const useUserStore = defineStore('user', {
     },
     // 重置用户信息
     resetInfo() {
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('app');
       this.$reset();
     },
     // 获取用户信息
@@ -66,8 +68,8 @@ export const useUserStore = defineStore('user', {
     },
     // 异步登录并存储token
     async login(loginForm) {
+      this.resetInfo();
       const result = await userLogin(loginForm);
-      console.log(result, '111');
 
       const token = result?.session_ids;
       if (token) {

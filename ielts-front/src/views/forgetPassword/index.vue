@@ -5,116 +5,148 @@
       <div class="login-form-error-msg">{{ errorMessage }}</div>
       <el-form ref="ruleFormRef" :model="userFormData" class="login-form" layout="vertical" :rules="rules" size="large">
         <el-form-item
-          prop="username"
+          prop="phone_number"
           :rules="[{ required: true, message: '手机号不能为空' }]"
           :validate-trigger="['change', 'blur']"
           hide-label
         >
-          <el-input v-model="userFormData.username" placeholder="手机号" />
+          <el-input v-model="userFormData.phone_number" placeholder="手机号" />
         </el-form-item>
         <el-form-item
-          prop="password"
+          prop="code"
           :rules="[{ required: true, message: '验证码不能为空' }]"
           :validate-trigger="['change', 'blur']"
           hide-label
         >
-          <el-input v-model="userFormData.password" placeholder="验证码" allow-clear>
+          <el-input v-model="userFormData.code" placeholder="验证码" allow-clear>
             <template #append>
-              <el-button style="margin: 0; padding: 0" type="primary" @click="senYzm">发送验证码</el-button>
+              <span class="cursor-pointer" @click="senYzm" :disabled="countingDown">{{
+                countingDown ? `${countdown} 秒` : '发送验证码'
+              }}</span>
             </template>
           </el-input>
+        </el-form-item>
+        <el-form-item
+          prop="password"
+          :rules="[{ required: true, message: '密码不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <el-input v-model="userFormData.password" placeholder="新密码" type="password" />
+        </el-form-item>
+        <el-form-item
+          prop="password2"
+          :rules="[{ required: true, message: '密码不能为空' }]"
+          :validate-trigger="['change', 'blur']"
+          hide-label
+        >
+          <el-input v-model="userFormData.password2" placeholder="确认新密码" type="password" />
         </el-form-item>
         <el-button type="primary" @click="handleNuxt(ruleFormRef)">下一步</el-button>
-        <el-button type="text" class="forget-pwd" @click="handleToChangePwd" />
-      </el-form>
-    </div>
-    <div class="login-form-wrapper">
-      <div class="text-bold">重设您的账号密码</div>
-      <div class="login-form-error-msg">{{ errorMessage }}</div>
-      <el-form ref="ruleFormRef" :model="userFormData" class="login-form" layout="vertical" :rules="rules" size="large">
-        <el-form-item
-          prop="username"
-          :rules="[{ required: true, message: '手机号不能为空' }]"
-          :validate-trigger="['change', 'blur']"
-          hide-label
-        >
-          <el-input v-model="userFormData.username" placeholder="手机号" />
-        </el-form-item>
-        <el-form-item
-          prop="password"
-          :rules="[{ required: true, message: '验证码不能为空' }]"
-          :validate-trigger="['change', 'blur']"
-          hide-label
-        >
-          <el-input v-model="userFormData.password" placeholder="验证码" allow-clear>
-            <template #append>
-              <el-button style="margin: 0; padding: 0" type="primary" @click="senYzm">发送验证码</el-button>
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-button type="primary" @click="handleSubmit(ruleFormRef)">提交</el-button>
-        <el-button type="text" class="forget-pwd" @click="handleToChangePwd" />
+        <!-- <el-button type="text" class="forget-pwd" @click="handleToChangePwd" /> -->
       </el-form>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { ElMessage, FormInstance } from 'element-plus';
-  import { useUserStore } from '@/store';
+  import { ElMessage } from 'element-plus';
+  import { sendyzm, signup } from '@/api/user/index';
 
   const router = useRouter();
   const errorMessage = ref('');
-  const userStore = useUserStore();
-  const step = ref('1');
+  const countdown = ref(60);
 
   const userFormData = reactive({
-    username: '',
+    phone_number: '',
+    code: '12345',
     password: '',
   });
+  const countingDown = ref(false);
+
   const ruleFormRef = ref();
   const rules = reactive({
-    username: [
+    phone_number: [
       {
         required: true,
         message: '手机号不能为空',
       },
     ],
-    password: [
+    code: [
       {
         required: true,
         message: '验证码不能为空',
+      },
+    ],
+    password: [
+      {
+        required: true,
+        message: '密码不能为空',
+      },
+    ],
+    password2: [
+      {
+        required: true,
+        message: '密码不能为空',
       },
     ],
   });
 
   const handleNuxt = async (formEl) => {
     if (!formEl) return;
+    if (userFormData.password != userFormData.password2) {
+      ElMessage.error('两次密码输入不一致，请检查确认');
+      return;
+    }
     await formEl.validate(async (valid) => {
-      console.log(valid);
       if (valid) {
-        // await userStore.login(userFormData);
-        step.value = '2';
-        router.push('/');
+        signup({
+          phone_number: +userFormData.phone_number,
+          code: userFormData.code,
+          password: userFormData.password,
+          is_reset: true,
+        }).then(() => {
+          ElMessage.success('修改成功，请重新登录！');
+          setTimeout(() => {
+            router.back();
+          }, 500);
+        });
       } else {
-        ElMessage.error('错误信息:请填写手机号和验证码');
+        ElMessage.error('错误信息:请填写手机号、验证码、密码');
       }
     });
   };
-  const handleSubmit = async (formEl) => {
-    if (!formEl) return;
-    await formEl.validate(async (valid) => {
-      console.log(valid);
-      if (valid) {
-        await userStore.login({ ...userFormData });
-        await userStore.info();
-        router.push('/');
-      } else {
-        ElMessage.error('错误信息:请填写手机号和验证码');
-      }
-    });
+
+  // 发送验证码
+  const senYzm = () => {
+    if (countingDown.value) {
+      return;
+    }
+    if (!userFormData.phone_number) {
+      ElMessage.error('错误信息：请补充手机号');
+      return;
+    }
+    sendyzm({
+      phone_number: userFormData.phone_number,
+      action: 'code',
+    })
+      .then(() => {
+        ElMessage.success('发送成功，请注意查看');
+        countingDown.value = true;
+        countdown.value = 60;
+
+        timer = setInterval(() => {
+          countdown.value--;
+          if (countdown.value === 0) {
+            countingDown.value = false;
+            clearInterval(timer);
+          }
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  const senYzm = () => {};
 
   const handleToChangePwd = () => {
     router.push('/#/forgetPassword');

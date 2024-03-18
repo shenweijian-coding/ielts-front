@@ -111,7 +111,11 @@
       l_id: l_id,
     }).then((res) => {
       galleryState.sceneList = res;
-      getBooks(res[0].id);
+      if (res.length) {
+        getBooks(res[0].id);
+      } else {
+        galleryState.booksList = [];
+      }
     });
   };
   const getLanguage = () => {
@@ -121,7 +125,9 @@
     });
   };
 
-  const handleTabClick = () => {};
+  const handleTabClick = ({ paneName }) => {
+    getScene(paneName);
+  };
   onMounted(() => {
     getLanguage();
   });

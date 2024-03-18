@@ -21,7 +21,7 @@
         <el-input v-model="userFormData.password" placeholder="密码" allow-clear type="password" />
       </el-form-item>
       <el-button type="primary" @click="handleSubmit(ruleFormRef)">登录</el-button>
-      <!-- <el-button type="text" class="forget-pwd" @click="handleToChangePwd">忘记密码?</el-button> -->
+      <el-button type="text" class="forget-pwd" @click="handleToChangePwd">忘记密码?</el-button>
     </el-form>
   </div>
 </template>
@@ -68,7 +68,7 @@
   };
 
   const handleToChangePwd = () => {
-    router.push('/#/forgetPassword');
+    router.push('/forgetPassword');
   };
 </script>
 
