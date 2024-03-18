@@ -48,6 +48,7 @@
   import { reactive } from 'vue';
   import SvgIcon from '@/components/SvgIcon/index.vue';
   import { useAppStore } from '@/store';
+  import { ElMessage, ElMessageBox } from 'element-plus';
 
   const appStore = useAppStore();
 
@@ -68,6 +69,15 @@
     state.dialogVisible = false;
   };
   const handleClickChapter = (item) => {
+    if (item.is_incomplete) {
+      ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
+        confirmButtonText: '继续听写',
+        cancelButtonText: '重新开始',
+        type: 'warning',
+      })
+        .then(() => {})
+        .catch(() => {});
+    }
     appStore.setChapterInfo({
       currentChapter: item,
       chapterList: state.list,
