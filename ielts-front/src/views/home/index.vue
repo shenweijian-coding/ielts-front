@@ -319,9 +319,9 @@
                       ref="inputRef"
                       class="font-mono font-normal text-center"
                       @keydown.enter="inputEnter"
-                      @focus="handleFocus"
                       @blur="handleBlur"
                       @keydown="handleKeyDown"
+                      @click="handleFocus"
                     />
                   </div>
                 </div>
@@ -428,7 +428,7 @@
   const correctRef = ref(new Audio(correct));
   const defaultAudioRef = ref(new Audio(defaultAudio));
   const mistakeRef = ref(null);
-
+  const currentTestKey = Date.now();
   const nearWords = computed(() => {
     let lastWord = '';
     let nextWord = '';
@@ -458,7 +458,11 @@
       wordsData.words = copyWords;
       wordsData.currentWord = copyWords[wordsData.currentIndex];
     } else {
-      getWordList({ c_id: appStore.dictationInfo.currentChapter.id }).then((res) => {
+      getWordList({
+        c_id: appStore.dictationInfo.currentChapter.id,
+        continue_lexicon_id: appStore.dictationInfo.last_id,
+        pagesize: 9999,
+      }).then((res) => {
         if (res.data.length) {
           wordsData.words = res.data;
           wordsData.currentWord = wordsData.words[wordsData.currentIndex];
@@ -515,7 +519,7 @@
   // 上报听写配置
   const handleReport = (data) => {
     reportLexiRes({
-      lexicon_id: '',
+      key: currentTestKey,
       ...data,
     }).then(() => {});
   };
@@ -560,7 +564,7 @@
 
   // 聚焦
   const handleFocus = () => {
-    // start();
+    start();
   };
   // 失去焦点
   const handleBlur = () => {

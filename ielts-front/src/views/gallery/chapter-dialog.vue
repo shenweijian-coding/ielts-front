@@ -73,17 +73,29 @@
       ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
         confirmButtonText: '继续听写',
         cancelButtonText: '重新开始',
-        type: 'warning',
+        type: 'info',
+        distinguishCancelAndClose: true,
       })
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {
+          appStore.setChapterInfo({
+            currentChapter: item,
+            chapterList: state.list,
+            booInfo: state.book,
+            last_id: item.last_id,
+          });
+          router.push('/home');
+        })
+        .catch((action) => {
+          if (action == 'cancel') {
+            appStore.setChapterInfo({
+              currentChapter: item,
+              chapterList: state.list,
+              booInfo: state.book,
+            });
+            router.push('/home');
+          }
+        });
     }
-    appStore.setChapterInfo({
-      currentChapter: item,
-      chapterList: state.list,
-      booInfo: state.book,
-    });
-    router.push('/home');
   };
   defineExpose({
     open,
