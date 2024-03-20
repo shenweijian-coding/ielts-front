@@ -20,7 +20,7 @@ router.beforeEach(async (_to, _from, next) => {
 
   if (hasToken) {
     if (_to.path === '/login') {
-      next('/gallery');
+      next({path: '/gallery', replace: true});
     } else {
       NProgress.start();
       next();

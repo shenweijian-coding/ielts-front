@@ -18,6 +18,9 @@ export const useUserStore = defineStore('user', {
       error_sound: 1, //错误音效是否开启
     },
   }),
+  persist: {
+    storage: sessionStorage,
+  },
   getters: {
     userProfile(state) {
       return { ...state };

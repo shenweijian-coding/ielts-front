@@ -295,7 +295,7 @@
                   </div>
                 </div> -->
 
-              <div class="relative">
+              <div class="relative" v-if="wordsData.words.length">
                 <div lang="en" class="flex flex-col items-center justify-center pb-1 pt-4">
                   <!-- <div
                       class="tooltip-info relative w-fit bg-transparent p-0 leading-normal shadow-none dark:bg-transparent"
@@ -379,6 +379,7 @@
     </div>
   </div>
   <mistakeDialog ref="mistakeRef" @next="handleNextChapter" />
+  <Loading :loading="loading" />
 </template>
 
 <script setup>
@@ -388,7 +389,9 @@
   import defaultAudio from '@/assets/Default.wav';
   import { ElMessage } from 'element-plus';
   import { UserFilled, List } from '@element-plus/icons-vue';
+  import Loading from '@/components/loading/index.vue';
   import mistakeDialog from './mistakeDialog.vue';
+  import useLoading from '@/hooks/loading.ts';
   import { useAppStore, useUserStore } from '@/store';
   import { getWordList, reportLexiRes } from '@/api/book/index';
 
@@ -396,6 +399,8 @@
   const userStore = useUserStore();
   const route = useRoute();
   const router = useRouter();
+
+  const { loading, setLoading } = useLoading();
 
   // 有道的翻译api
   // const YDAPI = 'https://dict.youdao.com/dictvoice?audio=';
@@ -458,18 +463,22 @@
       wordsData.words = copyWords;
       wordsData.currentWord = copyWords[wordsData.currentIndex];
     } else {
+      setLoading(true);
       getWordList({
         c_id: appStore.dictationInfo.currentChapter.id,
         continue_lexicon_id: appStore.dictationInfo.last_id,
         pagesize: 9999,
-      }).then((res) => {
-        if (res.data.length) {
-          wordsData.words = res.data;
-          wordsData.currentWord = wordsData.words[wordsData.currentIndex];
-        } else {
-          ElMessage.error('当前章节未配置词库');
-        }
-      });
+      })
+        .then((res) => {
+          if (res.data.length) {
+            wordsData.words = res.data;
+            wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+          } else {
+            ElMessage.error('当前章节未配置词库');
+          }
+          setLoading(false);
+        })
+        .catch((err) => console.log(err));
     }
   };
   // 播放音频的方法

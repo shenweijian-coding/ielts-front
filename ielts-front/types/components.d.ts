@@ -42,6 +42,7 @@ declare module 'vue' {
     IxButton: typeof import('@idux/components/button')['IxButton']
     IxSpace: typeof import('@idux/components/space')['IxSpace']
     LastPage: typeof import('./../src/components/lastPage/index.vue')['default']
+    Loading: typeof import('./../src/components/loading/index.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
     NSpace: typeof import('naive-ui')['NSpace']
     RouterLink: typeof import('vue-router')['RouterLink']

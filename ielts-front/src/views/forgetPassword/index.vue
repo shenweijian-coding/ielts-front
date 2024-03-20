@@ -59,7 +59,7 @@
 
   const userFormData = reactive({
     phone_number: '',
-    code: '12345',
+    code: '',
     password: '',
   });
   const countingDown = ref(false);
