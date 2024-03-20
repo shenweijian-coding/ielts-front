@@ -285,8 +285,11 @@
                       nearWords.nextWord.translate
                     }}</p> -->
                   </div>
-                  <SvgIcon name="right" /> </div></div></div
-          ></div>
+                  <!-- <SvgIcon name="right" />  -->
+                </div></div
+              ></div
+            ></div
+          >
           <div class="container flex flex-grow flex-col items-center justify-center">
             <div class="relative flex w-full justify-center">
               <!-- <div class="absolute flex h-full w-full justify-center">
