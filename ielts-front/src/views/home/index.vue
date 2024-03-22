@@ -238,7 +238,7 @@
                   </button>
                 </template>
                 <div class="full-w text-center">
-                  <el-button type="text" @click="handleLogout">退出登陆</el-button>
+                  <el-button type="text" @click="handleLogout">退出登录</el-button>
                 </div>
               </el-popover>
             </div>
@@ -413,7 +413,7 @@
     play_speed: userStore.getConfig.play_speed + '' || '1.0',
     play_interval: userStore.getConfig.play_interval || '5',
     repetitions: userStore.getConfig.repetitions + '' || '1',
-    phonetic_type: userStore.getConfig.phonetic_type || '美音',
+    phonetic_type: userStore.getConfig.phonetic_type || 2,
     error_sound: userStore.getConfig.error_sound || false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['2', '3', '4', '5', '6', '7'],
@@ -469,12 +469,15 @@
       setLoading(true);
       getWordList({
         c_id: appStore.dictationInfo.currentChapter.id,
-        continue_lexicon_id: appStore.dictationInfo.last_id,
+        // continue_lexicon_id: appStore.dictationInfo.last_id,
         pagesize: 9999,
       })
         .then((res) => {
           if (res.data.length) {
             wordsData.words = res.data;
+            if (appStore.dictationInfo.last_id) {
+              wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.last_id);
+            }
             wordsData.currentWord = wordsData.words[wordsData.currentIndex];
           } else {
             ElMessage.error('当前章节未配置词库');
@@ -489,7 +492,7 @@
 
   // 重新播放
   const playAgain = () => {
-    audio.src = config.phonetic_type == '美音' ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+    audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
 
     audio.playbackRate = +config.play_speed;
 
@@ -518,6 +521,8 @@
   const stop = () => {
     playStatus.value = 2;
     inputRef.value.blur();
+    audio.src = '';
+    audio.pause();
   };
 
   // 切换暂停和播放
@@ -603,7 +608,7 @@
     var repeatTimes = config.repetitions;
 
     // 播放第一个单词
-    audio.src = config.phonetic_type == '美音' ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
+    audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
     audio.playbackRate = +config.play_speed;
 
     audio.play();
@@ -614,7 +619,7 @@
         count++;
         if (count < repeatTimes || repeatTimes == '无限') {
           // 这里是播放
-          audio.src = config.phonetic_type == '美音' ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
+          audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
 
           setTimeout(() => {
             audio.play();
@@ -624,7 +629,7 @@
           count = 0;
 
           if (index < words.length) {
-            audio.src = config.phonetic_type == '美音' ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
+            audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
 
             setTimeout(() => {
               audio.play();

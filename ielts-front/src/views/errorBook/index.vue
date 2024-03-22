@@ -38,8 +38,8 @@
         >
           <el-table-column type="selection" width="55" />
           <el-table-column prop="lexicon.word" label="单词" width="180" />
-          <el-table-column prop="paraphrase" label="释义" width="180" />
-          <el-table-column prop="lexicon.phonetic_transcription" label="音标">
+          <el-table-column prop="lexicon.translate" label="释义" />
+          <el-table-column prop="lexicon.phonetic_transcription" label="音标" width="180">
             <template #default="scope">
               <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer" @click="play(scope.row)"
                 >{{ scope.row.lexicon?.phonetic_transcription }} <el-icon class="ml-2"><Headset /></el-icon
@@ -47,11 +47,11 @@
               <span v-else></span>
             </template>
           </el-table-column>
-          <el-table-column prop="error_num" label="错误次数" sortable="custom" />
-          <el-table-column prop="error_word" label="错误拼写" />
-          <el-table-column prop="lexicon_group.name" label="词典" />
-          <el-table-column prop="chapter.name" label="章节" />
-          <el-table-column prop="updated_at" label="最近错误时间" sortable="custom" />
+          <el-table-column prop="error_num" label="错误次数" sortable="custom" width="130" />
+          <el-table-column prop="error_word" label="错误拼写" width="180" />
+          <el-table-column prop="lexicon_group.name" label="词典" width="100" />
+          <el-table-column prop="chapter.name" label="章节" width="100" />
+          <el-table-column prop="updated_at" label="最近错误时间" sortable="custom" width="180" />
         </el-table>
         <!-- <div class="py-5 flex justify-end">
           <el-pagination
