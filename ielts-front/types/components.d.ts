@@ -38,6 +38,7 @@ declare module 'vue' {
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    Footer: typeof import('./../src/components/footer/index.vue')['default']
     Header: typeof import('./../src/components/Header/index.vue')['default']
     IxButton: typeof import('@idux/components/button')['IxButton']
     IxSpace: typeof import('@idux/components/space')['IxSpace']

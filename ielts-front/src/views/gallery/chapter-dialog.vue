@@ -33,7 +33,7 @@
                     color="#ff5c00"
                     hoverColor="#ff5c00"
                     class="absolute -bottom-1 -right-1 text-8xl"
-                    size="70"
+                    size="default"
                   />
                 </div>
               </div>

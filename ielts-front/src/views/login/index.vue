@@ -1,9 +1,11 @@
 <template>
   <div class="container">
     <div class="logo">
-      <img :src="logo" width="240" />
+      <a class="flex items-center text-2xl font-bold text-indigo-500 no-underline hover:no-underline lg:text-4xl" href="/">
+        <img :src="logo" class="h-20" />
+      </a>
     </div>
-    <LoginBanner />
+    <!-- <LoginBanner /> -->
     <div class="content">
       <div class="content-inner bg-white">
         <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -20,7 +22,6 @@
 </template>
 
 <script setup>
-  import LoginBanner from './components/banner.vue';
   import LoginForm from './components/login-form.vue';
   import logo from '@/assets/images/logo.png';
   import SignIn from './components/sign-in.vue';
@@ -51,7 +52,7 @@
 
     .banner {
       width: 550px;
-      background-image: url("https://pic.imgdb.cn/item/65f52d019f345e8d036267ae.jpg");
+      background-image: url('');
       background-position: center;
     }
 

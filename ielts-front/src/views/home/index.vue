@@ -708,6 +708,7 @@
 
     // 或者将音频对象赋值为null
     audio = null;
+    appStore.setLastId(wordsData.currentWord.id);
   });
 </script>
 
