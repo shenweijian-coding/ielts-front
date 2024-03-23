@@ -1,7 +1,7 @@
 <template>
   <div class="dark:text-slate-400 dark:bg-slate-900 relative w-full">
     <div class="home-box h-screen w-full flex justify-center items-center">
-      <a class="absolute top-20 lg:left-60" href="/">
+      <a class="absolute top-20 lg:left-60 text-theme" href="/">
         <SvgIcon name="atx" class="" width="200" height="80" />
       </a>
       <div class="flex justify-center items-center h-screen space-x-12" v-if="isLogin">

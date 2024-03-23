@@ -1,7 +1,7 @@
 <template>
   <header class="container z-20 mx-auto w-full lg:px-10 py-8 px-4">
     <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0"
-      ><a class="flex items-center text-2xl font-bold text-indigo-500 no-underline hover:no-underline lg:text-4xl" href="/">
+      ><a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
         <SvgIcon name="atx" class="" width="200" height="80" />
       </a>
       <nav

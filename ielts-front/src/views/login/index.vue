@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="w-full logo flex justify-center items-center">
-      <a class="absolute top-20 lg:left-60" href="/">
+      <a class="absolute top-20 lg:left-60 text-theme" href="/">
         <SvgIcon name="atx" width="200" height="80" />
       </a>
     </div>
