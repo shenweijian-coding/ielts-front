@@ -24,18 +24,20 @@
           </div>
 
           <!-- 书籍 -->
-          <div class="flex mt-8 px-1 pb-4 flex-wrap justify-between lg:justify-initial">
+          <div class="flex mt-8 px-1 pb-4 flex-wrap justify-between lg:justify-initial md:justify-initial">
             <div
               v-for="item in galleryState.booksList"
               :key="item.id"
-              class="group flex lg:h-36 w-42 lg:w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-10 lg:mb-10"
+              class="group flex lg:h-36 w-[46%] lg:w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-10 md:mr-6 lg:mb-10 mb-4"
               @click="openChapter(item)"
             >
-              <div class="relative ml-1 mt-2 flex h-full w-full flex-col items-start justify-start"
+              <div class="relative ml-1 lg:mt-2 flex h-full w-full flex-col items-start justify-start"
                 ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">{{ item.name }}</h1
-                ><p class="mb-3 max-w-full truncate textdelayDuration-gray-600 dark:text-gray-200 whitespace-nowrap" data-state="closed">{{
-                  item.remarks
-                }}</p>
+                ><p
+                  class="lg:mb-3 max-w-full truncate textdelayDuration-gray-600 dark:text-gray-200 whitespace-nowrap"
+                  data-state="closed"
+                  >{{ item.remarks }}</p
+                >
                 <p class="mb-2 font-bold text-gray-600 dark:text-gray-200">{{ item.word_total }} 词</p>
                 <p class="mb-0.5 font-bold text-gray-600 dark:text-gray-200" v-if="item.chapter_total">{{ item.chapter_total }} 章</p>
                 <div class="flex w-full items-center"
@@ -78,7 +80,11 @@
   const openChapter = (item) => {
     getChapterList({ g_id: item.id }).then((res) => {
       galleryState.chapterList = res;
-      ChapterDialogRef.value.open(item, res);
+      if (res.length) {
+        ChapterDialogRef.value.open(item, res);
+      } else {
+        ElMessage.warning('未配置词库');
+      }
     });
   };
 

@@ -15,12 +15,12 @@
         <div class="mt-2 focus:outline-none h-full">
           <div class="relative overflow-hidden lg:h-[30rem]">
             <div class="h-full w-full rounded-[inherit]">
-              <div class="flex w-full flex-wrap gap-3 justify-center lg:justify-initial">
+              <div class="flex w-full flex-wrap gap-3 justify-between lg:justify-initial">
                 <div
                   v-for="item in state.list"
                   :key="item.id"
                   @click="handleClickChapter(item)"
-                  class="relative flex h-16 lg:w-40 w-36 cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 pt-3 dark:bg-slate-800"
+                  class="relative flex h-16 lg:w-40 w-[48%] cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 pt-3 dark:bg-slate-800"
                 >
                   <div class="flex justify-between w-full">
                     <h3>{{ item.name }}</h3
@@ -70,7 +70,7 @@
     } else if (screenWidth >= 768 && screenWidth < 1024) {
       dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
     } else {
-      dialogWidth.value = '40%'; // 在大屏幕下设置Dialog宽度为50%
+      dialogWidth.value = '50%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
   const open = (book, list) => {
