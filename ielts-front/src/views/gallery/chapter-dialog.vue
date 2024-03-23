@@ -1,8 +1,8 @@
 <template>
-  <el-dialog v-model="state.dialogVisible" title="CET-4" width="40%" :before-close="handleClose">
+  <el-dialog v-model="state.dialogVisible" title="CET-4" :width="dialogWidth" :before-close="handleClose">
     <div class="text relative flex h-30 flex-col gap-2">
       <p class="mt-1">{{ state.book.chapter_total }} 章节</p><p>共 {{ state.book.word_total }} 词</p><p>{{ state.book.remarks }}</p>
-      <div class="absolute bottom-6 right-4">
+      <div class="absolute bottom-6 right-2">
         <div role="group" dir="ltr" class="flex items-center justify-center gap-1" tabindex="0" style="outline: none">
           <a href="/#/errorBook">
             <el-button>查看错题</el-button>
@@ -11,16 +11,16 @@
       </div>
     </div>
     <div class="flex pl-0">
-      <div class="h-[30rem] w-full">
+      <div class="lg:h-[30rem] w-full">
         <div class="mt-2 focus:outline-none h-full">
-          <div class="relative overflow-hidden h-[30rem]">
+          <div class="relative overflow-hidden lg:h-[30rem]">
             <div class="h-full w-full rounded-[inherit]">
-              <div class="flex w-full flex-wrap gap-3">
+              <div class="flex w-full flex-wrap gap-3 justify-center lg:justify-initial">
                 <div
                   v-for="item in state.list"
                   :key="item.id"
                   @click="handleClickChapter(item)"
-                  class="relative flex h-16 w-40 cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 pt-3 dark:bg-slate-800"
+                  class="relative flex h-16 lg:w-40 w-36 cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 pt-3 dark:bg-slate-800"
                 >
                   <div class="flex justify-between w-full">
                     <h3>{{ item.name }}</h3
@@ -59,7 +59,20 @@
     book: null,
     dialogVisible: false,
   });
+  const dialogWidth = ref('40%');
 
+  const windowSize = () => {
+    const screenWidth = window.innerWidth; // 获取当前屏幕宽度
+
+    // 根据屏幕宽度计算Dialog的宽度
+    if (screenWidth < 768) {
+      dialogWidth.value = '90%'; // 在小屏幕下设置Dialog宽度为90%
+    } else if (screenWidth >= 768 && screenWidth < 1024) {
+      dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
+    } else {
+      dialogWidth.value = '40%'; // 在大屏幕下设置Dialog宽度为50%
+    }
+  };
   const open = (book, list) => {
     state.list = list;
     state.book = book;
@@ -108,6 +121,12 @@
       router.push('/home');
     }
   };
+  onMounted(() => {
+    window.addEventListener('resize', () => {
+      windowSize();
+    });
+    windowSize();
+  });
   defineExpose({
     open,
   });

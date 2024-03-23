@@ -1,5 +1,5 @@
 <template>
-  <svg aria-hidden="true" class="svg-icon-spin" :class="calsses">
+  <svg aria-hidden="true" class="svg-icon-spin" :height="props.height" :width="props.width">
     <use :xlink:href="symbolId" :fill="color" />
   </svg>
 </template>
@@ -16,46 +16,37 @@
     },
     color: {
       type: String,
-      default: '#333',
+      default: '',
     },
     hoverColor: {
       type: String,
       default: '',
     },
-    size: {
-      type: String,
-      default: 'default',
+    width: {
+      type: [String, Number],
+      default: 32,
+    },
+    height: {
+      type: [String, Number],
+      default: 32,
     },
   });
   const symbolId = computed(() => `#${props.prefix}-${props.name}`);
-  const calsses = computed(() => {
-    return {
-      [`sdms-size-${props.size}`]: props.size,
-    };
-  });
-  const fontSize = reactive({ default: '32px', small: '20px', large: '48px' });
+  // const calsses = computed(() => {
+  //   return {
+  //     [`sdms-size-${props.size}`]: props.size,
+  //   };
+  // });
+  // const fontSize = reactive({ default: '32px', small: '20px', large: '48px' });
 </script>
 <style lang="less" scoped>
   svg:hover {
     fill: v-bind(hoverColor);
     color: v-bind(hoverColor);
   }
-
   .svg-icon-spin {
-    width: v-bind('fontSize.default');
-    height: v-bind('fontSize.default');
     fill: v-bind(color);
     vertical-align: middle;
     color: v-bind(color);
-
-    &.sdms-size-small {
-      font-size: v-bind('fontSize.small');
-      height: v-bind('fontSize.small');
-    }
-
-    &.sdms-size-large {
-      font-size: v-bind('fontSize.large');
-      height: v-bind('fontSize.large');
-    }
   }
 </style>

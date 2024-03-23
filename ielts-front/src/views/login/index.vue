@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div class="logo">
-      <a class="flex items-center text-2xl font-bold text-indigo-500 no-underline hover:no-underline lg:text-4xl" href="/">
-        <img :src="logo" class="h-20" />
+    <div class="w-full logo flex justify-center items-center">
+      <a class="absolute top-20 lg:left-60" href="/">
+        <SvgIcon name="atx" width="200" height="80" />
       </a>
     </div>
     <!-- <LoginBanner /> -->
@@ -23,8 +23,8 @@
 
 <script setup>
   import LoginForm from './components/login-form.vue';
-  import logo from '@/assets/images/logo.png';
   import SignIn from './components/sign-in.vue';
+  import SvgIcon from '@/components/SvgIcon/index.vue';
 
   const theme = localStorage.getItem('theme');
 
@@ -80,7 +80,6 @@
   .logo {
     position: fixed;
     top: 24px;
-    left: 22px;
     z-index: 1;
     display: inline-flex;
     align-items: center;
