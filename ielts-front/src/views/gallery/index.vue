@@ -58,6 +58,7 @@
   import rb from '@/assets/images/rb.png';
   import LastPage from '@/components/lastPage/index.vue';
   // import dg from '@/assets/images/dg.png';
+  import { ElMessage } from 'element-plus';
 
   import { getSceneList, getGroupBooks, getChapterList, getLanguageList } from '@/api/book/index';
 
