@@ -13,7 +13,7 @@
     <div class="flex pl-0">
       <div class="lg:h-[30rem] w-full">
         <div class="mt-2 focus:outline-none h-full">
-          <div class="relative overflow-hidden lg:h-[30rem]">
+          <div class="relative overflow-hidden lg:h-[30rem] overflow-y-auto">
             <div class="h-full w-full rounded-[inherit]">
               <div class="flex w-full flex-wrap gap-3 justify-between lg:justify-initial">
                 <div

@@ -51,6 +51,7 @@
     </div>
   </div>
   <LastPage />
+  <Loading :loading="loading" />
 </template>
 <script setup>
   import ChapterDialog from './chapter-dialog.vue';
@@ -59,8 +60,12 @@
   import LastPage from '@/components/lastPage/index.vue';
   // import dg from '@/assets/images/dg.png';
   import { ElMessage } from 'element-plus';
+  import Loading from '@/components/loading/index.vue';
+  import useLoading from '@/hooks/loading.ts';
 
   import { getSceneList, getGroupBooks, getChapterList, getLanguageList } from '@/api/book/index';
+
+  const { loading, setLoading } = useLoading();
 
   const ChapterDialogRef = ref(null);
 
@@ -79,20 +84,33 @@
   });
 
   const openChapter = (item) => {
-    getChapterList({ g_id: item.id }).then((res) => {
-      galleryState.chapterList = res;
-      if (res.length) {
-        ChapterDialogRef.value.open(item, res);
-      } else {
-        ElMessage.warning('未配置词库');
-      }
-    });
+    setLoading(true);
+    getChapterList({ g_id: item.id })
+      .then((res) => {
+        galleryState.chapterList = res;
+        if (res.length) {
+          setLoading(false);
+          ChapterDialogRef.value.open(item, res);
+        } else {
+          ElMessage.warning('未配置词库');
+        }
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   const getBooks = (s_id) => {
-    getGroupBooks({ s_id: s_id }).then((res) => {
-      galleryState.booksList = res;
-    });
+    setLoading(true);
+
+    getGroupBooks({ s_id: s_id })
+      .then((res) => {
+        galleryState.booksList = res;
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   const handleSceneSel = (item) => {

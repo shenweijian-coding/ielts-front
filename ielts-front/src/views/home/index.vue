@@ -22,7 +22,7 @@
           </el-tooltip>
           <el-tooltip content="章节切换" placement="top" effect="light">
             <div class="relative">
-              <el-popover placement="bottom" :width="100" trigger="click">
+              <el-popover placement="bottom" :width="200" trigger="click">
                 <template #reference>
                   <button
                     class="rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
@@ -60,8 +60,6 @@
                     class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
                     type="button"
                     aria-expanded="false"
-                    data-headlessui-state=""
-                    id="headlessui-popover-button-:rdc:"
                   >
                     <div class="relative">
                       <div>x{{ config.play_speed }} 倍</div>
@@ -84,7 +82,20 @@
               </el-popover>
             </div>
           </el-tooltip>
-
+          <el-tooltip content="单词听写模式" placement="top" effect="light">
+            <div class="relative" data-headlessui-state="">
+              <button
+                class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                type="button"
+                aria-expanded="false"
+                @click="handleMode"
+              >
+                <div class="relative">
+                  <div :class="config.isSeries ? '' : 'line-through'">连听</div>
+                </div>
+              </button>
+            </div>
+          </el-tooltip>
           <el-tooltip content="单词播放间隔" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <el-popover placement="bottom" :width="100" trigger="click">
@@ -93,8 +104,6 @@
                     class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
                     type="button"
                     aria-expanded="false"
-                    data-headlessui-state=""
-                    id="headlessui-popover-button-:rdc:"
                   >
                     <div class="relative">
                       <div>{{ config.play_interval }} 秒</div>
@@ -120,8 +129,6 @@
                     class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
                     type="button"
                     aria-expanded="false"
-                    data-headlessui-state=""
-                    id="headlessui-popover-button-:rdc:"
                   >
                     <div class="relative">
                       <div>{{ config.repetitions }} 遍</div>
@@ -153,8 +160,6 @@
                     class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
                     type="button"
                     aria-expanded="false"
-                    data-headlessui-state=""
-                    id="headlessui-popover-button-:rdc:"
                   >
                     <div class="relative">
                       <div>{{ config.pronounceList.find((o) => o.id == config.phonetic_type).name }}</div>
@@ -396,8 +401,8 @@
   import { ElMessage } from 'element-plus';
   import { UserFilled, List } from '@element-plus/icons-vue';
   import Loading from '@/components/loading/index.vue';
-  import mistakeDialog from './mistakeDialog.vue';
   import useLoading from '@/hooks/loading.ts';
+  import mistakeDialog from './mistakeDialog.vue';
   import { useAppStore, useUserStore } from '@/store';
   import { getWordList, reportLexiRes } from '@/api/book/index';
 
@@ -418,6 +423,7 @@
     repetitions: userStore.getConfig.repetitions + '' || '1',
     phonetic_type: userStore.getConfig.phonetic_type || 2,
     error_sound: userStore.getConfig.error_sound || false,
+    isSeries: true,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['2', '3', '4', '5', '6', '7'],
     repeatList: ['1', '2', '3', '无限'],
@@ -487,7 +493,10 @@
           }
           setLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        });
     }
   };
   // 播放音频的方法
@@ -604,6 +613,11 @@
     ElMessage.success(`音效已 ${config.error_sound ? '关闭' : '开启'}`);
     handleConfigChange('error_sound', config.error_sound);
   };
+  // 听写模式
+  const handleMode = () => {
+    config.isSeries = !config.isSeries;
+    ElMessage.success(`连读已 ${config.isSeries ? '关闭' : '开启'}`);
+  };
   const handleKeyDown = (event) => {
     if (!config.error_sound) {
       const key = event.key.toLowerCase();
@@ -644,7 +658,13 @@
               audio.play();
             }, config.play_interval * 1000);
           } else {
-            // 所有单词都已播放完毕，停止播放
+            // // 所有单词都已播放完毕，停止播放
+            // if (wordsData.currentIndex < wordsData.words.length) {
+            //   setTimeout(() => {
+            //     console.log(1111);
+            //     inputEnter();
+            //   }, config.play_interval * 1000);
+            // }
             return;
           }
         }

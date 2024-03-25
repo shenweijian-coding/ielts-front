@@ -1,15 +1,15 @@
 <template>
   <div class="flex w-full flex-1 select-text items-start justify-center overflow-hidden bg-white">
-    <div class="flex h-full w-5/6 flex-col pt-10">
+    <div class="flex h-full lg:w-5/6 w-full flex-col lg:pt-10 pt-4">
       <div>
-        <el-form :model="state.form" size="large" label-width="80">
+        <el-form :model="state.form" :size="formSize" label-width="80">
           <el-form-item label="错误时间">
             <el-radio-group v-model="state.form.errTime" @change="getErrorWords">
               <el-radio-button v-for="o in state.errTimeOption" :key="o.id" :value="o.id" :label="o.id">{{ o.name }}</el-radio-button>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="错误次数">
-            <el-radio-group v-model="state.form.error_num" size="large" @change="getErrorWords">
+            <el-radio-group v-model="state.form.error_num" @change="getErrorWords">
               <el-radio-button v-for="o in state.errNumOption" :key="o.num" :value="o.num" :label="o.num">{{ o.name }}</el-radio-button>
             </el-radio-group>
           </el-form-item>
@@ -33,25 +33,28 @@
           style="width: 100%"
           @selection-change="handleSelectionChange"
           @sort-change="sortChange"
-          height="500"
-          max-height="600"
+          :maxHeight="screenHeight - 360"
         >
           <el-table-column type="selection" width="55" />
-          <el-table-column prop="lexicon.word" label="单词" width="180" />
-          <el-table-column prop="lexicon.translate" label="释义" />
-          <el-table-column prop="lexicon.phonetic_transcription" label="音标" width="180">
+          <el-table-column prop="lexicon" label="单词" width="180">
             <template #default="scope">
-              <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer" @click="play(scope.row)"
-                >{{ scope.row.lexicon?.phonetic_transcription }} <el-icon class="ml-2"><Headset /></el-icon
-              ></span>
-              <span v-else></span>
+              <span
+                >{{ scope.row.lexicon.word }}
+                <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer" @click="play(scope.row)"
+                  >{{ scope.row.lexicon?.phonetic_transcription }} <el-icon class="ml-2"><Headset /></el-icon
+                ></span>
+              </span>
             </template>
           </el-table-column>
-          <el-table-column prop="error_num" label="错误次数" sortable="custom" width="130" />
-          <el-table-column prop="error_word" label="错误拼写" width="180" />
-          <el-table-column prop="lexicon_group.name" label="词典" width="100" />
-          <el-table-column prop="chapter.name" label="章节" width="100" />
-          <el-table-column prop="updated_at" label="最近错误时间" sortable="custom" width="180" />
+          <el-table-column prop="lexicon.translate" label="释义" align="center" />
+          <!-- <el-table-column prop="lexicon.phonetic_transcription" label="音标" width="180">
+
+          </el-table-column> -->
+          <el-table-column prop="error_num" label="错误次数" sortable="custom" width="130" align="center" />
+          <el-table-column prop="error_word" label="错误拼写" width="180" align="center" />
+          <el-table-column prop="lexicon_group.name" label="词典" width="100" align="center" />
+          <el-table-column prop="chapter.name" label="章节" width="100" align="center" />
+          <el-table-column prop="updated_at" label="最近错误时间" sortable="custom" width="180" align="center" />
         </el-table>
         <!-- <div class="py-5 flex justify-end">
           <el-pagination
@@ -71,8 +74,8 @@
   </div>
 </template>
 <script setup>
-  import { getErrorWordList, getChapterList } from '@/api/book/index';
-  import { useAppStore, useUserStore } from '@/store';
+  import { getErrorWordList } from '@/api/book/index';
+  import { useAppStore } from '@/store';
   import { Headset } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage } from 'element-plus';
@@ -82,6 +85,16 @@
   const router = useRouter();
 
   const tableRef = ref(null);
+  const screenWidth = ref(window.innerWidth); // 获取当前屏幕宽度
+  const screenHeight = ref(window.innerHeight); // 获取当前屏幕宽度
+
+  const formSize = computed(() => {
+    if (screenWidth.value < 768) {
+      return 'small';
+    } else {
+      return 'large';
+    }
+  });
   const state = reactive({
     form: {
       errTime: 0,
@@ -140,25 +153,26 @@
     getErrorWordList(params).then((res) => {
       state.tableData = res.data;
       state.page.total = res.total;
-      setTimeout(() => {
-        tableRef.value.toggleAllSelection();
-      });
+      res.total &&
+        setTimeout(() => {
+          tableRef.value.toggleAllSelection();
+        });
     });
   };
   const handleSelectionChange = (val) => {
     console.log(val);
     state.selWords = val;
   };
-  const handleSizeChange = (size) => {
-    console.log(size);
-    state.page.pageSize = size;
-    getErrorWordList();
-  };
-  const getAllChapter = () => {
-    getChapterList().then((res) => {
-      state.chapterList = res;
-    });
-  };
+  // const handleSizeChange = (size) => {
+  //   console.log(size);
+  //   state.page.pageSize = size;
+  //   getErrorWordList();
+  // };
+  // const getAllChapter = () => {
+  //   getChapterList().then((res) => {
+  //     state.chapterList = res;
+  //   });
+  // };
   const sortChange = ({ column, prop, order }) => {
     const sortMap = {
       ascending: 'asc',
@@ -197,5 +211,5 @@
     });
   };
   getErrorWords();
-  getAllChapter();
+  // getAllChapter();
 </script>

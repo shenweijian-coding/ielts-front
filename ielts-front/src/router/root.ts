@@ -1,27 +1,50 @@
 export default [
   {
-    path: '/login',
+    path: '/',
     name: 'index',
     meta: {
-      title: '首页',
+      title: '爱听写',
+    },
+    component: () => import('@/views/index.vue'),
+  },
+  {
+    path: '/home',
+    name: 'home',
+    meta: {
+      title: '爱听写',
+    },
+    component: () => import('@/views/home/index.vue'),
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: {
+      title: '爱听写',
     },
     component: () => import('@/views/login/index.vue'),
   },
   {
-    path: '/contain',
-    name: 'layout',
+    path: '/gallery',
+    name: 'gallery',
     meta: {
-      title: '导航页',
+      title: '爱听写',
     },
-    children: [
-      {
-        path: '/contain',
-        name: 'menu',
-        meta: {
-          title: '导航页',
-        },
-        component: () => import('@/views/contain/index.vue'),
-      },
-    ],
+    component: () => import('@/views/gallery/index.vue'),
+  },
+  {
+    path: '/errorBook',
+    name: 'errorBook',
+    meta: {
+      title: '爱听写',
+    },
+    component: () => import('@/views/errorBook/index.vue'),
+  },
+  {
+    path: '/forgetPassword',
+    name: 'forgetPassword',
+    meta: {
+      title: '爱听写',
+    },
+    component: () => import('@/views/forgetPassword/index.vue'),
   },
 ];
