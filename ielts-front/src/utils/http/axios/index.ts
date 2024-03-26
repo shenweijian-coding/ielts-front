@@ -4,6 +4,8 @@ import { showMessage } from './status';
 import { IResponse } from './type';
 import { ElMessage } from 'element-plus';
 import { clearToken } from '@/utils/auth';
+import { useUserStore } from '@/store';
+
 console.log(import.meta.env);
 
 const service: AxiosInstance = axios.create({
@@ -33,6 +35,8 @@ service.interceptors.response.use(
       console.log(response, 'response');
       
       if (response.data.status == 401) {
+        const userStore = useUserStore();
+        userStore.logout()
         clearToken()
         window.location.replace('/login');
       }
