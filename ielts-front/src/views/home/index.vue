@@ -487,7 +487,8 @@
             if (appStore.dictationInfo.last_id) {
               wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.last_id);
             }
-            wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+            console.log(wordsData.currentIndex, 'wordsData.currentIndexwordsData.currentIndex');
+            wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
           } else {
             ElMessage.error('当前章节未配置词库');
           }
@@ -706,7 +707,7 @@
     await appStore.toggleCurrentChapter(chapterList.value.find((chapter) => chapter.id == id));
     setTimeout(() => {
       getWords();
-      wordsData.currentWord = { translate: '', word: '', phonetic_transcription: '' };
+      wordsData.currentWord = { translate: '', word: '', phonetic_transcription: '', userInput: '' };
       wordsData.words = [];
       wordsData.currentIndex = 0;
     });
