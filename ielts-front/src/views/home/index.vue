@@ -20,7 +20,7 @@
               </div>
             </div>
           </el-tooltip>
-          <el-tooltip content="章节切换" placement="top" effect="light">
+          <el-tooltip content="章节切换" placement="top" effect="light" v-if="!errSource">
             <div class="relative">
               <el-popover placement="bottom" :width="200" trigger="click">
                 <template #reference>
@@ -82,7 +82,7 @@
               </el-popover>
             </div>
           </el-tooltip>
-          <el-tooltip content="单词听写模式" placement="top" effect="light">
+          <!-- <el-tooltip content="单词听写模式" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <button
                 class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
@@ -95,7 +95,7 @@
                 </div>
               </button>
             </div>
-          </el-tooltip>
+          </el-tooltip> -->
           <el-tooltip content="单词播放间隔" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <el-popover placement="bottom" :width="100" trigger="click">
@@ -694,7 +694,7 @@
     errSource.value = route.query?.source == 'err';
 
     document.addEventListener('keydown', handleAllKeyDown);
-    if (!appStore?.dictationInfo?.currentChapter) {
+    if (!appStore?.dictationInfo?.currentChapter && !appStore.errWords.length) {
       router.push('/gallery');
       return;
     }
@@ -737,7 +737,7 @@
 
     // 或者将音频对象赋值为null
     audio = null;
-    appStore.setLastId(wordsData.currentWord.id);
+    appStore.setLastId(wordsData?.currentWord.id || null);
   });
 </script>
 

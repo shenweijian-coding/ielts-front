@@ -4,9 +4,7 @@
       <p class="mt-1">{{ state.book.chapter_total }} 章节</p><p>共 {{ state.book.word_total }} 词</p><p>{{ state.book.remarks }}</p>
       <div class="absolute bottom-6 right-2">
         <div role="group" dir="ltr" class="flex items-center justify-center gap-1" tabindex="0" style="outline: none">
-          <a href="/#/errorBook">
-            <el-button>查看错题</el-button>
-          </a>
+          <el-button @click="handleErrorBook">查看错题</el-button>
         </div>
       </div>
     </div>
@@ -81,6 +79,16 @@
   const handleClose = () => {
     state.dialogVisible = false;
   };
+
+  const setChapterInfo = (item) => {
+    appStore.setChapterInfo({
+      currentChapter: item,
+      chapterList: state.list,
+      booInfo: state.book,
+      last_id: item?.last_id,
+    });
+  };
+
   const handleClickChapter = (item) => {
     if (!item.word_total) {
       ElMessage.warning('当前章节下无词库');
@@ -94,32 +102,41 @@
         distinguishCancelAndClose: true,
       })
         .then(() => {
-          appStore.setChapterInfo({
-            currentChapter: item,
-            chapterList: state.list,
-            booInfo: state.book,
-            last_id: item.last_id,
-          });
+          // appStore.setChapterInfo({
+          //   currentChapter: item,
+          //   chapterList: state.list,
+          //   booInfo: state.book,
+          //   last_id: item.last_id,
+          // });
+          setChapterInfo(item);
           router.push('/home');
         })
         .catch((action) => {
           if (action == 'cancel') {
-            appStore.setChapterInfo({
-              currentChapter: item,
-              chapterList: state.list,
-              booInfo: state.book,
-            });
+            // appStore.setChapterInfo({
+            //   currentChapter: item,
+            //   chapterList: state.list,
+            //   booInfo: state.book,
+            // });
+            setChapterInfo(item);
             router.push('/home');
           }
         });
     } else {
-      appStore.setChapterInfo({
-        currentChapter: item,
-        chapterList: state.list,
-        booInfo: state.book,
-      });
+      // appStore.setChapterInfo({
+      //   currentChapter: item,
+      //   chapterList: state.list,
+      //   booInfo: state.book,
+      // });
+      setChapterInfo(item);
+
       router.push('/home');
     }
+  };
+
+  const handleErrorBook = () => {
+    // setChapterInfo(state.list[0]);
+    router.push('/errorBook');
   };
   onMounted(() => {
     window.addEventListener('resize', () => {
