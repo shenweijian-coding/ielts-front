@@ -5,7 +5,6 @@
 
 import AutoImport from 'unplugin-auto-import/vite';
 import { ElementPlusResolver, AntDesignVueResolver, TDesignResolver } from 'unplugin-vue-components/resolvers';
-import { VueRouterAutoImports } from 'unplugin-vue-router';
 
 export const AutoImportDeps = () => {
   return AutoImport({
@@ -18,8 +17,7 @@ export const AutoImportDeps = () => {
       },
       {
         'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
-      },
-      VueRouterAutoImports,
+      }
     ],
     resolvers: [
       ElementPlusResolver(),

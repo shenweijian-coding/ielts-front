@@ -405,6 +405,7 @@
   import mistakeDialog from './mistakeDialog.vue';
   import { useAppStore, useUserStore } from '@/store';
   import { getWordList, reportLexiRes } from '@/api/book/index';
+  import { useRouter, useRoute } from 'vue-router';
 
   const appStore = useAppStore();
   const userStore = useUserStore();

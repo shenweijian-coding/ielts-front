@@ -5,6 +5,7 @@
 </template>
 <script setup lang="ts">
   import { CloseBold } from '@element-plus/icons-vue';
+  import { useRouter } from 'vue-router';
 
   const router = useRouter();
   const handleLastPage = () => {

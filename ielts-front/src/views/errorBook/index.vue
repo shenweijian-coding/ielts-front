@@ -33,10 +33,10 @@
           style="width: 100%"
           @selection-change="handleSelectionChange"
           @sort-change="sortChange"
-          :maxHeight="screenHeight - 360"
+          :maxHeight="tableHeight"
         >
-          <el-table-column type="selection" width="55" />
-          <el-table-column prop="lexicon" label="单词" width="180">
+          <el-table-column type="selection" width="30" />
+          <el-table-column prop="lexicon" label="单词" minWidth="100">
             <template #default="scope">
               <span
                 >{{ scope.row.lexicon.word }}
@@ -46,15 +46,15 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="lexicon.translate" label="释义" align="center" />
+          <el-table-column prop="lexicon.translate" label="释义" align="center" minWidth="280" />
           <!-- <el-table-column prop="lexicon.phonetic_transcription" label="音标" width="180">
 
           </el-table-column> -->
-          <el-table-column prop="error_num" label="错误次数" sortable="custom" width="130" align="center" />
+          <el-table-column prop="error_num" label="错误次数" sortable="custom" width="110" align="center" />
           <el-table-column prop="error_word" label="错误拼写" width="180" align="center" />
-          <el-table-column prop="lexicon_group.name" label="词典" width="100" align="center" />
-          <el-table-column prop="chapter.name" label="章节" width="100" align="center" />
-          <el-table-column prop="updated_at" label="最近错误时间" sortable="custom" width="180" align="center" />
+          <el-table-column prop="lexicon_group.name" label="词典" width="90" align="center" />
+          <el-table-column prop="chapter.name" label="章节" width="80" align="center" />
+          <el-table-column prop="updated_at" label="错误时间" sortable="custom" width="110" align="center" />
         </el-table>
         <!-- <div class="py-5 flex justify-end">
           <el-pagination
@@ -71,6 +71,7 @@
       </div>
     </div>
     <LastPage />
+    <Loading :loading="loading" />
   </div>
 </template>
 <script setup>
@@ -80,9 +81,13 @@
   import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage } from 'element-plus';
   import dayjs from 'dayjs';
+  import { useRouter } from 'vue-router';
+  import Loading from '@/components/loading/index.vue';
+  import useLoading from '@/hooks/loading.ts';
 
   const appStore = useAppStore();
   const router = useRouter();
+  const { loading, setLoading } = useLoading();
 
   const tableRef = ref(null);
   const screenWidth = ref(window.innerWidth); // 获取当前屏幕宽度
@@ -93,6 +98,15 @@
       return 'small';
     } else {
       return 'large';
+    }
+  });
+  const tableHeight = computed(() => {
+    if (screenWidth.value < 768) {
+      // return 'small';
+      return screenHeight.value - 200;
+    } else {
+      return screenHeight.value - 310;
+      // return 'large';
     }
   });
   const state = reactive({
@@ -150,14 +164,20 @@
       params.sort_type = state.form.sort_type;
     }
 
-    getErrorWordList(params).then((res) => {
-      state.tableData = res.data;
-      state.page.total = res.total;
-      res.total &&
-        setTimeout(() => {
-          tableRef.value.toggleAllSelection();
-        });
-    });
+    setLoading(true);
+    getErrorWordList(params)
+      .then((res) => {
+        state.tableData = res.data;
+        state.page.total = res.total;
+        res.total &&
+          setTimeout(() => {
+            tableRef.value.toggleAllSelection();
+          });
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
   const handleSelectionChange = (val) => {
     console.log(val);
@@ -213,3 +233,8 @@
   getErrorWords();
   // getAllChapter();
 </script>
+<style lang="less" scoped>
+  /deep/.el-table__cell .cell {
+    padding: 0 6px;
+  }
+</style>

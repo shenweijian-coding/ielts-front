@@ -5,6 +5,7 @@ import { IResponse } from './type';
 import { ElMessage } from 'element-plus';
 import { clearToken } from '@/utils/auth';
 import { useUserStore } from '@/store';
+import { useRouter } from 'vue-router';
 
 console.log(import.meta.env);
 
@@ -36,9 +37,10 @@ service.interceptors.response.use(
       
       if (response.data.status == 401) {
         const userStore = useUserStore();
+        const router = useRouter()
         userStore.logout()
         clearToken()
-        window.location.replace('/login');
+        router.replace('/login')
       }
       if (response.data.status) {
         ElMessage.error(response.data.message);

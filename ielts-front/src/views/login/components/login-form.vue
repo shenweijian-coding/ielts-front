@@ -29,6 +29,7 @@
 <script lang="ts" setup>
   import { ElMessage, FormInstance, FormRules } from 'element-plus';
   import { useUserStore } from '@/store';
+  import { useRouter } from 'vue-router';
 
   const router = useRouter();
   const errorMessage = ref('');

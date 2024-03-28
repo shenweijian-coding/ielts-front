@@ -52,6 +52,7 @@
 <script setup>
   import { ElMessage } from 'element-plus';
   import { sendyzm, signup } from '@/api/user/index';
+  import { useRouter } from 'vue-router';
 
   const router = useRouter();
   const errorMessage = ref('');

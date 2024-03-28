@@ -47,6 +47,7 @@
   import SvgIcon from '@/components/SvgIcon/index.vue';
   import { useAppStore } from '@/store';
   import { ElMessage, ElMessageBox } from 'element-plus';
+  import { useRouter } from 'vue-router';
 
   const appStore = useAppStore();
 
@@ -135,7 +136,7 @@
   };
 
   const handleErrorBook = () => {
-    // setChapterInfo(state.list[0]);
+    setChapterInfo('');
     router.push('/errorBook');
   };
   onMounted(() => {

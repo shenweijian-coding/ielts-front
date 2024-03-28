@@ -39,6 +39,7 @@
   import { ElMessage, FormInstance, FormRules } from 'element-plus';
   // import { useUserStore } from '@/store';
   import { sendyzm, signup } from '@/api/user/index';
+  import { useRouter } from 'vue-router';
 
   const router = useRouter();
   const errorMessage = ref('');
