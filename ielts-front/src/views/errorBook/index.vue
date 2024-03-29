@@ -38,11 +38,11 @@
           <el-table-column type="selection" width="30" />
           <el-table-column prop="lexicon" label="单词" minWidth="100">
             <template #default="scope">
-              <span
-                >{{ scope.row.lexicon.word }}
-                <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer" @click="play(scope.row)"
-                  >{{ scope.row.lexicon?.phonetic_transcription }} <el-icon class="ml-2"><Headset /></el-icon
-                ></span>
+              <span class="flex items-center cursor-pointer"
+                >{{ scope.row.lexicon.word }}<el-icon @click="play(scope.row)" class="ml-2"><Headset /></el-icon>
+              </span>
+              <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer"
+                >{{ scope.row.lexicon?.phonetic_transcription }}
               </span>
             </template>
           </el-table-column>
@@ -226,6 +226,7 @@
       };
     });
     await appStore.setErrWords(errWords);
+    await appStore.toggleCurrentChapter(null);
     setTimeout(() => {
       router.push('/home?source=err');
     });

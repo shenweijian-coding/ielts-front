@@ -46,7 +46,7 @@
   import { reactive } from 'vue';
   import SvgIcon from '@/components/SvgIcon/index.vue';
   import { useAppStore } from '@/store';
-  import { ElMessage, ElMessageBox } from 'element-plus';
+  import { ElMessage } from 'element-plus';
   import { useRouter } from 'vue-router';
 
   const appStore = useAppStore();
@@ -86,7 +86,7 @@
       currentChapter: item,
       chapterList: state.list,
       booInfo: state.book,
-      last_id: item?.last_id,
+      // last_id: item?.last_id,
     });
   };
 
@@ -95,44 +95,44 @@
       ElMessage.warning('当前章节下无词库');
       return;
     }
-    if (item.is_incomplete) {
-      ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
-        confirmButtonText: '继续听写',
-        cancelButtonText: '重新开始',
-        type: 'info',
-        distinguishCancelAndClose: true,
-      })
-        .then(() => {
-          // appStore.setChapterInfo({
-          //   currentChapter: item,
-          //   chapterList: state.list,
-          //   booInfo: state.book,
-          //   last_id: item.last_id,
-          // });
-          setChapterInfo(item);
-          router.push('/home');
-        })
-        .catch((action) => {
-          if (action == 'cancel') {
-            // appStore.setChapterInfo({
-            //   currentChapter: item,
-            //   chapterList: state.list,
-            //   booInfo: state.book,
-            // });
-            setChapterInfo(item);
-            router.push('/home');
-          }
-        });
-    } else {
-      // appStore.setChapterInfo({
-      //   currentChapter: item,
-      //   chapterList: state.list,
-      //   booInfo: state.book,
-      // });
-      setChapterInfo(item);
+    // if (item.is_incomplete) {
+    //   ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
+    //     confirmButtonText: '继续听写',
+    //     cancelButtonText: '重新开始',
+    //     type: 'info',
+    //     distinguishCancelAndClose: true,
+    //   })
+    //     .then(() => {
+    //       // appStore.setChapterInfo({
+    //       //   currentChapter: item,
+    //       //   chapterList: state.list,
+    //       //   booInfo: state.book,
+    //       //   last_id: item.last_id,
+    //       // });
+    //       setChapterInfo(item);
+    //       router.push('/home');
+    //     })
+    //     .catch((action) => {
+    //       if (action == 'cancel') {
+    //         // appStore.setChapterInfo({
+    //         //   currentChapter: item,
+    //         //   chapterList: state.list,
+    //         //   booInfo: state.book,
+    //         // });
+    //         setChapterInfo(item);
+    //         router.push('/home');
+    //       }
+    //     });
+    // } else {
+    // appStore.setChapterInfo({
+    //   currentChapter: item,
+    //   chapterList: state.list,
+    //   booInfo: state.book,
+    // });
+    setChapterInfo(item);
 
-      router.push('/home');
-    }
+    router.push('/home');
+    // }
   };
 
   const handleErrorBook = () => {

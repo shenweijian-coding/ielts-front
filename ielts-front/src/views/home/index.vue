@@ -20,7 +20,7 @@
               </div>
             </div>
           </el-tooltip>
-          <el-tooltip content="章节切换" placement="top" effect="light" v-if="!errSource">
+          <el-tooltip content="章节切换" placement="top" effect="light">
             <div class="relative">
               <el-popover placement="bottom" :width="200" trigger="click">
                 <template #reference>
@@ -31,7 +31,7 @@
                     aria-haspopup="listbox"
                     aria-expanded="false"
                     data-headlessui-state=""
-                    >{{ appStore?.dictationInfo?.currentChapter.name }}</button
+                    >{{ errSource ? '错词练习' : appStore?.dictationInfo?.currentChapter?.name }}</button
                   >
                 </template>
                 <div class="h-50 overflow-y-auto">
@@ -398,7 +398,7 @@
   import beep from '@/assets/beep.wav';
   import correct from '@/assets/correct.wav';
   import defaultAudio from '@/assets/Default.wav';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import { UserFilled, List } from '@element-plus/icons-vue';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
@@ -485,11 +485,29 @@
         .then((res) => {
           if (res.data.length) {
             wordsData.words = res.data;
-            if (appStore.dictationInfo.last_id) {
-              wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.last_id);
+            // 继续上次播放的逻辑
+            if (appStore.dictationInfo.currentChapter.is_incomplete && !errSource.value) {
+              ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
+                confirmButtonText: '继续听写',
+                cancelButtonText: '重新开始',
+                type: 'info',
+                distinguishCancelAndClose: true,
+              })
+                .then(() => {
+                  if (appStore.dictationInfo?.currentChapter?.last_id) {
+                    console.log(appStore.dictationInfo.currentChapter.last_id, 'appStore.dictationInfo.last_id');
+                    wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.currentChapter.last_id);
+                    wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+                  }
+                })
+                .catch((action) => {
+                  if (action == 'cancel') {
+                    wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+                  }
+                });
+            } else {
+              wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
             }
-            console.log(wordsData.currentIndex, 'wordsData.currentIndexwordsData.currentIndex');
-            wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
           } else {
             ElMessage.error('当前章节未配置词库');
           }
@@ -706,6 +724,10 @@
   // 章节切换
   const chapterChange = async (id) => {
     await appStore.toggleCurrentChapter(chapterList.value.find((chapter) => chapter.id == id));
+    if (errSource.value) {
+      errSource.value = false;
+      router.push('/home');
+    }
     setTimeout(() => {
       getWords();
       wordsData.currentWord = { translate: '', word: '', phonetic_transcription: '', userInput: '' };

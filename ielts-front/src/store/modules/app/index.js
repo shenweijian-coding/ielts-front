@@ -15,7 +15,7 @@ export const useAppStore = defineStore(
     },
     getters: {
       chapterId(state) {
-        return state?.dictationInfo?.currentChapter.id;
+        return state?.dictationInfo?.currentChapter?.id;
       },
     },
     actions: {

@@ -65,12 +65,12 @@ service.interceptors.response.use(
 
 const request = <T = any>(config: AxiosRequestConfig): Promise<T> => {
   const conf = config;
-  return new Promise((resolve) => {
+  return new Promise((resolve,reject) => {
     service.request<any, AxiosResponse<IResponse>>(conf).then((res: AxiosResponse<IResponse>) => {
-      const { data } = res;
+      const { data } = res || {};
 
       resolve(data.values as T);
-    });
+    }).catch(err => reject(err));
   });
 };
 
