@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="state.dialogVisible" title="CET-4" :width="dialogWidth" :before-close="handleClose">
+  <el-dialog v-model="state.dialogVisible" :title="state.book?.name" :width="dialogWidth" :before-close="handleClose">
     <div class="text relative flex h-30 flex-col gap-2">
       <p class="mt-1">{{ state.book.chapter_total }} 章节</p><p>共 {{ state.book.word_total }} 词</p><p>{{ state.book.remarks }}</p>
       <div class="absolute bottom-6 right-2">
@@ -18,13 +18,15 @@
                   v-for="item in state.list"
                   :key="item.id"
                   @click="handleClickChapter(item)"
-                  class="relative flex h-16 lg:w-40 w-[48%] cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 pt-3 dark:bg-slate-800"
+                  class="relative flex h-16 lg:w-40 w-[48%] cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 dark:bg-slate-800"
                 >
                   <div class="flex justify-between w-full">
-                    <h3>{{ item.name }}</h3
-                    ><span>共{{ item.word_total }}词</span>
+                    <h4 class="text-nowrap text-ellipsis truncate" :alt="item.name">{{ item.name }}</h4>
                   </div>
-                  <p class="pt-[2px] text-xs text-slate-600">{{ item.accuracy ? `${item.accuracy.toFixed(2)}%` : '未练习' }}</p>
+                  <div class="flex justify-between w-full text-xs items-center"
+                    ><span class="pt-[2px] text-slate-600">{{ item.accuracy ? `${item.accuracy.toFixed(2)}%` : '未练习' }}</span
+                    ><span class="text-nowrap">共{{ item.word_total }}词</span></div
+                  >
                   <SvgIcon
                     v-if="item.id == appStore.chapterId"
                     name="tick"

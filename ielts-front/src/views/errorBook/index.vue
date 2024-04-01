@@ -54,7 +54,7 @@
           <el-table-column prop="error_word" label="错误拼写" width="180" align="center" />
           <el-table-column prop="lexicon_group.name" label="词典" width="90" align="center" />
           <el-table-column prop="chapter.name" label="章节" width="80" align="center" />
-          <el-table-column prop="updated_at" label="错误时间" sortable="custom" width="110" align="center" />
+          <el-table-column prop="updated_at" label="错误时间" sortable="custom" width="94" align="center" />
         </el-table>
         <!-- <div class="py-5 flex justify-end">
           <el-pagination
