@@ -82,7 +82,7 @@
               </el-popover>
             </div>
           </el-tooltip>
-          <!-- <el-tooltip content="单词听写模式" placement="top" effect="light">
+          <el-tooltip content="单词听写模式" placement="top" effect="light" v-if="false">
             <div class="relative" data-headlessui-state="">
               <button
                 class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
@@ -95,7 +95,7 @@
                 </div>
               </button>
             </div>
-          </el-tooltip> -->
+          </el-tooltip>
           <el-tooltip content="单词播放间隔" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <el-popover placement="bottom" :width="100" trigger="click">
@@ -184,6 +184,27 @@
           </el-tooltip>
 
           <div class="flex items-center justify-center gap-2 space-x-4 lg:space-x-1">
+            <el-tooltip content="当前播放词库" placement="top" effect="light">
+              <div class="relative">
+                <div>
+                  <div class="relative"
+                    ><button
+                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:text-white"
+                      title="当前播放词库"
+                      type="button"
+                      @click="showWordsList"
+                    >
+                      <el-icon color="#2c3e50" :size="20"><List /></el-icon> </button
+                  ></div>
+                </div>
+                <div
+                  class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
+                >
+                  <span class="tooltip">当前播放词库</span></div
+                >
+              </div>
+            </el-tooltip>
+
             <el-tooltip content="音效设置" placement="top" effect="light">
               <div class="relative">
                 <div>
@@ -221,7 +242,8 @@
                       class="flex items-center justify-center rounded p-[2px] text-lg outline-none transition-colors duration-300 ease-in-out"
                       title="查看错题本"
                     >
-                      <el-icon color="#2c3e50" :size="20"><List /></el-icon>
+                      <!-- <el-icon color="#2c3e50" :size="20"><List /></el-icon> -->
+                      <SvgIcon name="error-list" prefix="icon-svg" width="18" height="18" color="#2c3e50" />
                     </button>
                   </a>
                 </div>
@@ -241,7 +263,7 @@
                       type="button"
                       class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
                     >
-                      <el-icon color="#2c3e50" :size="20"><UserFilled /></el-icon>
+                      <el-icon color="#2c3e50" :size="19"><UserFilled /></el-icon>
                     </button>
                   </template>
                   <div class="full-w text-center">
@@ -391,6 +413,7 @@
   </div>
   <mistakeDialog ref="mistakeRef" @next="handleNextChapter" />
   <Loading :loading="loading" />
+  <WordsDrawer ref="wordslistRef" />
 </template>
 
 <script setup>
@@ -406,6 +429,7 @@
   import { useAppStore, useUserStore } from '@/store';
   import { getWordList, reportLexiRes } from '@/api/book/index';
   import { useRouter, useRoute } from 'vue-router';
+  import WordsDrawer from './wordsDrawer.vue';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -424,7 +448,7 @@
     repetitions: userStore.getConfig.repetitions + '' || '1',
     phonetic_type: userStore.getConfig.phonetic_type || 2,
     error_sound: userStore.getConfig.error_sound || false,
-    isSeries: true,
+    isSeries: false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['2', '3', '4', '5', '6', '7'],
     repeatList: ['1', '2', '3', '无限'],
@@ -446,6 +470,7 @@
   const correctRef = ref(new Audio(correct));
   const defaultAudioRef = ref(new Audio(defaultAudio));
   const mistakeRef = ref(null);
+  const wordslistRef = ref(null);
   const currentTestKey = Date.now();
   const nearWords = computed(() => {
     let lastWord = '';
@@ -535,9 +560,14 @@
   const clearAudioCache = () => {
     audio.src = '';
     audio.pause();
+    audio = null;
   };
 
   const handleMove = (type) => {
+    // 如果已经在播放状态，直接返回，避免重复调用
+    // if (playStatus.value === 1) {
+    //   return;
+    // }
     playStatus.value = 1;
     const sign = wordsData.currentIndex + type;
 
@@ -588,7 +618,7 @@
     mistakeRef.value.open(correctness.toFixed(2));
   };
 
-  // 回车
+  // 回车 播放下一个的方法
   const inputEnter = () => {
     if (!wordsData.words.length) {
       return;
@@ -636,7 +666,7 @@
   // 听写模式
   const handleMode = () => {
     config.isSeries = !config.isSeries;
-    ElMessage.success(`连读已 ${config.isSeries ? '关闭' : '开启'}`);
+    ElMessage.success(`连读已 ${!config.isSeries ? '关闭' : '开启'}`);
   };
   const handleKeyDown = (event) => {
     if (!config.error_sound) {
@@ -646,10 +676,13 @@
       }
     }
   };
+  // 播放单词的方法
   const playWords = (words = [wordsData.currentWord]) => {
     var index = 0;
     var count = 0;
-
+    if (!audio) {
+      audio = new Audio();
+    }
     // 播放第一个单词
     audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
     audio.playbackRate = +config.play_speed;
@@ -678,13 +711,12 @@
               audio.play();
             }, config.play_interval * 1000);
           } else {
-            // // 所有单词都已播放完毕，停止播放
-            // if (wordsData.currentIndex < wordsData.words.length) {
-            //   setTimeout(() => {
-            //     console.log(1111);
-            //     inputEnter();
-            //   }, config.play_interval * 1000);
-            // }
+            // 所有单词都已播放完毕，停止播放
+            if (playStatus.value == 1 && config.isSeries) {
+              setTimeout(() => {
+                inputEnter();
+              }, config.play_interval * 1000);
+            }
             return;
           }
         }
@@ -763,6 +795,11 @@
     audio = null;
     appStore.setLastId(wordsData?.currentWord.id || null);
   });
+
+  // 展示当前播放词库列表
+  const showWordsList = () => {
+    wordslistRef.value.open(wordsData.words, wordsData.currentWord);
+  };
 </script>
 
 <style scoped lang="less">
