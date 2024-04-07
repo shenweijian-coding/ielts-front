@@ -231,6 +231,14 @@
       router.push('/home?source=err');
     });
   };
+  onUnmounted(() => {
+    audio.pause(); // 先暂停播放
+    audio.src = ''; // 清空src
+    audio.remove(); // 移除音频对象
+
+    // 或者将音频对象赋值为null
+    audio = null;
+  });
   getErrorWords();
   // getAllChapter();
 </script>

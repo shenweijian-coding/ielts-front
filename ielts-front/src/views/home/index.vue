@@ -82,7 +82,7 @@
               </el-popover>
             </div>
           </el-tooltip>
-          <el-tooltip content="单词听写模式" placement="top" effect="light" v-if="false">
+          <el-tooltip content="单词听写模式" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <button
                 class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
@@ -546,7 +546,7 @@
   };
   // 播放音频的方法
   var audio = new Audio();
-
+  var timer = null;
   // 重新播放
   const playAgain = () => {
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
@@ -558,6 +558,7 @@
 
   // clear 播放
   const clearAudioCache = () => {
+    clearTimeout(timer);
     audio.src = '';
     audio.pause();
     audio = null;
@@ -620,7 +621,7 @@
 
   // 回车 播放下一个的方法
   const inputEnter = () => {
-    if (!wordsData.words.length) {
+    if (!wordsData.words.length || playStatus.value != 1) {
       return;
     }
     const { word, userInput, id } = wordsData.currentWord;
@@ -697,7 +698,7 @@
           // 这里是播放
           audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
 
-          setTimeout(() => {
+          timer = setTimeout(() => {
             audio.play();
           }, config.play_interval * 1000);
         } else {
@@ -707,13 +708,13 @@
           if (index < words.length) {
             audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
 
-            setTimeout(() => {
+            timer = setTimeout(() => {
               audio.play();
             }, config.play_interval * 1000);
           } else {
             // 所有单词都已播放完毕，停止播放
             if (playStatus.value == 1 && config.isSeries) {
-              setTimeout(() => {
+              timer = setTimeout(() => {
                 inputEnter();
               }, config.play_interval * 1000);
             }

@@ -8,10 +8,19 @@
           class="mb-2 flex cursor-pointer select-text items-center rounded-xl py-2 px-4 shadow focus:outline-none dark:bg-opacity-20"
           :class="state.current == item ? 'bg-theme_hover current' : ''"
           :id="state.current == item ? 'current' : ''"
-          ><div class="flex-1"
-            ><p class="select-all font-mono text-xl font-normal leading-6 dark:text-gray-50 mb-2">{{ item.word }}</p
-            ><div class="mt-2 max-w-sm font-sans text-sm text-gray-400">{{ item.translate }}</div></div
+        >
+          <div class="flex-1"
+            ><p class="select-all font-mono text-xl font-normal leading-6 dark:text-gray-50 mb-2"
+              >{{ item.word }} &nbsp;&nbsp;{{ item.phonetic_transcription }}</p
+            ><div class="mt-2 max-w-sm font-sans text-sm text-gray-400">{{ item.translate }}</div>
+          </div>
+          <button
+            @click="play(item)"
+            class="focus:outline-none dark:fill-gray-400 dark:opacity-80 cursor-pointer text-gray-600 h-8 w-8"
+            type="button"
           >
+            <SvgIcon name="sound" prefix="icon-svg" width="20" height="20" />
+          </button>
         </div>
       </div>
     </div>
@@ -20,6 +29,7 @@
 <script setup>
   import { useAppStore } from '@/store';
   import { nextTick } from 'vue';
+  import SvgIcon from '@/components/SvgIcon/index.vue';
 
   const appStore = useAppStore();
 
@@ -55,6 +65,20 @@
       windowSize();
     });
     windowSize();
+  });
+  var audio = new Audio();
+
+  const play = (row) => {
+    audio.src = row['phonetic-m'];
+    audio.play();
+  };
+  onUnmounted(() => {
+    audio.pause(); // 先暂停播放
+    audio.src = ''; // 清空src
+    audio.remove(); // 移除音频对象
+
+    // 或者将音频对象赋值为null
+    audio = null;
   });
   defineExpose({
     open,
