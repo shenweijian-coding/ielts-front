@@ -221,7 +221,7 @@
       return {
         c_id: word.c_id,
         g_id: word.g_id,
-        id: word.id,
+        id: word.lexicon.id,
         word: word.lexicon.word,
         translate: word.lexicon?.translate,
         phonetic_transcription: word.lexicon?.phonetic_transcription,
