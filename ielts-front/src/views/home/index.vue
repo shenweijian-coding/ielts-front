@@ -559,9 +559,11 @@
   // clear 播放
   const clearAudioCache = () => {
     clearTimeout(timer);
-    audio.src = '';
-    audio.pause();
-    audio = null;
+    if (audio) {
+      audio?.src && (audio.src = '');
+      audio.pause();
+      audio = null;
+    }
   };
 
   const handleMove = (type) => {
@@ -592,8 +594,10 @@
   const stop = () => {
     playStatus.value = 2;
     inputRef.value.blur();
-    audio.src = '';
-    audio.pause();
+    if (audio) {
+      audio?.src && (audio.src = '');
+      audio.pause();
+    }
   };
 
   // 切换暂停和播放
@@ -621,6 +625,7 @@
 
   // 回车 播放下一个的方法
   const inputEnter = () => {
+    clearAudioCache();
     if (!wordsData.words.length || playStatus.value != 1) {
       return;
     }

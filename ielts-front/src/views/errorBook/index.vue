@@ -119,6 +119,7 @@
     },
     errTimeOption: [
       { name: '全部', id: 0 },
+      { name: '最近一次', id: 3 },
       { name: '今天', id: 1 },
       { name: '近七天', id: 2 },
     ],
@@ -151,9 +152,12 @@
       const currentTime = dayjs();
       params.error_end_date = currentTime.endOf('day').format('YYYY-MM-DD HH:mm:ss');
       params.error_start_date = currentTime.subtract(6, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    } else if (state.form.errTime == 3) {
+      params.recently = true;
     }
     params.error_num = state.form.error_num;
     params.c_id = state.form.c_id;
+    console.log(state.form.c_id, 'state.form.c_id');
     params.page = state.page.currentPage;
     params.pagesize = state.page.pageSize;
 
@@ -231,6 +235,10 @@
       router.push('/home?source=err');
     });
   };
+  onMounted(() => {
+    state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
+    getErrorWords();
+  });
   onUnmounted(() => {
     audio.pause(); // 先暂停播放
     audio.src = ''; // 清空src
@@ -239,7 +247,6 @@
     // 或者将音频对象赋值为null
     audio = null;
   });
-  getErrorWords();
   // getAllChapter();
 </script>
 <style lang="less" scoped>
