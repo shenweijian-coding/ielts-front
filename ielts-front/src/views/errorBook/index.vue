@@ -14,7 +14,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="章节">
-            <el-select v-model="state.form.c_id" placeholder="全部章节" style="width: 180px" @change="getErrorWords">
+            <el-select v-model="state.form.c_id" placeholder="全部章节" style="width: 180px" @change="getErrorWords" clearable>
               <el-option v-for="item in chapterList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
           </el-form-item>
@@ -111,7 +111,7 @@
   });
   const state = reactive({
     form: {
-      errTime: 0,
+      errTime: 3,
       error_num: 0,
       c_id: undefined,
       sort: undefined,
@@ -237,6 +237,9 @@
   };
   onMounted(() => {
     state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
+    if (!state.form.c_id && appStore?.dictationInfo?.chapterList?.length) {
+      state.form.c_id = appStore?.dictationInfo?.chapterList[0].id;
+    }
     getErrorWords();
   });
   onUnmounted(() => {
