@@ -344,7 +344,11 @@
                         >
                       </div>
                     </div> -->
-
+                  <div class="text-2xl font-bold text-gray count-down-box">
+                    <div>
+                      {{ countDown ? `${countDown}S` : ' ' }}
+                    </div>
+                  </div>
                   <div class="user-input text-center">
                     <input
                       v-model="wordsData.currentWord.userInput"
@@ -472,6 +476,7 @@
   const mistakeRef = ref(null);
   const wordslistRef = ref(null);
   const currentTestKey = Date.now();
+  const countDown = ref(0); // 倒计时
   const nearWords = computed(() => {
     let lastWord = '';
     let nextWord = '';
@@ -719,9 +724,20 @@
           } else {
             // 所有单词都已播放完毕，停止播放
             if (playStatus.value == 1 && config.isSeries) {
-              timer = setTimeout(() => {
-                inputEnter();
-              }, config.play_interval * 1000);
+              // timer = setTimeout(() => {
+              //   inputEnter();
+              // }, config.play_interval * 1000);
+
+              countDown.value = config.play_interval;
+
+              const countdownInterval = setInterval(() => {
+                countDown.value--;
+                if (countDown.value === 0) {
+                  clearInterval(countdownInterval);
+                  // 播放下一个单词的逻辑
+                  inputEnter();
+                }
+              }, 1000);
             }
             return;
           }
@@ -833,5 +849,10 @@
     .success {
       border-bottom: 2px solid green;
     }
+  }
+  .count-down-box {
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
   }
 </style>

@@ -23,7 +23,7 @@
       <div class="px-4">
         <div class="flex justify-end pb-3 items-center space-x-4">
           <span
-            >共{{ state.page.total }}条，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
+            >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
           >
           <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
         </div>
