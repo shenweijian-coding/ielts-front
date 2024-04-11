@@ -51,7 +51,7 @@
             </div>
           </el-tooltip>
         </div>
-        <div class="flex space-x-4 lg:space-x-1">
+        <div class="flex space-x-2 lg:space-x-1">
           <el-tooltip content="单词播放速度" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <el-popover placement="bottom" :width="100" trigger="click">
@@ -183,7 +183,7 @@
             </div>
           </el-tooltip>
 
-          <div class="flex items-center justify-center gap-2 space-x-4 lg:space-x-1">
+          <div class="flex items-center justify-center gap-2 space-x-2 lg:space-x-1">
             <el-tooltip content="当前播放词库" placement="top" effect="light">
               <div class="relative">
                 <div>
