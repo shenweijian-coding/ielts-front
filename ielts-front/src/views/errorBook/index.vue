@@ -81,12 +81,13 @@
   import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage } from 'element-plus';
   import dayjs from 'dayjs';
-  import { useRouter } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
 
   const appStore = useAppStore();
   const router = useRouter();
+  const route = useRoute();
   const { loading, setLoading } = useLoading();
 
   const tableRef = ref(null);
@@ -111,7 +112,7 @@
   });
   const state = reactive({
     form: {
-      errTime: 3,
+      errTime: 0,
       error_num: 0,
       c_id: undefined,
       sort: undefined,
@@ -236,10 +237,17 @@
     });
   };
   onMounted(() => {
-    state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
-    if (!state.form.c_id && appStore?.dictationInfo?.chapterList?.length) {
-      state.form.c_id = appStore?.dictationInfo?.chapterList[0].id;
+    if (route.query?.from == 'result') {
+      state.form.errTime = 3;
+    } else if (route.query?.from == 'gallery') {
+    } else if (route.query?.from == 'home') {
+      state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
     }
+    console.log(appStore?.dictationInfo?.currentChapter?.id);
+    // if (!state.form.c_id && appStore?.dictationInfo?.chapterList?.length) {
+    //   state.form.c_id = appStore?.dictationInfo?.chapterList[0].id;
+    // }
+
     getErrorWords();
   });
   onUnmounted(() => {

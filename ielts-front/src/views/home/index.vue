@@ -236,7 +236,7 @@
             <el-tooltip content="错词本" placement="top" effect="light">
               <div class="relative">
                 <div>
-                  <a href="/#/errorBook">
+                  <a href="/#/errorBook?from=home">
                     <button
                       type="button"
                       class="flex items-center justify-center rounded p-[2px] text-lg outline-none transition-colors duration-300 ease-in-out"
@@ -566,6 +566,10 @@
   // clear 播放
   const clearAudioCache = () => {
     clearTimeout(timer);
+    if (countdownInterval) {
+      clearInterval(countdownInterval);
+      countDown.value = 0;
+    }
     if (audio) {
       audio?.src && (audio.src = '');
       audio.pause();
@@ -813,12 +817,14 @@
     userStore.handleConfig(p, val);
   };
   onUnmounted(() => {
-    audio.pause(); // 先暂停播放
-    audio.src = ''; // 清空src
-    audio.remove(); // 移除音频对象
+    if (audio) {
+      audio.pause(); // 先暂停播放
+      audio.src = ''; // 清空src
+      audio.remove(); // 移除音频对象
 
-    // 或者将音频对象赋值为null
-    audio = null;
+      // 或者将音频对象赋值为null
+      audio = null;
+    }
     appStore.setLastId(wordsData?.currentWord.id || null);
   });
 

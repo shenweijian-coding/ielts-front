@@ -5,7 +5,7 @@
       <div class="mt-4 text-2xl text-black">本次正确听写率</div>
       <!-- <div class="text-grey mt-4">上次正确听写率：80%</div> -->
       <div class="flex space-x-10 justify-center mt-8">
-        <a href="/#/errorBook">
+        <a href="/#/errorBook?from=result">
           <el-button size="large">查看错词</el-button>
         </a>
         <el-button type="primary" size="large" @click="nextChapter">继续听写下一章</el-button>

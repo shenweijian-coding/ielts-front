@@ -139,7 +139,7 @@
 
   const handleErrorBook = () => {
     setChapterInfo('');
-    router.push('/errorBook');
+    router.push('/errorBook?from=gallery');
   };
   onMounted(() => {
     window.addEventListener('resize', () => {
