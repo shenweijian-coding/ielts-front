@@ -344,11 +344,6 @@
                         >
                       </div>
                     </div> -->
-                  <div class="text-2xl font-bold text-gray count-down-box">
-                    <div>
-                      {{ countDown ? `${countDown}S` : ' ' }}
-                    </div>
-                  </div>
                   <div class="user-input text-center">
                     <input
                       v-model="wordsData.currentWord.userInput"
@@ -360,6 +355,12 @@
                       @keydown="handleKeyDown"
                       @click="handleFocus"
                     />
+                  </div>
+                  <div class="text-2xl font-bold text-gray count-down-box">
+                    <div v-if="countDown <= 2 && countDown > 0">
+                      <span>{{ countDown }}</span
+                      ><span class="text-m">s</span>
+                    </div>
                   </div>
                 </div>
                 <!-- <div
@@ -552,6 +553,7 @@
   // 播放音频的方法
   var audio = new Audio();
   var timer = null;
+  var countdownInterval = null;
   // 重新播放
   const playAgain = () => {
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
@@ -599,6 +601,8 @@
   const stop = () => {
     playStatus.value = 2;
     inputRef.value.blur();
+    countDown.value = 0;
+    clearInterval(countdownInterval);
     if (audio) {
       audio?.src && (audio.src = '');
       audio.pause();
@@ -730,7 +734,7 @@
 
               countDown.value = config.play_interval;
 
-              const countdownInterval = setInterval(() => {
+              countdownInterval = setInterval(() => {
                 countDown.value--;
                 if (countDown.value === 0) {
                   clearInterval(countdownInterval);
@@ -851,8 +855,11 @@
     }
   }
   .count-down-box {
+    position: absolute;
+    right: 3rem;
+    bottom: 0px;
     height: 32px;
     line-height: 32px;
-    text-align: center;
+    opacity: 0.4;
   }
 </style>
