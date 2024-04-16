@@ -27,11 +27,12 @@
   </el-drawer>
 </template>
 <script setup>
-  import { useAppStore } from '@/store';
+  import { useAppStore, useUserStore } from '@/store';
   import { nextTick } from 'vue';
   import SvgIcon from '@/components/SvgIcon/index.vue';
 
   const appStore = useAppStore();
+  const userStore = useUserStore();
 
   const state = reactive({
     drawer: false,
@@ -69,7 +70,8 @@
   var audio = new Audio();
 
   const play = (row) => {
-    audio.src = row['phonetic-m'];
+    const type = userStore.getConfig.phonetic_type == 1 ? 'phonetic-y' : 'phonetic-m';
+    audio.src = row[type];
     audio.play();
   };
   onUnmounted(() => {

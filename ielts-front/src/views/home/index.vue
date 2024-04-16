@@ -825,7 +825,9 @@
       // 或者将音频对象赋值为null
       audio = null;
     }
-    appStore.setLastId(wordsData?.currentWord.id || null);
+    if (!errSource.value) {
+      appStore.setLastId(wordsData?.currentWord.id || null);
+    }
   });
 
   // 展示当前播放词库列表

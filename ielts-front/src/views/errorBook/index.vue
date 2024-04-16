@@ -76,7 +76,7 @@
 </template>
 <script setup>
   import { getErrorWordList } from '@/api/book/index';
-  import { useAppStore } from '@/store';
+  import { useAppStore, useUserStore } from '@/store';
   import { Headset } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage } from 'element-plus';
@@ -86,6 +86,8 @@
   import useLoading from '@/hooks/loading.ts';
 
   const appStore = useAppStore();
+  const userStore = useUserStore();
+
   const router = useRouter();
   const route = useRoute();
   const { loading, setLoading } = useLoading();
@@ -210,7 +212,8 @@
   var audio = new Audio();
 
   const play = (row) => {
-    audio.src = row.lexicon['phonetic-m'];
+    const type = userStore.getConfig.phonetic_type == 1 ? 'phonetic-y' : 'phonetic-m';
+    audio.src = row.lexicon[type];
     audio.play();
   };
   const handleSelWords = async () => {
