@@ -551,7 +551,7 @@
     }
   };
   // 播放音频的方法
-  var audio = new Audio();
+  let audio = null;
   var timer = null;
   var countdownInterval = null;
   // 重新播放
@@ -573,7 +573,7 @@
     if (audio) {
       audio?.src && (audio.src = '');
       audio.pause();
-      audio = null;
+      // audio = null;
     }
   };
 
@@ -699,9 +699,9 @@
   const playWords = (words = [wordsData.currentWord]) => {
     var index = 0;
     var count = 0;
-    if (!audio) {
-      audio = new Audio();
-    }
+    // if (!audio) {
+    //   audio = new Audio();
+    // }
     // 播放第一个单词
     audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
     audio.playbackRate = +config.play_speed;
@@ -772,7 +772,7 @@
   onMounted(() => {
     console.log(appStore.dictationInfo);
     console.log(route);
-
+    audio = new Audio();
     errSource.value = route.query?.source == 'err';
 
     document.addEventListener('keydown', handleAllKeyDown);
