@@ -33,6 +33,7 @@ declare module 'vue' {
     Loading: typeof import('./../src/components/loading/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Sidebar: typeof import('./../src/components/sidebar/index.vue')['default']
     SvgIcon: typeof import('./../src/components/SvgIcon/index.vue')['default']
     WordConfig: typeof import('./../src/components/WordConfig/index.vue')['default']
   }

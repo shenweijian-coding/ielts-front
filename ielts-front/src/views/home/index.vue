@@ -292,9 +292,13 @@
                   >
                     <SvgIcon name="left" />
                     <div class="grow-1 flex w-full flex-col ml-2"
-                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">{{
-                        nearWords.lastWord.word
-                      }}</p
+                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">
+                        <span
+                          v-for="(item, index) in nearWords.lastWord.word"
+                          :key="index"
+                          :class="{ 'text-error': nearWords.lastWord.inputWordArr[index] != item }"
+                          >{{ item }}</span
+                        > </p
                       ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
                         nearWords.lastWord.translate
                       }}</p></div
@@ -382,13 +386,13 @@
                     </el-tooltip>
                   </div>
                   <div>
-                    <el-tooltip content="快捷键 ctrl+p" placement="top" effect="light">
+                    <el-tooltip content="暂停，快捷键ctrl+P" placement="top" effect="light">
                       <SvgIcon v-if="playStatus == 0 || playStatus == 2" @click="start" name="play-start" color="grey" />
                       <SvgIcon v-if="playStatus == 1" @click="stop" name="play-stop" color="grey" />
                     </el-tooltip>
                   </div>
                   <div>
-                    <el-tooltip content="快捷键 ctrl+L" placement="top" effect="light">
+                    <el-tooltip content="再读一遍，快捷键 ctrl+L" placement="top" effect="light">
                       <SvgIcon @click="playAgain" name="play-again" color="grey" />
                     </el-tooltip>
                   </div>
@@ -484,6 +488,12 @@
     let index = wordsData.currentIndex;
     if (wordsData.currentIndex > 0) {
       lastWord = wordsData.words[index - 1];
+      lastWord.wordArr = lastWord.word.split('');
+      if (lastWord.userInput) {
+        lastWord.inputWordArr = lastWord.userInput.split('');
+      } else {
+        lastWord.inputWordArr = new Array(lastWord.word.length);
+      }
     }
     if (index < wordsData.words.length) {
       nextWord = wordsData.words[index + 1];
@@ -769,6 +779,10 @@
     }
   };
 
+  // 错词标红
+  const isError = (index) => {
+    console.log(index, '111');
+  };
   onMounted(() => {
     console.log(appStore.dictationInfo);
     console.log(route);
