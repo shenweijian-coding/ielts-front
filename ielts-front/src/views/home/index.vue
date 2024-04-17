@@ -296,7 +296,7 @@
                         <span
                           v-for="(item, index) in nearWords.lastWord.word"
                           :key="index"
-                          :class="{ 'text-error': nearWords.lastWord.inputWordArr[index] != item }"
+                          :class="{ 'text-red': nearWords.lastWord.inputWordArr[index] != item }"
                           >{{ item }}</span
                         > </p
                       ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
