@@ -205,31 +205,29 @@
               </div>
             </el-tooltip>
 
-            <el-tooltip content="音效设置" placement="top" effect="light">
+            <el-tooltip content="设置" placement="top" effect="light">
               <div class="relative">
-                <div>
-                  <div class="relative"
-                    ><button
-                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white"
-                      title="音效设置"
+                <el-popover placement="bottom" :width="200" trigger="click">
+                  <template #reference>
+                    <button
+                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
+                      title="设置"
                       type="button"
-                      @click="handleSoundEffect"
                     >
-                      <SvgIcon
-                        name="sound"
-                        prefix="icon-svg"
-                        width="20"
-                        height="20"
-                        hoverColor="#fff"
-                        :color="config.error_sound ? '' : '#ff5c00'"
-                      /> </button
-                  ></div>
-                </div>
-                <div
-                  class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
-                >
-                  <span class="tooltip">音效设置</span></div
-                >
+                      <SvgIcon name="setting" prefix="icon-svg" width="24" height="24" />
+                    </button>
+                  </template>
+                  <div>
+                    <div class="flex items-center justify-between">
+                      <div>忽略大小写</div>
+                      <el-switch v-model="config.ignore_case" />
+                    </div>
+                    <div class="flex items-center justify-between mt-2">
+                      <div>输入按键音效</div>
+                      <el-switch v-model="config.error_sound" />
+                    </div>
+                  </div>
+                </el-popover>
               </div>
             </el-tooltip>
 
@@ -292,11 +290,11 @@
                   >
                     <SvgIcon name="left" />
                     <div class="grow-1 flex w-full flex-col ml-2"
-                      ><p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0">
+                      ><p class="font-mono text-2xl font-normal tracking-normal mb-0">
                         <span
-                          v-for="(item, index) in nearWords.lastWord.word"
+                          v-for="(item, index) in nearWords.lastWord.wordArr"
                           :key="index"
-                          :class="{ 'text-red': nearWords.lastWord.inputWordArr[index] != item }"
+                          :class="{ 'text-red-600': nearWords.lastWord.inputWordArr[index] != item }"
                           >{{ item }}</span
                         > </p
                       ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
@@ -457,6 +455,7 @@
     repetitions: userStore.getConfig.repetitions + '' || '1',
     phonetic_type: userStore.getConfig.phonetic_type || 2,
     error_sound: userStore.getConfig.error_sound || false,
+    ignore_case: userStore.getConfig.ignore_case || true,
     isSeries: false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['2', '3', '4', '5', '6', '7'],
@@ -488,9 +487,9 @@
     let index = wordsData.currentIndex;
     if (wordsData.currentIndex > 0) {
       lastWord = wordsData.words[index - 1];
-      lastWord.wordArr = lastWord.word.split('');
+      lastWord.wordArr = config.ignore_case ? lastWord.word.toLowerCase().split('') : lastWord.word.split('');
       if (lastWord.userInput) {
-        lastWord.inputWordArr = lastWord.userInput.split('');
+        lastWord.inputWordArr = config.ignore_case ? lastWord.userInput.toLowerCase().split('') : lastWord.userInput.split('');
       } else {
         lastWord.inputWordArr = new Array(lastWord.word.length);
       }
@@ -652,7 +651,12 @@
     if (!wordsData.words.length || playStatus.value != 1) {
       return;
     }
-    const { word, userInput, id } = wordsData.currentWord;
+    let { word, userInput, id } = wordsData.currentWord;
+    if (config.ignore_case) {
+      // 忽略大小写
+      word = word.toLowerCase();
+      userInput = userInput.toLowerCase();
+    }
     if (word === userInput) {
       inputRef.value.style.color = 'green';
       inputRef.value.style.borderColor = 'green';
@@ -686,19 +690,14 @@
   const handleBlur = () => {
     stop();
   };
-  // 处理音效
-  const handleSoundEffect = () => {
-    config.error_sound = !config.error_sound;
-    ElMessage.success(`音效已 ${config.error_sound ? '关闭' : '开启'}`);
-    handleConfigChange('error_sound', config.error_sound);
-  };
+
   // 听写模式
   const handleMode = () => {
     config.isSeries = !config.isSeries;
     ElMessage.success(`连读已 ${!config.isSeries ? '关闭' : '开启'}`);
   };
   const handleKeyDown = (event) => {
-    if (!config.error_sound) {
+    if (config.error_sound) {
       const key = event.key.toLowerCase();
       if (/^[a-z]$/.test(key)) {
         defaultAudioRef.value.play();

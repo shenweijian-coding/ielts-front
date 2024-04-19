@@ -25,6 +25,7 @@
           <span
             >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
           >
+          <el-button :icon="Download" plain @click="handleDownloadExcel" />
           <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
         </div>
         <el-table
@@ -77,13 +78,14 @@
 <script setup>
   import { getErrorWordList } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
-  import { Headset } from '@element-plus/icons-vue';
+  import { Headset, Download } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage } from 'element-plus';
   import dayjs from 'dayjs';
   import { useRouter, useRoute } from 'vue-router';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
+  import * as XLSX from 'xlsx';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -131,7 +133,7 @@
       { name: '2次及以上', num: 2 },
       { name: '3次及以上', num: 3 },
     ],
-    chapterList: ['全部', '滴滴'],
+    chapterList: [],
     tableData: [],
     selWords: [],
     page: {
@@ -237,6 +239,32 @@
     await appStore.toggleCurrentChapter(null);
     setTimeout(() => {
       router.push('/home?source=err');
+    });
+  };
+
+  // 导出excel
+  const handleDownloadExcel = () => {
+    if (!state.selWords.length) {
+      ElMessage.warning('未选择错题');
+      return;
+    }
+    const exportData = [];
+    state.selWords.forEach((item) => {
+      exportData.push({
+        单词: item.lexicon.word,
+        释义: item.lexicon.translate,
+        错误次数: item.error_num,
+        错误拼写: item.error_word,
+        词典: item.lexicon_group.name,
+        章节: item.chapter.name,
+        错误时间: item.updated_at,
+      });
+    });
+    const workBook = XLSX.utils.book_new();
+    const workSheet = XLSX.utils.json_to_sheet(exportData);
+    XLSX.utils.book_append_sheet(workBook, workSheet);
+    XLSX.writeFile(workBook, `错题本.xlsx`, {
+      bookType: 'xlsx',
     });
   };
   onMounted(() => {
