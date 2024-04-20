@@ -655,7 +655,7 @@
     if (config.ignore_case) {
       // 忽略大小写
       word = word.toLowerCase();
-      userInput = userInput.toLowerCase();
+      userInput = userInput ? userInput.toLowerCase() : '';
     }
     if (word === userInput) {
       inputRef.value.style.color = 'green';
