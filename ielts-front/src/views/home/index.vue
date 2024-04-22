@@ -82,7 +82,7 @@
               </el-popover>
             </div>
           </el-tooltip>
-          <el-tooltip content="单词听写模式" placement="top" effect="light">
+          <!-- <el-tooltip content="单词听写模式" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <button
                 class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
@@ -95,7 +95,7 @@
                 </div>
               </button>
             </div>
-          </el-tooltip>
+          </el-tooltip> -->
           <el-tooltip content="单词播放间隔" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <el-popover placement="bottom" :width="100" trigger="click">
