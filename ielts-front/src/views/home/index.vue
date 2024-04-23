@@ -2,7 +2,7 @@
   <header class="container z-20 mx-auto w-full lg:px-10 py-8 px-4">
     <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0"
       ><a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
-        <SvgIcon name="atx" class="" width="200" height="80" />
+        <SvgIcon name="atx" class="hidden md:block" width="200" height="80" />
       </a>
       <nav
         class="my-card on element flex w-auto flex-col lg:flex-row content-center items-center justify-end space-x-3 rounded-xl bg-white lg:p-4 p-2 transition-colors duration-300 dark:bg-gray-800"
@@ -82,7 +82,7 @@
               </el-popover>
             </div>
           </el-tooltip>
-          <!-- <el-tooltip content="单词听写模式" placement="top" effect="light">
+          <el-tooltip content="单词听写模式" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <button
                 class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
@@ -95,7 +95,7 @@
                 </div>
               </button>
             </div>
-          </el-tooltip> -->
+          </el-tooltip>
           <el-tooltip content="单词播放间隔" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <el-popover placement="bottom" :width="100" trigger="click">
@@ -421,6 +421,7 @@
   <mistakeDialog ref="mistakeRef" @next="handleNextChapter" />
   <Loading :loading="loading" />
   <WordsDrawer ref="wordslistRef" />
+  <audio ref="audioPlayer" controls style="display: none"></audio>
 </template>
 
 <script setup>
@@ -481,6 +482,8 @@
   const wordslistRef = ref(null);
   const currentTestKey = Date.now();
   const countDown = ref(0); // 倒计时
+  const audioPlayer = ref(null);
+  let audio = audioPlayer.value;
   const nearWords = computed(() => {
     let lastWord = '';
     let nextWord = '';
@@ -560,7 +563,7 @@
     }
   };
   // 播放音频的方法
-  let audio = null;
+  // let audio = null;
   var timer = null;
   var countdownInterval = null;
   // 重新播放
@@ -714,12 +717,14 @@
     // 播放第一个单词
     audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
     audio.playbackRate = +config.play_speed;
-
+    // console.log(Math.random());
     audio.play();
 
     audio.addEventListener(
       'ended',
       function () {
+        console.log(Math.random());
+
         count++;
         if (count < +config.repetitions || config.repetitions == '无限') {
           // 这里是播放
@@ -760,7 +765,7 @@
           }
         }
       },
-      false,
+      { once: true },
     );
   };
 
