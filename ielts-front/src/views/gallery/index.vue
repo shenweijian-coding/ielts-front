@@ -52,6 +52,7 @@
   </div>
   <LastPage />
   <Loading :loading="loading" />
+  <Footer />
 </template>
 <script setup>
   import ChapterDialog from './chapter-dialog.vue';
@@ -62,6 +63,7 @@
   import { ElMessage } from 'element-plus';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
+  import Footer from '@/components/footer/index.vue';
 
   import { getSceneList, getGroupBooks, getChapterList, getLanguageList } from '@/api/book/index';
 
