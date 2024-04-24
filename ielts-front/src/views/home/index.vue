@@ -565,7 +565,7 @@
   // 播放音频的方法
   // let audio = null;
   var timer = null;
-  var countdownInterval = null;
+  let countdownInterval = null;
   // 重新播放
   const playAgain = () => {
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
@@ -623,6 +623,7 @@
       audio?.src && (audio.src = '');
       audio.pause();
     }
+    clearAudioCache();
   };
 
   // 切换暂停和播放
@@ -707,66 +708,61 @@
       }
     }
   };
-  // 播放单词的方法
-  const playWords = (words = [wordsData.currentWord]) => {
-    var index = 0;
+
+  function audioOver(words, count) {
     var count = 0;
+    console.log(Math.random());
+    count++;
+    if (count < +config.repetitions || config.repetitions == '无限') {
+      // 这里是播放
+      audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+      timer = setTimeout(() => {
+        audio.play();
+      }, config.play_interval * 1000);
+    } else {
+      count = 0;
+
+      // 所有单词都已播放完毕，停止播放
+      if (playStatus.value == 1 && config.isSeries) {
+        // timer = setTimeout(() => {
+        //   inputEnter();
+        // }, config.play_interval * 1000);
+
+        countDown.value = config.play_interval;
+        console.log(countDown.value, 'countDown.value1');
+        countdownInterval = setInterval(() => {
+          console.log(countDown.value, 'countDown.value2');
+          countDown.value--;
+          if (countDown.value <= 0) {
+            clearInterval(countdownInterval);
+            // 播放下一个单词的逻辑
+            inputEnter();
+          }
+        }, 1000);
+      } else {
+        audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+        timer = setTimeout(() => {
+          audio.play();
+        }, config.play_interval * 1000);
+      }
+    }
+  }
+
+  // 播放单词的方法
+  const playWords = () => {
     // if (!audio) {
     //   audio = new Audio();
     // }
     // 播放第一个单词
-    audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
+    audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
     audio.playbackRate = +config.play_speed;
     // console.log(Math.random());
     audio.play();
 
-    audio.addEventListener(
-      'ended',
-      function () {
-        console.log(Math.random());
-
-        count++;
-        if (count < +config.repetitions || config.repetitions == '无限') {
-          // 这里是播放
-          audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
-
-          timer = setTimeout(() => {
-            audio.play();
-          }, config.play_interval * 1000);
-        } else {
-          index++;
-          count = 0;
-
-          if (index < words.length) {
-            audio.src = config.phonetic_type == 2 ? words[index]['phonetic-m'] : words[index]['phonetic-y'];
-
-            timer = setTimeout(() => {
-              audio.play();
-            }, config.play_interval * 1000);
-          } else {
-            // 所有单词都已播放完毕，停止播放
-            if (playStatus.value == 1 && config.isSeries) {
-              // timer = setTimeout(() => {
-              //   inputEnter();
-              // }, config.play_interval * 1000);
-
-              countDown.value = config.play_interval;
-
-              countdownInterval = setInterval(() => {
-                countDown.value--;
-                if (countDown.value === 0) {
-                  clearInterval(countdownInterval);
-                  // 播放下一个单词的逻辑
-                  inputEnter();
-                }
-              }, 1000);
-            }
-            return;
-          }
-        }
-      },
-      { once: true },
-    );
+    audio.removeEventListener('ended', audioOver);
+    audio.addEventListener('ended', audioOver);
   };
 
   //播放时的组合按键触发;
@@ -783,10 +779,6 @@
     }
   };
 
-  // 错词标红
-  const isError = (index) => {
-    console.log(index, '111');
-  };
   onMounted(() => {
     console.log(appStore.dictationInfo);
     console.log(route);
