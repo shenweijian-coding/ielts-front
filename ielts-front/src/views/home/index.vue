@@ -484,6 +484,8 @@
   const countDown = ref(0); // 倒计时
   const audioPlayer = ref(null);
   let audio = audioPlayer.value;
+  var count = 0;
+
   const nearWords = computed(() => {
     let lastWord = '';
     let nextWord = '';
@@ -615,6 +617,7 @@
 
   // 暂停
   const stop = () => {
+    count = 0;
     playStatus.value = 2;
     inputRef.value.blur();
     countDown.value = 0;
@@ -709,11 +712,10 @@
     }
   };
 
-  function audioOver(words, count) {
-    var count = 0;
-    console.log(Math.random());
-    count++;
+  function audioOver() {
+    console.log(Math.random(), count);
     if (count < +config.repetitions || config.repetitions == '无限') {
+      count++;
       // 这里是播放
       audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
 
@@ -740,13 +742,14 @@
             inputEnter();
           }
         }, 1000);
-      } else {
-        audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
-
-        timer = setTimeout(() => {
-          audio.play();
-        }, config.play_interval * 1000);
       }
+      // else {
+      //   audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+      //   timer = setTimeout(() => {
+      //     audio.play();
+      //   }, config.play_interval * 1000);
+      // }
     }
   }
 
@@ -760,6 +763,7 @@
     audio.playbackRate = +config.play_speed;
     // console.log(Math.random());
     audio.play();
+    count++;
 
     audio.removeEventListener('ended', audioOver);
     audio.addEventListener('ended', audioOver);
