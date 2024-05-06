@@ -1,6 +1,19 @@
 <template>
-  <div class="relative mb-auto mt-auto flex w-full flex-1 flex-col overflow-y-auto lg:px-30 px-4">
-    <div class="mt-20 flex w-full flex-1 flex-col justify-center overflow-y-auto">
+  <div class="relative mb-auto mt-auto flex w-full flex-1 flex-col overflow-y-auto lg:px-30 px-4 pt-6">
+    <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0"
+      ><a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
+        <SvgIcon name="atx" class="hidden md:block" width="180" height="80" />
+      </a>
+      <nav
+        class="my-card on element flex w-auto flex-col lg:flex-row content-center items-center justify-end space-x-3 rounded-xl bg-white/75 lg:p-4 p-2 transition-colors duration-300 dark:bg-gray-800"
+      >
+        <div class="w-30 text-center cursor-pointer rounded-md text-theme font-bold text-2xl">单词书</div>
+        <div class="text-lg w-30 text-center cursor-pointer">统计</div>
+        <div class="text-lg w-30 text-center cursor-pointer">错词本</div>
+        <div class="text-lg w-30 text-center cursor-pointer">我的</div>
+      </nav>
+    </div>
+    <div class="mt-10 flex w-full flex-1 flex-col justify-center overflow-y-auto">
       <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-20 w-full items-center justify-between pb-6">
         <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
           <template #label>
@@ -50,15 +63,15 @@
       <ChapterDialog ref="ChapterDialogRef" />
     </div>
   </div>
-  <LastPage />
+  <!-- <LastPage /> -->
   <Loading :loading="loading" />
-  <Footer />
+  <Footer v-if="galleryState.sceneList.length" />
 </template>
 <script setup>
   import ChapterDialog from './chapter-dialog.vue';
   import yg from '@/assets/images/yg.png';
   import rb from '@/assets/images/rb.png';
-  import LastPage from '@/components/lastPage/index.vue';
+  // import LastPage from '@/components/lastPage/index.vue';
   // import dg from '@/assets/images/dg.png';
   import { ElMessage } from 'element-plus';
   import Loading from '@/components/loading/index.vue';
