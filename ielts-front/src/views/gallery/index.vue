@@ -1,7 +1,7 @@
 <template>
   <div class="relative mb-auto mt-auto flex w-full flex-1 flex-col overflow-y-auto lg:px-30 px-4 pt-6">
-    <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0"
-      ><a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
+    <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0">
+      <a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
         <SvgIcon name="atx" class="hidden md:block" width="180" height="80" />
       </a>
       <nav
@@ -23,7 +23,7 @@
         </el-tab-pane>
       </el-tabs>
       <div class="flex-1 overflow-y-auto">
-        <div class="lg:mt-10">
+        <div class="lg:mt-4">
           <!-- 选项 -->
           <div class="flex items-center space-x-4 overscroll-x-auto">
             <div
@@ -41,7 +41,7 @@
             <div
               v-for="item in galleryState.booksList"
               :key="item.id"
-              class="group flex lg:h-36 w-[46%] lg:w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-10 md:mr-6 lg:mb-10 mb-4"
+              class="group flex lg:h-36 w-[46%] lg:w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
               @click="openChapter(item)"
             >
               <div class="relative ml-1 lg:mt-2 flex h-full w-full flex-col items-start justify-start"
