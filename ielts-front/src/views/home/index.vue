@@ -654,6 +654,7 @@
 
   // 回车 播放下一个的方法
   const inputEnter = () => {
+    count = 0;
     clearAudioCache();
     if (!wordsData.words.length || playStatus.value != 1) {
       return;
