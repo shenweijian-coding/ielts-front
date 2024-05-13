@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full flex-1 select-text items-start justify-center overflow-hidden bg-white">
+  <div class="flex w-full flex-1 select-text items-start justify-center overflow-hidden">
     <div class="flex h-full lg:w-5/6 w-full flex-col lg:pt-10 pt-4">
       <div>
         <el-form :model="state.form" :size="formSize" label-width="80">

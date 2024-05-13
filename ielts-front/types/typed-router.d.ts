@@ -49,7 +49,8 @@ declare module 'vue-router/auto/routes' {
     '/errorBook/': RouteRecordInfo<'/errorBook/', '/errorBook', Record<never, never>, Record<never, never>>,
     '/forgetPassword/': RouteRecordInfo<'/forgetPassword/', '/forgetPassword', Record<never, never>, Record<never, never>>,
     '/gallery/': RouteRecordInfo<'/gallery/', '/gallery', Record<never, never>, Record<never, never>>,
-    '/gallery/chapter-dialog': RouteRecordInfo<'/gallery/chapter-dialog', '/gallery/chapter-dialog', Record<never, never>, Record<never, never>>,
+    '/gallery/book/': RouteRecordInfo<'/gallery/book/', '/gallery/book', Record<never, never>, Record<never, never>>,
+    '/gallery/book/chapter-dialog': RouteRecordInfo<'/gallery/book/chapter-dialog', '/gallery/book/chapter-dialog', Record<never, never>, Record<never, never>>,
     '/home/': RouteRecordInfo<'/home/', '/home', Record<never, never>, Record<never, never>>,
     '/home/mistakeDialog': RouteRecordInfo<'/home/mistakeDialog', '/home/mistakeDialog', Record<never, never>, Record<never, never>>,
     '/home/wordsDrawer': RouteRecordInfo<'/home/wordsDrawer', '/home/wordsDrawer', Record<never, never>, Record<never, never>>,
@@ -57,6 +58,7 @@ declare module 'vue-router/auto/routes' {
     '/login/components/banner': RouteRecordInfo<'/login/components/banner', '/login/components/banner', Record<never, never>, Record<never, never>>,
     '/login/components/login-form': RouteRecordInfo<'/login/components/login-form', '/login/components/login-form', Record<never, never>, Record<never, never>>,
     '/login/components/sign-in': RouteRecordInfo<'/login/components/sign-in', '/login/components/sign-in', Record<never, never>, Record<never, never>>,
+    '/statistics/': RouteRecordInfo<'/statistics/', '/statistics', Record<never, never>, Record<never, never>>,
   }
 }
 
