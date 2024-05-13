@@ -459,7 +459,7 @@
     ignore_case: userStore.getConfig.ignore_case || true,
     isSeries: false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
-    gapList: ['2', '3', '4', '5', '6', '7'],
+    gapList: ['1', '2', '3', '4', '5', '6', '7'],
     repeatList: ['1', '2', '3', '无限'],
     pronounceList: [
       { name: '美音', id: 2 },
