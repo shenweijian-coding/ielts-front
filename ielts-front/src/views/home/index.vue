@@ -13,7 +13,7 @@
               <div>
                 <a
                   class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
-                  href="/#/gallery"
+                  href="/#/main"
                 >
                   {{ appStore?.dictationInfo?.booInfo.remarks }}
                 </a>
@@ -791,7 +791,7 @@
 
     document.addEventListener('keydown', handleAllKeyDown);
     if (!appStore?.dictationInfo?.currentChapter && !appStore.errWords.length) {
-      router.push('/gallery');
+      router.push('/main');
       return;
     }
     getWords();

@@ -51,6 +51,7 @@ declare module 'vue-router/auto/routes' {
     '/gallery/': RouteRecordInfo<'/gallery/', '/gallery', Record<never, never>, Record<never, never>>,
     '/gallery/book/': RouteRecordInfo<'/gallery/book/', '/gallery/book', Record<never, never>, Record<never, never>>,
     '/gallery/book/chapter-dialog': RouteRecordInfo<'/gallery/book/chapter-dialog', '/gallery/book/chapter-dialog', Record<never, never>, Record<never, never>>,
+    '/gallery/book/import-dialog': RouteRecordInfo<'/gallery/book/import-dialog', '/gallery/book/import-dialog', Record<never, never>, Record<never, never>>,
     '/home/': RouteRecordInfo<'/home/', '/home', Record<never, never>, Record<never, never>>,
     '/home/mistakeDialog': RouteRecordInfo<'/home/mistakeDialog', '/home/mistakeDialog', Record<never, never>, Record<never, never>>,
     '/home/wordsDrawer': RouteRecordInfo<'/home/wordsDrawer', '/home/wordsDrawer', Record<never, never>, Record<never, never>>,

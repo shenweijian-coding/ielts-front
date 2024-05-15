@@ -71,7 +71,7 @@
         </div> -->
       </div>
     </div>
-    <LastPage />
+    <!-- <LastPage /> -->
     <Loading :loading="loading" />
   </div>
 </template>
