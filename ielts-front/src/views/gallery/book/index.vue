@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-10 flex w-full flex-1 flex-col justify-center overflow-y-auto">
-    <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-20 w-full items-center justify-between pb-6">
+  <div class="lg:mt-10 flex w-full flex-1 flex-col justify-center overflow-y-auto">
+    <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-20 w-full items-center justify-between lg:pb-6">
       <el-tab-pane name="我的词书">
         <template #label>
           <!-- <img :src="" alt="" />&nbsp; -->
