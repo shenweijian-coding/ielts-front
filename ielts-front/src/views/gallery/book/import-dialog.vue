@@ -1,19 +1,19 @@
 <template>
   <el-dialog v-model="state.dialogVisible" :width="dialogWidth" :before-close="handleClose">
     <div>
-      <el-form :model="state.form" label-width="140" :rules="state.rules">
-        <el-form-item label="单词书名称" prop="name">
-          <el-input placeholder="最多输入9个字" v-model="state.form.name" />
+      <el-form :model="state.form" label-width="120" :rules="state.rules">
+        <el-form-item label="单词书名称" prop="title">
+          <el-input placeholder="最多输入9个字" v-model="state.form.title" />
         </el-form-item>
-        <el-form-item label="每章节单词数" prop="num">
-          <el-radio-group v-model="state.form.num">
+        <el-form-item label="每章节单词数" prop="word_count">
+          <el-radio-group v-model="state.form.word_count">
             <el-radio-button v-for="item in state.numOption" :key="item" :label="item" :value="item">{{ item }}个</el-radio-button>
           </el-radio-group>
           <br />
           <!-- <div>若上传1000个单词，选中【50个】，将自动为您划分20个章节</div> -->
         </el-form-item>
-        <el-form-item label="单词" prop="words">
-          <el-input placeholder="单词，一行一个" v-model="state.form.words" :rows="6" type="textarea" />
+        <el-form-item label="单词" prop="data">
+          <el-input placeholder="单词，一行一个" v-model="state.form.data" :rows="6" type="textarea" />
         </el-form-item>
       </el-form>
     </div>
@@ -26,18 +26,20 @@
   </el-dialog>
 </template>
 <script setup>
+  import { uploadBook } from '@/api/book/index';
+
   const state = reactive({
     dialogVisible: false,
     form: {
-      name: '',
-      num: 15,
-      words: '',
+      title: '',
+      word_count: 15,
+      data: '',
     },
     numOption: [15, 30, 50, 100, 200],
     rules: {
-      name: [{ required: true, message: '名称', trigger: 'blur' }],
-      num: [{ required: true, message: '数量', trigger: 'change' }],
-      words: [{ required: true, message: '输入单词', trigger: 'blur' }],
+      title: [{ required: true, message: '名称', trigger: 'blur' }],
+      word_count: [{ required: true, message: '数量', trigger: 'change' }],
+      data: [{ required: true, message: '输入单词', trigger: 'blur' }],
     },
   });
   const dialogWidth = ref('40%');
@@ -61,6 +63,9 @@
     state.dialogVisible = false;
   };
   const handleConfirm = () => {
+    uploadBook(state.form).then((res) => {
+      console.log(res);
+    });
     handleClose();
   };
   onMounted(() => {

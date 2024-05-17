@@ -22,7 +22,7 @@
   </div>
   <div class="bg-white">
     <div class="flex justify-end pr-4 mt-4">
-      <el-select v-model="value" placeholder="请选择章节" size="large">
+      <el-select v-model="chapterId" placeholder="请选择章节" size="large">
         <el-option v-for="item in chapterList" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
     </div>
@@ -34,12 +34,13 @@
 <script setup>
   import { Chart, registerables } from 'chart.js';
   import { useAppStore } from '@/store';
+  import { getAnalysisData } from '@/api/book/index';
 
   const appStore = useAppStore();
 
   Chart.register(...registerables);
   const ctx = ref(null);
-
+  const chapterId = ref('');
   // const
 
   const chartData = {
@@ -86,7 +87,17 @@
   const chapterList = computed(() => {
     return appStore?.dictationInfo?.chapterList || [];
   });
+
+  const getData = () => {
+    getAnalysisData({
+      c_id: chapterId.value,
+    }).then((res) => {
+      console.log(res);
+    });
+  };
+
   onMounted(() => {
+    getData();
     new Chart(ctx.value, {
       type: 'line',
       data: chartData,

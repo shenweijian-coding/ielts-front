@@ -219,6 +219,11 @@
                   </template>
                   <div>
                     <div class="flex items-center justify-between">
+                      <div>乱序播放</div>
+                      <el-switch v-model="config.is_random" />
+                    </div>
+                    <!-- <span class="text-sm">开启后，单词播放顺序将会被打乱，下一章节/重新进入本章节 开始生效</span> -->
+                    <div class="flex items-center justify-between mt-2">
                       <div>忽略大小写</div>
                       <el-switch v-model="config.ignore_case" />
                     </div>
@@ -438,6 +443,7 @@
   import { getWordList, reportLexiRes } from '@/api/book/index';
   import { useRouter, useRoute } from 'vue-router';
   import WordsDrawer from './wordsDrawer.vue';
+  import { shuffleArray } from '@/utils/index';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -457,6 +463,7 @@
     phonetic_type: userStore.getConfig.phonetic_type || 2,
     error_sound: userStore.getConfig.error_sound || false,
     ignore_case: userStore.getConfig.ignore_case || true,
+    is_random: userStore.getConfig.ignore_case || true,
     isSeries: false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['2', '3', '4', '5', '6', '7'],
@@ -529,7 +536,19 @@
       })
         .then((res) => {
           if (res.data.length) {
-            wordsData.words = res.data;
+            // 是否开启乱序
+            if (config.is_random) {
+              // 筛选出没有听写的单词
+              const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
+              const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));
+              if (noRead.length) {
+                wordsData.words = [...beanRead, ...shuffleArray(noRead)];
+              } else {
+                wordsData.words = shuffleArray(beanRead);
+              }
+            } else {
+              wordsData.words = res.data;
+            }
             // 继续上次播放的逻辑
             if (appStore.dictationInfo.currentChapter.is_incomplete && !errSource.value) {
               ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {

@@ -45,7 +45,7 @@ export default [
       },
       {
         path: 'user',
-        component: () => import('@/views/errorBook/index.vue'),
+        component: () => import('@/views/user/index.vue'),
       }
     ],
   },

@@ -19,4 +19,18 @@ const reportLexiRes = async (data) => post({ url: '/api/study/lexicon/v1/practic
 
 const getErrorWordList = async (data) => post({ url: '/api/study/lexicon/v1/error/list', data });
 
-export { getBookList, getSceneList, getGroupBooks, getChapterList, getLanguageList, getWordList, reportLexiRes, getErrorWordList };
+const uploadBook = async (data) => post({ url: '/api/study/lexicon/v1/upload/book', data });
+
+const getAnalysisData = async (data) => post({ url: '/api/study/lexicon/v1/data/analysis', data });
+export {
+  getBookList,
+  getSceneList,
+  getGroupBooks,
+  getChapterList,
+  getLanguageList,
+  getWordList,
+  reportLexiRes,
+  getErrorWordList,
+  uploadBook,
+  getAnalysisData,
+};

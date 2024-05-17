@@ -1,12 +1,6 @@
 <template>
   <div class="lg:mt-10 flex w-full flex-1 flex-col justify-center overflow-y-auto">
     <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-20 w-full items-center justify-between lg:pb-6">
-      <el-tab-pane name="我的词书">
-        <template #label>
-          <!-- <img :src="" alt="" />&nbsp; -->
-          <span class="text-lg"> 我的词书 </span>
-        </template>
-      </el-tab-pane>
       <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
         <template #label>
           <img :src="galleryState.languageIcon[item.id]" alt="" />&nbsp;
@@ -15,7 +9,7 @@
       </el-tab-pane>
     </el-tabs>
     <div class="flex-1 overflow-y-auto">
-      <div v-if="galleryState.activeTab != '我的词书'" class="lg:mt-4">
+      <div v-if="galleryState.activeTab != 2" class="lg:mt-4">
         <!-- 选项 -->
         <div class="flex items-center space-x-4 overscroll-x-auto">
           <div
@@ -94,7 +88,6 @@
     languageList: [],
     languageIcon: {
       1: yg,
-      2: rb,
     },
     activeTab: 1,
     activeType: 0,

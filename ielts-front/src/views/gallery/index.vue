@@ -4,9 +4,10 @@
       <a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
         <SvgIcon name="atx" class="hidden md:block" width="180" height="80" />
       </a>
+      <!-- PC端展示的 -->
       <div class="hidden md:block">
         <el-menu default-active="/main/book" mode="horizontal" :ellipsis="false" router>
-          <el-menu-item index="/home">
+          <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home">
             <el-icon><Headset /></el-icon>
             听写
           </el-menu-item>
@@ -32,9 +33,10 @@
     <router-view />
   </div>
   <Footer />
+  <!-- 移动端展示的 -->
   <div class="md:hidden flex tabbar bg-white w-full justify-center">
     <el-menu default-active="/main/book" mode="horizontal" :ellipsis="false" router>
-      <el-menu-item index="/home" class="flex flex-col leading-1">
+      <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home" class="flex flex-col leading-1">
         <el-icon><Headset /></el-icon>
         听写
       </el-menu-item>
@@ -60,6 +62,9 @@
 <script setup>
   import Footer from '@/components/footer/index.vue';
   import { Memo, Headset, DataLine, DocumentDelete, User } from '@element-plus/icons-vue';
+  import { useAppStore } from '@/store';
+
+  const appStore = useAppStore();
 </script>
 <style lang="less" scoped>
   .tabbar .el-menu-item {
