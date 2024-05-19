@@ -113,5 +113,6 @@
   },
   "resolutions": {
     "bin-wrapper": "npm:bin-wrapper-china"
-  }
+  },
+  "__npminstall_done": false
 }

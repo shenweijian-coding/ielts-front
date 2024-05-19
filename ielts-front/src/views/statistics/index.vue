@@ -1,33 +1,33 @@
 <template>
   <div class="flex items-stretch -mx-4 md:space-x-10 space-x-2 justify-between px-3 pt-10">
     <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4">
-      <div class="text-xl font-medium text-black">32</div>
+      <div class="text-xl font-medium text-black">{{ state.detail.today_practice || 0 }}</div>
       <p class="text-gray-500">今日听写</p>
     </div>
 
     <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4">
-      <div class="text-xl font-medium text-black">50min</div>
+      <div class="text-xl font-medium text-black">{{ state.detail.today_time || 0 }}min</div>
       <p class="text-gray-500">今日学习</p>
     </div>
 
     <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4">
-      <div class="text-xl font-medium text-black">1332</div>
+      <div class="text-xl font-medium text-black">{{ state.detail.cumulative_practice || 0 }}</div>
       <p class="text-gray-500">累计听写</p>
     </div>
 
     <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4">
-      <div class="text-xl font-medium text-black">180</div>
+      <div class="text-xl font-medium text-black">{{ state.detail.cumulative_time || 0 }}</div>
       <p class="text-gray-500">累计分钟</p>
     </div>
   </div>
   <div class="bg-white">
-    <div class="flex justify-end pr-4 mt-4">
-      <el-select v-model="chapterId" placeholder="请选择章节" size="large">
-        <el-option v-for="item in chapterList" :key="item.id" :label="item.name" :value="item.id" />
+    <div class="flex justify-end pr-4 mt-4 w-full">
+      <el-select v-model="state.chapterId" placeholder="请选择章节" size="large" style="width: 300px" @change="chapterChange">
+        <el-option v-for="(item, val) in state.data" :key="item" :label="item.name" :value="val" />
       </el-select>
     </div>
     <div>
-      <canvas ref="ctx" style="height: 66vh"></canvas>
+      <canvas ref="ctx" style="height: 64vh"></canvas>
     </div>
   </div>
 </template>
@@ -40,15 +40,20 @@
 
   Chart.register(...registerables);
   const ctx = ref(null);
-  const chapterId = ref('');
+  const state = reactive({
+    chart: null,
+    chapterId: '',
+    detail: {},
+    data: {},
+  });
   // const
 
   const chartData = {
-    labels: ['第1次', '第2次'], // 横轴标签
+    labels: [], // 横轴标签
     datasets: [
       {
-        label: '百分比', // 数据集的名称，将显示在图例中
-        data: [50, 75], // 数据集的具体数据
+        label: '练习次数正确率', // 数据集的名称，将显示在图例中
+        data: [], // 数据集的具体数据
         backgroundColor: 'rgba(0, 123, 255, 0.5)', // 数据集的填充颜色
         borderColor: 'rgba(0, 123, 255, 1)', // 数据集的边框颜色
         borderWidth: 1, // 数据集的边框宽度
@@ -61,6 +66,13 @@
         title: {
           display: true,
           text: '练习次数', // 横轴标题名称
+          ticks: {
+            callback: function (value) {
+              console.log(value);
+              // 格式化 y 轴的刻度标签为百分比形式
+              return value;
+            },
+          },
         },
       },
       y: {
@@ -70,6 +82,8 @@
         },
         beginAtZero: true,
         ticks: {
+          // min: 0, // 设置 Y 轴的最小值
+          // max: 100, // 设置 Y 轴的最大值为 1，代表 100%
           callback: function (value) {
             // 格式化 y 轴的刻度标签为百分比形式
             return value + '%';
@@ -84,24 +98,41 @@
     },
     maintainAspectRatio: false,
   };
-  const chapterList = computed(() => {
-    return appStore?.dictationInfo?.chapterList || [];
-  });
+  // const chapterList = computed(() => {
+  //   return appStore?.dictationInfo?.chapterList || [];
+  // });
 
   const getData = () => {
     getAnalysisData({
-      c_id: chapterId.value,
+      c_id: state.chapterId.value,
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
+      state.detail = res;
+      state.data = res.data;
+      if (Object.keys(res.data).length) {
+        state.chapterId = Object.keys(res.data)[0];
+        chapterChange(state.chapterId);
+      }
     });
   };
 
+  const chapterChange = (chapterId) => {
+    const labels = [];
+    state.data[chapterId].accuracy.forEach((item, index) => {
+      labels.push(index);
+    });
+    chartData.labels = labels;
+    chartData.datasets[0].data = state.data[chapterId].accuracy;
+    // console.log(chartData.labels, chartData.datasets[0].data, '111');
+    state.chart.update();
+  };
+
   onMounted(() => {
-    getData();
-    new Chart(ctx.value, {
+    state.chart = new Chart(ctx.value, {
       type: 'line',
       data: chartData,
       options: chartOptions,
     });
+    getData();
   });
 </script>

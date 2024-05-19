@@ -9,9 +9,9 @@
       </el-tab-pane>
     </el-tabs>
     <div class="flex-1 overflow-y-auto">
-      <div v-if="galleryState.activeTab != 2" class="lg:mt-4">
+      <div class="lg:mt-4">
         <!-- 选项 -->
-        <div class="flex items-center space-x-4 overscroll-x-auto">
+        <div v-if="galleryState.activeTab != 2" class="flex items-center space-x-4 overscroll-x-auto">
           <div
             v-for="(item, index) in galleryState.sceneList"
             :key="index"
@@ -41,23 +41,23 @@
                 ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20" /></div
             ></div>
           </div>
-        </div>
-      </div>
-      <div v-else class="lg:mt-4">
-        <div class="flex mt-8 px-1 pb-4 flex-wrap justify-between lg:justify-initial md:justify-initial">
-          <div
-            class="group flex lg:h-36 w-[46%] lg:w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4 flex-col"
-            @click="openCustomDialog"
-          >
-            <el-icon size="40" color="gray"><Plus /></el-icon>
-            <div class="mt-4">添加自定义词书</div>
+          <div v-if="galleryState.activeTab == 2">
+            <div class="flex px-1 pb-4 flex-wrap justify-between lg:justify-initial md:justify-initial">
+              <div
+                class="group flex lg:h-36 w-[46%] lg:w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4 flex-col"
+                @click="openCustomDialog"
+              >
+                <el-icon size="40" color="gray"><Plus /></el-icon>
+                <div class="mt-4">添加自定义词书</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <Loading :loading="loading" />
     <ChapterDialog ref="ChapterDialogRef" />
-    <ImportDialog ref="ImportDialogRef" />
+    <ImportDialog ref="ImportDialogRef" @ok="getBooks(2)" />
   </div>
 </template>
 <script setup>

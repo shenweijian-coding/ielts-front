@@ -220,7 +220,7 @@
                   <div>
                     <div class="flex items-center justify-between">
                       <div>乱序播放</div>
-                      <el-switch v-model="config.is_random" />
+                      <el-switch v-model="config.is_disorderly" @change="(val) => handleConfigChange('play_interval', val)" />
                     </div>
                     <!-- <span class="text-sm">开启后，单词播放顺序将会被打乱，下一章节/重新进入本章节 开始生效</span> -->
                     <div class="flex items-center justify-between mt-2">
@@ -463,7 +463,7 @@
     phonetic_type: userStore.getConfig.phonetic_type || 2,
     error_sound: userStore.getConfig.error_sound || false,
     ignore_case: userStore.getConfig.ignore_case || true,
-    is_random: userStore.getConfig.ignore_case || true,
+    is_disorderly: userStore.getConfig.ignore_case || false,
     isSeries: false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['2', '3', '4', '5', '6', '7'],
@@ -537,7 +537,7 @@
         .then((res) => {
           if (res.data.length) {
             // 是否开启乱序
-            if (config.is_random) {
+            if (config.is_disorderly) {
               // 筛选出没有听写的单词
               const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
               const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));

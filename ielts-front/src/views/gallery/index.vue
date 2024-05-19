@@ -23,10 +23,10 @@
             <el-icon><DocumentDelete /></el-icon>
             错词本
           </el-menu-item>
-          <el-menu-item index="/main/user">
+          <!-- <el-menu-item index="/main/user">
             <el-icon><User /></el-icon>
             我的
-          </el-menu-item>
+          </el-menu-item> -->
         </el-menu>
       </div>
     </div>

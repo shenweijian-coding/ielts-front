@@ -27,7 +27,9 @@
 </template>
 <script setup>
   import { uploadBook } from '@/api/book/index';
+  import { ElMessage } from 'element-plus';
 
+  const emits = defineEmits(['ok']);
   const state = reactive({
     dialogVisible: false,
     form: {
@@ -63,8 +65,15 @@
     state.dialogVisible = false;
   };
   const handleConfirm = () => {
-    uploadBook(state.form).then((res) => {
+    const data = state.form.data.split('\n');
+    uploadBook({
+      title: state.form.title,
+      word_count: state.form.word_count,
+      data: data,
+    }).then((res) => {
       console.log(res);
+      ElMessage.success(`操作成功`);
+      emits('ok');
     });
     handleClose();
   };
