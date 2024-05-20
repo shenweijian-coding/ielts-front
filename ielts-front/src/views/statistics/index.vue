@@ -6,7 +6,7 @@
     </div>
 
     <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4">
-      <div class="text-xl font-medium text-black">{{ state.detail.today_time || 0 }} min</div>
+      <div class="text-xl font-medium text-black">{{ ((state.detail.today_time || 0) / 60).toFixed(0) || 0 }} || 0 }} min</div>
       <p class="text-gray-500">今日学习</p>
     </div>
 
