@@ -162,7 +162,7 @@
     }
     params.error_num = state.form.error_num;
     params.c_id = state.form.c_id;
-    console.log(state.form.c_id, 'state.form.c_id');
+    // console.log(state.form.c_id, 'state.form.c_id');
     params.page = state.page.currentPage;
     params.pagesize = state.page.pageSize;
 
@@ -189,7 +189,7 @@
       });
   };
   const handleSelectionChange = (val) => {
-    console.log(val);
+    // console.log(val);
     state.selWords = val;
   };
   // const handleSizeChange = (size) => {
@@ -274,7 +274,7 @@
     } else if (route.query?.from == 'home') {
       state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
     }
-    console.log(appStore?.dictationInfo?.currentChapter?.id);
+    // console.log(appStore?.dictationInfo?.currentChapter?.id);
     // if (!state.form.c_id && appStore?.dictationInfo?.chapterList?.length) {
     //   state.form.c_id = appStore?.dictationInfo?.chapterList[0].id;
     // }

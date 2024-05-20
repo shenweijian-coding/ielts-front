@@ -6,7 +6,7 @@
       </a>
       <!-- PC端展示的 -->
       <div class="hidden md:block">
-        <el-menu default-active="/main/book" mode="horizontal" :ellipsis="false" router>
+        <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
           <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home">
             <el-icon><Headset /></el-icon>
             听写
@@ -35,7 +35,7 @@
   <Footer />
   <!-- 移动端展示的 -->
   <div class="md:hidden flex tabbar bg-white w-full justify-center">
-    <el-menu default-active="/main/book" mode="horizontal" :ellipsis="false" router>
+    <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
       <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home" class="flex flex-col leading-1">
         <el-icon><Headset /></el-icon>
         听写
@@ -63,8 +63,15 @@
   import Footer from '@/components/footer/index.vue';
   import { Memo, Headset, DataLine, DocumentDelete, User } from '@element-plus/icons-vue';
   import { useAppStore } from '@/store';
+  import { useRoute } from 'vue-router';
 
   const appStore = useAppStore();
+  const route = useRoute();
+  const currentRoute = ref('/main/book');
+  onMounted(() => {
+    console.log(console.log(route.path));
+    currentRoute.value = route.path;
+  });
 </script>
 <style lang="less" scoped>
   .tabbar .el-menu-item {
