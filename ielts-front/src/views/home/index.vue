@@ -220,7 +220,7 @@
                   <div>
                     <div class="flex items-center justify-between">
                       <div>乱序播放</div>
-                      <el-switch v-model="config.is_disorderly" @change="(val) => handleConfigChange('play_interval', val)" />
+                      <el-switch v-model="config.is_disorderly" @change="(val) => handleConfigChange('is_disorderly', val)" />
                     </div>
                     <!-- <span class="text-sm">开启后，单词播放顺序将会被打乱，下一章节/重新进入本章节 开始生效</span> -->
                     <div class="flex items-center justify-between mt-2">
@@ -236,7 +236,7 @@
               </div>
             </el-tooltip>
 
-            <el-tooltip content="错词本" placement="top" effect="light">
+            <el-tooltip v-if="false" content="错词本" placement="top" effect="light">
               <div class="relative">
                 <div>
                   <a href="/#/errorBook?from=home">
@@ -463,7 +463,7 @@
     phonetic_type: userStore.getConfig.phonetic_type || 2,
     error_sound: userStore.getConfig.error_sound || false,
     ignore_case: userStore.getConfig.ignore_case || true,
-    is_disorderly: userStore.getConfig.ignore_case || false,
+    is_disorderly: userStore.getConfig.is_disorderly || false,
     isSeries: false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['2', '3', '4', '5', '6', '7'],
@@ -541,6 +541,7 @@
               // 筛选出没有听写的单词
               const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
               const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));
+              // console.log(noRead, beanRead, '222');
               if (noRead.length) {
                 wordsData.words = [...beanRead, ...shuffleArray(noRead)];
               } else {
@@ -549,8 +550,9 @@
             } else {
               wordsData.words = res.data;
             }
-            // 继续上次播放的逻辑
-            if (appStore.dictationInfo.currentChapter.is_incomplete && !errSource.value) {
+
+            // 是否继续上次播放
+            if (res?.existing_id?.length && !errSource.value) {
               ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
                 confirmButtonText: '继续听写',
                 cancelButtonText: '重新开始',
@@ -558,10 +560,11 @@
                 distinguishCancelAndClose: true,
               })
                 .then(() => {
-                  if (appStore.dictationInfo?.currentChapter?.last_id) {
-                    console.log(appStore.dictationInfo.currentChapter.last_id, 'appStore.dictationInfo.last_id');
-                    wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.currentChapter.last_id);
-                    wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+                  if (res?.existing_id?.length) {
+                    // console.log(appStore.dictationInfo.currentChapter.last_id, 'appStore.dictationInfo.last_id');
+                    // wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.currentChapter.last_id);
+                    wordsData.currentIndex = res?.existing_id.length || 0;
+                    wordsData.currentWord = wordsData.words[wordsData.currentIndex];
                   }
                 })
                 .catch((action) => {
@@ -572,6 +575,12 @@
             } else {
               wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
             }
+
+            // // 继续上次播放的逻辑
+            // if (appStore.dictationInfo.currentChapter.is_incomplete && !errSource.value) {
+
+            // } else {
+            // }
           } else {
             ElMessage.error('当前章节未配置词库');
           }

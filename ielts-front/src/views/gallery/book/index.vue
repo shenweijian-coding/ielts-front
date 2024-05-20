@@ -41,17 +41,17 @@
                 ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20" /></div
             ></div>
           </div>
-          <div v-if="galleryState.activeTab == 2">
-            <div class="flex px-1 pb-4 flex-wrap justify-between lg:justify-initial md:justify-initial">
-              <div
-                class="group flex lg:h-36 w-[46%] lg:w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4 flex-col"
-                @click="openCustomDialog"
-              >
-                <el-icon size="40" color="gray"><Plus /></el-icon>
-                <div class="mt-4">添加自定义词书</div>
-              </div>
+          <template v-if="galleryState.activeTab == 2">
+            <!-- <div class="flex px-1 pb-4 flex-wrap justify-between lg:justify-initial md:justify-initial"> -->
+            <div
+              class="group flex lg:h-36 w-[46%] lg:w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4 flex-col"
+              @click="openCustomDialog"
+            >
+              <el-icon size="40" color="gray"><Plus /></el-icon>
+              <div class="mt-4">添加自定义词书</div>
             </div>
-          </div>
+            <!-- </div> -->
+          </template>
         </div>
       </div>
     </div>

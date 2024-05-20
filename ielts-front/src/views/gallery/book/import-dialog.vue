@@ -1,7 +1,7 @@
 <template>
   <el-dialog v-model="state.dialogVisible" :width="dialogWidth" :before-close="handleClose">
     <div>
-      <el-form :model="state.form" label-width="120" :rules="state.rules">
+      <el-form ref="formRef" :model="state.form" label-width="120" :rules="state.rules">
         <el-form-item label="单词书名称" prop="title">
           <el-input placeholder="最多输入9个字" v-model="state.form.title" />
         </el-form-item>
@@ -30,6 +30,7 @@
   import { ElMessage } from 'element-plus';
 
   const emits = defineEmits(['ok']);
+  const formRef = ref(null);
   const state = reactive({
     dialogVisible: false,
     form: {
@@ -39,7 +40,7 @@
     },
     numOption: [15, 30, 50, 100, 200],
     rules: {
-      title: [{ required: true, message: '名称', trigger: 'blur' }],
+      title: [{ required: true, message: '单词书名称', trigger: 'blur' }],
       word_count: [{ required: true, message: '数量', trigger: 'change' }],
       data: [{ required: true, message: '输入单词', trigger: 'blur' }],
     },
@@ -65,17 +66,22 @@
     state.dialogVisible = false;
   };
   const handleConfirm = () => {
-    const data = state.form.data.split('\n');
-    uploadBook({
-      title: state.form.title,
-      word_count: state.form.word_count,
-      data: data,
-    }).then((res) => {
-      console.log(res);
-      ElMessage.success(`操作成功`);
-      emits('ok');
+    formRef.value.validate((valid, fields) => {
+      if (valid) {
+        console.log('submit!');
+        const data = state.form.data.split('\n');
+        uploadBook({
+          title: state.form.title,
+          word_count: state.form.word_count,
+          data: data,
+        }).then(() => {
+          // console.log(res);
+          ElMessage.success(`操作成功`);
+          emits('ok');
+        });
+        handleClose();
+      }
     });
-    handleClose();
   };
   onMounted(() => {
     window.addEventListener('resize', () => {

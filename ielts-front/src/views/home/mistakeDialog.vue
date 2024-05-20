@@ -3,7 +3,9 @@
     <div class="text-center p-6">
       <div class="text-theme-color text-6xl">{{ state.correctness }}%</div>
       <div class="mt-4 text-2xl text-black">本次正确听写率</div>
-      <!-- <div class="text-grey mt-4">上次正确听写率：80%</div> -->
+      <div class="text-grey mt-4" v-if="appStore.currentChapter.is_incomplete && appStore.currentChapter.accuracy > 0"
+        >上次正确听写率：{{ appStore.currentChapter.accuracy.toFixed(2) }}</div
+      >
       <div class="flex space-x-10 justify-center mt-8">
         <a href="/#/errorBook?from=result">
           <el-button size="large">查看错词</el-button>
@@ -15,6 +17,9 @@
 </template>
 <script setup>
   import { reactive } from 'vue';
+  import { useAppStore } from '@/store';
+
+  const appStore = useAppStore();
 
   const dialogWidth = ref('40%');
   const emit = defineEmits(['next']);
