@@ -24,12 +24,30 @@ export default [
     component: () => import('@/views/login/index.vue'),
   },
   {
-    path: '/gallery',
-    name: 'gallery',
+    path: '/main',
+    redirect: '/main/book',
     meta: {
       title: '爱听写',
     },
     component: () => import('@/views/gallery/index.vue'),
+    children: [
+      {
+        path: 'book',
+        component: () => import('@/views/gallery/book/index.vue')
+      },
+      {
+        path: 'statistics',
+        component: () => import('@/views/statistics/index.vue')
+      },
+      {
+        path: 'errorBook',
+        component: () => import('@/views/errorBook/index.vue'),
+      },
+      {
+        path: 'user',
+        component: () => import('@/views/user/index.vue'),
+      }
+    ],
   },
   {
     path: '/errorBook',

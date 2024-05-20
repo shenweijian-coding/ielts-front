@@ -61,7 +61,7 @@
       if (valid) {
         await userStore.login(userFormData);
         ElMessage.success('登录成功');
-        router.push('/gallery');
+        router.push('/main');
       } else {
         ElMessage.error('错误信息:请填写手机号和密码');
       }

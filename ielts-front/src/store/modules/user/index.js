@@ -16,6 +16,7 @@ export const useUserStore = defineStore('user', {
       phonetic_type: 1, // 发音  1：英音 2：美音
       repetitions: 1, // 重复次数
       error_sound: 1, //错误音效是否开启
+      is_disorderly: 0, // 是否乱序
     },
   }),
   persist: {

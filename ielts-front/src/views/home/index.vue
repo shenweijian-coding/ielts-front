@@ -13,7 +13,7 @@
               <div>
                 <a
                   class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
-                  href="/#/gallery"
+                  href="/#/main"
                 >
                   {{ appStore?.dictationInfo?.booInfo.remarks }}
                 </a>
@@ -219,6 +219,11 @@
                   </template>
                   <div>
                     <div class="flex items-center justify-between">
+                      <div>乱序播放</div>
+                      <el-switch v-model="config.is_disorderly" @change="(val) => handleConfigChange('is_disorderly', val)" />
+                    </div>
+                    <!-- <span class="text-sm">开启后，单词播放顺序将会被打乱，下一章节/重新进入本章节 开始生效</span> -->
+                    <div class="flex items-center justify-between mt-2">
                       <div>忽略大小写</div>
                       <el-switch v-model="config.ignore_case" />
                     </div>
@@ -231,7 +236,7 @@
               </div>
             </el-tooltip>
 
-            <el-tooltip content="错词本" placement="top" effect="light">
+            <el-tooltip v-if="false" content="错词本" placement="top" effect="light">
               <div class="relative">
                 <div>
                   <a href="/#/errorBook?from=home">
@@ -438,6 +443,7 @@
   import { getWordList, reportLexiRes } from '@/api/book/index';
   import { useRouter, useRoute } from 'vue-router';
   import WordsDrawer from './wordsDrawer.vue';
+  import { shuffleArray } from '@/utils/index';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -457,6 +463,7 @@
     phonetic_type: userStore.getConfig.phonetic_type || 2,
     error_sound: userStore.getConfig.error_sound || false,
     ignore_case: userStore.getConfig.ignore_case || true,
+    is_disorderly: userStore.getConfig.is_disorderly || false,
     isSeries: false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['1', '2', '3', '4', '5', '6', '7'],
@@ -518,7 +525,11 @@
   const getWords = () => {
     if (errSource.value) {
       const copyWords = JSON.parse(JSON.stringify(appStore.errWords));
-      wordsData.words = copyWords;
+      if (config.is_disorderly) {
+        wordsData.words = shuffleArray(copyWords);
+      } else {
+        wordsData.words = copyWords;
+      }
       wordsData.currentWord = copyWords[wordsData.currentIndex];
     } else {
       setLoading(true);
@@ -529,9 +540,23 @@
       })
         .then((res) => {
           if (res.data.length) {
-            wordsData.words = res.data;
-            // 继续上次播放的逻辑
-            if (appStore.dictationInfo.currentChapter.is_incomplete && !errSource.value) {
+            // 是否开启乱序
+            if (config.is_disorderly) {
+              // 筛选出没有听写的单词
+              const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
+              const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));
+              // console.log(noRead, beanRead, '222');
+              if (noRead.length) {
+                wordsData.words = [...beanRead, ...shuffleArray(noRead)];
+              } else {
+                wordsData.words = shuffleArray(beanRead);
+              }
+            } else {
+              wordsData.words = res.data;
+            }
+
+            // 是否继续上次播放
+            if (res?.existing_id?.length && !errSource.value) {
               ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
                 confirmButtonText: '继续听写',
                 cancelButtonText: '重新开始',
@@ -539,10 +564,11 @@
                 distinguishCancelAndClose: true,
               })
                 .then(() => {
-                  if (appStore.dictationInfo?.currentChapter?.last_id) {
-                    console.log(appStore.dictationInfo.currentChapter.last_id, 'appStore.dictationInfo.last_id');
-                    wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.currentChapter.last_id);
-                    wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+                  if (res?.existing_id?.length) {
+                    // console.log(appStore.dictationInfo.currentChapter.last_id, 'appStore.dictationInfo.last_id');
+                    // wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.currentChapter.last_id);
+                    wordsData.currentIndex = res?.existing_id.length || 0;
+                    wordsData.currentWord = wordsData.words[wordsData.currentIndex];
                   }
                 })
                 .catch((action) => {
@@ -553,6 +579,12 @@
             } else {
               wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
             }
+
+            // // 继续上次播放的逻辑
+            // if (appStore.dictationInfo.currentChapter.is_incomplete && !errSource.value) {
+
+            // } else {
+            // }
           } else {
             ElMessage.error('当前章节未配置词库');
           }
@@ -792,7 +824,7 @@
 
     document.addEventListener('keydown', handleAllKeyDown);
     if (!appStore?.dictationInfo?.currentChapter && !appStore.errWords.length) {
-      router.push('/gallery');
+      router.push('/main');
       return;
     }
     getWords();
