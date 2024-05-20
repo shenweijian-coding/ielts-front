@@ -525,7 +525,11 @@
   const getWords = () => {
     if (errSource.value) {
       const copyWords = JSON.parse(JSON.stringify(appStore.errWords));
-      wordsData.words = copyWords;
+      if (config.is_disorderly) {
+        wordsData.words = shuffleArray(copyWords);
+      } else {
+        wordsData.words = copyWords;
+      }
       wordsData.currentWord = copyWords[wordsData.currentIndex];
     } else {
       setLoading(true);
