@@ -1,6 +1,6 @@
 <template>
   <div class="lg:mt-10 flex w-full flex-1 flex-col justify-center overflow-y-auto">
-    <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-20 w-full items-center justify-between lg:pb-6">
+    <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-16 w-full items-center justify-between">
       <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
         <template #label>
           <img :src="galleryState.languageIcon[item.id]" alt="" />&nbsp;
@@ -11,11 +11,21 @@
     <div class="flex-1 overflow-y-auto">
       <div class="lg:mt-4">
         <!-- 选项 -->
-        <div v-if="galleryState.activeTab != 2" class="flex items-center space-x-4 overscroll-x-auto">
+        <div v-if="galleryState.activeTab != 2" class="flex items-center overscroll-x-auto flex-wrap mb-4">
+          <div
+            v-for="(item, index) in galleryState.categoryList"
+            :key="index"
+            class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 false border-color-theme mr-4 mb-2"
+            :class="galleryState.currentCategory == item.id ? 'bg-theme text-white' : 'bg-white text-black hover:bg-theme_hover'"
+            @click="handleCategorySel(item)"
+            ><span class="font-normal">{{ item.name }}</span></div
+          >
+        </div>
+        <div v-if="galleryState.activeTab != 2" class="flex items-center overscroll-x-auto flex-wrap">
           <div
             v-for="(item, index) in galleryState.sceneList"
             :key="index"
-            class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 false border-color-theme"
+            class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 false border-color-theme mr-4 mb-2"
             :class="galleryState.currentScene == item.id ? 'bg-theme text-white' : 'bg-white text-black hover:bg-theme_hover'"
             @click="handleSceneSel(item)"
             ><span class="font-normal">{{ item.name }}</span></div
@@ -63,7 +73,7 @@
 <script setup>
   import ChapterDialog from './chapter-dialog.vue';
   import yg from '@/assets/images/yg.png';
-  import rb from '@/assets/images/rb.png';
+  // import rb from '@/assets/images/rb.png';
   // import LastPage from '@/components/lastPage/index.vue';
   // import dg from '@/assets/images/dg.png';
   import { ElMessage } from 'element-plus';
@@ -73,7 +83,7 @@
   import { Plus } from '@element-plus/icons-vue';
   import ImportDialog from './import-dialog.vue';
 
-  import { getSceneList, getGroupBooks, getChapterList, getLanguageList } from '@/api/book/index';
+  import { getSceneList, getGroupBooks, getChapterList, getLanguageList, getCategoryList } from '@/api/book/index';
 
   const { loading, setLoading } = useLoading();
 
@@ -81,8 +91,12 @@
   const ImportDialogRef = ref(null);
 
   const galleryState = reactive({
+    cuttentCID: '',
+    cuttentLID: '',
+    categoryList: [],
     sceneList: [],
     currentScene: 1,
+    currentCategory: 1,
     booksList: [],
     chapterList: [],
     languageList: [],
@@ -127,13 +141,32 @@
     galleryState.currentScene = item.id;
     getBooks(item.id);
   };
-  const getScene = (l_id) => {
+  const handleCategorySel = (item) => {
+    galleryState.currentCategory = item.id;
+    getScene(galleryState.activeTab, item.id);
+  };
+  const getScene = (l_id, c_id) => {
     getSceneList({
       l_id: l_id,
+      c_id: c_id,
     }).then((res) => {
       galleryState.sceneList = res;
       if (res.length) {
+        galleryState.currentScene = res[0].id;
         getBooks(res[0].id);
+      } else {
+        galleryState.booksList = [];
+      }
+    });
+  };
+  const getCategory = (l_id) => {
+    getCategoryList({
+      l_id: l_id,
+    }).then((res) => {
+      galleryState.categoryList = res;
+      galleryState.currentCategory = res[0].id;
+      if (res.length) {
+        getScene(l_id, res[0].id);
       } else {
         galleryState.booksList = [];
       }
@@ -142,7 +175,8 @@
   const getLanguage = () => {
     getLanguageList().then((res) => {
       galleryState.languageList = res;
-      getScene(res[0].id);
+      getCategory(res[0].id);
+      // getScene(res[0].id);
     });
   };
 

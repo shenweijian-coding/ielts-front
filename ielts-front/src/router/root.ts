@@ -3,7 +3,7 @@ export default [
     path: '/',
     name: 'index',
     meta: {
-      title: '爱听写',
+      title: '爱听写-首页',
     },
     component: () => import('@/views/index.vue'),
   },
@@ -11,7 +11,7 @@ export default [
     path: '/home',
     name: 'home',
     meta: {
-      title: '爱听写',
+      title: '爱听写-听写页',
     },
     component: () => import('@/views/home/index.vue'),
   },
@@ -19,15 +19,23 @@ export default [
     path: '/login',
     name: 'login',
     meta: {
-      title: '爱听写',
+      title: '爱听写-登录',
     },
     component: () => import('@/views/login/index.vue'),
+  },
+  {
+    path: '/gallery',
+    name: 'gallery',
+    redirect: '/main/book',
+    meta: {
+      title: '爱听写-书籍页',
+    }
   },
   {
     path: '/main',
     redirect: '/main/book',
     meta: {
-      title: '爱听写',
+      title: '爱听写-书籍页',
     },
     component: () => import('@/views/gallery/index.vue'),
     children: [
@@ -53,7 +61,7 @@ export default [
     path: '/errorBook',
     name: 'errorBook',
     meta: {
-      title: '爱听写',
+      title: '爱听写-错误本',
     },
     component: () => import('@/views/errorBook/index.vue'),
   },
@@ -61,7 +69,7 @@ export default [
     path: '/forgetPassword',
     name: 'forgetPassword',
     meta: {
-      title: '爱听写',
+      title: '爱听写-忘记密码',
     },
     component: () => import('@/views/forgetPassword/index.vue'),
   },

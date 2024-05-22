@@ -22,6 +22,8 @@ const getErrorWordList = async (data) => post({ url: '/api/study/lexicon/v1/erro
 const uploadBook = async (data) => post({ url: '/api/study/lexicon/v1/upload/book', data });
 
 const getAnalysisData = async (data) => post({ url: '/api/study/lexicon/v1/data/analysis', data });
+
+const getCategoryList = async (data) => post({ url: '/api/study/lexicon/v1/v1/category/list', data });
 export {
   getBookList,
   getSceneList,
@@ -33,4 +35,5 @@ export {
   getErrorWordList,
   uploadBook,
   getAnalysisData,
+  getCategoryList,
 };
