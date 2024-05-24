@@ -9,6 +9,7 @@ export const useAppStore = defineStore(
       theme: '',
       dictationInfo: null,
       errWords: null,
+      isContinuePlay: false,
     }),
     persist: {
       storage: sessionStorage,
@@ -32,6 +33,9 @@ export const useAppStore = defineStore(
           this.theme = 'light';
           document.documentElement.classList.remove('dark');
         }
+      },
+      updateContinuePlayStatus(data) {
+        this.isContinuePlay = data;
       },
       setChapterInfo(data) {
         this.dictationInfo = data;

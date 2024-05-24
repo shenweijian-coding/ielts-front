@@ -440,7 +440,7 @@
   import useLoading from '@/hooks/loading.ts';
   import mistakeDialog from './mistakeDialog.vue';
   import { useAppStore, useUserStore } from '@/store';
-  import { getWordList, reportLexiRes } from '@/api/book/index';
+  import { getWordList, reportLexiRes, getChapterList } from '@/api/book/index';
   import { useRouter, useRoute } from 'vue-router';
   import WordsDrawer from './wordsDrawer.vue';
   import { shuffleArray } from '@/utils/index';
@@ -487,7 +487,7 @@
   const defaultAudioRef = ref(new Audio(defaultAudio));
   const mistakeRef = ref(null);
   const wordslistRef = ref(null);
-  const currentTestKey = ref(Date.now());
+  let currentTestKey = Date.now();
   const countDown = ref(0); // 倒计时
   const audioPlayer = ref(null);
   let audio = audioPlayer.value;
@@ -555,32 +555,40 @@
               wordsData.words = res.data;
             }
 
-            // 是否继续上次播放
-            if (res?.existing_id?.length && !errSource.value) {
-              ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
-                confirmButtonText: '继续听写',
-                cancelButtonText: '重新开始',
-                type: 'info',
-                distinguishCancelAndClose: true,
-              })
-                .then(() => {
-                  if (res?.existing_id?.length) {
-                    // console.log(appStore.dictationInfo.currentChapter.last_id, 'appStore.dictationInfo.last_id');
-                    // wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.currentChapter.last_id);
-                    wordsData.currentIndex = res?.existing_id.length || 0;
-                    wordsData.currentWord = wordsData.words[wordsData.currentIndex];
-                  }
-                  if (res.last_key) {
-                    currentTestKey.value = res.last_key;
-                  }
-                })
-                .catch((action) => {
-                  if (action == 'cancel') {
-                    wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
-                  }
-                });
+            if (appStore.isContinuePlay) {
+              if (res?.existing_id?.length) {
+                wordsData.currentIndex = res?.existing_id.length || 0;
+                wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+              }
+              if (res.last_key) {
+                currentTestKey = res.last_key;
+              }
             } else {
-              wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+              // 是否继续上次播放
+              if (res?.existing_id?.length && !errSource.value) {
+                ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
+                  confirmButtonText: '继续听写',
+                  cancelButtonText: '重新开始',
+                  type: 'info',
+                  distinguishCancelAndClose: true,
+                })
+                  .then(() => {
+                    if (res?.existing_id?.length) {
+                      wordsData.currentIndex = res?.existing_id.length || 0;
+                      wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+                    }
+                    if (res.last_key) {
+                      currentTestKey = res.last_key;
+                    }
+                  })
+                  .catch((action) => {
+                    if (action == 'cancel') {
+                      wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+                    }
+                  });
+              } else {
+                wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+              }
             }
 
             // // 继续上次播放的逻辑
@@ -675,7 +683,7 @@
   // 上报听写配置
   const handleReport = (data) => {
     reportLexiRes({
-      key: currentTestKey.value,
+      key: currentTestKey,
       ...data,
     }).then(() => {});
   };
@@ -684,7 +692,13 @@
   const handleResult = () => {
     const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
     console.log(correctness.toFixed(2), '计算答对');
-    mistakeRef.value.open(correctness.toFixed(2));
+    // getChapterList({
+    //   id: appStore.chapterId,
+    //   l_id: 1,
+    // }).then((res) => {
+    //   console.log(res);
+    mistakeRef.value.open(correctness).toFixed(2);
+    // });
   };
 
   // 回车 播放下一个的方法

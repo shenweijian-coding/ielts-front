@@ -183,9 +183,10 @@
   };
 
   const handleTabClick = ({ paneName }) => {
-    if (paneName == '我的词书') {
+    if (paneName == 2) {
       galleryState.sceneList = [];
       galleryState.booksList = [];
+      getBooks(2);
     } else {
       getScene(paneName);
     }

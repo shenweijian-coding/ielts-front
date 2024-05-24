@@ -7,7 +7,7 @@
       <!-- PC端展示的 -->
       <div class="hidden md:block">
         <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
-          <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home">
+          <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home" @click="appStore.updateContinuePlayStatus(true)">
             <el-icon><Headset /></el-icon>
             听写
           </el-menu-item>

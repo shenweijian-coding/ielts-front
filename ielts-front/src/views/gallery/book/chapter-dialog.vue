@@ -99,6 +99,7 @@
       ElMessage.warning('当前章节下无词库');
       return;
     }
+    appStore.updateContinuePlayStatus(false);
     // if (item.is_incomplete) {
     //   ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
     //     confirmButtonText: '继续听写',

@@ -2,7 +2,12 @@
   <keep-alive>
     <div class="phone-tab md:hidden flex tabbar bg-white w-full justify-center h-14">
       <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
-        <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home" class="flex flex-col leading-1">
+        <el-menu-item
+          v-if="appStore?.dictationInfo?.currentChapter"
+          index="/home"
+          class="flex flex-col leading-1"
+          @click="appStore.updateContinuePlayStatus(true)"
+        >
           <el-icon><Headset /></el-icon>
           听写
         </el-menu-item>
