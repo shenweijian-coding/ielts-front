@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:mt-10 flex w-full flex-1 flex-col justify-center overflow-y-auto">
+  <div class="flex w-full flex-1 flex-col justify-center overflow-y-auto">
     <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-16 w-full items-center justify-between">
       <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
         <template #label>
@@ -68,6 +68,7 @@
     <Loading :loading="loading" />
     <ChapterDialog ref="ChapterDialogRef" />
     <ImportDialog ref="ImportDialogRef" @ok="getBooks(2)" />
+    <tabbar />
   </div>
 </template>
 <script setup>
@@ -82,6 +83,7 @@
   // import Footer from '@/components/footer/index.vue';
   import { Plus } from '@element-plus/icons-vue';
   import ImportDialog from './import-dialog.vue';
+  import tabbar from '@/components/tabBar/index.vue';
 
   import { getSceneList, getGroupBooks, getChapterList, getLanguageList, getCategoryList } from '@/api/book/index';
 
@@ -145,7 +147,7 @@
     galleryState.currentCategory = item.id;
     getScene(galleryState.activeTab, item.id);
   };
-  const getScene = (l_id, c_id) => {
+  const getScene = (l_id, c_id = galleryState.currentCategory) => {
     getSceneList({
       l_id: l_id,
       c_id: c_id,

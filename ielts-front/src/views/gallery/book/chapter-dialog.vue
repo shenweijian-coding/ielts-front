@@ -4,7 +4,7 @@
       <p class="mt-1">{{ state.book.chapter_total }} 章节</p><p>共 {{ state.book.word_total }} 词</p><p>{{ state.book.remarks }}</p>
       <div class="absolute bottom-6 right-2">
         <div role="group" dir="ltr" class="flex items-center justify-center gap-1" tabindex="0" style="outline: none">
-          <el-button @click="handleErrorBook">查看错题</el-button>
+          <!-- <el-button @click="handleErrorBook">查看错题</el-button> -->
         </div>
       </div>
     </div>

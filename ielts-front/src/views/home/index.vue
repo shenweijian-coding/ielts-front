@@ -258,7 +258,7 @@
               </div>
             </el-tooltip>
 
-            <div class="relative">
+            <!-- <div class="relative">
               <div>
                 <el-popover placement="bottom" :width="50" trigger="hover" popper-class="popperClass">
                   <template #reference>
@@ -274,7 +274,7 @@
                   </div>
                 </el-popover>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </nav>

@@ -1,8 +1,8 @@
 <template>
   <div class="flex w-full flex-1 select-text items-start justify-center overflow-hidden">
-    <div class="flex h-full w-full flex-col lg:pt-10 pt-4">
+    <div class="flex h-full w-full flex-col">
       <div class="bg-white px-4 pt-4">
-        <el-form :model="state.form" :size="formSize" label-width="80">
+        <el-form :model="state.form" :size="formSize" label-width="80" :inline="true">
           <el-form-item label="错误时间">
             <el-radio-group v-model="state.form.errTime" @change="getErrorWords">
               <el-radio-button v-for="o in state.errTimeOption" :key="o.id" :value="o.id" :label="o.id">{{ o.name }}</el-radio-button>
@@ -20,8 +20,8 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="px-4 bg-white p-6">
-        <div class="flex justify-end pb-3 items-center space-x-4">
+      <div class="px-4 bg-white">
+        <div class="flex justify-end pb-1 items-center space-x-4">
           <span
             >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
           >
@@ -73,6 +73,7 @@
     </div>
     <!-- <LastPage /> -->
     <Loading :loading="loading" />
+    <tabbar />
   </div>
 </template>
 <script setup>
@@ -86,6 +87,7 @@
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
   import * as XLSX from 'xlsx';
+  import tabbar from '@/components/tabBar/index.vue';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -110,7 +112,7 @@
       // return 'small';
       return screenHeight.value - 200;
     } else {
-      return screenHeight.value - 310;
+      return screenHeight.value - 240;
       // return 'large';
     }
   });

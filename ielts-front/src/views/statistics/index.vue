@@ -1,41 +1,42 @@
 <template>
-  <div class="flex items-stretch -mx-4 md:space-x-10 space-x-2 justify-between px-3 pt-10">
+  <div class="flex items-stretch -mx-4 md:space-x-10 space-x-2 justify-between px-3 pt-2 text-center">
     <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4">
-      <div class="text-xl font-medium text-black">{{ state.detail.today_practice || 0 }} 个</div>
-      <p class="text-gray-500">今日听写</p>
+      <div class="text-m font-medium text-black">{{ state.detail.today_practice || 0 }} 个</div>
+      <div class="text-gray-500">今日听写</div>
     </div>
 
-    <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4">
-      <div class="text-xl font-medium text-black">{{ ((state.detail.today_time || 0) / 60).toFixed(0) || 0 }} min</div>
-      <p class="text-gray-500">今日学习</p>
+    <div class="w-full md:w-1/4 lg:px-4 mb-4 rounded-xl bg-white shadow-md p-4 text-center">
+      <div class="text-m font-medium text-black">{{ ((state.detail.today_time || 0) / 60).toFixed(0) || 0 }} min</div>
+      <div class="text-gray-500">今日学习</div>
     </div>
 
-    <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4">
-      <div class="text-xl font-medium text-black">{{ state.detail.cumulative_practice || 0 }} 个</div>
-      <p class="text-gray-500">累计听写</p>
+    <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4 text-center">
+      <div class="text-m font-medium text-black">{{ state.detail.cumulative_practice || 0 }} 个</div>
+      <div class="text-gray-500">累计听写</div>
     </div>
 
-    <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4">
-      <div class="text-xl font-medium text-black">{{ ((state.detail.cumulative_time || 0) / 60).toFixed(0) || 0 }} min</div>
-      <p class="text-gray-500">累计分钟</p>
+    <div class="w-full md:w-1/4 px-4 mb-4 rounded-xl bg-white shadow-md p-4 text-center">
+      <div class="text-m font-medium text-black">{{ ((state.detail.cumulative_time || 0) / 60).toFixed(0) || 0 }} min</div>
+      <div class="text-gray-500">累计分钟</div>
     </div>
   </div>
   <div class="bg-white">
     <div class="flex justify-end pr-4 mt-4 w-full">
-      <el-select v-model="state.chapterId" placeholder="请选择章节" size="large" style="width: 300px" @change="chapterChange">
+      <el-select v-model="state.chapterId" placeholder="请选择章节" size="large" class="w-50" @change="chapterChange">
         <el-option v-for="(item, val) in state.data" :key="item" :label="item.name" :value="val" />
       </el-select>
     </div>
     <div>
       <canvas ref="ctx" style="height: 64vh"></canvas>
     </div>
+    <tabbar />
   </div>
 </template>
 <script setup>
   import { Chart, registerables } from 'chart.js';
   // import { useAppStore } from '@/store';
   import { getAnalysisData } from '@/api/book/index';
-  import { nextTick } from 'vue';
+  import tabbar from '@/components/tabBar/index.vue';
 
   // const appStore = useAppStore();
 

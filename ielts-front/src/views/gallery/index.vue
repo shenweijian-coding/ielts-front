@@ -1,8 +1,8 @@
 <template>
-  <div class="relative mb-auto mt-auto flex w-full flex-1 flex-col overflow-y-auto lg:px-30 px-4 lg:pt-6">
+  <div class="relative mt-auto flex w-full flex-1 flex-col overflow-y-auto lg:px-30 lg:pt-6 mb-10 md:mb-auto">
     <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0">
       <a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
-        <SvgIcon name="atx" class="hidden md:block" width="180" height="80" />
+        <!-- <SvgIcon name="atx" class="hidden md:block" width="180" height="80" /> -->
       </a>
       <!-- PC端展示的 -->
       <div class="hidden md:block">
@@ -34,7 +34,7 @@
   </div>
   <Footer />
   <!-- 移动端展示的 -->
-  <div class="md:hidden flex tabbar bg-white w-full justify-center">
+  <!-- <div class="phone-tab md:hidden flex tabbar bg-white w-full justify-center h-14">
     <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
       <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home" class="flex flex-col leading-1">
         <el-icon><Headset /></el-icon>
@@ -57,7 +57,7 @@
         我的
       </el-menu-item>
     </el-menu>
-  </div>
+  </div> -->
 </template>
 <script setup>
   import Footer from '@/components/footer/index.vue';
@@ -73,8 +73,4 @@
     currentRoute.value = route.path;
   });
 </script>
-<style lang="less" scoped>
-  .tabbar .el-menu-item {
-    line-height: 1.4rem;
-  }
-</style>
+<style lang="less" scoped></style>
