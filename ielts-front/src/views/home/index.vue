@@ -487,7 +487,7 @@
   const defaultAudioRef = ref(new Audio(defaultAudio));
   const mistakeRef = ref(null);
   const wordslistRef = ref(null);
-  const currentTestKey = Date.now();
+  const currentTestKey = ref(Date.now());
   const countDown = ref(0); // 倒计时
   const audioPlayer = ref(null);
   let audio = audioPlayer.value;
@@ -569,6 +569,9 @@
                     // wordsData.currentIndex = res.data.findIndex((word) => word.id == appStore.dictationInfo.currentChapter.last_id);
                     wordsData.currentIndex = res?.existing_id.length || 0;
                     wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+                  }
+                  if (res.last_key) {
+                    currentTestKey.value = res.last_key;
                   }
                 })
                 .catch((action) => {
@@ -672,7 +675,7 @@
   // 上报听写配置
   const handleReport = (data) => {
     reportLexiRes({
-      key: currentTestKey,
+      key: currentTestKey.value,
       ...data,
     }).then(() => {});
   };
