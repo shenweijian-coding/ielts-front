@@ -37,8 +37,8 @@
     <div>
       <canvas ref="ctx" style="height: 64vh"></canvas>
     </div>
-    <tabbar />
   </div>
+  <tabbar />
 </template>
 <script setup>
   import { Chart, registerables } from 'chart.js';

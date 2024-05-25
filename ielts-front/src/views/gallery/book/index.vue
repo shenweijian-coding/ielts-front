@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full flex-1 flex-col justify-center overflow-y-auto px-4">
+  <div class="flex w-full flex-1 flex-col justify-center px-4">
     <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-16 w-full items-center justify-between">
       <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
         <template #label>
@@ -8,7 +8,7 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-    <div class="flex-1 overflow-y-auto">
+    <div class="flex-1">
       <div class="lg:mt-4">
         <!-- 选项 -->
         <div v-if="galleryState.activeTab != 2" class="flex items-center overscroll-x-auto flex-wrap mb-4">

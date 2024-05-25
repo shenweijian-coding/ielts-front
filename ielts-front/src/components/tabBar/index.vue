@@ -30,6 +30,7 @@
       </el-menu>
     </div>
   </keep-alive>
+  <div class="phone-tab-block"></div>
 </template>
 <script setup>
   import { Memo, Headset, DataLine, DocumentDelete, User } from '@element-plus/icons-vue';
@@ -66,5 +67,11 @@
   .phone-tab .el-menu--horizontal {
     width: 100%;
     justify-content: space-evenly;
+  }
+  .phone-tab-block {
+    height: 60px;
+  }
+  .el-menu-item > .el-icon {
+    margin: 0 !important;
   }
 </style>

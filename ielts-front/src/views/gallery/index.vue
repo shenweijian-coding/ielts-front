@@ -81,9 +81,9 @@
     width: 100vw;
     // height: 72px;
     position: fixed;
-    background-color: hsla(0, 0%, 100%, 0.89);
-    -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12);
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12);
+    background-color: hsla(0, 0%, 100%, 0.49);
+    -webkit-box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     width: 100%;
@@ -95,5 +95,9 @@
   .el-menu-item {
     border: none !important;
     background-color: transparent !important;
+  }
+  .el-menu--horizontal {
+    background-color: transparent !important;
+    border: none;
   }
 </style>

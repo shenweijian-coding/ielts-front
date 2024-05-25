@@ -695,7 +695,7 @@
       id: appStore.dictationInfo.currentChapter.id,
       g_id: appStore.dictationInfo.currentChapter.g_id,
     }).then((res) => {
-      mistakeRef.value.open((res.accuracy || correctness).toFixed(2));
+      mistakeRef.value.open((res?.[0].accuracy || correctness).toFixed(2));
     });
   };
   // 回车 播放下一个的方法
