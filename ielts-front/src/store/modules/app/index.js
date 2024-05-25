@@ -41,7 +41,7 @@ export const useAppStore = defineStore(
         this.dictationInfo = data;
       },
       async toggleCurrentChapter(data) {
-        this.dictationInfo.currentChapter = data;
+        this.dictationInfo && (this.dictationInfo.currentChapter = data);
       },
       async setErrWords(data) {
         this.errWords = data;

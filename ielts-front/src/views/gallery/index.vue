@@ -1,35 +1,38 @@
 <template>
-  <div class="relative mt-auto flex w-full flex-1 flex-col overflow-y-auto lg:px-30 lg:pt-6 mb-10 md:mb-auto">
-    <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0">
-      <a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
-        <!-- <SvgIcon name="atx" class="hidden md:block" width="180" height="80" /> -->
-      </a>
-      <!-- PC端展示的 -->
-      <div class="hidden md:block">
-        <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
-          <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home" @click="appStore.updateContinuePlayStatus(true)">
-            <el-icon><Headset /></el-icon>
-            听写
-          </el-menu-item>
-          <el-menu-item index="/main/book">
-            <el-icon><Memo /></el-icon>
-            单词书
-          </el-menu-item>
-          <el-menu-item index="/main/statistics">
-            <el-icon><DataLine /></el-icon>
-            统计
-          </el-menu-item>
-          <el-menu-item index="/main/errorbook">
-            <el-icon><DocumentDelete /></el-icon>
-            错词本
-          </el-menu-item>
-          <!-- <el-menu-item index="/main/user">
-            <el-icon><User /></el-icon>
-            我的
-          </el-menu-item> -->
-        </el-menu>
+  <!-- PC端展示的 -->
+  <div class="hidden md:block w-full general_header">
+    <div class="flex justify-end lg:px-30">
+      <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0">
+        <a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
+          <SvgIcon name="atx" class="hidden md:block" width="130" height="50" />
+        </a>
       </div>
+      <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
+        <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home" @click="appStore.updateContinuePlayStatus(true)">
+          <!-- <el-icon><Headset /></el-icon> -->
+          听写
+        </el-menu-item>
+        <el-menu-item index="/main/book">
+          <!-- <el-icon><Memo /></el-icon> -->
+          单词书
+        </el-menu-item>
+        <el-menu-item index="/main/statistics">
+          <!-- <el-icon><DataLine /></el-icon> -->
+          统计
+        </el-menu-item>
+        <el-menu-item index="/main/errorbook">
+          <!-- <el-icon><DocumentDelete /></el-icon> -->
+          错词本
+        </el-menu-item>
+        <el-menu-item index="/main/user">
+          <!-- <el-icon><User /></el-icon> -->
+          我的
+        </el-menu-item>
+      </el-menu>
     </div>
+  </div>
+  <div class="lg:block hidden header-blank"></div>
+  <div class="relative mt-auto flex w-full flex-1 flex-col overflow-y-auto lg:px-30 mb-10 md:mb-auto">
     <router-view />
   </div>
   <Footer />
@@ -73,4 +76,24 @@
     currentRoute.value = route.path;
   });
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .general_header {
+    width: 100vw;
+    // height: 72px;
+    position: fixed;
+    background-color: hsla(0, 0%, 100%, 0.89);
+    -webkit-box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    z-index: 99;
+  }
+  .header-blank {
+    height: 68px;
+  }
+  .el-menu-item {
+    border: none !important;
+    background-color: transparent !important;
+  }
+</style>

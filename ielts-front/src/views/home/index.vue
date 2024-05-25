@@ -15,7 +15,7 @@
                   class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
                   href="/#/main"
                 >
-                  {{ appStore?.dictationInfo?.booInfo.remarks }}
+                  {{ appStore?.dictationInfo?.booInfo.remarks || '前往书籍页' }}
                 </a>
               </div>
             </div>
@@ -691,16 +691,13 @@
   // 处理计算结果
   const handleResult = () => {
     const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
-    console.log(correctness.toFixed(2), '计算答对');
-    // getChapterList({
-    //   id: appStore.chapterId,
-    //   l_id: 1,
-    // }).then((res) => {
-    //   console.log(res);
-    mistakeRef.value.open(correctness).toFixed(2);
-    // });
+    getChapterList({
+      id: appStore.dictationInfo.currentChapter.id,
+      g_id: appStore.dictationInfo.currentChapter.g_id,
+    }).then((res) => {
+      mistakeRef.value.open((res.accuracy || correctness).toFixed(2));
+    });
   };
-
   // 回车 播放下一个的方法
   const inputEnter = () => {
     count = 0;

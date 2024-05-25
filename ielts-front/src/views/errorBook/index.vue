@@ -1,8 +1,8 @@
 <template>
   <div class="flex w-full flex-1 select-text items-start justify-center overflow-hidden">
     <div class="flex h-full w-full flex-col">
-      <div class="bg-white px-4 pt-4">
-        <el-form :model="state.form" :size="formSize" label-width="80" :inline="true">
+      <div class="px-4 pt-2">
+        <el-form :model="state.form" :size="formSize" label-width="70" :inline="true">
           <el-form-item label="错误时间">
             <el-radio-group v-model="state.form.errTime" @change="getErrorWords">
               <el-radio-button v-for="o in state.errTimeOption" :key="o.id" :value="o.id" :label="o.id">{{ o.name }}</el-radio-button>
@@ -14,13 +14,13 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="章节">
-            <el-select v-model="state.form.c_id" placeholder="全部章节" style="width: 180px" @change="getErrorWords" clearable>
+            <el-select v-model="state.form.c_id" placeholder="全部章节" style="width: 180px" @change="getErrorWords" clearable filterable>
               <el-option v-for="item in chapterList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
           </el-form-item>
         </el-form>
       </div>
-      <div class="px-4 bg-white">
+      <div class="px-4 bg-white pt-4">
         <div class="flex justify-end pb-1 items-center space-x-4">
           <span
             >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
@@ -104,7 +104,7 @@
     if (screenWidth.value < 768) {
       return 'small';
     } else {
-      return 'large';
+      return 'default';
     }
   });
   const tableHeight = computed(() => {

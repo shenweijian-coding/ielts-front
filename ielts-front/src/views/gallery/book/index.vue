@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full flex-1 flex-col justify-center overflow-y-auto">
+  <div class="flex w-full flex-1 flex-col justify-center overflow-y-auto px-4">
     <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-16 w-full items-center justify-between">
       <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
         <template #label>
@@ -37,7 +37,7 @@
           <div
             v-for="item in galleryState.booksList"
             :key="item.id"
-            class="group flex lg:h-36 w-[46%] lg:w-80 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
+            class="group flex lg:h-36 w-[46%] lg:w-74 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
             @click="openChapter(item)"
           >
             <div class="relative ml-1 lg:mt-2 flex h-full w-full flex-col items-start justify-start"
