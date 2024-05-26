@@ -23,12 +23,15 @@
                   <div class="flex justify-between w-full">
                     <h4 class="text-nowrap text-ellipsis truncate" :alt="item.name">{{ item.name }}</h4>
                   </div>
-                  <div class="flex w-full text-xs items-center" :class="item.id == appStore.chapterId ? '' : 'justify-between'"
-                    ><span class="text-slate-600">{{
-                      item.is_practiced ? (item.is_incomplete ? '未完成' : `${item.accuracy.toFixed(2)}%`) : '未练习'
-                    }}</span
-                    >&nbsp;<span class="text-nowrap">共{{ item.word_total }}词</span></div
-                  >
+                  <div class="flex w-full text-xs items-center" :class="item.id == appStore.chapterId ? '' : 'justify-between'">
+                    <span v-if="item?.accuracy">
+                      {{ `${item.accuracy.toFixed(2)}%` }}
+                    </span>
+                    <span v-else class="text-slate-600">
+                      {{ item.is_practiced ? (item.is_incomplete ? '未完成' : `${item.accuracy.toFixed(2)}%`) : '未练习' }} </span
+                    >&nbsp;
+                    <span class="text-nowrap">共{{ item.word_total }}词</span>
+                  </div>
                   <SvgIcon
                     v-if="item.id == appStore.chapterId"
                     name="tick"

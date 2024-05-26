@@ -1,8 +1,8 @@
 <template>
   <!-- PC端展示的 -->
   <div class="hidden md:block w-full general_header">
-    <div class="flex justify-end lg:px-30">
-      <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0">
+    <div class="flex justify-between lg:px-30">
+      <div class="flex flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0">
         <a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
           <SvgIcon name="atx" class="hidden md:block" width="130" height="50" />
         </a>
@@ -31,7 +31,7 @@
       </el-menu>
     </div>
   </div>
-  <div class="lg:block hidden header-blank"></div>
+  <div class="md:block hidden header-blank"></div>
   <div class="relative mt-auto flex w-full flex-1 flex-col overflow-y-auto lg:px-30 mb-10 md:mb-auto">
     <router-view />
   </div>

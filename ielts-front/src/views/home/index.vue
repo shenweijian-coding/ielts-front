@@ -691,12 +691,16 @@
   // 处理计算结果
   const handleResult = () => {
     const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
-    getChapterList({
-      id: appStore.dictationInfo.currentChapter.id,
-      g_id: appStore.dictationInfo.currentChapter.g_id,
-    }).then((res) => {
-      mistakeRef.value.open((res?.[0].accuracy || correctness).toFixed(2));
-    });
+    if (appStore?.dictationInfo?.currentChapter.id && appStore?.dictationInfo?.currentChapter.g_id) {
+      getChapterList({
+        id: appStore.dictationInfo.currentChapter.id,
+        g_id: appStore.dictationInfo.currentChapter.g_id,
+      }).then((res) => {
+        mistakeRef.value.open((res?.[0].accuracy || correctness).toFixed(2));
+      });
+    } else {
+      mistakeRef.value.open(correctness.toFixed(2));
+    }
   };
   // 回车 播放下一个的方法
   const inputEnter = () => {
