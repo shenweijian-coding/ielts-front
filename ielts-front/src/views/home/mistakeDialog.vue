@@ -7,7 +7,7 @@
         >上次正确听写率：{{ appStore.currentChapter.accuracy.toFixed(2) }}</div
       >
       <div class="flex space-x-10 justify-center mt-8">
-        <a href="/#/errorBook?from=result">
+        <a href="/#/main/errorbook?from=result">
           <el-button size="large">查看错词</el-button>
         </a>
         <el-button type="primary" size="large" @click="nextChapter">继续听写下一章</el-button>

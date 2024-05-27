@@ -1,25 +1,26 @@
 <template>
-  <div class="flex items-stretch -mx-4 md:space-x-10 space-x-2 justify-between px-3 pt-2 text-center">
-    <div class="w-full md:w-1/4 px-4 mb-2 rounded-xl bg-white shadow-md p-3">
+  <div class="flex items-stretch justify-between p-4 text-center pb-2 bg-white mb-2 rounded-l">
+    <div class="w-full">
       <div class="text-m font-medium text-black">{{ state.detail.today_practice || 0 }} 个</div>
       <div class="text-gray-500">今日听写</div>
     </div>
 
-    <div class="w-full md:w-1/4 lg:px-4 mb-2 rounded-xl bg-white shadow-md p-3 text-center">
+    <div class="w-full text-center">
       <div class="text-m font-medium text-black">{{ ((state.detail.today_time || 0) / 60).toFixed(0) || 0 }} min</div>
       <div class="text-gray-500">今日学习</div>
     </div>
 
-    <div class="w-full md:w-1/4 px-4 mb-2 rounded-xl bg-white shadow-md p-3 text-center">
+    <div class="w-full text-center">
       <div class="text-m font-medium text-black">{{ state.detail.cumulative_practice || 0 }} 个</div>
       <div class="text-gray-500">累计听写</div>
     </div>
 
-    <div class="w-full md:w-1/4 px-4 mb-2 rounded-xl bg-white shadow-md p-3 text-center">
+    <div class="w-full text-center">
       <div class="text-m font-medium text-black">{{ ((state.detail.cumulative_time || 0) / 60).toFixed(0) || 0 }} min</div>
       <div class="text-gray-500">累计分钟</div>
     </div>
   </div>
+
   <div class="bg-white px-4">
     <div class="flex justify-end pr-4 mt-4 w-full">
       <el-select
