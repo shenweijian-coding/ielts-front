@@ -145,7 +145,11 @@
     },
   });
   const chapterList = computed(() => {
-    return appStore?.dictationInfo?.chapterList || [];
+    let list = appStore?.dictationInfo?.chapterList || [];
+    if (!list.length) {
+      return state.chapterList;
+    }
+    return list;
   });
   const getErrorWords = () => {
     const params = {};
@@ -184,6 +188,20 @@
           setTimeout(() => {
             tableRef.value.toggleAllSelection();
           });
+
+        if (!chapterList.length && !state.chapterList.length && res.data.length) {
+          const list = [];
+          res.data.forEach((item) => {
+            if (!list.find((o) => o.id == item.c_id)) {
+              list.push({
+                id: item.c_id,
+                name: item.chapter.name,
+              });
+            }
+          });
+          state.chapterList = list;
+        }
+
         setLoading(false);
       })
       .catch(() => {

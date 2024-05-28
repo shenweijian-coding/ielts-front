@@ -214,7 +214,8 @@
                       title="设置"
                       type="button"
                     >
-                      <SvgIcon name="setting" prefix="icon-svg" width="24" height="24" />
+                      <!-- <SvgIcon name="setting" prefix="icon-svg" width="23" height="23" color="#2c3e50" /> -->
+                      <el-icon color="#2c3e50" :size="20"><Tools /></el-icon>
                     </button>
                   </template>
                   <div>
@@ -236,6 +237,20 @@
               </div>
             </el-tooltip>
 
+            <el-tooltip content="返回主页" placement="top" effect="light">
+              <div class="relative hidden sm:block">
+                <a href="/#/main/book">
+                  <button
+                    class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
+                    title="返回主页"
+                    type="button"
+                  >
+                    <el-icon color="#2c3e50" :size="20"><HomeFilled /></el-icon>
+                  </button>
+                </a>
+              </div>
+            </el-tooltip>
+
             <el-tooltip v-if="false" content="错词本" placement="top" effect="light">
               <div class="relative">
                 <div>
@@ -245,8 +260,7 @@
                       class="flex items-center justify-center rounded p-[2px] text-lg outline-none transition-colors duration-300 ease-in-out"
                       title="查看错题本"
                     >
-                      <!-- <el-icon color="#2c3e50" :size="20"><List /></el-icon> -->
-                      <SvgIcon name="error-list" prefix="icon-svg" width="18" height="18" color="#2c3e50" />
+                      <el-icon><HomeFilled /></el-icon>
                     </button>
                   </a>
                 </div>
@@ -435,7 +449,7 @@
   import correct from '@/assets/correct.wav';
   import defaultAudio from '@/assets/Default.wav';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { UserFilled, List } from '@element-plus/icons-vue';
+  import { List, HomeFilled, Tools } from '@element-plus/icons-vue';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
   import mistakeDialog from './mistakeDialog.vue';

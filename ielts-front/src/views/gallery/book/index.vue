@@ -9,9 +9,19 @@
       </el-tab-pane>
     </el-tabs>
     <div class="flex-1">
-      <div class="lg:mt-4">
+      <div class="">
         <!-- 选项 -->
-        <div v-if="galleryState.activeTab != 2" class="flex items-center overscroll-x-auto flex-wrap mb-4">
+
+        <el-tabs
+          v-if="galleryState.activeTab != 2"
+          v-model="galleryState.currentCategory"
+          @tab-click="handleCategorySel"
+          class="flex h-16 w-full items-center justify-between"
+        >
+          <el-tab-pane :label="item.name" :name="item.id" v-for="(item, index) in galleryState.categoryList" :key="item.id" />
+        </el-tabs>
+
+        <!-- <div v-if="galleryState.activeTab != 2" class="flex items-center overscroll-x-auto flex-wrap mb-4">
           <div
             v-for="(item, index) in galleryState.categoryList"
             :key="index"
@@ -20,8 +30,9 @@
             @click="handleCategorySel(item)"
             ><span class="font-normal">{{ item.name }}</span></div
           >
-        </div>
-        <div v-if="galleryState.activeTab != 2" class="flex items-center overscroll-x-auto flex-wrap">
+        </div> -->
+
+        <div v-if="galleryState.activeTab != 2" class="flex items-center overscroll-x-auto flex-wrap lg:mt-4">
           <div
             v-for="(item, index) in galleryState.sceneList"
             :key="index"
@@ -143,9 +154,9 @@
     galleryState.currentScene = item.id;
     getBooks(item.id);
   };
-  const handleCategorySel = (item) => {
-    galleryState.currentCategory = item.id;
-    getScene(galleryState.activeTab, item.id);
+  const handleCategorySel = ({ paneName }) => {
+    galleryState.currentCategory = paneName;
+    getScene(galleryState.activeTab, paneName);
   };
   const getScene = (l_id, c_id = galleryState.currentCategory) => {
     getSceneList({

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-stretch justify-between p-4 text-center pb-2 bg-white mb-2 rounded-l">
+  <div class="flex items-stretch justify-between p-4 text-center pb-2 bg-white mb-2 rounded-l shadow-sm">
     <div class="w-full">
       <div class="text-m font-medium text-black">{{ state.detail.today_practice || 0 }} 个</div>
       <div class="text-gray-500">今日听写</div>
@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <div class="bg-white px-4">
+  <div class="bg-white px-4 shadow-sm">
     <div class="flex justify-end pr-4 mt-4 w-full">
       <el-select
         v-model="state.chapterId"
@@ -36,7 +36,7 @@
       </el-select>
     </div>
     <div>
-      <canvas ref="ctx" style="height: 64vh"></canvas>
+      <canvas ref="ctx" style="height: 70vh"></canvas>
     </div>
   </div>
   <tabbar />

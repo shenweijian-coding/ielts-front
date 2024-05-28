@@ -36,6 +36,7 @@
     <router-view />
   </div>
   <Footer />
+  <Notice />
   <!-- 移动端展示的 -->
   <!-- <div class="phone-tab md:hidden flex tabbar bg-white w-full justify-center h-14">
     <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
@@ -67,6 +68,7 @@
   import { Memo, Headset, DataLine, DocumentDelete, User } from '@element-plus/icons-vue';
   import { useAppStore } from '@/store';
   import { useRoute } from 'vue-router';
+  import Notice from '@/components/Notice/index.vue';
 
   const appStore = useAppStore();
   const route = useRoute();
