@@ -1,6 +1,6 @@
 <template>
   <div class="flex w-full flex-1 flex-col justify-center px-4">
-    <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-16 w-full items-center justify-between">
+    <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-12 w-full items-center justify-between">
       <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
         <template #label>
           <img :src="galleryState.languageIcon[item.id]" alt="" />&nbsp;
@@ -214,5 +214,13 @@
 <style lang="less">
   .flex-grow {
     flex-grow: 1;
+  }
+  /*去掉el-tab-pane底部灰色线条*/
+  .el-tabs__nav-wrap::after {
+    height: 0;
+  }
+  /*去掉el-tab-pane切换时的蓝色下划线*/
+  .el-tabs__active-bar {
+    // background: transparent;
   }
 </style>

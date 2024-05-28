@@ -2,9 +2,9 @@
   <div>
     <el-dialog v-model="dialogVisible" title="温馨提示" width="400">
       <p style="line-height: 26px">
-        hi！尊敬的用户<br />爱听写因为网址备案转移<br />现网址从 5月31日 开始停止访问 2-3 周<br />即日起你可以通过
+        hi！尊敬的用户<br />爱听写因备案原因，需要你换个网址登录。<br />即日起你可以通过
         <a href="//www.dictation.top">www.dictation.top</a>
-        访问<a href="//www.dictation.top"> 爱听写</a><br />当前账号的听写数据不会受影响。<br />请及时保存新网址，从新网址访问
+        访问<br />当前账号的听写数据不会受影响。<br />现网址从5月31日开始停用。请及时保存新网址。
       </p>
       <template #footer>
         <div class="flex justify-end">
