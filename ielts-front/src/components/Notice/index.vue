@@ -25,8 +25,9 @@
   onMounted(() => {
     const isHideNotice = window.localStorage.getItem('isHideNotice');
     const isHideNotice2 = window.sessionStorage.getItem('isHideNotice');
-
-    if (!isHideNotice && !isHideNotice2) {
+    const domain = window.location.hostname;
+    console.log(domain, '1');
+    if (!isHideNotice && !isHideNotice2 && domain == 'idictation.cn') {
       setTimeout(() => {
         dialogVisible.value = true;
       }, 1000);
