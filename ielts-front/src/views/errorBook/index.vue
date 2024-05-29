@@ -38,19 +38,44 @@
         >
           <el-table-column type="selection" width="30" />
           <el-table-column prop="lexicon" label="单词" minWidth="100">
+            <template #header="scope">
+              <div class="flex items-center">
+                单词&nbsp;
+                <el-icon @click="troggleView('word')" class="cursor-pointer">
+                  <View v-if="state.hideProps.word" />
+                  <Hide v-else />
+                </el-icon>
+              </div>
+            </template>
             <template #default="scope">
-              <span class="flex items-center cursor-pointer"
-                >{{ scope.row.lexicon.word }}<el-icon @click="play(scope.row)" class="ml-2"><Headset /></el-icon>
-              </span>
-              <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer"
-                >{{ scope.row.lexicon?.phonetic_transcription }}
-              </span>
+              <template v-if="!state.hideProps.word">
+                <span class="flex items-center cursor-pointer"
+                  >{{ scope.row.lexicon.word }}<el-icon @click="play(scope.row)" class="ml-2"><Headset /></el-icon>
+                </span>
+                <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer"
+                  >{{ scope.row.lexicon?.phonetic_transcription }}
+                </span>
+              </template>
+              <span v-else>***</span>
             </template>
           </el-table-column>
-          <el-table-column prop="lexicon.translate" label="释义" align="center" minWidth="280" />
-          <!-- <el-table-column prop="lexicon.phonetic_transcription" label="音标" width="180">
-
-          </el-table-column> -->
+          <el-table-column prop="lexicon" label="释义" align="center" minWidth="280">
+            <template #header="scope">
+              <div class="flex items-center justify-center">
+                释义&nbsp;
+                <el-icon @click="troggleView('translate')" class="cursor-pointer">
+                  <View v-if="state.hideProps.translate" />
+                  <Hide v-else />
+                </el-icon>
+              </div>
+            </template>
+            <template #default="scope">
+              <template v-if="!state.hideProps.translate">
+                {{ scope.row.lexicon.translate }}
+              </template>
+              <span v-else>***</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="error_num" label="错误次数" sortable="custom" width="110" align="center" />
           <el-table-column prop="error_word" label="错误拼写" width="180" align="center" />
           <el-table-column prop="lexicon_group.name" label="词典" width="90" align="center" />
@@ -79,7 +104,7 @@
 <script setup>
   import { getErrorWordList } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
-  import { Headset, Download } from '@element-plus/icons-vue';
+  import { Headset, Download, Hide, View } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage } from 'element-plus';
   import dayjs from 'dayjs';
@@ -142,6 +167,10 @@
       total: 0,
       pageSize: 9999,
       currentPage: 1,
+    },
+    hideProps: {
+      word: false,
+      translate: false,
     },
   });
   const chapterList = computed(() => {
@@ -301,6 +330,9 @@
 
     getErrorWords();
   });
+  const troggleView = (field) => {
+    state.hideProps[field] = !state.hideProps[field];
+  };
   onUnmounted(() => {
     audio.pause(); // 先暂停播放
     audio.src = ''; // 清空src

@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="w-full logo flex justify-center lg:justify-start lg:ml-20 items-center">
+  <div class="container flex-col">
+    <div class="logo flex justify-center lg:justify-start lg:ml-10 items-center mt-10">
       <a class="text-theme" href="/">
         <SvgIcon name="atx" width="200" height="80" />
       </a>
@@ -78,11 +78,11 @@
   }
 
   .logo {
-    position: fixed;
-    top: 24px;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
+    // position: absolute;
+    // // top: 24px;
+    // z-index: 1;
+    // display: inline-flex;
+    // align-items: center;
 
     &-text {
       margin-right: 4px;
