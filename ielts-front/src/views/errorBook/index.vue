@@ -1,19 +1,19 @@
 <template>
   <div class="flex w-full flex-1 select-text items-start justify-center overflow-hidden">
     <div class="flex h-full w-full flex-col">
-      <div class="px-4 pt-2">
+      <div class="pt-2">
         <el-form :model="state.form" :size="formSize" label-width="70" :inline="true">
-          <el-form-item label="错误时间">
+          <el-form-item label="">
             <el-radio-group v-model="state.form.errTime" @change="getErrorWords">
               <el-radio-button v-for="o in state.errTimeOption" :key="o.id" :value="o.id" :label="o.id">{{ o.name }}</el-radio-button>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="错误次数">
+          <el-form-item label="">
             <el-radio-group v-model="state.form.error_num" @change="getErrorWords">
               <el-radio-button v-for="o in state.errNumOption" :key="o.num" :value="o.num" :label="o.num">{{ o.name }}</el-radio-button>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="章节">
+          <el-form-item label="">
             <el-select v-model="state.form.c_id" placeholder="全部章节" style="width: 180px" @change="getErrorWords" clearable filterable>
               <el-option v-for="item in chapterList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
@@ -137,7 +137,7 @@
       // return 'small';
       return screenHeight.value - 200;
     } else {
-      return screenHeight.value - 240;
+      return screenHeight.value - 210;
       // return 'large';
     }
   });
@@ -151,14 +151,14 @@
     },
     errTimeOption: [
       { name: '全部', id: 0 },
-      { name: '最近一次', id: 3 },
-      { name: '今天', id: 1 },
-      { name: '近七天', id: 2 },
+      { name: '最近一次听写', id: 3 },
+      { name: '今天听写', id: 1 },
+      { name: '近七天听写', id: 2 },
     ],
     errNumOption: [
       { name: '全部', num: 0 },
-      { name: '2次及以上', num: 2 },
-      { name: '3次及以上', num: 3 },
+      { name: '错误2次及以上', num: 2 },
+      { name: '错误3次及以上', num: 3 },
     ],
     chapterList: [],
     tableData: [],
