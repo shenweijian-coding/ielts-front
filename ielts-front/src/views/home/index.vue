@@ -904,6 +904,10 @@
   // 切换配置
   const handleConfigChange = (p, val) => {
     userStore.handleConfig(p, val);
+    if (val) {
+      appStore.updateContinuePlayStatus(true);
+      getWords();
+    }
   };
   onUnmounted(() => {
     if (audio) {
