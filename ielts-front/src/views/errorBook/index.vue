@@ -151,9 +151,9 @@
     },
     errTimeOption: [
       { name: '全部', id: 0 },
-      { name: '最近一次听写', id: 3 },
-      { name: '今天听写', id: 1 },
-      { name: '近七天听写', id: 2 },
+      { name: '最近听写错词', id: 3 },
+      { name: '今日错词', id: 1 },
+      { name: '近七天错词', id: 2 },
     ],
     errNumOption: [
       { name: '全部', num: 0 },
