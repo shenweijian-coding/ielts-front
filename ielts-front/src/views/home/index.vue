@@ -371,6 +371,9 @@
                       type="text"
                       ref="inputRef"
                       class="font-mono font-normal text-center"
+                      autocomplete="off"
+                      autocorrect="off"
+                      spellcheck="false"
                       @keydown.enter="inputEnter"
                       @blur="handleBlur"
                       @keydown="handleKeyDown"
@@ -588,6 +591,13 @@
                 })
                   .then(() => {
                     if (res?.existing_id?.length) {
+                      // 过滤一遍 防止有遗漏
+                      if (res?.existing_id?.length != res.data.length) {
+                        const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
+                        const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));
+                        wordsData.words = [...beanRead, ...noRead];
+                      }
+
                       wordsData.currentIndex = res?.existing_id.length || 0;
                       wordsData.currentWord = wordsData.words[wordsData.currentIndex];
                     }
