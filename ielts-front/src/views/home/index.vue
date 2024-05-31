@@ -367,6 +367,7 @@
                     </div> -->
                   <div class="user-input text-center">
                     <input
+                      :placeholder="!showPlaceholder ? '在此输入单词，点击Enter核对' : ''"
                       v-model="wordsData.currentWord.userInput"
                       type="text"
                       ref="inputRef"
@@ -539,6 +540,8 @@
   //   return appStore.dictationInfo.currentChapter;
   // });
 
+  const showPlaceholder = ref(window.localStorage.getItem('oldUser'));
+
   const getWords = () => {
     if (errSource.value) {
       const copyWords = JSON.parse(JSON.stringify(appStore.errWords));
@@ -706,6 +709,10 @@
   };
   // 上报听写配置
   const handleReport = (data) => {
+    if (!showPlaceholder.value) {
+      showPlaceholder.value = true;
+      window.localStorage.setItem('oldUser', true);
+    }
     reportLexiRes({
       key: currentTestKey,
       ...data,
@@ -946,7 +953,13 @@
       padding: 10px;
       width: 90%;
     }
-
+    input::placeholder {
+      color: #999; /* 灰色 */
+      font-size: 20px;
+    }
+    input:focus::placeholder {
+      color: transparent; /* 使placeholder在聚焦时消失 */
+    }
     .error {
       border-bottom: 2px solid red;
     }
