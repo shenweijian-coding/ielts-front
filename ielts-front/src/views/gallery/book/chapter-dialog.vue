@@ -1,7 +1,7 @@
 <template>
   <el-dialog v-model="state.dialogVisible" :title="state.book?.name" :width="dialogWidth" :before-close="handleClose">
-    <div class="text relative flex h-30 flex-col gap-2">
-      <p class="mt-1">{{ state.book.chapter_total }} 章节</p><p>共 {{ state.book.word_total }} 词</p><p>{{ state.book.remarks }}</p>
+    <div class="text relative flex h-10 flex-col gap-2">
+      <p class="mt-1">{{ state.book.chapter_total }} 章节 &nbsp;&nbsp;{{ state.book.word_total }} 词</p>
       <div class="absolute bottom-6 right-2">
         <div role="group" dir="ltr" class="flex items-center justify-center gap-1" tabindex="0" style="outline: none">
           <!-- <el-button @click="handleErrorBook">查看错题</el-button> -->
@@ -13,12 +13,12 @@
         <div class="mt-2 focus:outline-none h-full">
           <div class="relative overflow-hidden h-[30rem] overflow-y-auto">
             <div class="h-full w-full rounded-[inherit]">
-              <div class="flex w-full flex-wrap gap-3 justify-between lg:justify-initial">
+              <div class="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-4">
                 <div
                   v-for="item in state.list"
                   :key="item.id"
                   @click="handleClickChapter(item)"
-                  class="relative flex h-16 lg:w-40 w-[48%] cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 dark:bg-slate-800"
+                  class="relative flex h-16 lg:w-40 w-[88%] cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 dark:bg-slate-800"
                 >
                   <div class="flex justify-between w-full">
                     <h4 class="text-nowrap text-ellipsis truncate" :alt="item.name">{{ item.name }}</h4>

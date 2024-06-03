@@ -60,6 +60,7 @@ declare module 'vue-router/auto/routes' {
     '/login/components/login-form': RouteRecordInfo<'/login/components/login-form', '/login/components/login-form', Record<never, never>, Record<never, never>>,
     '/login/components/sign-in': RouteRecordInfo<'/login/components/sign-in', '/login/components/sign-in', Record<never, never>, Record<never, never>>,
     '/statistics/': RouteRecordInfo<'/statistics/', '/statistics', Record<never, never>, Record<never, never>>,
+    '/stop/': RouteRecordInfo<'/stop/', '/stop', Record<never, never>, Record<never, never>>,
     '/user/': RouteRecordInfo<'/user/', '/user', Record<never, never>, Record<never, never>>,
   }
 }

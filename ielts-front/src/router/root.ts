@@ -8,6 +8,14 @@ export default [
     component: () => import('@/views/index.vue'),
   },
   {
+    path: '/stop',
+    name: 'stop',
+    meta: {
+      title: '爱听写-维护',
+    },
+    component: () => import('@/views/stop/index.vue'),
+  },
+  {
     path: '/home',
     name: 'home',
     meta: {

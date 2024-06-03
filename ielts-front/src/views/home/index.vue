@@ -888,6 +888,7 @@
       router.push('/home');
     }
     setTimeout(() => {
+      currentTestKey = Date.now();
       getWords();
       wordsData.currentWord = { translate: '', word: '', phonetic_transcription: '', userInput: '' };
       wordsData.words = [];
