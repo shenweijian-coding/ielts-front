@@ -881,6 +881,7 @@
 
   // 章节切换
   const chapterChange = async (id) => {
+    config.chapterId = id;
     await appStore.toggleCurrentChapter(chapterList.value.find((chapter) => chapter.id == id));
     if (errSource.value) {
       errSource.value = false;
