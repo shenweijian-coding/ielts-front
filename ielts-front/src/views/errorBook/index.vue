@@ -224,7 +224,7 @@
             if (!list.find((o) => o.id == item.c_id)) {
               list.push({
                 id: item.c_id,
-                name: item.chapter.name,
+                name: item.lexicon_group.name + ' ' + item.chapter.name,
               });
             }
           });

@@ -228,6 +228,10 @@
                       <div>忽略大小写</div>
                       <el-switch v-model="config.ignore_case" />
                     </div>
+                    <!-- <div class="flex items-center justify-between mt-2">
+                      <div>拼写正确自动提交</div>
+                      <el-switch v-model="config.auto_submit" />
+                    </div> -->
                     <div class="flex items-center justify-between mt-2">
                       <div>输入按键音效</div>
                       <el-switch v-model="config.error_sound" />
@@ -445,6 +449,7 @@
   <Loading :loading="loading" />
   <WordsDrawer ref="wordslistRef" />
   <audio ref="audioPlayer" controls style="display: none"></audio>
+  <canvas ref="canvasRef"></canvas>
 </template>
 
 <script setup>
@@ -461,7 +466,8 @@
   import { getWordList, reportLexiRes, getChapterList } from '@/api/book/index';
   import { useRouter, useRoute } from 'vue-router';
   import WordsDrawer from './wordsDrawer.vue';
-  import { shuffleArray } from '@/utils/index';
+  import { shuffleArray, debounce } from '@/utils/index';
+  import confetti from 'canvas-confetti'
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -482,6 +488,7 @@
     error_sound: userStore.getConfig.error_sound || false,
     ignore_case: userStore.getConfig.ignore_case || true,
     is_disorderly: userStore.getConfig.is_disorderly || false,
+    // auto_submit: userStore.getConfig.auto_submit || false,
     isSeries: false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['1', '2', '3', '4', '5', '6', '7'],
@@ -498,6 +505,7 @@
     currentIndex: 0,
   });
 
+  var myConfetti = null
   const playStatus = ref(0); // 0-未开始 1-播放中 2-已暂停
   const inputRef = ref(null); // 输入框聚焦
   const beepRef = ref(new Audio(beep));
@@ -508,6 +516,7 @@
   let currentTestKey = Date.now();
   const countDown = ref(0); // 倒计时
   const audioPlayer = ref(null);
+  const canvasRef = ref(null)
   let audio = audioPlayer.value;
   var count = 0;
 
@@ -718,7 +727,47 @@
       ...data,
     }).then(() => {});
   };
+  function fire(particleRatio, opts) {
+    var defaults = {
+      origin: { y: 0.7 }
+    };
+      myConfetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio)
+      });
+    }
+  // 弹出效果
+  const handleEffectiveness = () => {
+    canvasRef.value.style.display = 'block'
+    var count = 200;
 
+
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+    fire(0.2, {
+      spread: 60,
+    });
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
+    });
+    canvasRef.value.style.display = 'none'
+  }
   // 处理计算结果
   const handleResult = () => {
     const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
@@ -732,6 +781,21 @@
     } else {
       mistakeRef.value.open(correctness.toFixed(2));
     }
+    handleEffectiveness()
+  };
+  // 判断单词是否输入正确
+  const checkWordsIsOk = () => {
+    let { word, userInput } = wordsData.currentWord;
+    console.log(word, userInput, 'word, userInput');
+    // if (userInput?.length != word?.length) {
+    //   return false;
+    // }
+    if (config.ignore_case) {
+      // 忽略大小写
+      word = word.toLowerCase();
+      userInput = userInput ? userInput.toLowerCase() : '';
+    }
+    return word === userInput;
   };
   // 回车 播放下一个的方法
   const inputEnter = () => {
@@ -775,6 +839,13 @@
   const handleFocus = () => {
     start();
   };
+  // // 拼写输入监听
+  // const handleWordChange = (val) => {
+  //   console.log(checkWordsIsOk, 'checkWordsIsOk');
+  //   // if (checkWordsIsOk()) {
+  //   //   inputEnter();
+  //   // }
+  // };
   // 失去焦点
   const handleBlur = () => {
     stop();
@@ -877,6 +948,11 @@
       return;
     }
     getWords();
+
+    myConfetti = confetti.create(canvasRef.value, {
+      resize: true,
+      useWorker: true
+    })
   });
 
   // 章节切换
@@ -977,5 +1053,15 @@
     height: 32px;
     line-height: 32px;
     opacity: 0.4;
+  }
+  canvas {
+    width: 80%;
+    height: 80%;
+    position:absolute;
+    left: 10%;
+    right: 10%;
+    top: 20%;
+    z-index: 999;
+    display: none;
   }
 </style>

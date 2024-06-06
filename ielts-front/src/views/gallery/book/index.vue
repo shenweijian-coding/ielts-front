@@ -3,7 +3,7 @@
     <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-12 w-full items-center justify-between">
       <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
         <template #label>
-          <img :src="galleryState.languageIcon[item.id]" alt="" />&nbsp;
+          <img :src="galleryState.languageIcon[item.id]" alt="" style="width: 30px" />&nbsp;
           <span class="text-lg"> {{ item.name }} </span>
         </template>
       </el-tab-pane>
@@ -85,6 +85,7 @@
 <script setup>
   import ChapterDialog from './chapter-dialog.vue';
   import yg from '@/assets/images/yg.png';
+  import collect from '@/assets/images/collect.png';
   // import rb from '@/assets/images/rb.png';
   // import LastPage from '@/components/lastPage/index.vue';
   // import dg from '@/assets/images/dg.png';

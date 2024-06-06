@@ -29,3 +29,12 @@ export const shuffleArray = (array: any) => {
   }
   return newArray;
 }
+export const debounce = (func, delay) => {
+  let timeoutId;
+  return function(...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}

@@ -8,7 +8,7 @@
   const router = useRouter();
 
   const hostname = window.location.hostname;
-  const isDesiredDomain = hostname === 'idictation.cn';
+  const isDesiredDomain = hostname.indexOf('idictation.cn') != -1;
   // const isDesiredDomain = hostname === 'localhost';
 
   if (isDesiredDomain) {

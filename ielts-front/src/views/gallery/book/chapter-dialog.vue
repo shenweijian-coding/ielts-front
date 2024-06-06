@@ -13,12 +13,12 @@
         <div class="mt-2 focus:outline-none h-full">
           <div class="relative overflow-hidden h-[30rem] overflow-y-auto">
             <div class="h-full w-full rounded-[inherit]">
-              <div class="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 gap-4">
+              <div class="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                 <div
                   v-for="item in state.list"
                   :key="item.id"
                   @click="handleClickChapter(item)"
-                  class="relative flex h-16 lg:w-40 w-[88%] cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 dark:bg-slate-800"
+                  class="relative flex h-16 lg:w-40 xl:w-30 w-40 w-[88%] cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 dark:bg-slate-800"
                 >
                   <div class="flex justify-between w-full">
                     <h4 class="text-nowrap text-ellipsis truncate" :alt="item.name">{{ item.name }}</h4>
