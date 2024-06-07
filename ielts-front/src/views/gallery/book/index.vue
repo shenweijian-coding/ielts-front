@@ -3,7 +3,7 @@
     <el-tabs v-model="galleryState.activeTab" @tab-click="handleTabClick" class="flex h-12 w-full items-center justify-between">
       <el-tab-pane :name="item.id" v-for="item in galleryState.languageList" :key="item.id">
         <template #label>
-          <img :src="galleryState.languageIcon[item.id]" alt="" style="width: 30px" />&nbsp;
+          <img :src="galleryState.languageIcon[item.id]" alt="" style="width: 26px" />
           <span class="text-lg"> {{ item.name }} </span>
         </template>
       </el-tab-pane>

@@ -14,7 +14,14 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="">
-            <el-select v-model="state.form.c_id" placeholder="全部章节" style="width: 180px" @change="getErrorWords" clearable filterable>
+            <el-select
+              v-model="state.form.c_id"
+              :placeholder="appStore?.dictationInfo?.booInfo.name || '全部章节'"
+              style="width: 180px"
+              @change="getErrorWords"
+              clearable
+              filterable
+            >
               <el-option v-for="item in chapterList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
           </el-form-item>

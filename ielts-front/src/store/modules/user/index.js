@@ -17,6 +17,7 @@ export const useUserStore = defineStore('user', {
       repetitions: 1, // 重复次数
       error_sound: 1, //错误音效是否开启
       is_disorderly: 0, // 是否乱序
+      is_automatic_submit: 0, // 是否自动提交
     },
   }),
   persist: {

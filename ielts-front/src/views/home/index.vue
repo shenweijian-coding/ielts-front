@@ -221,17 +221,20 @@
                   <div>
                     <div class="flex items-center justify-between">
                       <div>乱序播放</div>
-                      <el-switch v-model="config.is_disorderly" @change="(val) => handleConfigChange('is_disorderly', val)" />
+                      <el-switch v-model="config.is_disorderly" @change="(val) => handleConfigChange('is_disorderly', val, true)" />
                     </div>
                     <!-- <span class="text-sm">开启后，单词播放顺序将会被打乱，下一章节/重新进入本章节 开始生效</span> -->
                     <div class="flex items-center justify-between mt-2">
                       <div>忽略大小写</div>
                       <el-switch v-model="config.ignore_case" />
                     </div>
-                    <!-- <div class="flex items-center justify-between mt-2">
+                    <div class="flex items-center justify-between mt-2">
                       <div>拼写正确自动提交</div>
-                      <el-switch v-model="config.auto_submit" />
-                    </div> -->
+                      <el-switch
+                        v-model="config.is_automatic_submit"
+                        @change="(val) => handleConfigChange('is_automatic_submit', val, false)"
+                      />
+                    </div>
                     <div class="flex items-center justify-between mt-2">
                       <div>输入按键音效</div>
                       <el-switch v-model="config.error_sound" />
@@ -312,15 +315,20 @@
                     class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
                   >
                     <SvgIcon name="left" />
-                    <div class="grow-1 flex w-full flex-col ml-2"
-                      ><p class="font-mono text-2xl font-normal tracking-normal mb-0">
+                    <div class="grow-1 flex w-full flex-col ml-2">
+                      <p class="font-mono text-2xl font-normal tracking-normal mb-0">
+                        <template v-if="nearWords.lastWord.isOk">
+                          <span>{{ nearWords.lastWord.word }}</span>
+                        </template>
                         <span
+                          v-else
                           v-for="(item, index) in nearWords.lastWord.wordArr"
                           :key="index"
                           :class="{ 'text-red-600': nearWords.lastWord.inputWordArr[index] != item }"
                           >{{ item }}</span
-                        > </p
-                      ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
+                        >
+                      </p>
+                      <p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
                         nearWords.lastWord.translate
                       }}</p></div
                     ></div
@@ -383,6 +391,7 @@
                       @blur="handleBlur"
                       @keydown="handleKeyDown"
                       @click="handleFocus"
+                      @input="handleWordChange"
                     />
                   </div>
                   <div class="text-2xl font-bold text-gray count-down-box">
@@ -488,7 +497,7 @@
     error_sound: userStore.getConfig.error_sound || false,
     ignore_case: userStore.getConfig.ignore_case || true,
     is_disorderly: userStore.getConfig.is_disorderly || false,
-    // auto_submit: userStore.getConfig.auto_submit || false,
+    is_automatic_submit: userStore.getConfig.is_automatic_submit || false,
     isSeries: false,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['1', '2', '3', '4', '5', '6', '7'],
@@ -501,7 +510,7 @@
 
   const wordsData = reactive({
     words: [],
-    currentWord: { translate: '', word: '', phonetic_transcription: '' },
+    currentWord: { translate: '', word: '', phonetic_transcription: '', userInput: '' },
     currentIndex: 0,
   });
 
@@ -541,6 +550,22 @@
       nextWord,
     };
   });
+
+  // 判断单词是否输入正确
+  const checkWordsIsOk = () => {
+    let { word, userInput = '', other_word = '' } = wordsData.currentWord;
+    console.log(word, userInput, 'word, userInput');
+    // if (userInput?.length != word?.length) {
+    //   return false;
+    // }
+    if (config.ignore_case) {
+      // 忽略大小写
+      word = word.toLowerCase();
+      other_word = other_word?.toLowerCase();
+      userInput = userInput ? userInput.toLowerCase() : '';
+    }
+    return word === userInput || other_word == userInput;
+  };
 
   const chapterList = computed(() => {
     return appStore?.dictationInfo?.chapterList || [];
@@ -783,20 +808,6 @@
       mistakeRef.value.open(correctness.toFixed(2));
     }
   };
-  // 判断单词是否输入正确
-  const checkWordsIsOk = () => {
-    let { word, userInput } = wordsData.currentWord;
-    console.log(word, userInput, 'word, userInput');
-    // if (userInput?.length != word?.length) {
-    //   return false;
-    // }
-    if (config.ignore_case) {
-      // 忽略大小写
-      word = word.toLowerCase();
-      userInput = userInput ? userInput.toLowerCase() : '';
-    }
-    return word === userInput;
-  };
   // 回车 播放下一个的方法
   const inputEnter = () => {
     count = 0;
@@ -804,14 +815,14 @@
     if (!wordsData.words.length || playStatus.value != 1) {
       return;
     }
-    let { word, userInput, id, other_word } = wordsData.currentWord;
-    if (config.ignore_case) {
-      // 忽略大小写
-      word = word.toLowerCase();
-      other_word = other_word?.toLowerCase();
-      userInput = userInput ? userInput.toLowerCase() : '';
-    }
-    if (word === userInput || other_word === userInput) {
+    let { userInput = '', id } = wordsData.currentWord;
+    // if (config.ignore_case) {
+    //   // 忽略大小写
+    //   word = word.toLowerCase();
+    //   other_word = other_word?.toLowerCase();
+    //   userInput = userInput ? userInput.toLowerCase() : '';
+    // }
+    if (checkWordsIsOk()) {
       inputRef.value.style.color = 'green';
       inputRef.value.style.borderColor = 'green';
       correctRef.value.play();
@@ -836,17 +847,20 @@
     }, 500);
   };
 
+  watch(
+    () => wordsData.currentWord.userInput,
+    (newValue, oldValue) => {
+      console.log(`message changed from ${oldValue} to ${newValue}`);
+      if (config.is_automatic_submit && checkWordsIsOk()) {
+        inputEnter();
+      }
+    },
+  );
+
   // 聚焦
   const handleFocus = () => {
     start();
   };
-  // // 拼写输入监听
-  // const handleWordChange = (val) => {
-  //   console.log(checkWordsIsOk, 'checkWordsIsOk');
-  //   // if (checkWordsIsOk()) {
-  //   //   inputEnter();
-  //   // }
-  // };
   // 失去焦点
   const handleBlur = () => {
     stop();
@@ -989,9 +1003,9 @@
   };
 
   // 切换配置
-  const handleConfigChange = (p, val) => {
+  const handleConfigChange = (p, val, isResetWord = false) => {
     userStore.handleConfig(p, val);
-    if (val) {
+    if (val && isResetWord) {
       appStore.updateContinuePlayStatus(true);
       getWords();
     }
