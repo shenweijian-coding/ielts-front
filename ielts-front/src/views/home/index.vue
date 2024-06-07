@@ -467,7 +467,7 @@
   import { useRouter, useRoute } from 'vue-router';
   import WordsDrawer from './wordsDrawer.vue';
   import { shuffleArray, debounce } from '@/utils/index';
-  import confetti from 'canvas-confetti'
+  import confetti from 'canvas-confetti';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -505,7 +505,7 @@
     currentIndex: 0,
   });
 
-  var myConfetti = null
+  var myConfetti = null;
   const playStatus = ref(0); // 0-未开始 1-播放中 2-已暂停
   const inputRef = ref(null); // 输入框聚焦
   const beepRef = ref(new Audio(beep));
@@ -516,7 +516,7 @@
   let currentTestKey = Date.now();
   const countDown = ref(0); // 倒计时
   const audioPlayer = ref(null);
-  const canvasRef = ref(null)
+  const canvasRef = ref(null);
   let audio = audioPlayer.value;
   var count = 0;
 
@@ -728,48 +728,49 @@
     }).then(() => {});
   };
   function fire(particleRatio, opts) {
+    var count = 200;
     var defaults = {
-      origin: { y: 0.7 }
+      origin: { y: 0.7 },
     };
-      myConfetti({
-        ...defaults,
-        ...opts,
-        particleCount: Math.floor(count * particleRatio)
-      });
-    }
+    myConfetti({
+      ...defaults,
+      ...opts,
+      particleCount: Math.floor(count * particleRatio),
+    });
+  }
   // 弹出效果
   const handleEffectiveness = () => {
-    canvasRef.value.style.display = 'block'
-    var count = 200;
-
-
+    canvasRef.value.style.display = 'block';
 
     fire(0.25, {
-      spread: 26,
+      spread: 60,
       startVelocity: 55,
     });
     fire(0.2, {
-      spread: 60,
+      spread: 180,
     });
     fire(0.35, {
-      spread: 100,
+      spread: 180,
       decay: 0.91,
-      scalar: 0.8
+      scalar: 0.8,
     });
     fire(0.1, {
-      spread: 120,
+      spread: 180,
       startVelocity: 25,
       decay: 0.92,
-      scalar: 1.2
+      scalar: 1.2,
     });
     fire(0.1, {
-      spread: 120,
+      spread: 180,
       startVelocity: 45,
     });
-    canvasRef.value.style.display = 'none'
-  }
+    setTimeout(() => {
+      canvasRef.value.style.display = 'none';
+    }, 4000);
+  };
   // 处理计算结果
   const handleResult = () => {
+    handleEffectiveness();
     const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
     if (appStore?.dictationInfo?.currentChapter?.id && appStore?.dictationInfo?.currentChapter?.g_id) {
       getChapterList({
@@ -781,7 +782,6 @@
     } else {
       mistakeRef.value.open(correctness.toFixed(2));
     }
-    handleEffectiveness()
   };
   // 判断单词是否输入正确
   const checkWordsIsOk = () => {
@@ -804,13 +804,14 @@
     if (!wordsData.words.length || playStatus.value != 1) {
       return;
     }
-    let { word, userInput, id } = wordsData.currentWord;
+    let { word, userInput, id, other_word } = wordsData.currentWord;
     if (config.ignore_case) {
       // 忽略大小写
       word = word.toLowerCase();
+      other_word = other_word?.toLowerCase();
       userInput = userInput ? userInput.toLowerCase() : '';
     }
-    if (word === userInput) {
+    if (word === userInput || other_word === userInput) {
       inputRef.value.style.color = 'green';
       inputRef.value.style.borderColor = 'green';
       correctRef.value.play();
@@ -951,8 +952,9 @@
 
     myConfetti = confetti.create(canvasRef.value, {
       resize: true,
-      useWorker: true
-    })
+      useWorker: true,
+    });
+    // handleEffectiveness();
   });
 
   // 章节切换
@@ -1056,11 +1058,11 @@
   }
   canvas {
     width: 80%;
-    height: 80%;
-    position:absolute;
+    height: 100%;
+    position: absolute;
     left: 10%;
     right: 10%;
-    top: 20%;
+    bottom: -10%;
     z-index: 999;
     display: none;
   }
