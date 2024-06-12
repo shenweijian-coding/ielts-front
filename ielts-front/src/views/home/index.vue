@@ -377,7 +377,7 @@
                         >
                       </div>
                     </div> -->
-                  <div class="user-input text-center">
+                  <div class="user-input text-center flex flex-col items-center">
                     <input
                       :placeholder="!showPlaceholder ? '在此输入单词，点击Enter核对' : ''"
                       v-model="wordsData.currentWord.userInput"
@@ -393,6 +393,7 @@
                       @click="handleFocus"
                       @input="handleWordChange"
                     />
+                    <div class="input-border"> </div>
                   </div>
                   <div class="text-2xl font-bold text-gray count-down-box">
                     <div v-if="countDown <= 2 && countDown > 0">
@@ -448,8 +449,8 @@
         class="my-card flex lg:w-3/5 w-90 rounded-xl bg-white p-4 py-10 opacity-50 transition-colors duration-300 dark:bg-gray-800"
         v-if="wordsData.words.length"
       >
-        <el-progress :percentage="((wordsData.currentIndex + 1) * 100) / (wordsData.words.length || 1)" class="w-full" :stroke-width="16">
-          <span>{{ wordsData.currentIndex + 1 }}/{{ wordsData.words.length }}</span>
+        <el-progress :percentage="(wordsData.currentIndex * 100) / (wordsData.words.length || 1)" class="w-full" :stroke-width="16">
+          <span>{{ wordsData.currentIndex }}/{{ wordsData.words.length }}</span>
         </el-progress>
       </div>
     </div>
@@ -548,6 +549,15 @@
     return {
       lastWord,
       nextWord,
+    };
+  });
+
+  const inputStyle = computed(() => {
+    const baseWidth = 300; // 设置一个基础宽度
+    const additionalWidth = 20; // 每个字符增加的宽度
+    const contentWidth = wordsData.currentWord.userInput?.length * additionalWidth;
+    return {
+      width: `calc('90%' + ${contentWidth})`,
     };
   });
 
@@ -796,6 +806,7 @@
   // 处理计算结果
   const handleResult = () => {
     handleEffectiveness();
+    wordsData.currentIndex = wordsData.words.length;
     const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
     if (appStore?.dictationInfo?.currentChapter?.id && appStore?.dictationInfo?.currentChapter?.g_id) {
       getChapterList({
@@ -1041,11 +1052,17 @@
   }
 
   .user-input {
+    .input-border {
+      width: 90%;
+      height: 2px;
+      background-color: #000;
+      // border-bottom: 2px solid ;
+    }
     input {
       font-size: 3rem;
-      border-bottom: 2px solid black;
-      padding: 10px;
-      width: 90%;
+      // border-bottom: 2px solid ;
+      padding: 10px 0;
+      width: 100%;
     }
     input::placeholder {
       color: #999; /* 灰色 */

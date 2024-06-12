@@ -3,17 +3,17 @@
 </template>
 <script setup lang="ts">
   import Main from '@/layout/layout.vue';
-  import { useRouter } from 'vue-router';
+  // import { useRouter } from 'vue-router';
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const hostname = window.location.hostname;
-  const isDesiredDomain = hostname.indexOf('idictation.cn') != -1;
-  // const isDesiredDomain = hostname === 'localhost';
+  // const hostname = window.location.hostname;
+  // const isDesiredDomain = hostname.indexOf('idictation.cn') != -1;
+  // // const isDesiredDomain = hostname === 'localhost';
 
-  if (isDesiredDomain) {
-    router.replace('/stop');
-  }
+  // if (isDesiredDomain) {
+  //   router.replace('/stop');
+  // }
 </script>
 
 <style>
