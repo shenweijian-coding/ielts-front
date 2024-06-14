@@ -24,7 +24,11 @@ const uploadBook = async (data) => post({ url: '/api/study/lexicon/v1/upload/boo
 const getAnalysisData = async (data) => post({ url: '/api/study/lexicon/v1/data/analysis', data });
 
 const getCategoryList = async (data) => post({ url: '/api/study/lexicon/v1/v1/category/list', data });
+
+const deleteBook = async (data) => post({ url: '/api/study/lexicon/v1/book/delete', data });
+
 export {
+  deleteBook,
   getBookList,
   getSceneList,
   getGroupBooks,

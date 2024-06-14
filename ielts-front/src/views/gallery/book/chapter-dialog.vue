@@ -5,6 +5,7 @@
       <div class="absolute bottom-6 right-2">
         <div role="group" dir="ltr" class="flex items-center justify-center gap-1" tabindex="0" style="outline: none">
           <!-- <el-button @click="handleErrorBook">查看错题</el-button> -->
+          <!-- <el-button @click="deleteBook" :icon="Delete" size="small">删除</el-button> -->
         </div>
       </div>
     </div>
@@ -53,8 +54,9 @@
   import { reactive } from 'vue';
   import SvgIcon from '@/components/SvgIcon/index.vue';
   import { useAppStore } from '@/store';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import { useRouter } from 'vue-router';
+  import { Delete } from '@element-plus/icons-vue';
 
   const appStore = useAppStore();
 
@@ -146,6 +148,26 @@
   const handleErrorBook = () => {
     setChapterInfo('');
     router.push('/errorBook?from=gallery');
+  };
+
+  const deleteBook = () => {
+    ElMessageBox.confirm('删除后无法恢复', `要删除 “${state.book?.name}” 吗?`, {
+      confirmButtonText: '不删除',
+      cancelButtonText: '删除',
+      type: 'warning',
+    })
+      .then(() => {
+        // ElMessage({
+        //   type: 'success',
+        //   message: 'Delete completed',
+        // });
+      })
+      .catch(() => {
+        ElMessage({
+          type: 'info',
+          message: 'Delete canceled',
+        });
+      });
   };
   onMounted(() => {
     window.addEventListener('resize', () => {

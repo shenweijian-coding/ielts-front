@@ -13,6 +13,8 @@
 </script>
 <style lang="less" scoped>
   .loading {
+    top: 0;
+    left: 0;
     position: absolute;
     background-color: #fffaf7;
     opacity: 0.8;

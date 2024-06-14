@@ -361,8 +361,8 @@
                   </div>
                 </div> -->
 
-              <div class="relative" v-if="wordsData.words.length">
-                <div lang="en" class="flex flex-col items-center justify-center pb-1 pt-4">
+              <div class="relative w-full" v-if="wordsData.words.length">
+                <div lang="en" class="flex flex-col items-center justify-center pb-1 pt-4 w-full">
                   <!-- <div
                       class="tooltip-info relative w-fit bg-transparent p-0 leading-normal shadow-none dark:bg-transparent"
                       data-tip="按 Tab 快捷键显示完整单词"
@@ -377,7 +377,7 @@
                         >
                       </div>
                     </div> -->
-                  <div class="user-input text-center flex flex-col items-center">
+                  <div class="user-input text-center flex flex-col items-center w-full">
                     <input
                       :placeholder="!showPlaceholder ? '在此输入单词，点击Enter核对' : ''"
                       v-model="wordsData.currentWord.userInput"
@@ -391,9 +391,8 @@
                       @blur="handleBlur"
                       @keydown="handleKeyDown"
                       @click="handleFocus"
-                      @input="handleWordChange"
                     />
-                    <div class="input-border"> </div>
+                    <div class="input-border w-4/5 lg:w-2/5"> </div>
                   </div>
                   <div class="text-2xl font-bold text-gray count-down-box">
                     <div v-if="countDown <= 2 && countDown > 0">
@@ -484,6 +483,8 @@
   const route = useRoute();
   const router = useRouter();
 
+  let canSubmit = true;
+
   const { loading, setLoading } = useLoading();
 
   // 有道的翻译api
@@ -554,10 +555,12 @@
 
   const inputStyle = computed(() => {
     const baseWidth = 300; // 设置一个基础宽度
-    const additionalWidth = 20; // 每个字符增加的宽度
-    const contentWidth = wordsData.currentWord.userInput?.length * additionalWidth;
+    const additionalWidth = 30; // 每个字符增加的宽度
+    const width1 = wordsData?.currentWord?.userInput?.length * additionalWidth || 0;
+    const width2 = wordsData?.currentWord?.word?.length * additionalWidth || 0;
+    console.log(wordsData?.currentWord?.word, wordsData?.currentWord?.userInput);
     return {
-      width: `calc('90%' + ${contentWidth})`,
+      width: `${Math.max(baseWidth, width1, width2)}px`,
     };
   });
 
@@ -574,7 +577,7 @@
       other_word = other_word?.toLowerCase();
       userInput = userInput ? userInput.toLowerCase() : '';
     }
-    return word === userInput || other_word == userInput;
+    return word === userInput || (other_word && other_word == userInput);
   };
 
   const chapterList = computed(() => {
@@ -760,7 +763,13 @@
     reportLexiRes({
       key: currentTestKey,
       ...data,
-    }).then(() => {});
+    })
+      .then(() => {
+        // canSubmit = true;
+      })
+      .catch(() => {
+        // canSubmit = true;
+      });
   };
   function fire(particleRatio, opts) {
     var count = 200;
@@ -821,6 +830,12 @@
   };
   // 回车 播放下一个的方法
   const inputEnter = () => {
+    console.log(canSubmit, 'canSubmit1');
+    if (!canSubmit) {
+      return;
+    }
+    canSubmit = false;
+    console.log(canSubmit, 'canSubmit2');
     count = 0;
     clearAudioCache();
     if (!wordsData.words.length || playStatus.value != 1) {
@@ -855,7 +870,8 @@
       } else {
         handleMove(1);
       }
-    }, 500);
+      canSubmit = true;
+    }, 200);
   };
 
   watch(
@@ -969,7 +985,7 @@
     errSource.value = route.query?.source == 'err';
 
     document.addEventListener('keydown', handleAllKeyDown);
-    if (!appStore?.dictationInfo?.currentChapter && !appStore.errWords.length) {
+    if (!appStore?.dictationInfo?.currentChapter && !appStore?.errWords?.length) {
       router.push('/main');
       return;
     }
@@ -1053,7 +1069,6 @@
 
   .user-input {
     .input-border {
-      width: 90%;
       height: 2px;
       background-color: #000;
       // border-bottom: 2px solid ;

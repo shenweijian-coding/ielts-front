@@ -47,7 +47,7 @@ export const useAppStore = defineStore(
         this.errWords = data;
       },
       async setLastId(data) {
-        this.dictationInfo.currentChapter.last_id = data;
+        this.dictationInfo && (this.dictationInfo.currentChapter.last_id = data);
       },
     },
   },

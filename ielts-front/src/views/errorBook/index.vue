@@ -44,7 +44,7 @@
           :maxHeight="tableHeight"
         >
           <el-table-column type="selection" width="30" />
-          <el-table-column prop="lexicon" label="单词" minWidth="100">
+          <el-table-column prop="lexicon" label="单词" minWidth="140">
             <template #header="scope">
               <div class="flex items-center">
                 单词&nbsp;
@@ -85,9 +85,13 @@
           </el-table-column>
           <el-table-column prop="error_num" label="错误次数" sortable="custom" width="110" align="center" />
           <el-table-column prop="error_word" label="错误拼写" width="180" align="center" />
-          <el-table-column prop="lexicon_group.name" label="词典" width="90" align="center" />
+          <!-- <el-table-column prop="lexicon_group.name" label="词典" width="90" align="center" /> -->
           <el-table-column prop="chapter.name" label="章节" width="80" align="center" />
-          <el-table-column prop="updated_at" label="错误时间" sortable="custom" width="94" align="center" />
+          <el-table-column prop="updated_at" label="错误时间" sortable="custom" width="100" align="center">
+            <template #default="scope">
+              {{ scope.row.updated_at.split(' ')[0] }}
+            </template>
+          </el-table-column>
         </el-table>
         <!-- <div class="py-5 flex justify-end">
           <el-pagination
