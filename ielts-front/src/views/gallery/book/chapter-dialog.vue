@@ -5,7 +5,7 @@
       <div class="absolute bottom-6 right-2">
         <div role="group" dir="ltr" class="flex items-center justify-center gap-1" tabindex="0" style="outline: none">
           <!-- <el-button @click="handleErrorBook">查看错题</el-button> -->
-          <!-- <el-button @click="deleteBook" :icon="Delete" size="small">删除</el-button> -->
+          <!-- <el-button @click="deleteBookClick" :icon="Delete" size="small">删除</el-button> -->
         </div>
       </div>
     </div>
@@ -57,6 +57,9 @@
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { useRouter } from 'vue-router';
   import { Delete } from '@element-plus/icons-vue';
+  import { deleteBook } from '@/api/book/index';
+
+  const emits = defineEmits(['ok']);
 
   const appStore = useAppStore();
 
@@ -150,7 +153,7 @@
     router.push('/errorBook?from=gallery');
   };
 
-  const deleteBook = () => {
+  const deleteBookClick = () => {
     ElMessageBox.confirm('删除后无法恢复', `要删除 “${state.book?.name}” 吗?`, {
       confirmButtonText: '不删除',
       cancelButtonText: '删除',
@@ -162,11 +165,13 @@
         //   message: 'Delete completed',
         // });
       })
-      .catch(() => {
-        ElMessage({
-          type: 'info',
-          message: 'Delete canceled',
-        });
+      .catch((action) => {
+        if (action == 'cancel') {
+          deleteBook({ g_id: state.book.id }).then((res) => {
+            state.dialogVisible = false;
+            emits('ok');
+          });
+        }
       });
   };
   onMounted(() => {

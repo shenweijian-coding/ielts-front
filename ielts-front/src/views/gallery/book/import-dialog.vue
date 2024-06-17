@@ -13,7 +13,12 @@
           <!-- <div>若上传1000个单词，选中【50个】，将自动为您划分20个章节</div> -->
         </el-form-item>
         <el-form-item label="单词" prop="data">
-          <el-input placeholder="单词，一行一个" v-model="state.form.data" :rows="6" type="textarea" />
+          <el-input
+            placeholder="一行一个，不用输入中文释义，示例如下&#13;apple&#13;ablity&#13;air"
+            type="textarea"
+            v-model="state.form.data"
+            :rows="6"
+          />
         </el-form-item>
       </el-form>
     </div>

@@ -77,7 +77,7 @@
       </div>
     </div>
     <Loading :loading="loading" />
-    <ChapterDialog ref="ChapterDialogRef" />
+    <ChapterDialog ref="ChapterDialogRef" @ok="getBooks(2)" />
     <ImportDialog ref="ImportDialogRef" @ok="getBooks(2)" />
     <tabbar />
   </div>

@@ -381,7 +381,7 @@
                     <input
                       :placeholder="!showPlaceholder ? '在此输入单词，点击Enter核对' : ''"
                       v-model="wordsData.currentWord.userInput"
-                      type="text"
+                      :type="isMobile ? 'password' : 'text'"
                       ref="inputRef"
                       class="font-mono font-normal text-center"
                       autocomplete="off"
@@ -390,7 +390,8 @@
                       @keydown.enter="inputEnter"
                       @blur="handleBlur"
                       @keydown="handleKeyDown"
-                      @click="handleFocus"
+                      @click="handleFocusClick"
+                      @focus="handleFocus"
                     />
                     <div class="input-border w-4/5 lg:w-2/5"> </div>
                   </div>
@@ -490,6 +491,8 @@
   // 有道的翻译api
   // const YDAPI = 'https://dict.youdao.com/dictvoice?audio=';
   const errSource = ref(false); // 默认空，错词表来的  err
+  const isMobile = ref(window.innerWidth <= 768);
+
   const config = reactive({
     chapterId: appStore.chapterId,
     play_speed: userStore.getConfig.play_speed + '' || '1.0',
@@ -885,8 +888,15 @@
   );
 
   // 聚焦
-  const handleFocus = () => {
+  const handleFocusClick = () => {
     start();
+  };
+  const handleFocus = () => {
+    if (isMobile.value) {
+      setTimeout(() => {
+        inputRef.value.type = 'text';
+      }, 200);
+    }
   };
   // 失去焦点
   const handleBlur = () => {
