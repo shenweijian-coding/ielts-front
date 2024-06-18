@@ -68,7 +68,7 @@
           </el-table-column>
           <el-table-column prop="lexicon" label="释义" align="center" minWidth="280">
             <template #header="scope">
-              <div class="flex items-center justify-center">
+              <div class="flex">
                 释义&nbsp;
                 <el-icon @click="troggleView('translate')" class="cursor-pointer">
                   <View v-if="state.hideProps.translate" />
@@ -78,7 +78,10 @@
             </template>
             <template #default="scope">
               <template v-if="!state.hideProps.translate">
-                {{ scope.row.lexicon.translate }}
+                <div class="text-left" v-html="scope.row.lexicon?.translate.replace(/([A-Za-z]+)\./g, function(match, p1, offset) {   
+                  if (offset) {
+                  return '<br>' + p1 + '.' } return p1 + '.'; })">
+                  </div>
               </template>
               <span v-else>***</span>
             </template>
