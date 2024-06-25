@@ -68,7 +68,7 @@
           </el-table-column>
           <el-table-column prop="lexicon" label="释义" align="center" minWidth="280">
             <template #header="scope">
-              <div class="flex">
+              <div class="flex items-center">
                 释义&nbsp;
                 <el-icon @click="troggleView('translate')" class="cursor-pointer">
                   <View v-if="state.hideProps.translate" />

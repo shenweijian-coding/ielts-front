@@ -817,7 +817,7 @@
   };
   // 处理计算结果
   const handleResult = () => {
-    handleEffectiveness();
+    let accuracy = 0
     wordsData.currentIndex = wordsData.words.length;
     const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
     if (appStore?.dictationInfo?.currentChapter?.id && appStore?.dictationInfo?.currentChapter?.g_id) {
@@ -825,10 +825,18 @@
         id: appStore.dictationInfo.currentChapter.id,
         g_id: appStore.dictationInfo.currentChapter.g_id,
       }).then((res) => {
-        mistakeRef.value.open((res?.[0].accuracy || correctness).toFixed(2));
+        accuracy = (res?.[0].accuracy || correctness).toFixed(2)
+        if(accuracy > 0) {
+          handleEffectiveness();
+        }
+        mistakeRef.value.open(accuracy);
       });
     } else {
-      mistakeRef.value.open(correctness.toFixed(2));
+      accuracy = correctness.toFixed(2)
+      if(accuracy > 0) {
+        handleEffectiveness();
+      }
+      mistakeRef.value.open(accuracy);
     }
   };
   // 回车 播放下一个的方法

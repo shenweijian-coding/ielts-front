@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="state.dialogVisible" :width="dialogWidth" :before-close="handleClose">
-    <div>
+    <div class="pt-6">
       <el-form ref="formRef" :model="state.form" label-width="120" :rules="state.rules">
         <el-form-item label="单词书名称" prop="title">
           <el-input placeholder="最多输入9个字" v-model="state.form.title" />
@@ -68,6 +68,13 @@
     state.dialogVisible = true;
   };
   const handleClose = () => {
+    // formRef.value && formRef.value.resetField()
+    formRef.value && formRef.value.clearValidate()
+    state.form = {
+      title: '',
+      word_count: 15,
+      data: '',
+    },
     state.dialogVisible = false;
   };
   const handleConfirm = () => {
