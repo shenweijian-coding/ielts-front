@@ -33,6 +33,9 @@
             >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
           >
           <el-button :icon="Download" plain @click="handleDownloadExcel" />
+          <!-- <el-icon><Delete /></el-icon> -->
+          <el-button type="" :icon="Delete" plain />
+          <el-button type="" :icon="Star" plain />
           <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
         </div>
         <el-table
@@ -118,7 +121,7 @@
 <script setup>
   import { getErrorWordList } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
-  import { Headset, Download, Hide, View } from '@element-plus/icons-vue';
+  import { Headset, Download, Hide, View, Delete, Star } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage } from 'element-plus';
   import dayjs from 'dayjs';
