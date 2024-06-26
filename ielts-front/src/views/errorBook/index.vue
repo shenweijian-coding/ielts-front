@@ -34,8 +34,8 @@
           >
           <el-button :icon="Download" plain @click="handleDownloadExcel" />
           <!-- <el-icon><Delete /></el-icon> -->
-          <el-button type="" :icon="Delete" plain />
-          <el-button type="" :icon="Star" plain />
+          <el-button type="" :icon="Delete" plain @click="handleWordSign"/>
+          <el-button type="" :icon="Star" plain @click="handleWordSign"/>
           <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
         </div>
         <el-table
@@ -119,7 +119,7 @@
   </div>
 </template>
 <script setup>
-  import { getErrorWordList } from '@/api/book/index';
+  import { getErrorWordList, wordLabel } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
   import { Headset, Download, Hide, View, Delete, Star } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
@@ -333,6 +333,10 @@
       bookType: 'xlsx',
     });
   };
+  // 单词标熟 
+  const handleWordSign = () => {
+    wordLabel
+  }
   onMounted(() => {
     if (route.query?.from == 'result') {
       state.form.errTime = 3;

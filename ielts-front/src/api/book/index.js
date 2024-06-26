@@ -27,6 +27,8 @@ const getCategoryList = async (data) => post({ url: '/api/study/lexicon/v1/v1/ca
 
 const deleteBook = async (data) => post({ url: '/api/study/lexicon/v1/book/delete', data });
 
+const wordLabel = async (data) => post({ url: '/api/study/lexicon/v1/label', data });
+
 export {
   deleteBook,
   getBookList,
@@ -40,4 +42,5 @@ export {
   uploadBook,
   getAnalysisData,
   getCategoryList,
+  wordLabel
 };
