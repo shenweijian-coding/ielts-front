@@ -33,7 +33,7 @@
             >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
           >
           <el-button :icon="Download" plain @click="handleDownloadExcel" />
-          <!-- <el-icon><Delete /></el-icon> -->
+          <el-icon><Delete /></el-icon>
           <el-button type="" :icon="Delete" plain @click="handleWordSign"/>
           <el-button type="" :icon="Star" plain @click="handleWordSign"/>
           <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
@@ -45,6 +45,7 @@
           @selection-change="handleSelectionChange"
           @sort-change="sortChange"
           :maxHeight="tableHeight"
+          @row-click="rowClick"
         >
           <el-table-column type="selection" width="30" />
           <el-table-column prop="lexicon" label="单词" minWidth="140">
@@ -116,6 +117,7 @@
     <!-- <LastPage /> -->
     <Loading :loading="loading" />
     <tabbar />
+    <collectDialog />
   </div>
 </template>
 <script setup>
@@ -123,13 +125,14 @@
   import { useAppStore, useUserStore } from '@/store';
   import { Headset, Download, Hide, View, Delete, Star } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import dayjs from 'dayjs';
   import { useRouter, useRoute } from 'vue-router';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
   import * as XLSX from 'xlsx';
   import tabbar from '@/components/tabBar/index.vue';
+  import collectDialog from './components/collect-dialog.vue'
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -197,6 +200,7 @@
     }
     return list;
   });
+
   const getErrorWords = () => {
     const params = {};
     if (state.form.errTime == 0) {
@@ -284,6 +288,9 @@
     audio.src = row.lexicon[type];
     audio.play();
   };
+  const rowClick = (row) => {
+    play(row)
+  }
   const handleSelWords = async () => {
     if (!state.selWords.length) {
       ElMessage.error('请选择错词');
@@ -335,7 +342,31 @@
   };
   // 单词标熟 
   const handleWordSign = () => {
-    wordLabel
+    if(!state.selWords.length) {
+      ElMessage.error('请选择需要表熟的错词');
+      return
+    }
+    ElMessageBox.confirm(`确定将选中的${state.selWords.length}单词标为熟词吗？`, '', {
+      confirmButtonText: '标熟',
+      cancelButtonText: '取消',
+      type: 'warning',
+      distinguishCancelAndClose: true,
+    }).then(() => {
+      const ids = state.selWords.map(o => o.lexicon_id)
+      setLoading(true);
+  
+      wordLabel({
+        type: 'proficient',
+        lexicon_ids: JSON.stringify(ids)
+      }).then(res => {
+        ElMessage.error('操作成功');
+        setLoading(false)
+      }).catch(err => {
+        setLoading(false)
+      })
+
+    })
+
   }
   onMounted(() => {
     if (route.query?.from == 'result') {

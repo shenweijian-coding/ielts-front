@@ -8,6 +8,7 @@
           class="mb-2 flex cursor-pointer select-text items-center rounded-xl py-2 px-4 shadow focus:outline-none dark:bg-opacity-20"
           :class="state.current == item ? 'bg-theme_hover current' : ''"
           :id="state.current == item ? 'current' : ''"
+          @click="play(item)"
         >
           <div class="flex-1"
             ><p class="select-all font-mono text-xl font-normal leading-6 dark:text-gray-50 mb-2"

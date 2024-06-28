@@ -47,6 +47,7 @@ declare module 'vue-router/auto/routes' {
     '/contain/components/subAside': RouteRecordInfo<'/contain/components/subAside', '/contain/components/subAside', Record<never, never>, Record<never, never>>,
     '/demo/': RouteRecordInfo<'/demo/', '/demo', Record<never, never>, Record<never, never>>,
     '/errorBook/': RouteRecordInfo<'/errorBook/', '/errorBook', Record<never, never>, Record<never, never>>,
+    '/errorBook/components/collect-dialog': RouteRecordInfo<'/errorBook/components/collect-dialog', '/errorBook/components/collect-dialog', Record<never, never>, Record<never, never>>,
     '/forgetPassword/': RouteRecordInfo<'/forgetPassword/', '/forgetPassword', Record<never, never>, Record<never, never>>,
     '/gallery/': RouteRecordInfo<'/gallery/', '/gallery', Record<never, never>, Record<never, never>>,
     '/gallery/book/': RouteRecordInfo<'/gallery/book/', '/gallery/book', Record<never, never>, Record<never, never>>,
