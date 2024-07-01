@@ -65,15 +65,20 @@
 <script setup>
   import Footer from '@/components/footer/index.vue';
   import { Memo, Headset, DataLine, DocumentDelete, User } from '@element-plus/icons-vue';
-  import { useAppStore } from '@/store';
+  import { useAppStore, useUserStore } from '@/store';
   import { useRoute } from 'vue-router';
 
   const appStore = useAppStore();
+  const userStore = useUserStore();
   const route = useRoute();
   const currentRoute = ref('/main/book');
   onMounted(() => {
-    console.log(console.log(route.path));
-    currentRoute.value = route.path;
+    if (route.meta.belong) {
+      currentRoute.value = route.meta.belong;
+    } else {
+      currentRoute.value = route.path;
+    }
+    userStore.info();
   });
 </script>
 <style lang="less" scoped>

@@ -4,16 +4,6 @@
       <div class="pt-2">
         <el-form :model="state.form" :size="formSize" label-width="70" :inline="true">
           <el-form-item label="">
-            <el-radio-group v-model="state.form.errTime" @change="getErrorWords">
-              <el-radio-button v-for="o in state.errTimeOption" :key="o.id" :value="o.id" :label="o.id">{{ o.name }}</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="">
-            <el-radio-group v-model="state.form.error_num" @change="getErrorWords">
-              <el-radio-button v-for="o in state.errNumOption" :key="o.num" :value="o.num" :label="o.num">{{ o.name }}</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="">
             <el-select
               v-model="state.form.c_id"
               :placeholder="appStore?.dictationInfo?.booInfo.name || '全部章节'"
@@ -33,8 +23,6 @@
             >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
           >
           <el-button :icon="Download" plain @click="handleDownloadExcel" />
-          <el-button type="" :icon="Delete" plain @click="handleWordSign" />
-          <el-button type="" :icon="Star" plain @click="handleWordCollect" />
           <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
         </div>
         <el-table
@@ -97,42 +85,28 @@
               <span v-else>***</span>
             </template>
           </el-table-column>
-          <el-table-column prop="error_num" label="错误次数" sortable="custom" width="110" align="center" />
-          <el-table-column prop="error_word" label="错误拼写" width="180" align="center" />
-          <!-- <el-table-column prop="lexicon_group.name" label="词典" width="90" align="center" /> -->
           <el-table-column prop="chapter.name" label="章节" width="80" align="center" />
-          <el-table-column prop="updated_at" label="错误时间" sortable="custom" width="100" align="center">
+          <el-table-column prop="updated_at" label="添加时间" sortable="custom" width="100" align="center">
             <template #default="scope">
               {{ scope.row.updated_at.split(' ')[0] }}
             </template>
           </el-table-column>
+          <el-table-column prop="updated_at" label="添加时间" sortable="custom" width="100" align="center">
+            <template #default="scope">
+              <el-button text type="danger">取消收藏</el-button>
+            </template>
+          </el-table-column>
         </el-table>
-        <!-- <div class="py-5 flex justify-end">
-          <el-pagination
-            background
-            v-model:current-page="state.page.currentPage"
-            layout="prev, pager, next, sizes"
-            :total="state.page.total"
-            :page-size="state.page.pageSize"
-            :page-sizes="[20, 50, 100]"
-            @size-change="handleSizeChange"
-            @current-change="getErrorWords"
-          />
-        </div> -->
       </div>
     </div>
-    <!-- <LastPage /> -->
     <Loading :loading="loading" />
     <tabbar />
-    <collectDialog ref="collectRef" @addBook="addBook" />
-    <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
   </div>
 </template>
 <script setup>
   import { getErrorWordList, wordLabel } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
   import { Headset, Download, Hide, View, Delete, Star } from '@element-plus/icons-vue';
-  import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import dayjs from 'dayjs';
   import { useRouter, useRoute } from 'vue-router';
@@ -140,8 +114,6 @@
   import useLoading from '@/hooks/loading.ts';
   import * as XLSX from 'xlsx';
   import tabbar from '@/components/tabBar/index.vue';
-  import collectDialog from './components/collect-dialog.vue';
-  import ImportDialog from './components/import-dialog.vue';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -152,7 +124,6 @@
 
   const tableRef = ref(null);
   const collectRef = ref(null);
-  const ImportDialogRef = ref(null);
   const screenWidth = ref(window.innerWidth); // 获取当前屏幕宽度
   const screenHeight = ref(window.innerHeight); // 获取当前屏幕宽度
 
@@ -337,11 +308,8 @@
       exportData.push({
         单词: item.lexicon.word,
         释义: item.lexicon.translate,
-        错误次数: item.error_num,
-        错误拼写: item.error_word,
-        词典: item.lexicon_group.name,
         章节: item.chapter.name,
-        错误时间: item.updated_at,
+        添加时间: item.updated_at,
       });
     });
     const workBook = XLSX.utils.book_new();
@@ -351,42 +319,6 @@
       bookType: 'xlsx',
     });
   };
-  // 单词标熟
-  const handleWordSign = () => {
-    if (!state.selWords.length) {
-      ElMessage.error('请选择需要表熟的错词');
-      return;
-    }
-    ElMessageBox.confirm(`确定将选中的${state.selWords.length}单词标为熟词吗？`, '', {
-      confirmButtonText: '标熟',
-      cancelButtonText: '取消',
-      type: 'warning',
-      distinguishCancelAndClose: true,
-    }).then(() => {
-      const ids = state.selWords.map((o) => o.lexicon_id);
-      setLoading(true);
-
-      wordLabel({
-        type: 'proficient',
-        lexicon_ids: JSON.stringify(ids),
-      })
-        .then((res) => {
-          ElMessage.success('操作成功');
-          setLoading(false);
-        })
-        .catch((err) => {
-          setLoading(false);
-        });
-    });
-  };
-  // 单词收藏
-  const handleWordCollect = () => {
-    if (!state.selWords.length) {
-      ElMessage.error('请选择需要收藏的错词');
-      return;
-    }
-    collectRef.value.open(state.selWords.map((o) => o.lexicon_id));
-  };
   onMounted(() => {
     if (route.query?.from == 'result') {
       state.form.errTime = 3;
@@ -394,35 +326,19 @@
     } else if (route.query?.from == 'home') {
       state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
     }
-    // console.log(appStore?.dictationInfo?.currentChapter?.id);
-    // if (!state.form.c_id && appStore?.dictationInfo?.chapterList?.length) {
-    //   state.form.c_id = appStore?.dictationInfo?.chapterList[0].id;
-    // }
 
     getErrorWords();
   });
   const troggleView = (field) => {
     state.hideProps[field] = !state.hideProps[field];
   };
-  const addBook = () => {
-    setTimeout(() => {
-      ImportDialogRef.value.open();
-    }, 200);
-  };
-
-  const addBookComplete = () => {
-    handleWordCollect();
-  };
-
   onUnmounted(() => {
     audio.pause(); // 先暂停播放
     audio.src = ''; // 清空src
     audio.remove(); // 移除音频对象
-
     // 或者将音频对象赋值为null
     audio = null;
   });
-  // getAllChapter();
 </script>
 <style lang="less" scoped>
   /deep/.el-table__cell .cell {

@@ -62,6 +62,20 @@ export default [
       {
         path: 'user',
         component: () => import('@/views/user/index.vue'),
+      },
+      {
+        path: 'vocabularyBook',
+        meta: {
+          belong: '/main/user'
+        },
+        component: () => import('@/views/vocabularyBook/index.vue'),
+      },
+      {
+        path: 'vocabularyBookDetail',
+        meta: {
+          belong: '/main/user'
+        },
+        component: () => import('@/views/vocabularyBook/detail/index.vue'),
       }
     ],
   },

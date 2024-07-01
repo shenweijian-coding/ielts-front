@@ -48,6 +48,7 @@ declare module 'vue-router/auto/routes' {
     '/demo/': RouteRecordInfo<'/demo/', '/demo', Record<never, never>, Record<never, never>>,
     '/errorBook/': RouteRecordInfo<'/errorBook/', '/errorBook', Record<never, never>, Record<never, never>>,
     '/errorBook/components/collect-dialog': RouteRecordInfo<'/errorBook/components/collect-dialog', '/errorBook/components/collect-dialog', Record<never, never>, Record<never, never>>,
+    '/errorBook/components/import-dialog': RouteRecordInfo<'/errorBook/components/import-dialog', '/errorBook/components/import-dialog', Record<never, never>, Record<never, never>>,
     '/forgetPassword/': RouteRecordInfo<'/forgetPassword/', '/forgetPassword', Record<never, never>, Record<never, never>>,
     '/gallery/': RouteRecordInfo<'/gallery/', '/gallery', Record<never, never>, Record<never, never>>,
     '/gallery/book/': RouteRecordInfo<'/gallery/book/', '/gallery/book', Record<never, never>, Record<never, never>>,
@@ -63,6 +64,8 @@ declare module 'vue-router/auto/routes' {
     '/statistics/': RouteRecordInfo<'/statistics/', '/statistics', Record<never, never>, Record<never, never>>,
     '/stop/': RouteRecordInfo<'/stop/', '/stop', Record<never, never>, Record<never, never>>,
     '/user/': RouteRecordInfo<'/user/', '/user', Record<never, never>, Record<never, never>>,
+    '/vocabularyBook/': RouteRecordInfo<'/vocabularyBook/', '/vocabularyBook', Record<never, never>, Record<never, never>>,
+    '/vocabularyBook/detail/': RouteRecordInfo<'/vocabularyBook/detail/', '/vocabularyBook/detail', Record<never, never>, Record<never, never>>,
   }
 }
 

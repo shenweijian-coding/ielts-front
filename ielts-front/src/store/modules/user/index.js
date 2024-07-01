@@ -18,6 +18,9 @@ export const useUserStore = defineStore('user', {
       error_sound: 1, //错误音效是否开启
       is_disorderly: 0, // 是否乱序
       is_automatic_submit: 0, // 是否自动提交
+      proficient_tip: 0, // 标熟是否提示
+      default_collection_book: 0, // 是否自动收藏至上次添加单词本
+      recent_collection_book_id: 0, // 最近一次收藏书ID
     },
   }),
   persist: {

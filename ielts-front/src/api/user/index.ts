@@ -8,6 +8,7 @@ enum URL {
   sendyzm = '/api/study/phone/send/sms',
   signup = '/api/study/customer/v1/signup',
   updateConfig = '/api/study/customer/v1/update/config',
+  
 }
 interface LoginRes {
   token: string;
@@ -18,7 +19,7 @@ export interface LoginData {
   password: string;
 }
 
-const getUserProfile = async () => get({ url: '/user/getUserInfo' });
+const getUserProfile = async () => post({ url: '/api/study/customer/v1/login/msg' });
 const login = async (data: LoginData) => post<any>({ url: URL.login, data });
 const logout = async () => post<LoginRes>({ url: URL.logout });
 const saveConfig = async (data) => post({ url: '/user/saveConfig', data });
