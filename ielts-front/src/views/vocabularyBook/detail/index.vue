@@ -23,7 +23,7 @@
             >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
           >
           <el-button :icon="Download" plain @click="handleDownloadExcel" />
-          <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
+          <el-button @click="handleSelWords" type="primary">听写已选中单词</el-button>
         </div>
         <el-table
           ref="tableRef"
@@ -35,7 +35,7 @@
           @row-click="rowClick"
         >
           <el-table-column type="selection" width="30" />
-          <el-table-column prop="lexicon" label="单词" minWidth="140">
+          <el-table-column prop="word" label="单词" minWidth="140">
             <template #header="scope">
               <div class="flex items-center">
                 单词&nbsp;
@@ -48,16 +48,16 @@
             <template #default="scope">
               <template v-if="!state.hideProps.word">
                 <span class="flex items-center cursor-pointer"
-                  >{{ scope.row.lexicon.word }}<el-icon @click="play(scope.row)" class="ml-2"><Headset /></el-icon>
+                  >{{ scope.row.word }}<el-icon @click="play(scope.row)" class="ml-2"><Headset /></el-icon>
                 </span>
-                <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer"
-                  >{{ scope.row.lexicon?.phonetic_transcription }}
+                <span v-if="scope.row?.phonetic_transcription" class="flex items-center cursor-pointer"
+                  >{{ scope.row?.phonetic_transcription }}
                 </span>
               </template>
               <span v-else>***</span>
             </template>
           </el-table-column>
-          <el-table-column prop="lexicon" label="释义" align="center" minWidth="280">
+          <el-table-column prop="translate" label="释义" align="center" minWidth="280">
             <template #header="scope">
               <div class="flex items-center">
                 释义&nbsp;
@@ -72,7 +72,7 @@
                 <div
                   class="text-left"
                   v-html="
-                    scope.row.lexicon?.translate.replace(/([A-Za-z]+)\./g, function (match, p1, offset) {
+                    scope.row?.translate.replace(/([A-Za-z]+)\./g, function (match, p1, offset) {
                       if (offset) {
                         return '<br>' + p1 + '.';
                       }
@@ -85,13 +85,13 @@
               <span v-else>***</span>
             </template>
           </el-table-column>
-          <el-table-column prop="chapter.name" label="章节" width="80" align="center" />
+          <!-- <el-table-column prop="chapter.name" label="章节" width="80" align="center" /> -->
           <el-table-column prop="updated_at" label="添加时间" sortable="custom" width="100" align="center">
             <template #default="scope">
               {{ scope.row.updated_at.split(' ')[0] }}
             </template>
           </el-table-column>
-          <el-table-column prop="updated_at" label="添加时间" sortable="custom" width="100" align="center">
+          <el-table-column prop="updated_at" label="操作" width="100" align="center">
             <template #default="scope">
               <el-button text type="danger">取消收藏</el-button>
             </template>
@@ -104,7 +104,7 @@
   </div>
 </template>
 <script setup>
-  import { getErrorWordList, wordLabel } from '@/api/book/index';
+  import { getErrorWordList, wordLabel, getWordList } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
   import { Headset, Download, Hide, View, Delete, Star } from '@element-plus/icons-vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
@@ -151,17 +151,6 @@
       sort: undefined,
       sort_type: undefined,
     },
-    errTimeOption: [
-      { name: '全部', id: 0 },
-      { name: '最近听写错词', id: 3 },
-      { name: '今日错词', id: 1 },
-      { name: '近七天错词', id: 2 },
-    ],
-    errNumOption: [
-      { name: '全部', num: 0 },
-      { name: '错误2次及以上', num: 2 },
-      { name: '错误3次及以上', num: 3 },
-    ],
     chapterList: [],
     tableData: [],
     selWords: [],
@@ -183,77 +172,11 @@
     return list;
   });
 
-  const getErrorWords = () => {
-    const params = {};
-    if (state.form.errTime == 0) {
-      params.error_end_date = dayjs().format('YYYY-MM-DD HH:mm:ss');
-      params.error_start_date = dayjs('2024-01-01 00:00:00').format('YYYY-MM-DD HH:mm:ss');
-    } else if (state.form.errTime == 1) {
-      params.error_end_date = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss');
-      params.error_start_date = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss');
-    } else if (state.form.errTime == 2) {
-      const currentTime = dayjs();
-      params.error_end_date = currentTime.endOf('day').format('YYYY-MM-DD HH:mm:ss');
-      params.error_start_date = currentTime.subtract(6, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss');
-    } else if (state.form.errTime == 3) {
-      params.recently = true;
-    }
-    params.error_num = state.form.error_num;
-    params.c_id = state.form.c_id;
-    // console.log(state.form.c_id, 'state.form.c_id');
-    params.page = state.page.currentPage;
-    params.pagesize = state.page.pageSize;
 
-    if (state.form.sort) {
-      params.sort = state.form.sort;
-    }
-    if (state.form.sort_type) {
-      params.sort_type = state.form.sort_type;
-    }
-
-    setLoading(true);
-    getErrorWordList(params)
-      .then((res) => {
-        state.tableData = res.data;
-        state.page.total = res.total;
-        res.total &&
-          setTimeout(() => {
-            tableRef.value.toggleAllSelection();
-          });
-
-        if (!chapterList.length && !state.chapterList.length && res.data.length) {
-          const list = [];
-          res.data.forEach((item) => {
-            if (!list.find((o) => o.id == item.c_id)) {
-              list.push({
-                id: item.c_id,
-                name: item.lexicon_group.name + ' ' + item.chapter.name,
-              });
-            }
-          });
-          state.chapterList = list;
-        }
-
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
   const handleSelectionChange = (val) => {
-    // console.log(val);
     state.selWords = val;
   };
-  // const handleSizeChange = (size) => {
-  //   console.log(size);
-  //   state.page.pageSize = size;
-  //   getErrorWordList();
-  // };
-  // const getAllChapter = () => {
-  //   getChapterList().then((res) => {
-  //     state.chapterList = res;
-  //   });
-  // };
+
   const sortChange = ({ column, prop, order }) => {
     const sortMap = {
       ascending: 'asc',
@@ -267,7 +190,7 @@
 
   const play = (row) => {
     const type = userStore.getConfig.phonetic_type == 1 ? 'phonetic-y' : 'phonetic-m';
-    audio.src = row.lexicon[type];
+    audio.src = row[type];
     audio.play();
   };
   const rowClick = (row) => {
@@ -275,19 +198,19 @@
   };
   const handleSelWords = async () => {
     if (!state.selWords.length) {
-      ElMessage.error('请选择错词');
+      ElMessage.error('请选择单词');
       return;
     }
     const errWords = state.selWords.map((word) => {
       return {
         c_id: word.c_id,
         g_id: word.g_id,
-        id: word.lexicon.id,
-        word: word.lexicon.word,
-        translate: word.lexicon?.translate,
-        phonetic_transcription: word.lexicon?.phonetic_transcription,
-        'phonetic-y': word.lexicon['phonetic-y'],
-        'phonetic-m': word.lexicon['phonetic-m'],
+        id: word.id,
+        word: word.word,
+        translate: word?.translate,
+        phonetic_transcription: word?.phonetic_transcription,
+        'phonetic-y': word['phonetic-y'],
+        'phonetic-m': word['phonetic-m'],
       };
     });
     await appStore.setErrWords(errWords);
@@ -300,14 +223,14 @@
   // 导出excel
   const handleDownloadExcel = () => {
     if (!state.selWords.length) {
-      ElMessage.warning('未选择错题');
+      ElMessage.warning('未选择单词');
       return;
     }
     const exportData = [];
     state.selWords.forEach((item) => {
       exportData.push({
-        单词: item.lexicon.word,
-        释义: item.lexicon.translate,
+        单词: item.word,
+        释义: item.translate,
         章节: item.chapter.name,
         添加时间: item.updated_at,
       });
@@ -319,15 +242,22 @@
       bookType: 'xlsx',
     });
   };
+  const getWords = () => {
+    setLoading(true)
+    getWordList({
+      c_id: appStore.dictationInfo.currentChapter.id,
+      pagesize: 9999,
+    }).then(res => {
+      state.tableData = res.data;
+      setLoading(false)
+    }).catch(err => {
+      setLoading(false)
+    })
+  }
   onMounted(() => {
-    if (route.query?.from == 'result') {
-      state.form.errTime = 3;
-    } else if (route.query?.from == 'gallery') {
-    } else if (route.query?.from == 'home') {
-      state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
-    }
+    state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
 
-    getErrorWords();
+    getWords();
   });
   const troggleView = (field) => {
     state.hideProps[field] = !state.hideProps[field];

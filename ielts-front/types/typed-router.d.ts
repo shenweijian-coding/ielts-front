@@ -65,6 +65,7 @@ declare module 'vue-router/auto/routes' {
     '/stop/': RouteRecordInfo<'/stop/', '/stop', Record<never, never>, Record<never, never>>,
     '/user/': RouteRecordInfo<'/user/', '/user', Record<never, never>, Record<never, never>>,
     '/vocabularyBook/': RouteRecordInfo<'/vocabularyBook/', '/vocabularyBook', Record<never, never>, Record<never, never>>,
+    '/vocabularyBook/chapter-dialog': RouteRecordInfo<'/vocabularyBook/chapter-dialog', '/vocabularyBook/chapter-dialog', Record<never, never>, Record<never, never>>,
     '/vocabularyBook/detail/': RouteRecordInfo<'/vocabularyBook/detail/', '/vocabularyBook/detail', Record<never, never>, Record<never, never>>,
   }
 }

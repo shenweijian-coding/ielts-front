@@ -3,21 +3,22 @@
     <div v-for="(item, index) in state.list" :key="item.id">
       <div class="flex items-center justify-evenly px-10">
         <div class="w-80 flex items-center">
-          <img src="@/assets/images/book.png" class="w-10 h-10 mr-6" />
+          <!-- <img src="@/assets/images/book.png" class="w-10 h-10 mr-6" /> -->
           <div>{{ item.name }}</div>
         </div>
         <span class="cursor-pointer">
-          <SvgIcon name="collect" color="grey" width="20" height="20" @click="handleCollect" />
-          <SvgIcon name="collect-active" width="21" height="21" @click="handleCollect" />
+          <!-- <SvgIcon name="collect" color="grey" width="20" height="20" @click="handleCollect" />
+          <SvgIcon name="collect-active" width="21" height="21" @click="handleCollect" /> -->
+          <el-button size="small" @click="handleCollect(item)">收藏</el-button>
         </span>
       </div>
       <div class="bottom-border"></div>
     </div>
     <div class="px-10 flex items-center">
-      <div class="book-add flex items-center justify-center mr-4">
+      <!-- <div class="book-add flex items-center justify-center mr-4">
         <el-icon><Plus /></el-icon>
-      </div>
-      <el-button type="text" @click="handleAdd">新建单词本</el-button>
+      </div> -->
+      <el-button type="text" @click="handleAdd" class="">新建单词本</el-button>
     </div>
     <div class="py-3"></div>
     <div class="flex justify-center text-sm">
@@ -27,16 +28,14 @@
 </template>
 <script setup>
   import SvgIcon from '@/components/SvgIcon/index.vue';
-  import { wordLabel } from '@/api/book/index';
+  import { wordLabel, getGroupBooks } from '@/api/book/index';
   import { Plus } from '@element-plus/icons-vue';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage, ElNotification } from 'element-plus';
   import { useUserStore } from '@/store';
+  import { h } from 'vue'
 
   const state = reactive({
-    list: [
-      { name: '生词本', id: 1 },
-      { name: '生词本2', id: 2 },
-    ],
+    list: [],
     dialogVisible: false,
     ids: [],
     isAdd: false,
@@ -62,22 +61,17 @@
   const handleClose = () => {
     state.dialogVisible = false;
   };
-  const open = (ids) => {
-    state.ids = ids;
-    state.dialogVisible = true;
-  };
-  const handleCollect = () => {
+
+  const handleCollect = (item) => {
     wordLabel({
       type: 'collection',
       lexicon_ids: JSON.stringify(state.ids),
-      book_id: '',
+      book_id: item.id,
     })
       .then((res) => {
-        ElMessage.success('操作成功');
-        setLoading(false);
+        handleClose()
       })
       .catch((err) => {
-        setLoading(false);
       });
   };
   const handleAdd = () => {
@@ -89,6 +83,28 @@
     if (val) {
       userStore.handleConfig('recent_collection_book_id', val);
     }
+  };
+  const getBooks = (s_id) => {
+
+    getGroupBooks({ s_id: s_id })
+      .then((res) => {
+        state.list = res;
+      })
+      .catch(() => {
+      });
+  };
+  const open = (ids) => {
+    state.ids = ids;
+    if(userStore.default_collection_book) {
+      if(userStore.recent_collection_book_id) {
+        handleCollect({ id: userStore.recent_collection_book_id })
+        return
+      }else {
+        ElMessage.warning('首次收藏，无法自动收藏至上次单词本，请先手动收藏')
+      }
+    }
+    state.dialogVisible = true;
+    getBooks(3)
   };
   defineExpose({
     open,

@@ -128,7 +128,7 @@
     <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
   </div>
 </template>
-<script setup>
+<script setup lang="jsx">
   import { getErrorWordList, wordLabel } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
   import { Headset, Download, Hide, View, Delete, Star } from '@element-plus/icons-vue';
@@ -357,15 +357,11 @@
       ElMessage.error('请选择需要表熟的错词');
       return;
     }
-    ElMessageBox.confirm(`确定将选中的${state.selWords.length}单词标为熟词吗？`, '', {
-      confirmButtonText: '标熟',
-      cancelButtonText: '取消',
-      type: 'warning',
-      distinguishCancelAndClose: true,
-    }).then(() => {
+    let checked = false
+
+    const requestWordLabel = () => {
       const ids = state.selWords.map((o) => o.lexicon_id);
       setLoading(true);
-
       wordLabel({
         type: 'proficient',
         lexicon_ids: JSON.stringify(ids),
@@ -373,10 +369,24 @@
         .then((res) => {
           ElMessage.success('操作成功');
           setLoading(false);
+
         })
         .catch((err) => {
           setLoading(false);
         });
+    }
+
+    ElMessageBox({
+      title: `确定将选中的${state.selWords.length}个单词标为熟词吗？`,
+      message: () => <div style="fontSize: 22px"><br/><el-checkbox onChange={check => checked = check}>不再提醒</el-checkbox></div>,
+      confirmButtonText: '标熟',
+      cancelButtonText: '取消',
+      showCancelButton: true,
+      type: '',
+      distinguishCancelAndClose: true,
+    }).then(() => {
+      requestWordLabel()
+      userStore.handleConfig('proficient_tip', Number(checked));
     });
   };
   // 单词收藏

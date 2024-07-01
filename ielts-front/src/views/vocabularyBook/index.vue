@@ -25,10 +25,12 @@
       </div>
     </div>
     <Loading :loading="loading" />
+    <ChapterDialog ref="ChapterDialogRef" @ok="getBooks(3)" />
     <tabbar />
   </div>
 </template>
 <script setup>
+  import ChapterDialog from './chapter-dialog.vue';
   import { ElMessage } from 'element-plus';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
@@ -37,10 +39,11 @@
   import tabbar from '@/components/tabBar/index.vue';
   import { useRouter } from 'vue-router';
 
-  import { getSceneList, getGroupBooks, getLanguageList, getCategoryList } from '@/api/book/index';
+  import { getSceneList, getGroupBooks, getLanguageList, getCategoryList, getChapterList } from '@/api/book/index';
 
   const { loading, setLoading } = useLoading();
   const router = useRouter();
+  const ChapterDialogRef = ref(null);
 
   const galleryState = reactive({
     cuttentCID: '',
@@ -57,7 +60,20 @@
   });
 
   const openChapter = (item) => {
-    router.push('/main/vocabularyBookDetail?id=' + item.id);
+    setLoading(true);
+    getChapterList({ g_id: item.id })
+      .then((res) => {
+        galleryState.chapterList = res;
+        if (res.length) {
+          setLoading(false);
+          ChapterDialogRef.value.open(item, res);
+        } else {
+          ElMessage.warning('未配置词库');
+        }
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   const getBooks = (s_id) => {

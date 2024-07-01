@@ -21,7 +21,9 @@
             type="button"
           >
             <SvgIcon name="sound" prefix="icon-svg" width="20" height="20" />
-          </button>
+          </button>&nbsp;
+          <el-icon size="18" class="mr-1"><DeleteFilled /></el-icon>&nbsp;
+          <el-icon size="24"><StarFilled /></el-icon>
         </div>
       </div>
     </div>
@@ -31,6 +33,7 @@
   import { useAppStore, useUserStore } from '@/store';
   import { nextTick } from 'vue';
   import SvgIcon from '@/components/SvgIcon/index.vue';
+  import { DeleteFilled, StarFilled } from '@element-plus/icons-vue';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
