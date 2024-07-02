@@ -683,6 +683,7 @@
           console.log(err);
         });
     }
+    canSubmit = true
   };
   // 播放音频的方法
   // let audio = null;
@@ -739,7 +740,7 @@
   const stop = () => {
     count = 0;
     playStatus.value = 2;
-    inputRef.value.blur();
+    inputRef.value && inputRef.value.blur();
     countDown.value = 0;
     clearInterval(countdownInterval);
     if (audio) {
@@ -768,10 +769,10 @@
       ...data,
     })
       .then(() => {
-        // canSubmit = true;
+        canSubmit = true;
       })
       .catch(() => {
-        // canSubmit = true;
+        canSubmit = true;
       });
   };
   function fire(particleRatio, opts) {
@@ -845,8 +846,8 @@
     if (!canSubmit) {
       return;
     }
-    canSubmit = false;
     console.log(canSubmit, 'canSubmit2');
+    canSubmit = false;
     count = 0;
     clearAudioCache();
     if (!wordsData.words.length || playStatus.value != 1) {
@@ -881,7 +882,6 @@
       } else {
         handleMove(1);
       }
-      canSubmit = true;
     }, 200);
   };
 

@@ -20,7 +20,7 @@ export const useUserStore = defineStore('user', {
       is_automatic_submit: 0, // 是否自动提交
       proficient_tip: 0, // 标熟是否提示
       default_collection_book: 0, // 是否自动收藏至上次添加单词本
-      recent_collection_book_id: 0, // 最近一次收藏书ID
+      // recent_collection_book_id: 0, // 最近一次收藏书ID
     },
   }),
   persist: {
@@ -70,9 +70,10 @@ export const useUserStore = defineStore('user', {
     },
     async handleConfig(p, val) {
       this.config[p] = val;
-      updateConfig({
-        ...this.config,
-      });
+      const data = JSON.parse(JSON.stringify(this.config))
+      delete data.recent_collection_book_id
+      delete data.recent_chapter_id
+      updateConfig(data);
     },
     // 异步登录并存储token
     async login(loginForm) {

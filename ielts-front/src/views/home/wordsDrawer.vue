@@ -22,18 +22,19 @@
           >
             <SvgIcon name="sound" prefix="icon-svg" width="20" height="20" />
           </button>&nbsp;
-          <el-icon size="18" class="mr-1"><DeleteFilled /></el-icon>&nbsp;
+          <el-icon size="18" class="mr-1" @click.stop="handleWordSign(item)"><DeleteFilled /></el-icon>&nbsp;
           <el-icon size="24"><StarFilled /></el-icon>
         </div>
       </div>
     </div>
   </el-drawer>
 </template>
-<script setup>
+<script setup lang="jsx">
   import { useAppStore, useUserStore } from '@/store';
   import { nextTick } from 'vue';
   import SvgIcon from '@/components/SvgIcon/index.vue';
   import { DeleteFilled, StarFilled } from '@element-plus/icons-vue';
+  import { ElMessage, ElMessageBox } from 'element-plus';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -77,6 +78,43 @@
     const type = userStore.getConfig.phonetic_type == 1 ? 'phonetic-y' : 'phonetic-m';
     audio.src = row[type];
     audio.play();
+  };
+  // 单词标熟
+  const handleWordSign = (item) => {
+    let checked = false
+
+    const requestWordLabel = () => {
+      const ids = [item.id];
+      setLoading(true);
+      wordLabel({
+        type: 'proficient',
+        lexicon_ids: JSON.stringify(ids)
+      })
+        .then((res) => {
+          ElMessage.success('操作成功');
+          setLoading(false);
+
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
+    }
+    if(userStore.getConfig.proficient_tip) {
+      requestWordLabel()
+    } else {
+      ElMessageBox({
+        title: `确定将选中的单词标为熟词吗？`,
+        message: () => <div style="fontSize: 22px"><br/><el-checkbox onChange={check => checked = check}>不再提醒</el-checkbox></div>,
+        confirmButtonText: '标熟',
+        cancelButtonText: '取消',
+        showCancelButton: true,
+        type: '',
+        distinguishCancelAndClose: true,
+      }).then(() => {
+        requestWordLabel()
+        userStore.handleConfig('proficient_tip', Number(checked));
+      });
+    }
   };
   onUnmounted(() => {
     audio.pause(); // 先暂停播放

@@ -3,7 +3,8 @@
     <div v-for="(item, index) in state.list" :key="item.id">
       <div class="flex items-center justify-evenly px-10">
         <div class="w-80 flex items-center">
-          <!-- <img src="@/assets/images/book.png" class="w-10 h-10 mr-6" /> -->
+          <img v-if="index == 0" src="@/assets/images/word2.png" class="w-6 h-8 mr-3" />
+          <img v-else src="@/assets/images/word1.png" class="w-6 h-8 mr-3" />
           <div>{{ item.name }}</div>
         </div>
         <span class="cursor-pointer">
@@ -15,9 +16,9 @@
       <div class="bottom-border"></div>
     </div>
     <div class="px-10 flex items-center">
-      <!-- <div class="book-add flex items-center justify-center mr-4">
+      <div class="book-add flex items-center justify-center mr-4">
         <el-icon><Plus /></el-icon>
-      </div> -->
+      </div>
       <el-button type="text" @click="handleAdd" class="">新建单词本</el-button>
     </div>
     <div class="py-3"></div>
@@ -26,7 +27,7 @@
     </div>
   </el-dialog>
 </template>
-<script setup>
+<script setup lang="jsx">
   import SvgIcon from '@/components/SvgIcon/index.vue';
   import { wordLabel, getGroupBooks } from '@/api/book/index';
   import { Plus } from '@element-plus/icons-vue';
@@ -39,10 +40,11 @@
     dialogVisible: false,
     ids: [],
     isAdd: false,
+    message: null
   });
 
   const emits = defineEmits(['addBook']);
-  const dialogWidth = ref('400px');
+  const dialogWidth = ref('360px');
   const userStore = useUserStore();
 
   const windowSize = () => {
@@ -54,7 +56,7 @@
     } else if (screenWidth >= 768 && screenWidth < 1024) {
       dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
     } else {
-      dialogWidth.value = '500px'; // 在大屏幕下设置Dialog宽度为50%
+      dialogWidth.value = '360px'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
   windowSize();
@@ -62,27 +64,16 @@
     state.dialogVisible = false;
   };
 
-  const handleCollect = (item) => {
-    wordLabel({
-      type: 'collection',
-      lexicon_ids: JSON.stringify(state.ids),
-      book_id: item.id,
-    })
-      .then((res) => {
-        handleClose()
-      })
-      .catch((err) => {
-      });
-  };
+
   const handleAdd = () => {
     state.dialogVisible = false;
     emits('addBook');
   };
   const collectAuto = (val) => {
     userStore.handleConfig('default_collection_book', Number(val));
-    if (val) {
-      userStore.handleConfig('recent_collection_book_id', val);
-    }
+    // if (val) {
+    //   userStore.handleConfig('recent_collection_book_id', val);
+    // }
   };
   const getBooks = (s_id) => {
 
@@ -94,6 +85,7 @@
       });
   };
   const open = (ids) => {
+    state.message && state.message.close()
     state.ids = ids;
     if(userStore.default_collection_book) {
       if(userStore.recent_collection_book_id) {
@@ -106,6 +98,26 @@
     state.dialogVisible = true;
     getBooks(3)
   };
+  const handleCollect = (item) => {
+    wordLabel({
+      type: 'collection',
+      lexicon_ids: JSON.stringify(state.ids),
+      book_id: item.id,
+    })
+      .then((res) => {
+        state.message = ElMessage({
+          icon: '',
+          type: 'success',
+          plain: true,
+          customClass: 'msg-class',
+          duration: 0,
+          message: () => <div class="flex justify-between items-center" style="word-break:keep-all"><span>已收藏至&nbsp;{item.name}</span>&nbsp;&nbsp;<el-button size="small" plain text type="success" onClick={() => open()}>去修改</el-button></div>
+        });
+        handleClose()
+      })
+      .catch((err) => {
+      });
+  };
   defineExpose({
     open,
   });
@@ -117,9 +129,13 @@
     margin: 10px 0;
   }
   .book-add {
-    height: 46px;
-    width: 30px;
+    margin-left: 0rem;
+    height: 2rem;
+    width: 1.5rem;
     border: 1px solid #d3d3d3;
     padding: 10px 4px;
+  }
+  .msg-class{
+    top: 90% !important;
   }
 </style>

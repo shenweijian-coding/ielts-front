@@ -28,14 +28,16 @@
         </el-form>
       </div>
       <div class="px-4 bg-white pt-4">
-        <div class="flex justify-end pb-1 items-center space-x-4">
-          <span
-            >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个</span
+        <div class="lg:flex justify-end pb-1 items-center">
+          <div
+            >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个&nbsp;</div
           >
-          <el-button :icon="Download" plain @click="handleDownloadExcel" />
-          <el-button type="" :icon="Delete" plain @click="handleWordSign" />
-          <el-button type="" :icon="Star" plain @click="handleWordCollect" />
-          <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
+          <div class=" space-x-4">
+            <el-button :icon="Download" plain @click="handleDownloadExcel" />
+            <el-button type="" :icon="Delete" plain @click="handleWordSign" />
+            <el-button type="" :icon="Star" plain @click="handleWordCollect" />
+            <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
+          </div>
         </div>
         <el-table
           ref="tableRef"
@@ -84,7 +86,7 @@
                 <div
                   class="text-left"
                   v-html="
-                    scope.row.lexicon?.translate.replace(/([A-Za-z]+)\./g, function (match, p1, offset) {
+                    scope.row.lexicon?.translate?.replace(/([A-Za-z]+)\./g, function (match, p1, offset) {
                       if (offset) {
                         return '<br>' + p1 + '.';
                       }
@@ -357,6 +359,7 @@
       ElMessage.error('请选择需要表熟的错词');
       return;
     }
+
     let checked = false
 
     const requestWordLabel = () => {
@@ -369,25 +372,27 @@
         .then((res) => {
           ElMessage.success('操作成功');
           setLoading(false);
-
         })
         .catch((err) => {
           setLoading(false);
         });
     }
-
-    ElMessageBox({
-      title: `确定将选中的${state.selWords.length}个单词标为熟词吗？`,
-      message: () => <div style="fontSize: 22px"><br/><el-checkbox onChange={check => checked = check}>不再提醒</el-checkbox></div>,
-      confirmButtonText: '标熟',
-      cancelButtonText: '取消',
-      showCancelButton: true,
-      type: '',
-      distinguishCancelAndClose: true,
-    }).then(() => {
+    if(userStore.getConfig.proficient_tip) {
       requestWordLabel()
-      userStore.handleConfig('proficient_tip', Number(checked));
-    });
+    } else {
+      ElMessageBox({
+        title: `确定将选中的${state.selWords.length}个单词标为熟词吗？`,
+        message: () => <div style="fontSize: 22px"><br/><el-checkbox onChange={check => checked = check}>不再提醒</el-checkbox></div>,
+        confirmButtonText: '标熟',
+        cancelButtonText: '取消',
+        showCancelButton: true,
+        type: '',
+        distinguishCancelAndClose: true,
+      }).then(() => {
+        requestWordLabel()
+        userStore.handleConfig('proficient_tip', Number(checked));
+      });
+    }
   };
   // 单词收藏
   const handleWordCollect = () => {
