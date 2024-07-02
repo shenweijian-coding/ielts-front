@@ -570,7 +570,7 @@
   // 判断单词是否输入正确
   const checkWordsIsOk = () => {
     let { word, userInput = '', other_word = '' } = wordsData.currentWord;
-    console.log(word, userInput, 'word, userInput');
+    // console.log(word, userInput, 'word, userInput');
     // if (userInput?.length != word?.length) {
     //   return false;
     // }
@@ -683,7 +683,7 @@
           console.log(err);
         });
     }
-    canSubmit = true
+    canSubmit = true;
   };
   // 播放音频的方法
   // let audio = null;
@@ -818,7 +818,7 @@
   };
   // 处理计算结果
   const handleResult = () => {
-    let accuracy = 0
+    let accuracy = 0;
     wordsData.currentIndex = wordsData.words.length;
     const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
     if (appStore?.dictationInfo?.currentChapter?.id && appStore?.dictationInfo?.currentChapter?.g_id) {
@@ -826,15 +826,15 @@
         id: appStore.dictationInfo.currentChapter.id,
         g_id: appStore.dictationInfo.currentChapter.g_id,
       }).then((res) => {
-        accuracy = (res?.[0].accuracy || correctness).toFixed(2)
-        if(accuracy > 0) {
+        accuracy = (res?.[0].accuracy || correctness).toFixed(2);
+        if (accuracy > 0) {
           handleEffectiveness();
         }
         mistakeRef.value.open(accuracy);
       });
     } else {
-      accuracy = correctness.toFixed(2)
-      if(accuracy > 0) {
+      accuracy = correctness.toFixed(2);
+      if (accuracy > 0) {
         handleEffectiveness();
       }
       mistakeRef.value.open(accuracy);
@@ -888,8 +888,8 @@
   watch(
     () => wordsData.currentWord.userInput,
     (newValue, oldValue) => {
-      console.log(`message changed from ${oldValue} to ${newValue}`);
-      if (config.is_automatic_submit && checkWordsIsOk()) {
+      console.log(`${oldValue} to ${newValue}`, canSubmit);
+      if (config.is_automatic_submit && checkWordsIsOk() && oldValue && newValue) {
         inputEnter();
       }
     },

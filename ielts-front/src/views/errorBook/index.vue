@@ -32,7 +32,7 @@
           <div
             >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个&nbsp;</div
           >
-          <div class=" space-x-4">
+          <div class="space-x-4">
             <el-button :icon="Download" plain @click="handleDownloadExcel" />
             <el-button type="" :icon="Delete" plain @click="handleWordSign" />
             <el-button type="" :icon="Star" plain @click="handleWordCollect" />
@@ -360,7 +360,7 @@
       return;
     }
 
-    let checked = false
+    let checked = false;
 
     const requestWordLabel = () => {
       const ids = state.selWords.map((o) => o.lexicon_id);
@@ -376,20 +376,25 @@
         .catch((err) => {
           setLoading(false);
         });
-    }
-    if(userStore.getConfig.proficient_tip) {
-      requestWordLabel()
+    };
+    if (userStore.getConfig.proficient_tip) {
+      requestWordLabel();
     } else {
       ElMessageBox({
         title: `确定将选中的${state.selWords.length}个单词标为熟词吗？`,
-        message: () => <div style="fontSize: 22px"><br/><el-checkbox onChange={check => checked = check}>不再提醒</el-checkbox></div>,
+        message: () => (
+          <div style="fontSize: 22px">
+            <br />
+            <el-checkbox onChange={(check) => (checked = check)}>不再提醒</el-checkbox>
+          </div>
+        ),
         confirmButtonText: '标熟',
         cancelButtonText: '取消',
         showCancelButton: true,
         type: '',
         distinguishCancelAndClose: true,
       }).then(() => {
-        requestWordLabel()
+        requestWordLabel();
         userStore.handleConfig('proficient_tip', Number(checked));
       });
     }
