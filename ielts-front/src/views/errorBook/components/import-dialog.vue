@@ -1,7 +1,7 @@
 <template>
   <el-dialog v-model="state.dialogVisible" :width="dialogWidth" :before-close="handleClose">
     <div class="pt-6">
-      <el-form ref="formRef" :model="state.form" label-width="120" :rules="state.rules">
+      <el-form ref="formRef" :model="state.form" label-width="100" :rules="state.rules">
         <el-form-item label="单词书名称" prop="title">
           <el-input placeholder="最多输入9个字" v-model="state.form.title" />
         </el-form-item>
@@ -40,7 +40,7 @@
       word_count: [{ required: true, message: '数量', trigger: 'change' }],
     },
   });
-  const dialogWidth = ref('40%');
+  const dialogWidth = ref('500px');
 
   const windowSize = () => {
     const screenWidth = window.innerWidth; // 获取当前屏幕宽度
@@ -51,7 +51,7 @@
     } else if (screenWidth >= 768 && screenWidth < 1024) {
       dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
     } else {
-      dialogWidth.value = '40%'; // 在大屏幕下设置Dialog宽度为50%
+      dialogWidth.value = '500px'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
   const open = () => {

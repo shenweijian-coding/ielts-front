@@ -1,27 +1,27 @@
 <template>
   <el-dialog v-model="state.dialogVisible" title="将单词书收藏至" :width="dialogWidth" :before-close="handleClose" center>
-    <div v-for="(item, index) in state.list" :key="item.id">
-      <div class="flex items-center justify-evenly px-10">
+    <div v-for="(item, index) in state.list" :key="item.id" class="book-item">
+      <div class="flex items-center justify-evenly px-10 py-2">
         <div class="w-80 flex items-center">
           <img v-if="index == 0" src="@/assets/images/word2.png" class="w-6 h-8 mr-3" />
           <img v-else src="@/assets/images/word1.png" class="w-6 h-8 mr-3" />
           <div>{{ item.name }}</div>
         </div>
         <span class="cursor-pointer">
-          <!-- <SvgIcon name="collect" color="grey" width="20" height="20" @click="handleCollect" />
-          <SvgIcon name="collect-active" width="21" height="21" @click="handleCollect" /> -->
-          <el-button size="small" @click="handleCollect(item)">收藏</el-button>
+          <SvgIcon name="collect" color="grey" width="20" height="20" @click="handleCollect" />
+          <!-- <SvgIcon name="collect-active" width="21" height="21" @click="handleCollect" /> -->
+          <!-- <el-button size="small" @click="handleCollect(item)">收藏</el-button> -->
         </span>
       </div>
-      <div class="bottom-border"></div>
+      <!-- <div class="bottom-border"></div> -->
     </div>
-    <div class="px-10 flex items-center">
+    <div class="px-10 pt-2 flex items-center">
       <div class="book-add flex items-center justify-center mr-4">
         <el-icon><Plus /></el-icon>
       </div>
       <el-button type="text" @click="handleAdd" class="">新建单词本</el-button>
     </div>
-    <div class="py-3"></div>
+    <div class="py-4"></div>
     <div class="flex justify-center text-sm">
       <el-checkbox @change="collectAuto" :value="!!userStore.default_collection_book">自动收藏至上次添加单词的单词本</el-checkbox>
     </div>
@@ -96,7 +96,7 @@
       }
     }
     state.dialogVisible = true;
-    getBooks(3)
+    getBooks(2)
   };
   const handleCollect = (item) => {
     wordLabel({
@@ -137,5 +137,11 @@
   }
   .msg-class{
     top: 90% !important;
+  }
+  .book-item{
+    border-bottom: 1px solid #f5f5f5;
+    &:hover{
+      background-color: #f5f5f5;
+    }
   }
 </style>
