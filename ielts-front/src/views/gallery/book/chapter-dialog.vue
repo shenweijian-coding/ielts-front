@@ -19,10 +19,10 @@
                   v-for="item in state.list"
                   :key="item.id"
                   @click="handleClickChapter(item)"
-                  class="relative flex h-16 lg:w-40 xl:w-30 w-40 w-[88%] cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-3 dark:bg-slate-800"
+                  class="relative flex h-16 lg:w-40 pr-2 xl:w-30 w-36 w-[86%] cursor-pointer flex-col items-start justify-center overflow-hidden rounded-xl bg-slate-100 px-2 dark:bg-slate-800"
                 >
                   <div class="flex justify-between w-full">
-                    <h4 class="text-nowrap text-ellipsis truncate" :alt="item.name">{{ item.name }}</h4>
+                    <h5 class="text-nowrap text-ellipsis truncate" :alt="item.name">{{ item.name }}</h5>
                   </div>
                   <div class="flex w-full text-xs items-center" :class="item.id == appStore.chapterId ? '' : 'justify-between'">
                     <span v-if="item?.accuracy">
@@ -70,7 +70,7 @@
     book: null,
     dialogVisible: false,
   });
-  const dialogWidth = ref('40%');
+  const dialogWidth = ref('60%');
 
   const windowSize = () => {
     const screenWidth = window.innerWidth; // 获取当前屏幕宽度
@@ -81,7 +81,7 @@
     } else if (screenWidth >= 768 && screenWidth < 1024) {
       dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
     } else {
-      dialogWidth.value = '50%'; // 在大屏幕下设置Dialog宽度为50%
+      dialogWidth.value = '60%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
   const open = (book, list) => {

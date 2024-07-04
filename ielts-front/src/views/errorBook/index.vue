@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full flex-1 select-text items-start justify-center overflow-hidden">
     <div class="flex h-full w-full flex-col">
-      <div class="pt-2">
+      <div class="pt-0">
         <el-form :model="state.form" :size="formSize" label-width="70" :inline="true">
           <el-form-item label="">
             <el-radio-group v-model="state.form.errTime" @change="getErrorWords">
@@ -27,16 +27,14 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="px-4 bg-white pt-4">
+      <div class="px-4 bg-white lg:pt-2">
         <div class="lg:flex justify-end pb-1 items-center">
-          <div
-            >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个&nbsp;</div
-          >
-          <div class="space-x-4">
-            <el-button :icon="Download" plain @click="handleDownloadExcel" />
-            <el-button type="" :icon="Delete" plain @click="handleWordSign" />
-            <el-button type="" :icon="Star" plain @click="handleWordCollect" />
-            <el-button @click="handleSelWords" type="primary">听写已选中错词</el-button>
+
+          <div class="space-x-2">
+            <el-button :icon="Download" plain @click="handleDownloadExcel" size="small"/>
+            <el-button type="" :icon="Delete" plain @click="handleWordSign" size="small"/>
+            <el-button type="" :icon="Star" plain @click="handleWordCollect" size="small"/>
+            <el-button size="small" @click="handleSelWords" type="primary">听写已选中错词</el-button>
           </div>
         </div>
         <el-table
@@ -109,18 +107,22 @@
             </template>
           </el-table-column>
         </el-table>
-        <!-- <div class="py-5 flex justify-end">
+        <div class="py-2 flex justify-end items-center">
+          <div
+            >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个&nbsp;</div
+          >
           <el-pagination
             background
+            size="small"
             v-model:current-page="state.page.currentPage"
-            layout="prev, pager, next, sizes"
+            layout="prev, pager, next"
             :total="state.page.total"
             :page-size="state.page.pageSize"
             :page-sizes="[20, 50, 100]"
             @size-change="handleSizeChange"
             @current-change="getErrorWords"
           />
-        </div> -->
+        </div>
       </div>
     </div>
     <!-- <LastPage /> -->
@@ -168,9 +170,9 @@
   const tableHeight = computed(() => {
     if (screenWidth.value < 768) {
       // return 'small';
-      return screenHeight.value - 200;
+      return screenHeight.value - 250;
     } else {
-      return screenHeight.value - 210;
+      return screenHeight.value - 220;
       // return 'large';
     }
   });
@@ -198,7 +200,7 @@
     selWords: [],
     page: {
       total: 0,
-      pageSize: 9999,
+      pageSize: 200,
       currentPage: 1,
     },
     hideProps: {
@@ -252,17 +254,8 @@
             tableRef.value.toggleAllSelection();
           });
 
-        if (!chapterList.length && !state.chapterList.length && res.data.length) {
-          const list = [];
-          res.data.forEach((item) => {
-            if (!list.find((o) => o.id == item.c_id)) {
-              list.push({
-                id: item.c_id,
-                name: item.lexicon_group.name + ' ' + item.chapter.name,
-              });
-            }
-          });
-          state.chapterList = list;
+        if (res.chapters?.length) {
+          state.chapterList = res.chapters;
         }
 
         setLoading(false);

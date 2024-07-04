@@ -96,7 +96,7 @@
       }
     }
     state.dialogVisible = true;
-    getBooks(2)
+    getBooks(3)
   };
   const handleCollect = (item) => {
     wordLabel({
