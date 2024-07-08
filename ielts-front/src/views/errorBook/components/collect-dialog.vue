@@ -1,19 +1,21 @@
 <template>
   <el-dialog v-model="state.dialogVisible" title="将单词书收藏至" :width="dialogWidth" :before-close="handleClose" center>
-    <div v-for="(item, index) in state.list" :key="item.id" class="book-item">
-      <div class="flex items-center justify-evenly px-10 py-2">
-        <div class="w-80 flex items-center">
-          <img v-if="index == 0" src="@/assets/images/word2.png" class="w-6 h-8 mr-3" />
-          <img v-else src="@/assets/images/word1.png" class="w-6 h-8 mr-3" />
-          <div>{{ item.name }}</div>
+    <div class="overflow-y-auto h-60">
+      <div v-for="(item, index) in state.list" :key="item.id" class="book-item">
+        <div class="flex items-center justify-evenly px-10 py-2">
+          <div class="w-80 flex items-center">
+            <img v-if="index == 0" src="@/assets/images/word2.png" class="w-6 h-8 mr-3" />
+            <img v-else src="@/assets/images/word1.png" class="w-6 h-8 mr-3" />
+            <div>{{ item.name }}</div>
+          </div>
+          <span class="cursor-pointer">
+            <SvgIcon name="collect" color="grey" width="20" height="20" @click="handleCollect(item)" />
+            <!-- <SvgIcon name="collect-active" width="21" height="21" @click="handleCollect(item)" /> -->
+            <!-- <el-button size="small" @click="handleCollect(item)">收藏</el-button> -->
+          </span>
         </div>
-        <span class="cursor-pointer">
-          <SvgIcon name="collect" color="grey" width="20" height="20" @click="handleCollect" />
-          <!-- <SvgIcon name="collect-active" width="21" height="21" @click="handleCollect" /> -->
-          <!-- <el-button size="small" @click="handleCollect(item)">收藏</el-button> -->
-        </span>
+        <!-- <div class="bottom-border"></div> -->
       </div>
-      <!-- <div class="bottom-border"></div> -->
     </div>
     <div class="px-10 pt-2 flex items-center">
       <div class="book-add flex items-center justify-center mr-4">
@@ -23,7 +25,9 @@
     </div>
     <div class="py-4"></div>
     <div class="flex justify-center text-sm">
-      <el-checkbox @change="collectAuto" :value="!!userStore.default_collection_book">自动收藏至上次添加单词的单词本</el-checkbox>
+      <el-checkbox @change="collectAuto" :model-value="!!userStore.getConfig.default_collection_book"
+        >自动收藏至上次添加单词的单词本</el-checkbox
+      >
     </div>
   </el-dialog>
 </template>
@@ -33,20 +37,20 @@
   import { Plus } from '@element-plus/icons-vue';
   import { ElMessage, ElNotification } from 'element-plus';
   import { useUserStore } from '@/store';
-  import { h } from 'vue'
+  import { h } from 'vue';
 
   const state = reactive({
     list: [],
     dialogVisible: false,
     ids: [],
     isAdd: false,
-    message: null
+    message: null,
   });
 
   const emits = defineEmits(['addBook']);
   const dialogWidth = ref('360px');
   const userStore = useUserStore();
-
+  let flag = false; // 去修改打开的
   const windowSize = () => {
     const screenWidth = window.innerWidth; // 获取当前屏幕宽度
 
@@ -64,7 +68,6 @@
     state.dialogVisible = false;
   };
 
-
   const handleAdd = () => {
     state.dialogVisible = false;
     emits('addBook');
@@ -75,28 +78,27 @@
     //   userStore.handleConfig('recent_collection_book_id', val);
     // }
   };
-  const getBooks = (s_id) => {
-
+  const getBooks = async (s_id) => {
     getGroupBooks({ s_id: s_id })
       .then((res) => {
         state.list = res;
       })
-      .catch(() => {
-      });
+      .catch(() => {});
   };
-  const open = (ids) => {
-    state.message && state.message.close()
+  const open = async (ids) => {
+    await getBooks(3);
+    state.message && state.message.close();
     state.ids = ids;
-    if(userStore.default_collection_book) {
-      if(userStore.recent_collection_book_id) {
-        handleCollect({ id: userStore.recent_collection_book_id })
-        return
-      }else {
-        ElMessage.warning('首次收藏，无法自动收藏至上次单词本，请先手动收藏')
+    if (userStore.getConfig.default_collection_book && !flag) {
+      if (userStore.getConfig.recent_collection_book_id) {
+        handleCollect(state.list.find((o) => o.id == userStore.getConfig.recent_collection_book_id));
+        return;
+      } else {
+        ElMessage.warning('首次收藏，无法自动收藏至上次单词本，请先手动收藏');
       }
     }
     state.dialogVisible = true;
-    getBooks(3)
+    flag = false;
   };
   const handleCollect = (item) => {
     wordLabel({
@@ -110,13 +112,28 @@
           type: 'success',
           plain: true,
           customClass: 'msg-class',
-          duration: 0,
-          message: () => <div class="flex justify-between items-center" style="word-break:keep-all"><span>已收藏至&nbsp;{item.name}</span>&nbsp;&nbsp;<el-button size="small" plain text type="success" onClick={() => open()}>去修改</el-button></div>
+          duration: 5000,
+          message: () => (
+            <div class="flex justify-between items-center" style="word-break:keep-all">
+              <span>已收藏至&nbsp;{item.name}</span>&nbsp;&nbsp;
+              <el-button
+                size="small"
+                plain
+                text
+                type="success"
+                onClick={() => {
+                  flag = true;
+                  open();
+                }}
+              >
+                去修改
+              </el-button>
+            </div>
+          ),
         });
-        handleClose()
+        handleClose();
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
   defineExpose({
     open,
@@ -135,12 +152,12 @@
     border: 1px solid #d3d3d3;
     padding: 10px 4px;
   }
-  .msg-class{
+  .msg-class {
     top: 90% !important;
   }
-  .book-item{
+  .book-item {
     border-bottom: 1px solid #f5f5f5;
-    &:hover{
+    &:hover {
       background-color: #f5f5f5;
     }
   }

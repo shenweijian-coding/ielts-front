@@ -29,11 +29,10 @@
       </div>
       <div class="px-4 bg-white lg:pt-2">
         <div class="lg:flex justify-end pb-1 items-center">
-
           <div class="space-x-2">
-            <el-button :icon="Download" plain @click="handleDownloadExcel" size="small"/>
-            <el-button type="" :icon="Delete" plain @click="handleWordSign" size="small"/>
-            <el-button type="" :icon="Star" plain @click="handleWordCollect" size="small"/>
+            <el-button :icon="Download" plain @click="handleDownloadExcel" size="small" />
+            <el-button type="" :icon="Delete" plain @click="handleWordSign" size="small" />
+            <el-button type="" :icon="Star" plain @click="handleWordCollect" size="small" />
             <el-button size="small" @click="handleSelWords" type="primary">听写已选中错词</el-button>
           </div>
         </div>
@@ -114,8 +113,9 @@
           <el-pagination
             background
             size="small"
+            :pager-count="4"
             v-model:current-page="state.page.currentPage"
-            layout="prev, pager, next"
+            layout="pager"
             :total="state.page.total"
             :page-size="state.page.pageSize"
             :page-sizes="[20, 50, 100]"
@@ -172,7 +172,7 @@
       // return 'small';
       return screenHeight.value - 250;
     } else {
-      return screenHeight.value - 220;
+      return screenHeight.value - 230;
       // return 'large';
     }
   });
@@ -200,7 +200,7 @@
     selWords: [],
     page: {
       total: 0,
-      pageSize: 200,
+      pageSize: 100,
       currentPage: 1,
     },
     hideProps: {
@@ -209,11 +209,11 @@
     },
   });
   const chapterList = computed(() => {
-    let list = appStore?.dictationInfo?.chapterList || [];
-    if (!list.length) {
-      return state.chapterList;
-    }
-    return list;
+    // let list = appStore?.dictationInfo?.chapterList || [];
+    // if (!list.length) {
+    return state.chapterList;
+    // }
+    // return list;
   });
 
   const getErrorWords = () => {

@@ -20,13 +20,14 @@
             class="focus:outline-none dark:fill-gray-400 dark:opacity-80 cursor-pointer text-gray-600 h-8 w-8"
             type="button"
           >
-            <SvgIcon name="sound" prefix="icon-svg" width="20" height="20" />
-          </button>&nbsp;
-          <el-icon size="18" class="mr-1" @click.stop="handleWordSign(item)"><DeleteFilled /></el-icon>&nbsp;
-          <el-icon size="24"><StarFilled /></el-icon>
+            <SvgIcon name="sound" prefix="icon-svg" width="20" height="20" /> </button
+          >&nbsp; <el-icon size="18" class="mr-1" @click.stop="handleWordSign(item)"><DeleteFilled /></el-icon>&nbsp;
+          <el-icon @click.stop="handleWordCollect(item)" size="24"><StarFilled /></el-icon>
         </div>
       </div>
     </div>
+    <collectDialog ref="collectRef" @addBook="addBook" />
+    <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
   </el-drawer>
 </template>
 <script setup lang="jsx">
@@ -35,6 +36,9 @@
   import SvgIcon from '@/components/SvgIcon/index.vue';
   import { DeleteFilled, StarFilled } from '@element-plus/icons-vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
+  import { wordLabel } from '@/api/book/index';
+  import collectDialog from '../errorBook/components/collect-dialog.vue';
+  import ImportDialog from '../errorBook/components/import-dialog.vue';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -45,6 +49,8 @@
     current: null,
   });
   const dialogWidth = ref('40%');
+  const collectRef = ref(null);
+  const ImportDialogRef = ref(null);
 
   const windowSize = () => {
     const screenWidth = window.innerWidth; // 获取当前屏幕宽度
@@ -81,40 +87,52 @@
   };
   // 单词标熟
   const handleWordSign = (item) => {
-    let checked = false
+    let checked = false;
 
     const requestWordLabel = () => {
       const ids = [item.id];
-      setLoading(true);
       wordLabel({
         type: 'proficient',
-        lexicon_ids: JSON.stringify(ids)
+        lexicon_ids: JSON.stringify(ids),
       })
         .then((res) => {
           ElMessage.success('操作成功');
-          setLoading(false);
-
         })
-        .catch((err) => {
-          setLoading(false);
-        });
-    }
-    if(userStore.getConfig.proficient_tip) {
-      requestWordLabel()
+        .catch((err) => {});
+    };
+    if (userStore.getConfig.proficient_tip) {
+      requestWordLabel();
     } else {
       ElMessageBox({
         title: `确定将选中的单词标为熟词吗？`,
-        message: () => <div style="fontSize: 22px"><br/><el-checkbox onChange={check => checked = check}>不再提醒</el-checkbox></div>,
+        message: () => (
+          <div style="fontSize: 22px">
+            <br />
+            <el-checkbox onChange={(check) => (checked = check)}>不再提醒</el-checkbox>
+          </div>
+        ),
         confirmButtonText: '标熟',
         cancelButtonText: '取消',
         showCancelButton: true,
         type: '',
         distinguishCancelAndClose: true,
       }).then(() => {
-        requestWordLabel()
+        requestWordLabel();
         userStore.handleConfig('proficient_tip', Number(checked));
       });
     }
+  };
+  // 收藏
+  const handleWordCollect = (item) => {
+    collectRef.value.open([item.id]);
+  };
+  const addBook = () => {
+    setTimeout(() => {
+      ImportDialogRef.value.open();
+    }, 200);
+  };
+  const addBookComplete = () => {
+    handleWordCollect();
   };
   onUnmounted(() => {
     audio.pause(); // 先暂停播放

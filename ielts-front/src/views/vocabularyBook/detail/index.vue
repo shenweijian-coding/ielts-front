@@ -8,8 +8,7 @@
               v-model="state.form.c_id"
               :placeholder="appStore?.dictationInfo?.booInfo.name || '全部章节'"
               style="width: 180px"
-              @change="getErrorWords"
-              clearable
+              @change="getWords"
               filterable
             >
               <el-option v-for="item in chapterList" :key="item.id" :label="item.name" :value="item.id" />
@@ -172,7 +171,6 @@
     return list;
   });
 
-
   const handleSelectionChange = (val) => {
     state.selWords = val;
   };
@@ -243,17 +241,20 @@
     });
   };
   const getWords = () => {
-    setLoading(true)
+    setLoading(true);
     getWordList({
-      c_id: appStore.dictationInfo.currentChapter.id,
+      c_id: state.form.c_id || appStore.dictationInfo.currentChapter.id,
       pagesize: 9999,
-    }).then(res => {
-      state.tableData = res.data;
-      setLoading(false)
-    }).catch(err => {
-      setLoading(false)
     })
-  }
+      .then((res) => {
+        state.tableData = res.data;
+        state.page.total = res.total;
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
   onMounted(() => {
     state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
 

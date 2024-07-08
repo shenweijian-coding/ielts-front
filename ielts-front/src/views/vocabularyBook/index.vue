@@ -89,43 +89,43 @@
       });
   };
 
-  const getScene = (l_id, c_id = galleryState.currentCategory) => {
-    getSceneList({
-      l_id: l_id,
-      c_id: c_id,
-    }).then((res) => {
-      galleryState.sceneList = res;
-      if (res.length) {
-        galleryState.currentScene = res[0].id;
-        getBooks(res[0].id);
-      } else {
-        galleryState.booksList = [];
-      }
-    });
-  };
-  const getCategory = (l_id) => {
-    getCategoryList({
-      l_id: l_id,
-    }).then((res) => {
-      galleryState.categoryList = res;
-      galleryState.currentCategory = res[0].id;
-      if (res.length) {
-        getScene(l_id, res[0].id);
-      } else {
-        galleryState.booksList = [];
-      }
-    });
-  };
-  const getLanguage = () => {
-    getLanguageList().then((res) => {
-      galleryState.languageList = res;
-      getCategory(res[0].id);
-      // getScene(res[0].id);
-    });
-  };
+  // const getScene = (l_id, c_id = galleryState.currentCategory) => {
+  //   getSceneList({
+  //     l_id: l_id,
+  //     c_id: c_id,
+  //   }).then((res) => {
+  //     galleryState.sceneList = res;
+  //     if (res.length) {
+  //       galleryState.currentScene = res[0].id;
+  //       getBooks(res[0].id);
+  //     } else {
+  //       galleryState.booksList = [];
+  //     }
+  //   });
+  // };
+  // const getCategory = (l_id) => {
+  //   getCategoryList({
+  //     l_id: l_id,
+  //   }).then((res) => {
+  //     galleryState.categoryList = res;
+  //     galleryState.currentCategory = res[0].id;
+  //     if (res.length) {
+  //       getScene(l_id, res[0].id);
+  //     } else {
+  //       galleryState.booksList = [];
+  //     }
+  //   });
+  // };
+  // const getLanguage = () => {
+  //   getLanguageList().then((res) => {
+  //     galleryState.languageList = res;
+  //     getCategory(res[0].id);
+  //     // getScene(res[0].id);
+  //   });
+  // };
 
   onMounted(() => {
-    getLanguage();
+    getBooks(3);
   });
 </script>
 <style lang="less">
