@@ -61,7 +61,7 @@
     } else if (screenWidth >= 768 && screenWidth < 1024) {
       dialogWidth.value = '50%'; // 在中等屏幕下设置Dialog宽度为70%
     } else {
-      dialogWidth.value = '30%'; // 在大屏幕下设置Dialog宽度为50%
+      dialogWidth.value = '40%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
   const open = (list, current) => {
@@ -96,7 +96,7 @@
         lexicon_ids: JSON.stringify(ids),
       })
         .then((res) => {
-          ElMessage.success('操作成功');
+          ElMessage.success('单词标熟成功');
         })
         .catch((err) => {});
     };

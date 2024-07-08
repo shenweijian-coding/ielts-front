@@ -119,7 +119,6 @@
             :total="state.page.total"
             :page-size="state.page.pageSize"
             :page-sizes="[20, 50, 100]"
-            @size-change="handleSizeChange"
             @current-change="getErrorWords"
           />
         </div>
@@ -363,7 +362,7 @@
         lexicon_ids: JSON.stringify(ids),
       })
         .then((res) => {
-          ElMessage.success('操作成功');
+          ElMessage.success('单词标熟成功');
           setLoading(false);
         })
         .catch((err) => {

@@ -92,7 +92,7 @@
           </el-table-column>
           <el-table-column prop="updated_at" label="操作" width="100" align="center">
             <template #default="scope">
-              <el-button text type="danger">取消收藏</el-button>
+              <el-button text type="danger" @click="handleCancelCollect(scope.row)">取消收藏</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -263,6 +263,16 @@
   const troggleView = (field) => {
     state.hideProps[field] = !state.hideProps[field];
   };
+  const handleCancelCollect = (item) => {
+    wordLabel({
+      type: 'update_collection',
+      lexicon_ids: JSON.stringify([item.lexicon_id]),
+      book_id: item.g_id,
+    }).then(res => {1
+      ElMessage.success('取消收藏成功')
+      getWords()
+    }).catch(err => {})
+  }
   onUnmounted(() => {
     audio.pause(); // 先暂停播放
     audio.src = ''; // 清空src

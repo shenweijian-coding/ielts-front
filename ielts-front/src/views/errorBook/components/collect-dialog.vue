@@ -79,11 +79,8 @@
     // }
   };
   const getBooks = async (s_id) => {
-    getGroupBooks({ s_id: s_id })
-      .then((res) => {
+    const res = await getGroupBooks({ s_id: s_id })
         state.list = res;
-      })
-      .catch(() => {});
   };
   const open = async (ids) => {
     await getBooks(3);
