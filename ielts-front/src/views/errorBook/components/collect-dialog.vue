@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="state.dialogVisible" title="将单词书收藏至" :width="dialogWidth" :before-close="handleClose" center>
-    <div class="overflow-y-auto h-60">
+    <div class="overflow-y-auto max-h-60">
       <div v-for="(item, index) in state.list" :key="item.id" class="book-item">
         <div class="flex items-center justify-evenly px-10 py-2">
           <div class="w-80 flex items-center">
@@ -17,16 +17,16 @@
         <!-- <div class="bottom-border"></div> -->
       </div>
     </div>
-    <div class="px-10 pt-2 flex items-center">
+    <div class="px-10 pt-2 flex items-center" @click="handleAdd" >
       <div class="book-add flex items-center justify-center mr-4">
         <el-icon><Plus /></el-icon>
       </div>
-      <el-button type="text" @click="handleAdd" class="">新建单词本</el-button>
+      <el-button type="text" class="">新建词书</el-button>
     </div>
     <div class="py-4"></div>
     <div class="flex justify-center text-sm">
       <el-checkbox @change="collectAuto" :model-value="!!userStore.getConfig.default_collection_book"
-        >自动收藏至上次添加单词的单词本</el-checkbox
+        >自动收藏至上次添加单词的词书</el-checkbox
       >
     </div>
   </el-dialog>
@@ -47,7 +47,7 @@
     message: null,
   });
 
-  const emits = defineEmits(['addBook']);
+  const emits = defineEmits(['addBook', 'ok']);
   const dialogWidth = ref('360px');
   const userStore = useUserStore();
   let flag = false; // 去修改打开的
@@ -83,7 +83,7 @@
         state.list = res;
   };
   const open = async (ids) => {
-    await getBooks(3);
+    await getBooks(2);
     state.message && state.message.close();
     state.ids = ids;
     if (userStore.getConfig.default_collection_book && !flag) {
@@ -120,7 +120,7 @@
                 type="success"
                 onClick={() => {
                   flag = true;
-                  open();
+                  open(state.ids);
                 }}
               >
                 去修改
@@ -128,9 +128,12 @@
             </div>
           ),
         });
+        emits('ok', state.ids)
         handleClose();
       })
-      .catch((err) => {});
+      .catch((err) => {
+        handleClose();
+      });
   };
   defineExpose({
     open,

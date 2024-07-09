@@ -8,7 +8,7 @@
             v-for="item in galleryState.booksList"
             :key="item.id"
             class="group flex lg:h-36 w-[46%] lg:w-74 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
-            @click="openChapter(item)"
+            @click="toDetail(item)"
           >
             <div class="relative ml-1 lg:mt-2 flex h-full w-full flex-col items-start justify-start"
               ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">{{ item.name }}</h1>
@@ -76,6 +76,11 @@
       });
   };
 
+  const toDetail = (item) => {
+    console.log(item.id);
+    router.push('/main/vocabularyBookDetail?id='+ item.id);
+  }
+
   const getBooks = (s_id) => {
     setLoading(true);
 
@@ -125,7 +130,7 @@
   // };
 
   onMounted(() => {
-    getBooks(3);
+    getBooks(2);
   });
 </script>
 <style lang="less">

@@ -4,7 +4,7 @@
       <a class="absolute top-10 lg:left-10 text-theme" href="/">
         <SvgIcon name="atx" class="" width="200" height="80" />
       </a>
-      <div class="flex justify-center items-center h-screen space-x-12" v-if="isLogin">
+      <div class="flex justify-center items-center space-x-12" v-if="isLogin">
         <a href="/#/login">
           <el-button type="" szie="large"> 注册 </el-button>
         </a>
@@ -13,11 +13,13 @@
         </a>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script setup>
   import SvgIcon from '@/components/SvgIcon/index.vue';
+  import Footer from '@/components/footer/index.vue';
 
   const isLogin = ref(false);
   onMounted(() => {
@@ -31,7 +33,7 @@
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    height: 100vh;
+    height: 95vh;
 
     button {
       padding: 20px 40px;

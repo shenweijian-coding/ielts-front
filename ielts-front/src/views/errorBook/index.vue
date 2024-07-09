@@ -214,8 +214,7 @@
     // }
     // return list;
   });
-
-  const getErrorWords = () => {
+  const getParams = () => {
     const params = {};
     if (state.form.errTime == 0) {
       params.error_end_date = dayjs().format('YYYY-MM-DD HH:mm:ss');
@@ -233,8 +232,7 @@
     params.error_num = state.form.error_num;
     params.c_id = state.form.c_id;
     // console.log(state.form.c_id, 'state.form.c_id');
-    params.page = state.page.currentPage;
-    params.pagesize = state.page.pageSize;
+
 
     if (state.form.sort) {
       params.sort = state.form.sort;
@@ -242,6 +240,13 @@
     if (state.form.sort_type) {
       params.sort_type = state.form.sort_type;
     }
+    return params
+  }
+  const getErrorWords = () => {
+
+    const params = getParams()
+    params.page = state.page.currentPage;
+    params.pagesize = state.page.pageSize;
 
     setLoading(true);
     getErrorWordList(params)
@@ -322,11 +327,15 @@
 
   // 导出excel
   const handleDownloadExcel = () => {
-    if (!state.selWords.length) {
-      ElMessage.warning('未选择错题');
-      return;
-    }
-    const exportData = [];
+
+    const params = getParams()
+    params.page = 1;
+    params.pagesize = 9999;
+    
+    setLoading(true);
+    getErrorWordList(params)
+      .then((res) => {
+        const exportData = [];
     state.selWords.forEach((item) => {
       exportData.push({
         单词: item.lexicon.word,
@@ -344,6 +353,11 @@
     XLSX.writeFile(workBook, `错题本.xlsx`, {
       bookType: 'xlsx',
     });
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
   // 单词标熟
   const handleWordSign = () => {

@@ -92,7 +92,7 @@
           </el-table-column>
           <el-table-column prop="updated_at" label="操作" width="100" align="center">
             <template #default="scope">
-              <el-button text type="danger" @click="handleCancelCollect(scope.row)">取消收藏</el-button>
+              <el-button :disabled="!scope.row.lexicon_id" text type="danger" @click="handleCancelCollect(scope.row)">取消收藏</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -143,6 +143,7 @@
     }
   });
   const state = reactive({
+    bookId: 0,
     form: {
       errTime: 0,
       error_num: 0,
@@ -214,7 +215,7 @@
     await appStore.setErrWords(errWords);
     await appStore.toggleCurrentChapter(null);
     setTimeout(() => {
-      router.push('/home?source=err');
+      router.push('/home?source=collect');
     });
   };
 
@@ -243,8 +244,9 @@
   const getWords = () => {
     setLoading(true);
     getWordList({
-      c_id: state.form.c_id || appStore.dictationInfo.currentChapter.id,
+      c_id: state.form.c_id,
       pagesize: 9999,
+      g_id: state.bookId
     })
       .then((res) => {
         state.tableData = res.data;
@@ -256,8 +258,7 @@
       });
   };
   onMounted(() => {
-    state.form.c_id = appStore?.dictationInfo?.currentChapter?.id;
-
+    state.bookId = +route.query.id
     getWords();
   });
   const troggleView = (field) => {

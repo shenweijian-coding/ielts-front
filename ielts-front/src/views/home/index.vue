@@ -31,7 +31,7 @@
                     aria-haspopup="listbox"
                     aria-expanded="false"
                     data-headlessui-state=""
-                    >{{ errSource ? '错词练习' : appStore?.dictationInfo?.currentChapter?.name }}</button
+                    >{{ errSource == 'err' ? '错词练习' : errSource == 'collect' ? '听写练习' : appStore?.dictationInfo?.currentChapter?.name }}</button
                   >
                 </template>
                 <div class="h-50 overflow-y-auto">
@@ -490,7 +490,7 @@
 
   // 有道的翻译api
   // const YDAPI = 'https://dict.youdao.com/dictvoice?audio=';
-  const errSource = ref(false); // 默认空，错词表来的  err
+  const errSource = ref(''); // 默认空，错词表来的  err
   const isMobile = ref(window.innerWidth <= 768);
 
   const config = reactive({
@@ -517,6 +517,7 @@
     words: [],
     currentWord: { translate: '', word: '', phonetic_transcription: '', userInput: '' },
     currentIndex: 0,
+    lastIndex: 0 // 上一个单词的ID
   });
 
   var myConfetti = null;
@@ -540,6 +541,7 @@
     let index = wordsData.currentIndex;
     if (wordsData.currentIndex > 0) {
       lastWord = wordsData.words[index - 1];
+
       lastWord.wordArr = config.ignore_case ? lastWord.word.toLowerCase().split('') : lastWord.word.split('');
       if (lastWord.userInput) {
         lastWord.inputWordArr = config.ignore_case ? lastWord.userInput.toLowerCase().split('') : lastWord.userInput.split('');
@@ -723,6 +725,10 @@
     if (sign < wordsData.words.length && sign >= 0) {
       wordsData.currentIndex = sign;
       wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+      if(wordsData.words[sign]?.is_proficient) {
+        handleMove(type)
+        return
+      }
     }
     clearAudioCache();
     playWords();
@@ -1000,7 +1006,7 @@
     console.log(appStore.dictationInfo);
     console.log(route);
     audio = new Audio();
-    errSource.value = route.query?.source == 'err';
+    errSource.value = route.query?.source || '';
 
     document.addEventListener('keydown', handleAllKeyDown);
     if (!appStore?.dictationInfo?.currentChapter && !appStore?.errWords?.length) {
@@ -1021,7 +1027,7 @@
     config.chapterId = id;
     await appStore.toggleCurrentChapter(chapterList.value.find((chapter) => chapter.id == id));
     if (errSource.value) {
-      errSource.value = false;
+      errSource.value = '';
       router.push('/home');
     }
     setTimeout(() => {

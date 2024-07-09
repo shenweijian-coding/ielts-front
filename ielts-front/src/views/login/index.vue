@@ -19,12 +19,14 @@
       </div>
     </div>
   </div>
+  <Footer></Footer>
 </template>
 
 <script setup>
   import LoginForm from './components/login-form.vue';
   import SignIn from './components/sign-in.vue';
   import SvgIcon from '@/components/SvgIcon/index.vue';
+  import Footer from '@/components/footer/index.vue';
 
   const theme = localStorage.getItem('theme');
 

@@ -6,15 +6,26 @@
     >
       <div
         class="relative ml-1 px-3 lg:px-0 lg:mt-2 flex h-full w-full lg:flex-col lg:items-start items-center lg:justify-start justify-between"
-        ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">我的单词本</h1>
+        ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">我的词书</h1>
         <p class="mb-2 font-bold text-gray-600 dark:text-gray-200">共 {{ state.list.length }} 本</p>
         <div class="w-full items-center hidden lg:flex"
           ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20" /></div
       ></div>
     </div>
 
+    <!-- <div
+      class="group flex lg:h-36 w-[46%] lg:w-50 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
+    >
+      <div
+        class="relative ml-1 px-3 lg:px-0 lg:mt-2 flex h-full w-full lg:flex-col lg:items-start items-center lg:justify-start justify-between"
+        ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">新手教学视频</h1>
+        <div class="w-full items-center hidden lg:flex"
+          ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20" /></div
+      ></div>
+    </div> -->
+
     <div
-      class="group flex lg:h-36 w-[20%] lg:w-50 mt-10 lg:mt-0 w-full text-lg cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-white shadow-lg focus:outline-none bg-red-5 hover:bg-red-6 dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
+      class="group flex lg:h-36 w-[20%] lg:w-50 mt-10 lg:mt-0 w-full text-lg cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-white shadow-lg focus:outline-none bg-red-3 hover:bg-red-4 dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
       @click="handleLogout"
     >
       退出登陆
@@ -58,7 +69,7 @@
       })
       .catch(() => {});
   };
-  getBooks(3);
+  getBooks(2);
 </script>
 <style lang="less" scoped>
   .el-button + .el-button {
