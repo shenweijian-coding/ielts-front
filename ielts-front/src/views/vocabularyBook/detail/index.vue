@@ -11,7 +11,7 @@
               @change="getWords"
               filterable
             >
-              <el-option v-for="item in chapterList" :key="item.id" :label="item.name" :value="item.id" />
+              <el-option v-for="item in state.chapterList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -71,7 +71,7 @@
                 <div
                   class="text-left"
                   v-html="
-                    scope.row?.translate.replace(/([A-Za-z]+)\./g, function (match, p1, offset) {
+                    scope.row?.translate?.replace(/([A-Za-z]+)\./g, function (match, p1, offset) {
                       if (offset) {
                         return '<br>' + p1 + '.';
                       }
@@ -103,7 +103,7 @@
   </div>
 </template>
 <script setup>
-  import { getErrorWordList, wordLabel, getWordList } from '@/api/book/index';
+  import { getErrorWordList, wordLabel, getWordList, getChapterList } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
   import { Headset, Download, Hide, View, Delete, Star } from '@element-plus/icons-vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
@@ -164,13 +164,13 @@
       translate: false,
     },
   });
-  const chapterList = computed(() => {
-    let list = appStore?.dictationInfo?.chapterList || [];
-    if (!list.length) {
-      return state.chapterList;
-    }
-    return list;
-  });
+  // const chapterList = computed(() => {
+  //   let list = appStore?.dictationInfo?.chapterList || [];
+  //   if (!list.length) {
+  //     return state.chapterList;
+  //   }
+  //   return list;
+  // });
 
   const handleSelectionChange = (val) => {
     state.selWords = val;
@@ -257,8 +257,17 @@
         setLoading(false);
       });
   };
+  const getChapter = () => {
+    getChapterList({ g_id: state.bookId })
+      .then((res) => {
+        state.chapterList = res;
+      })
+      .catch(() => {
+      });
+  }
   onMounted(() => {
     state.bookId = +route.query.id
+    getChapter()
     getWords();
   });
   const troggleView = (field) => {

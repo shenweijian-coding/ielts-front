@@ -614,6 +614,7 @@
       })
         .then((res) => {
           if (res.data.length) {
+            // 把标熟的单词过略掉
             // 是否开启乱序
             if (config.is_disorderly) {
               // 筛选出没有听写的单词
@@ -724,8 +725,10 @@
     playStatus.value = 1;
     const sign = wordsData.currentIndex + type;
 
-    wordsData.lastIndex = wordsData.currentIndex;
     if (sign < wordsData.words.length && sign >= 0) {
+      if(wordsData.currentIndex<wordsData.words.length) {
+        wordsData.lastIndex = wordsData.currentIndex;
+      }
       wordsData.currentIndex = wordsData.currentIndex + type; // 如果当前单词标熟，继续查找下一个
       while (wordsData.currentIndex < wordsData.words.length) {
         // 如果当前单词未标熟，返回当前索引
@@ -840,7 +843,9 @@
   const handleResult = () => {
     let accuracy = 0;
     wordsData.currentIndex = wordsData.words.length;
-    const correctness = (wordsData.words.filter((word) => word.isOk).length / wordsData.words.length) * 100;
+    // 过略标熟的
+    const wordsRes = wordsData.words.filter((word) => !word.is_proficient) || []
+    const correctness = (wordsRes.filter((word) => word.isOk).length / wordsRes.length) * 100;
     if (appStore?.dictationInfo?.currentChapter?.id && appStore?.dictationInfo?.currentChapter?.g_id) {
       getChapterList({
         id: appStore.dictationInfo.currentChapter.id,
