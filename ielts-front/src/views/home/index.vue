@@ -2,7 +2,7 @@
   <header class="container z-20 mx-auto w-full lg:px-10 py-8 px-4">
     <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0"
       ><a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/#/main/book">
-        <SvgIcon name="atx" class="hidden md:block" width="200" height="80" />
+        <SvgIcon name="atx" class="hidden md:block" width="160" height="80" />
       </a>
       <nav
         class="my-card on element flex w-auto flex-col lg:flex-row content-center items-center justify-end space-x-3 rounded-xl bg-white lg:p-4 p-2 transition-colors duration-300 dark:bg-gray-800"
@@ -478,7 +478,7 @@
   import { getWordList, reportLexiRes, getChapterList } from '@/api/book/index';
   import { useRouter, useRoute } from 'vue-router';
   import WordsDrawer from './wordsDrawer.vue';
-  import { shuffleArray, debounce } from '@/utils/index';
+  import { shuffleArray, debounce, deepClone } from '@/utils/index';
   import confetti from 'canvas-confetti';
 
   const appStore = useAppStore();
@@ -517,6 +517,7 @@
 
   const wordsData = reactive({
     words: [],
+    wordsCopy: [],
     currentWord: { translate: '', word: '', phonetic_transcription: '', userInput: '' },
     currentIndex: 0,
     lastIndex: 0, // 上一个单词的ID
@@ -614,7 +615,6 @@
       })
         .then((res) => {
           if (res.data.length) {
-            // 把标熟的单词过略掉
             // 是否开启乱序
             if (config.is_disorderly) {
               // 筛选出没有听写的单词
@@ -678,6 +678,9 @@
 
             // } else {
             // }
+            // 筛选出标熟的单词
+            wordsData.wordsCopy = deepClone(wordsData.words);
+            wordsData.words = wordsData.words.filter((word) => !word.is_proficient);
           } else {
             ElMessage.error('当前章节未配置词库');
           }
@@ -726,7 +729,7 @@
     const sign = wordsData.currentIndex + type;
 
     if (sign < wordsData.words.length && sign >= 0) {
-      if(wordsData.currentIndex<wordsData.words.length) {
+      if (wordsData.currentIndex < wordsData.words.length) {
         wordsData.lastIndex = wordsData.currentIndex;
       }
       wordsData.currentIndex = wordsData.currentIndex + type; // 如果当前单词标熟，继续查找下一个
@@ -844,7 +847,7 @@
     let accuracy = 0;
     wordsData.currentIndex = wordsData.words.length;
     // 过略标熟的
-    const wordsRes = wordsData.words.filter((word) => !word.is_proficient) || []
+    const wordsRes = wordsData.words.filter((word) => !word.is_proficient) || [];
     const correctness = (wordsRes.filter((word) => word.isOk).length / wordsRes.length) * 100;
     if (appStore?.dictationInfo?.currentChapter?.id && appStore?.dictationInfo?.currentChapter?.g_id) {
       getChapterList({
@@ -1096,7 +1099,7 @@
 
   // 展示当前播放词库列表
   const showWordsList = () => {
-    wordslistRef.value.open(wordsData.words, wordsData.currentWord);
+    wordslistRef.value.open(wordsData.wordsCopy, wordsData.currentWord);
   };
 </script>
 

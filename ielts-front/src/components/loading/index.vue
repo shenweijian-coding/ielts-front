@@ -15,7 +15,7 @@
   .loading {
     top: 0;
     left: 0;
-    position: absolute;
+    position: fixed;
     background-color: #fffaf7;
     opacity: 0.8;
     width: 100vw;

@@ -6,8 +6,8 @@
           v-for="item in state.list"
           :key="item.id"
           class="mb-2 flex cursor-pointer select-text items-center rounded-xl py-2 px-4 shadow focus:outline-none dark:bg-opacity-20"
-          :class="state.current == item ? 'bg-theme_hover current' : ''"
-          :id="state.current == item ? 'current' : ''"
+          :class="state.current.id == item.id ? 'bg-theme_hover current' : ''"
+          :id="state.current.id == item.id ? 'current' : ''"
           @click="play(item)"
         >
           <div class="flex-1"
@@ -16,24 +16,28 @@
             ><div class="mt-2 max-w-sm font-sans text-sm text-gray-400">{{ item.translate }}</div>
           </div>
           <div class="space-x-2 flex justify-center items-center">
-
             <button
               @click="play(item)"
               class="focus:outline-none dark:fill-gray-400 dark:opacity-80 cursor-pointer text-gray-600 h-8 w-7"
               type="button"
             >
-              <SvgIcon name="sound" prefix="icon-svg" width="20" height="20" /> </button
-            > 
-              <el-icon size="18" v-if="item.is_proficient" class="mr-1" @click.stop="handleWordSign(item, 'cancel_proficient')"><DeleteFilled /></el-icon>
-              <el-icon class="h-8 w-8" v-else size="18"  color="#2c3e50" @click.stop="handleWordSign(item, 'proficient')"><Delete /></el-icon>
-              <el-icon class="h-8 w-8" v-if="item.is_collection" @click.stop="handleWordCollect(item, 'update_collection')" size="24"><StarFilled /></el-icon>
-              <el-icon class="h-8 w-8"  v-else size="24" @click.stop="handleWordCollect(item, 'collection')" color="#2c3e50"><Star style="transform: scale(.8);"/></el-icon>
+              <SvgIcon name="sound" prefix="icon-svg" width="20" height="20" />
+            </button>
+            <el-icon size="18" v-if="item.is_proficient" class="mr-1" @click.stop="handleWordSign(item, 'cancel_proficient')"
+              ><DeleteFilled
+            /></el-icon>
+            <el-icon class="h-8 w-8" v-else size="18" color="#2c3e50" @click.stop="handleWordSign(item, 'proficient')"><Delete /></el-icon>
+            <el-icon class="h-8 w-8" v-if="item.is_collection" @click.stop="handleWordCollect(item, 'update_collection')" size="24"
+              ><StarFilled
+            /></el-icon>
+            <el-icon class="h-8 w-8" v-else size="24" @click.stop="handleWordCollect(item, 'collection')" color="#2c3e50"
+              ><Star style="transform: scale(0.8)"
+            /></el-icon>
           </div>
-
         </div>
       </div>
     </div>
-    <collectDialog ref="collectRef" @addBook="addBook" @ok="collectFinish"/>
+    <collectDialog ref="collectRef" @addBook="addBook" @ok="collectFinish" />
     <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
   </el-drawer>
 </template>
@@ -93,10 +97,10 @@
     audio.play();
   };
   const signFinish = (ids, is_proficient = true) => {
-    ids.forEach(id => {
-      state.list.find(o => o.id == id).is_proficient = is_proficient
+    ids.forEach((id) => {
+      state.list.find((o) => o.id == id).is_proficient = is_proficient;
     });
-  }
+  };
   // 单词标熟
   const handleWordSign = (item, type) => {
     const requestWordLabel = () => {
@@ -107,11 +111,11 @@
       })
         .then((res) => {
           ElMessage.success(type == 'proficient' ? '单词标熟成功' : '单词已取消标熟');
-          signFinish(ids, type == 'proficient')
+          signFinish(ids, type == 'proficient');
         })
         .catch((err) => {});
     };
-    if(type == 'proficient') {
+    if (type == 'proficient') {
       let checked = false;
       if (userStore.getConfig.proficient_tip) {
         requestWordLabel();
@@ -135,26 +139,29 @@
         });
       }
     } else {
-      requestWordLabel()
+      requestWordLabel();
     }
   };
   const collectFinish = (ids, is_collection = true) => {
-    ids.forEach(id => {
-      state.list.find(o => o.id == id).is_collection = is_collection
+    ids.forEach((id) => {
+      state.list.find((o) => o.id == id).is_collection = is_collection;
     });
-  }
+  };
   // 收藏
   const handleWordCollect = (item, type) => {
-    if(type == 'collection') {
+    if (type == 'collection') {
       collectRef.value.open([item.id]);
     } else {
       wordLabel({
-      type: 'update_collection',
-      lexicon_ids: JSON.stringify([item.id]),
-    }).then(res => {1
-      collectFinish([item.id], false)
-      ElMessage.success('取消收藏成功')
-    }).catch(err => {})
+        type: 'update_collection',
+        lexicon_ids: JSON.stringify([item.id]),
+      })
+        .then((res) => {
+          1;
+          collectFinish([item.id], false);
+          ElMessage.success('取消收藏成功');
+        })
+        .catch((err) => {});
     }
   };
   const addBook = () => {

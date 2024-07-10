@@ -1,8 +1,8 @@
 <template>
   <div class="container flex-col">
-    <div class="logo flex justify-center lg:justify-start lg:ml-10 items-center mt-10">
+    <div class="logo flex justify-center lg:justify-start lg:ml-30 items-center mt-5">
       <a class="text-theme" href="/">
-        <SvgIcon name="atx" width="200" height="80" />
+        <SvgIcon name="atx" width="120" height="80" />
       </a>
     </div>
     <!-- <LoginBanner /> -->
@@ -19,7 +19,7 @@
       </div>
     </div>
   </div>
-  <Footer></Footer>
+  <Footer />
 </template>
 
 <script setup>

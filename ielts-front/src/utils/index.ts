@@ -38,3 +38,22 @@ export const debounce = (func, delay) => {
     }, delay);
   };
 }
+
+export function deepClone(obj, hash = new WeakMap()) {
+  if (obj === null) return null;
+  if (obj instanceof Date) return new Date(obj);
+  if (obj instanceof RegExp) return new RegExp(obj);
+  if (typeof obj !== 'object') return obj; // 原始类型直接返回
+
+  if (hash.has(obj)) return hash.get(obj); // 处理循环引用
+
+  let cloneObj = new obj.constructor();
+  hash.set(obj, cloneObj);
+
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      cloneObj[key] = deepClone(obj[key], hash);
+    }
+  }
+  return cloneObj;
+}

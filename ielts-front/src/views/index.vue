@@ -1,33 +1,31 @@
 <template>
   <div class="dark:text-slate-400 dark:bg-slate-900 relative w-full">
-    <div class="home-box h-screen w-full flex flex-col justify-center items-center">
-      <a class="absolute top-0 lg:left-30 text-theme" href="/">
+    <div class="w-full flex justify-center items-center justify-between px-30">
+      <a class="top-0 lg:left-30 text-theme" href="/">
         <SvgIcon name="atx" class="" width="120" height="80" />
       </a>
-      <!-- <div>
-        <h1
-          class="text-center w-full z-10 mt-8 animate-fade-up animate-ease-in-out animate-normal animate-fill-forwards text-[32px] sm:text-4xl lg:text-5xl font-semibold title"
-          >1分钟了解爱听写功能</h1
-        >
-        <video
-          src="http://cloud.video.taobao.com/play/u/null/p/1/e/6/t/1/471307749512.mp4"
-          height="500"
-          controls
-          autoplay
-          class="mt-5"
-        ></video>
-      </div> -->
-      <div class="flex justify-center items-center space-x-12" v-if="isLogin">
+      <div class="lg:flex justify-center items-center space-x-4 hidden" v-if="isLogin">
         <a href="/#/login">
-          <el-button type="" szie="large"> 注册 </el-button>
+          <el-button size="small" type="" link> 登录 </el-button>
         </a>
         <a href="/#/login">
-          <el-button type="primary" szie="large"> 登录 </el-button>
+          <el-button type="" size="small" round color="#000"> 免费注册 </el-button>
         </a>
       </div>
     </div>
-    <Footer />
+    <div class="flex flex-col items-center justify-center">
+      <a href="/#/login" class="block lg:hidden py-10">
+        <el-button type="" size="" round color="#000"> 开始使用 </el-button>
+      </a>
+      <h1
+        class="text-center w-full z-10 mt-8 animate-fade-up animate-ease-in-out animate-normal animate-fill-forwards sm:text-3xl lg:text-4xl font-semibold title"
+        >1分钟了解爱听写功能</h1
+      >
+
+      <video src="http://cloud.video.taobao.com/play/u/null/p/1/e/6/t/1/471307749512.mp4" controls autoplay class="mt-2"></video>
+    </div>
   </div>
+  <Footer />
 </template>
 
 <script setup>
@@ -56,5 +54,15 @@
     background: linear-gradient(62deg, #fa7017, #ff80c4 82.51%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+  video {
+    width: 80%;
+    height: calc(100vh - 220px);
+  }
+  @media (max-width: 600px) {
+    video {
+      width: 90%;
+      height: auto !important; /* 小屏幕下的高度 */
+    }
   }
 </style>

@@ -4,7 +4,7 @@
     <div class="flex justify-between lg:px-30">
       <div class="flex flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0">
         <a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/">
-          <SvgIcon name="atx" class="hidden md:block" width="130" height="50" />
+          <SvgIcon name="atx" class="hidden md:block" width="100" height="50" />
         </a>
       </div>
       <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
