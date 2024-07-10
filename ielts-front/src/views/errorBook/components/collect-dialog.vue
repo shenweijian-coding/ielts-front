@@ -17,7 +17,7 @@
         <!-- <div class="bottom-border"></div> -->
       </div>
     </div>
-    <div class="px-10 pt-2 flex items-center" @click="handleAdd" >
+    <div class="px-10 pt-2 flex items-center" @click="handleAdd">
       <div class="book-add flex items-center justify-center mr-4">
         <el-icon><Plus /></el-icon>
       </div>
@@ -79,8 +79,8 @@
     // }
   };
   const getBooks = async (s_id) => {
-    const res = await getGroupBooks({ s_id: s_id })
-        state.list = res;
+    const res = await getGroupBooks({ s_id: s_id });
+    state.list = res;
   };
   const open = async (ids) => {
     await getBooks(2);
@@ -88,8 +88,11 @@
     state.ids = ids;
     if (userStore.getConfig.default_collection_book && !flag) {
       if (userStore.getConfig.recent_collection_book_id) {
-        handleCollect(state.list.find((o) => o.id == userStore.getConfig.recent_collection_book_id));
-        return;
+        const bookInfo = state.list.find((o) => o.id == userStore.getConfig.recent_collection_book_id);
+        if (bookInfo) {
+          handleCollect(bookInfo);
+          return;
+        }
       } else {
         ElMessage.warning('首次收藏，无法自动收藏至上次单词本，请先手动收藏');
       }
@@ -128,7 +131,7 @@
             </div>
           ),
         });
-        emits('ok', state.ids)
+        emits('ok', state.ids);
         handleClose();
       })
       .catch((err) => {

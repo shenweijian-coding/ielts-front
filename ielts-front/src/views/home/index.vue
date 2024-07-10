@@ -31,7 +31,9 @@
                     aria-haspopup="listbox"
                     aria-expanded="false"
                     data-headlessui-state=""
-                    >{{ errSource == 'err' ? '错词练习' : errSource == 'collect' ? '听写练习' : appStore?.dictationInfo?.currentChapter?.name }}</button
+                    >{{
+                      errSource == 'err' ? '错词练习' : errSource == 'collect' ? '听写练习' : appStore?.dictationInfo?.currentChapter?.name
+                    }}</button
                   >
                 </template>
                 <div class="h-50 overflow-y-auto">
@@ -517,7 +519,7 @@
     words: [],
     currentWord: { translate: '', word: '', phonetic_transcription: '', userInput: '' },
     currentIndex: 0,
-    lastIndex: 0 // 上一个单词的ID
+    lastIndex: 0, // 上一个单词的ID
   });
 
   var myConfetti = null;
@@ -540,7 +542,7 @@
     let nextWord = '';
     let index = wordsData.currentIndex;
     if (wordsData.currentIndex > 0) {
-      lastWord = wordsData.words[index - 1];
+      lastWord = wordsData.words[wordsData.lastIndex];
 
       lastWord.wordArr = config.ignore_case ? lastWord.word.toLowerCase().split('') : lastWord.word.split('');
       if (lastWord.userInput) {
@@ -722,13 +724,25 @@
     playStatus.value = 1;
     const sign = wordsData.currentIndex + type;
 
+    wordsData.lastIndex = wordsData.currentIndex;
     if (sign < wordsData.words.length && sign >= 0) {
-      wordsData.currentIndex = sign;
-      wordsData.currentWord = wordsData.words[wordsData.currentIndex];
-      if(wordsData.words[sign]?.is_proficient) {
-        handleMove(type)
-        return
+      wordsData.currentIndex = wordsData.currentIndex + type; // 如果当前单词标熟，继续查找下一个
+      while (wordsData.currentIndex < wordsData.words.length) {
+        // 如果当前单词未标熟，返回当前索引
+        if (!wordsData.words[wordsData.currentIndex]?.is_proficient) {
+          console.log(`找到未标熟的单词：${wordsData.words[wordsData.currentIndex].word}`);
+          break; // 跳出循环
+        }
+        wordsData.currentIndex = wordsData.currentIndex + type; // 如果当前单词标熟，继续查找下一个
       }
+
+      // wordsData.currentIndex = sign;
+      wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+
+      // if(wordsData.words[sign]?.is_proficient) {
+      //   handleMove(type)
+      //   return
+      // }
     }
     clearAudioCache();
     playWords();

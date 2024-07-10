@@ -42,6 +42,7 @@ declare module 'vue' {
     Sidebar: typeof import('./../src/components/sidebar/index.vue')['default']
     SvgIcon: typeof import('./../src/components/SvgIcon/index.vue')['default']
     TabBar: typeof import('./../src/components/tabBar/index.vue')['default']
+    Teaching: typeof import('./../src/components/teaching/index.vue')['default']
     WordConfig: typeof import('./../src/components/WordConfig/index.vue')['default']
     Wx: typeof import('./../src/components/footer/wx.vue')['default']
   }

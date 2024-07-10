@@ -13,16 +13,14 @@
       ></div>
     </div>
 
-    <!-- <div
+    <div
       class="group flex lg:h-36 w-[46%] lg:w-50 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
+      @click="openTeaching"
     >
-      <div
-        class="relative ml-1 px-3 lg:px-0 lg:mt-2 flex h-full w-full lg:flex-col lg:items-start items-center lg:justify-start justify-between"
-        ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">新手教学视频</h1>
-        <div class="w-full items-center hidden lg:flex"
-          ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20" /></div
-      ></div>
-    </div> -->
+      <div class="relative lg:px-0 flex h-full w-full items-center justify-center"
+        ><h1 class="text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">新手教学视频</h1>
+      </div>
+    </div>
 
     <div
       class="group flex lg:h-36 w-[20%] lg:w-50 mt-10 lg:mt-0 w-full text-lg cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-white shadow-lg focus:outline-none bg-red-3 hover:bg-red-4 dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
@@ -36,6 +34,7 @@
     <!-- <el-button @click="handleLogout" type="" class="mt-10">清除缓存</el-button>
       <el-button @click="handleLogout" type="" class="mt-10">修改密码</el-button> -->
     <tabbar />
+    <Teach ref="teachRef" />
   </div>
 </template>
 <script setup>
@@ -44,6 +43,7 @@
   import { useRouter } from 'vue-router';
   import { getGroupBooks } from '@/api/book/index';
   import { ElMessage } from 'element-plus';
+  import Teach from '@/components/teaching/index.vue';
 
   const userStore = useUserStore();
   const router = useRouter();
@@ -51,7 +51,7 @@
   const state = reactive({
     list: [],
   });
-
+  const teachRef = ref(null);
   const handleLogout = () => {
     userStore.logout();
   };
@@ -62,6 +62,10 @@
     }
     router.push('/main/vocabularyBook');
   };
+  const openTeaching = () => {
+    teachRef.value.open();
+  };
+
   const getBooks = (s_id) => {
     getGroupBooks({ s_id: s_id })
       .then((res) => {
