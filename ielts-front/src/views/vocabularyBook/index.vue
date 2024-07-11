@@ -78,8 +78,8 @@
 
   const toDetail = (item) => {
     console.log(item.id);
-    router.push('/main/vocabularyBookDetail?id='+ item.id);
-  }
+    router.push('/main/vocabularyBookDetail?id=' + item.id + '&name=' + item.name);
+  };
 
   const getBooks = (s_id) => {
     setLoading(true);

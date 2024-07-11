@@ -6,7 +6,7 @@
           <el-form-item label="">
             <el-select
               v-model="state.form.c_id"
-              :placeholder="appStore?.dictationInfo?.booInfo.name || '全部章节'"
+              :placeholder="state.bookName || '全部章节'"
               style="width: 180px"
               @change="getWords"
               filterable
@@ -221,23 +221,26 @@
 
   // 导出excel
   const handleDownloadExcel = () => {
-    if (!state.selWords.length) {
-      ElMessage.warning('未选择单词');
-      return;
-    }
+    // if (!state.selWords.length) {
+    //   ElMessage.warning('未选择单词');
+    //   return;
+    // }
     const exportData = [];
-    state.selWords.forEach((item) => {
+    state.tableData.forEach((item) => {
       exportData.push({
         单词: item.word,
         释义: item.translate,
-        章节: item.chapter.name,
+        // 章节: item.chapter.name,
         添加时间: item.updated_at,
       });
     });
+    const chapterName = state.chapterList.find((o) => o.id == state.form.c_id)
+      ? state.chapterList.find((o) => o.id == state.form.c_id).name
+      : '全部章节';
     const workBook = XLSX.utils.book_new();
     const workSheet = XLSX.utils.json_to_sheet(exportData);
     XLSX.utils.book_append_sheet(workBook, workSheet);
-    XLSX.writeFile(workBook, `错题本.xlsx`, {
+    XLSX.writeFile(workBook, `${state.bookName}_${chapterName}.xlsx`, {
       bookType: 'xlsx',
     });
   };
@@ -246,7 +249,7 @@
     getWordList({
       c_id: state.form.c_id,
       pagesize: 9999,
-      g_id: state.bookId
+      g_id: state.bookId,
     })
       .then((res) => {
         state.tableData = res.data;
@@ -262,12 +265,12 @@
       .then((res) => {
         state.chapterList = res;
       })
-      .catch(() => {
-      });
-  }
+      .catch(() => {});
+  };
   onMounted(() => {
-    state.bookId = +route.query.id
-    getChapter()
+    state.bookId = +route.query.id;
+    state.bookName = route.query.name;
+    getChapter();
     getWords();
   });
   const troggleView = (field) => {
@@ -278,11 +281,14 @@
       type: 'update_collection',
       lexicon_ids: JSON.stringify([item.lexicon_id]),
       book_id: item.g_id,
-    }).then(res => {1
-      ElMessage.success('取消收藏成功')
-      getWords()
-    }).catch(err => {})
-  }
+    })
+      .then((res) => {
+        1;
+        ElMessage.success('取消收藏成功');
+        getWords();
+      })
+      .catch((err) => {});
+  };
   onUnmounted(() => {
     audio.pause(); // 先暂停播放
     audio.src = ''; // 清空src

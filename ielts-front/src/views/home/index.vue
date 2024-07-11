@@ -2,10 +2,10 @@
   <header class="container z-20 mx-auto w-full lg:px-10 py-8 px-4">
     <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0"
       ><a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/#/main/book">
-        <SvgIcon name="atx" class="hidden md:block" width="160" height="80" />
+        <SvgIcon name="atx" class="hidden md:block" width="120" height="80" />
       </a>
       <nav
-        class="my-card on element flex w-auto flex-col lg:flex-row content-center items-center justify-end space-x-3 rounded-xl bg-white lg:p-4 p-2 transition-colors duration-300 dark:bg-gray-800"
+        class="my-card on element flex w-auto flex-col lg:flex-row content-center items-center justify-end space-x-3 rounded-xl bg-white lg:p-3 p-2 transition-colors duration-300 dark:bg-gray-800"
       >
         <div class="flex">
           <el-tooltip content="词典切换" placement="top" effect="light">
@@ -308,7 +308,7 @@
     <div class="container relative mx-auto flex h-full flex-col items-center">
       <div class="container flex flex-grow items-center justify-center">
         <div class="container flex h-full w-full flex-col items-center justify-center">
-          <div class="container flex h-24 w-full shrink-0 grow-0 justify-between px-12 pt-10">
+          <div class="container flex h-24 w-full shrink-0 grow-0 justify-between px-12 pt-0">
             <el-tooltip content="快捷键 ctrl+j" placement="top" effect="light">
               <div class="relative" @click="handleMove(-1)"
                 ><div
