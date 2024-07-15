@@ -543,13 +543,18 @@
     let nextWord = '';
     let index = wordsData.currentIndex;
     if (wordsData.currentIndex > 0) {
-      lastWord = wordsData.words[wordsData.lastIndex];
-
-      lastWord.wordArr = config.ignore_case ? lastWord.word.toLowerCase().split('') : lastWord.word.split('');
-      if (lastWord.userInput) {
-        lastWord.inputWordArr = config.ignore_case ? lastWord.userInput.toLowerCase().split('') : lastWord.userInput.split('');
+      let lastIndex = getNoProficientWordIndex(-1)
+      if(lastIndex < 0) {
+        // 没有找到上一个
       } else {
-        lastWord.inputWordArr = new Array(lastWord.word.length);
+        lastWord = wordsData.words[lastIndex];
+  
+        lastWord.wordArr = config.ignore_case ? lastWord.word.toLowerCase().split('') : lastWord.word.split('');
+        if (lastWord.userInput) {
+          lastWord.inputWordArr = config.ignore_case ? lastWord.userInput.toLowerCase().split('') : lastWord.userInput.split('');
+        } else {
+          lastWord.inputWordArr = new Array(lastWord.word.length);
+        }
       }
     }
     if (index < wordsData.words.length) {
@@ -629,7 +634,6 @@
             } else {
               wordsData.words = res.data;
             }
-
             if (appStore.isContinuePlay) {
               if (res?.existing_id?.length) {
                 wordsData.currentIndex = res?.existing_id.length || 0;
@@ -658,6 +662,7 @@
 
                       wordsData.currentIndex = res?.existing_id.length || 0;
                       wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+                      initWordsList()
                     }
                     if (res.last_key) {
                       currentTestKey = res.last_key;
@@ -673,14 +678,7 @@
               }
             }
 
-            // // 继续上次播放的逻辑
-            // if (appStore.dictationInfo.currentChapter.is_incomplete && !errSource.value) {
-
-            // } else {
-            // }
-            // 筛选出标熟的单词
-            wordsData.wordsCopy = deepClone(wordsData.words);
-            wordsData.words = wordsData.words.filter((word) => !word.is_proficient);
+            initWordsList()
           } else {
             ElMessage.error('当前章节未配置词库');
           }
@@ -693,6 +691,15 @@
     }
     canSubmit = true;
   };
+
+  const initWordsList = () => {
+    wordsData.wordsCopy = deepClone(wordsData.words);
+    // 判断当前的单词有没有标熟 没有标熟可以听写 标熟的话 查找下一个
+    if(wordsData.currentWord.is_proficient) {
+      handleMove(1)
+    }
+  }
+
   // 播放音频的方法
   // let audio = null;
   var timer = null;
@@ -719,6 +726,19 @@
       // audio = null;
     }
   };
+  const getNoProficientWordIndex = (type) => {
+    let nextIndex = wordsData.currentIndex
+    nextIndex = nextIndex + type; // 如果当前单词标熟，继续查找下一个
+    while (nextIndex < wordsData.words.length && nextIndex >= 0) {
+      // 如果当前单词未标熟，返回当前索引
+      if (!wordsData.words[nextIndex]?.is_proficient) {
+        console.log(`找到未标熟的单词：${wordsData.words[nextIndex].word}`);
+        break; // 跳出循环
+      }
+      nextIndex = nextIndex + type; // 如果当前单词标熟，继续查找下一个
+    }
+    return nextIndex
+  }
 
   const handleMove = (type) => {
     // 如果已经在播放状态，直接返回，避免重复调用
@@ -732,23 +752,14 @@
       if (wordsData.currentIndex < wordsData.words.length) {
         wordsData.lastIndex = wordsData.currentIndex;
       }
-      wordsData.currentIndex = wordsData.currentIndex + type; // 如果当前单词标熟，继续查找下一个
-      while (wordsData.currentIndex < wordsData.words.length) {
-        // 如果当前单词未标熟，返回当前索引
-        if (!wordsData.words[wordsData.currentIndex]?.is_proficient) {
-          console.log(`找到未标熟的单词：${wordsData.words[wordsData.currentIndex].word}`);
-          break; // 跳出循环
-        }
-        wordsData.currentIndex = wordsData.currentIndex + type; // 如果当前单词标熟，继续查找下一个
-      }
+      wordsData.currentIndex = getNoProficientWordIndex(type)
 
       // wordsData.currentIndex = sign;
-      wordsData.currentWord = wordsData.words[wordsData.currentIndex];
-
-      // if(wordsData.words[sign]?.is_proficient) {
-      //   handleMove(type)
-      //   return
-      // }
+      if(wordsData.currentIndex < wordsData.words.length) {
+        wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+      } else {
+        handleResult()
+      }
     }
     clearAudioCache();
     playWords();
@@ -845,10 +856,13 @@
   // 处理计算结果
   const handleResult = () => {
     let accuracy = 0;
+    let correctness = 0
     wordsData.currentIndex = wordsData.words.length;
     // 过略标熟的
     const wordsRes = wordsData.words.filter((word) => !word.is_proficient) || [];
-    const correctness = (wordsRes.filter((word) => word.isOk).length / wordsRes.length) * 100;
+    if(wordsRes.length) {
+      correctness = (wordsRes.filter((word) => word.isOk).length / wordsRes.length) * 100;
+    }
     if (appStore?.dictationInfo?.currentChapter?.id && appStore?.dictationInfo?.currentChapter?.g_id) {
       getChapterList({
         id: appStore.dictationInfo.currentChapter.id,
@@ -914,7 +928,7 @@
   };
 
   watch(
-    () => wordsData.currentWord.userInput,
+    () => wordsData.currentWord?.userInput,
     (newValue, oldValue) => {
       console.log(`${oldValue} to ${newValue}`, canSubmit);
       if (config.is_automatic_submit && checkWordsIsOk() && oldValue && newValue) {
@@ -1099,7 +1113,7 @@
 
   // 展示当前播放词库列表
   const showWordsList = () => {
-    wordslistRef.value.open(wordsData.wordsCopy, wordsData.currentWord);
+    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words,wordsData.currentWord);
   };
 </script>
 

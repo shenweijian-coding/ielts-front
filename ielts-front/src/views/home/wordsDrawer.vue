@@ -57,6 +57,7 @@
   const state = reactive({
     drawer: false,
     list: [],
+    list2: [],
     current: null,
   });
   const dialogWidth = ref('40%');
@@ -75,9 +76,10 @@
       dialogWidth.value = '40%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
-  const open = (list, current) => {
+  const open = (list, list2, current) => {
     state.drawer = true;
     state.list = list;
+    state.list2 = list2;
     state.current = current;
     nextTick(() => {
       document.getElementById('current').scrollIntoView();
@@ -99,6 +101,7 @@
   const signFinish = (ids, is_proficient = true) => {
     ids.forEach((id) => {
       state.list.find((o) => o.id == id).is_proficient = is_proficient;
+      state.list2.find((o) => o.id == id).is_proficient = is_proficient;
     });
   };
   // 单词标熟
@@ -145,6 +148,7 @@
   const collectFinish = (ids, is_collection = true) => {
     ids.forEach((id) => {
       state.list.find((o) => o.id == id).is_collection = is_collection;
+      state.list2.find((o) => o.id == id).is_collection = is_collection;
     });
   };
   // 收藏
