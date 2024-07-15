@@ -132,6 +132,7 @@
           ),
         });
         emits('ok', state.ids);
+        userStore.info();
         handleClose();
       })
       .catch((err) => {
