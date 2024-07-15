@@ -40,14 +40,18 @@
     </div>
   </div>
   <tabbar />
+  <Loading :loading="loading" />
 </template>
 <script setup>
   import { Chart, registerables } from 'chart.js';
   // import { useAppStore } from '@/store';
   import { getAnalysisData } from '@/api/book/index';
   import tabbar from '@/components/tabBar/index.vue';
+  import useLoading from '@/hooks/loading.ts';
+  import Loading from '@/components/loading/index.vue';
 
   // const appStore = useAppStore();
+  const { loading, setLoading } = useLoading();
 
   Chart.register(...registerables);
   const ctx = ref(null);
@@ -114,17 +118,23 @@
   // });
 
   const getData = () => {
+    setLoading(true);
     getAnalysisData({
       c_id: state.chapterId.value,
-    }).then((res) => {
-      // console.log(res);
-      state.detail = res;
-      state.data = res.data;
-      if (Object.keys(res.data).length) {
-        state.chapterId = Object.keys(res.data)[0];
-        chapterChange(state.chapterId);
-      }
-    });
+    })
+      .then((res) => {
+        // console.log(res);
+        state.detail = res;
+        state.data = res.data;
+        if (Object.keys(res.data).length) {
+          state.chapterId = Object.keys(res.data)[0];
+          chapterChange(state.chapterId);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
   };
 
   const chapterChange = (chapterId) => {

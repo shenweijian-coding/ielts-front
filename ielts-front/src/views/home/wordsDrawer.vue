@@ -13,7 +13,7 @@
           <div class="flex-1"
             ><p class="select-all font-mono text-xl font-normal leading-6 dark:text-gray-50 mb-2"
               >{{ item.word }} &nbsp;&nbsp;{{ item.phonetic_transcription }}</p
-            ><div class="mt-2 max-w-sm font-sans text-sm text-gray-400">{{ item.translate }}</div>
+            ><div class="mt-2 max-w font-sans text-sm text-gray-400">{{ item.translate }}</div>
           </div>
           <div class="space-x-2 flex justify-center items-center">
             <button
@@ -59,7 +59,7 @@
     list: [],
     current: null,
   });
-  const dialogWidth = ref('40%');
+  const dialogWidth = ref('50%');
   const collectRef = ref(null);
   const ImportDialogRef = ref(null);
 
@@ -70,9 +70,9 @@
     if (screenWidth < 768) {
       dialogWidth.value = '90%'; // 在小屏幕下设置Dialog宽度为90%
     } else if (screenWidth >= 768 && screenWidth < 1024) {
-      dialogWidth.value = '50%'; // 在中等屏幕下设置Dialog宽度为70%
+      dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
     } else {
-      dialogWidth.value = '40%'; // 在大屏幕下设置Dialog宽度为50%
+      dialogWidth.value = '50%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
   const open = (list, current) => {
