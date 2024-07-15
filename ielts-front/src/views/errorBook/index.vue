@@ -377,6 +377,7 @@
       })
         .then((res) => {
           ElMessage.success('单词标熟成功');
+          getErrorWords()
           setLoading(false);
         })
         .catch((err) => {
