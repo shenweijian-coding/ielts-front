@@ -233,18 +233,16 @@
     params.c_id = state.form.c_id;
     // console.log(state.form.c_id, 'state.form.c_id');
 
-
     if (state.form.sort) {
       params.sort = state.form.sort;
     }
     if (state.form.sort_type) {
       params.sort_type = state.form.sort_type;
     }
-    return params
-  }
+    return params;
+  };
   const getErrorWords = () => {
-
-    const params = getParams()
+    const params = getParams();
     params.page = state.page.currentPage;
     params.pagesize = state.page.pageSize;
 
@@ -327,32 +325,31 @@
 
   // 导出excel
   const handleDownloadExcel = () => {
-
-    const params = getParams()
+    const params = getParams();
     params.page = 1;
     params.pagesize = 9999;
-    
+
     setLoading(true);
     getErrorWordList(params)
       .then((res) => {
         const exportData = [];
-    state.selWords.forEach((item) => {
-      exportData.push({
-        单词: item.lexicon.word,
-        释义: item.lexicon.translate,
-        错误次数: item.error_num,
-        错误拼写: item.error_word,
-        词典: item.lexicon_group.name,
-        章节: item.chapter.name,
-        错误时间: item.updated_at,
-      });
-    });
-    const workBook = XLSX.utils.book_new();
-    const workSheet = XLSX.utils.json_to_sheet(exportData);
-    XLSX.utils.book_append_sheet(workBook, workSheet);
-    XLSX.writeFile(workBook, `错题本.xlsx`, {
-      bookType: 'xlsx',
-    });
+        state.selWords.forEach((item) => {
+          exportData.push({
+            单词: item.lexicon.word,
+            释义: item.lexicon.translate,
+            错误次数: item.error_num,
+            错误拼写: item.error_word,
+            词典: item.lexicon_group.name,
+            章节: item.chapter.name,
+            错误时间: item.updated_at,
+          });
+        });
+        const workBook = XLSX.utils.book_new();
+        const workSheet = XLSX.utils.json_to_sheet(exportData);
+        XLSX.utils.book_append_sheet(workBook, workSheet);
+        XLSX.writeFile(workBook, `错题本.xlsx`, {
+          bookType: 'xlsx',
+        });
         setLoading(false);
       })
       .catch(() => {
@@ -377,7 +374,7 @@
       })
         .then((res) => {
           ElMessage.success('单词标熟成功');
-          getErrorWords()
+          // getErrorWords()
           setLoading(false);
         })
         .catch((err) => {

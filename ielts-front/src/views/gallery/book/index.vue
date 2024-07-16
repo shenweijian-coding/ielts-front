@@ -132,6 +132,7 @@
         } else {
           ElMessage.warning('未配置词库');
         }
+        setLoading(false);
       })
       .catch(() => {
         setLoading(false);

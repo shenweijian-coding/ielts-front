@@ -45,6 +45,7 @@
     ids: [],
     isAdd: false,
     message: null,
+    lastBookId: 0, // 上一本书ID
   });
 
   const emits = defineEmits(['addBook', 'ok']);
@@ -65,6 +66,7 @@
   };
   windowSize();
   const handleClose = () => {
+    flag = false;
     state.dialogVisible = false;
   };
 
@@ -82,10 +84,11 @@
     const res = await getGroupBooks({ s_id: s_id });
     state.list = res;
   };
-  const open = async (ids) => {
+  const open = async (ids, lastBookId) => {
     await getBooks(2);
     state.message && state.message.close();
     state.ids = ids;
+    state.lastBookId = lastBookId;
     if (userStore.getConfig.default_collection_book && !flag) {
       if (userStore.getConfig.recent_collection_book_id) {
         const bookInfo = state.list.find((o) => o.id == userStore.getConfig.recent_collection_book_id);
@@ -98,9 +101,12 @@
       }
     }
     state.dialogVisible = true;
-    flag = false;
   };
   const handleCollect = (item) => {
+    // 通过去修改进来的
+    if (flag) {
+      handleCancelCollect();
+    }
     wordLabel({
       type: 'collection',
       lexicon_ids: JSON.stringify(state.ids),
@@ -123,7 +129,7 @@
                 type="success"
                 onClick={() => {
                   flag = true;
-                  open(state.ids);
+                  open(state.ids, item.id);
                 }}
               >
                 去修改
@@ -138,6 +144,13 @@
       .catch((err) => {
         handleClose();
       });
+  };
+  const handleCancelCollect = () => {
+    wordLabel({
+      type: 'update_collection',
+      lexicon_ids: JSON.stringify(state.ids),
+      book_id: state.lastBookId,
+    }).then((res) => {});
   };
   defineExpose({
     open,
