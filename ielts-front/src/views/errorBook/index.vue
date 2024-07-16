@@ -241,7 +241,7 @@
     }
     return params;
   };
-  const getErrorWords = () => {
+  const getErrorWords = (noRefresh = false) => {
     const params = getParams();
     params.page = state.page.currentPage;
     params.pagesize = state.page.pageSize;
@@ -251,10 +251,11 @@
       .then((res) => {
         state.tableData = res.data;
         state.page.total = res.total;
-        res.total &&
+        if(!noRefresh && res.total) {
           setTimeout(() => {
             tableRef.value.toggleAllSelection();
           });
+        }
 
         if (res.chapters?.length) {
           state.chapterList = res.chapters;
@@ -374,7 +375,7 @@
       })
         .then((res) => {
           ElMessage.success('单词标熟成功');
-          // getErrorWords()
+          getErrorWords(true)
           setLoading(false);
         })
         .catch((err) => {
@@ -385,11 +386,13 @@
       requestWordLabel();
     } else {
       ElMessageBox({
-        title: `确定将选中的${state.selWords.length}个单词标为熟词吗？`,
+        title: ``,
         message: () => (
-          <div style="fontSize: 22px">
+          <div >
+            <p style="fontSize: 22px">确定将选中的{state.selWords.length}个单词标为熟词吗？</p>
+            <p style="fontSize: 22px">单词标熟后<b>错词本不再展示</b>，听写时<b>自动跳过</b></p>
             <br />
-            <el-checkbox onChange={(check) => (checked = check)}>不再提醒</el-checkbox>
+            <el-checkbox onChange={(check) => (checked = check)} size="small">不再提醒</el-checkbox>
           </div>
         ),
         confirmButtonText: '标熟',

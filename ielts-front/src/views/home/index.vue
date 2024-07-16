@@ -671,6 +671,7 @@
                   .catch((action) => {
                     if (action == 'cancel') {
                       wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+                      initWordsList()
                     }
                   });
               } else {
@@ -696,7 +697,7 @@
     wordsData.wordsCopy = deepClone(wordsData.words);
     // 判断当前的单词有没有标熟 没有标熟可以听写 标熟的话 查找下一个
     if(wordsData.currentWord.is_proficient) {
-      handleMove(1)
+      handleMove(1, false)
     }
   }
 
@@ -740,7 +741,7 @@
     return nextIndex
   }
 
-  const handleMove = (type) => {
+  const handleMove = (type, isPlay = true) => {
     // 如果已经在播放状态，直接返回，避免重复调用
     // if (playStatus.value === 1) {
     //   return;
@@ -762,7 +763,9 @@
       }
     }
     clearAudioCache();
-    playWords();
+    if(isPlay) {
+      playWords();
+    }
   };
 
   // 开始听写
@@ -868,7 +871,7 @@
         id: appStore.dictationInfo.currentChapter.id,
         g_id: appStore.dictationInfo.currentChapter.g_id,
       }).then((res) => {
-        accuracy = (res?.[0].accuracy || correctness).toFixed(2);
+        accuracy = (+res?.[0].accuracy || correctness).toFixed(2);
         if (accuracy > 0) {
           handleEffectiveness();
         }
