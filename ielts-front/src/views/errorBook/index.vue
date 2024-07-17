@@ -332,17 +332,16 @@
     setLoading(true);
     getErrorWordList(params)
       .then((res) => {
-        const exportData = [];
-        state.selWords.forEach((item) => {
-          exportData.push({
-            单词: item.lexicon.word,
-            释义: item.lexicon.translate,
-            错误次数: item.error_num,
-            错误拼写: item.error_word,
-            词典: item.lexicon_group.name,
-            章节: item.chapter.name,
-            错误时间: item.updated_at,
-          });
+        const exportData = res.data.map((item) => {
+          return {
+            单词: item?.lexicon?.word,
+            释义: item?.lexicon?.translate,
+            错误次数: item?.error_num,
+            错误拼写: item?.error_word,
+            词典: item?.lexicon_group?.name,
+            章节: item?.chapter?.name,
+            错误时间: item?.updated_at,
+          };
         });
         const workBook = XLSX.utils.book_new();
         const workSheet = XLSX.utils.json_to_sheet(exportData);

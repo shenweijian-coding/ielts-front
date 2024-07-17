@@ -228,10 +228,10 @@
     const exportData = [];
     state.tableData.forEach((item) => {
       exportData.push({
-        单词: item.word,
-        释义: item.translate,
+        单词: item?.word,
+        释义: item?.translate,
         // 章节: item.chapter.name,
-        添加时间: item.updated_at,
+        添加时间: item?.updated_at,
       });
     });
     const chapterName = state.chapterList.find((o) => o.id == state.form.c_id)
