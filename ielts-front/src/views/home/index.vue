@@ -611,6 +611,7 @@
         wordsData.words = copyWords;
       }
       wordsData.currentWord = copyWords[wordsData.currentIndex];
+      initWordsList()
     } else {
       setLoading(true);
       getWordList({

@@ -59,7 +59,7 @@
             <template #default="scope">
               <template v-if="!state.hideProps.word">
                 <span class="flex items-center cursor-pointer"
-                  >{{ scope.row.lexicon.word }}<el-icon @click="play(scope.row)" class="ml-2"><Headset /></el-icon>
+                  >{{ scope.row.lexicon?.word }}<el-icon @click="play(scope.row)" class="ml-2"><Headset /></el-icon>
                 </span>
                 <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer"
                   >{{ scope.row.lexicon?.phonetic_transcription }}
@@ -102,7 +102,7 @@
           <el-table-column prop="chapter.name" label="章节" width="80" align="center" />
           <el-table-column prop="updated_at" label="错误时间" sortable="custom" width="100" align="center">
             <template #default="scope">
-              {{ scope.row.updated_at.split(' ')[0] }}
+              {{ scope.row.updated_at?.split(' ')[0] }}
             </template>
           </el-table-column>
         </el-table>
@@ -305,17 +305,17 @@
       ElMessage.error('请选择错词');
       return;
     }
-    const errWords = state.selWords.map((word) => {
-      return {
-        c_id: word.c_id,
-        g_id: word.g_id,
-        id: word.lexicon.id,
-        word: word.lexicon.word,
-        translate: word.lexicon?.translate,
-        phonetic_transcription: word.lexicon?.phonetic_transcription,
-        'phonetic-y': word.lexicon['phonetic-y'],
-        'phonetic-m': word.lexicon['phonetic-m'],
-      };
+    const errWords = state.selWords.filter(word=> word.lexicon).map((word) => {
+        return {
+          c_id: word?.c_id || 0,
+          g_id: word?.g_id || 0,
+          id: word?.lexicon?.id || word.lexicon_id || 0,
+          word: word?.lexicon?.word,
+          translate: word.lexicon?.translate,
+          phonetic_transcription: word.lexicon?.phonetic_transcription,
+          'phonetic-y': word?.lexicon?.['phonetic-y'],
+          'phonetic-m': word?.lexicon?.['phonetic-m'],
+        };
     });
     await appStore.setErrWords(errWords);
     await appStore.toggleCurrentChapter(null);
