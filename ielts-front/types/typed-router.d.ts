@@ -47,6 +47,8 @@ declare module 'vue-router/auto/routes' {
     '/contain/components/subAside': RouteRecordInfo<'/contain/components/subAside', '/contain/components/subAside', Record<never, never>, Record<never, never>>,
     '/demo/': RouteRecordInfo<'/demo/', '/demo', Record<never, never>, Record<never, never>>,
     '/enterprise//class/': RouteRecordInfo<'/enterprise//class/', '/enterprise/class', Record<never, never>, Record<never, never>>,
+    '/enterprise//class/components/booksDialog': RouteRecordInfo<'/enterprise//class/components/booksDialog', '/enterprise/class/components/booksDialog', Record<never, never>, Record<never, never>>,
+    '/enterprise//class/detail': RouteRecordInfo<'/enterprise//class/detail', '/enterprise/class/detail', Record<never, never>, Record<never, never>>,
     '/enterprise//library/': RouteRecordInfo<'/enterprise//library/', '/enterprise/library', Record<never, never>, Record<never, never>>,
     '/enterprise//user/': RouteRecordInfo<'/enterprise//user/', '/enterprise/user', Record<never, never>, Record<never, never>>,
     '/enterprise/companyInfo': RouteRecordInfo<'/enterprise/companyInfo', '/enterprise/companyInfo', Record<never, never>, Record<never, never>>,

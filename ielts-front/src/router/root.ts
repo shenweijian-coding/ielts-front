@@ -114,6 +114,9 @@ export default [
         path: 'class',
         component: () => import('@/views/enterprise/index/class/index.vue')  
       },{
+        path: 'classDetail',
+        component: () => import('@/views/enterprise/index/class/detail.vue')  
+      },{
         path: 'library',
         component: () => import('@/views/enterprise/index/library/index.vue')  
       },{
