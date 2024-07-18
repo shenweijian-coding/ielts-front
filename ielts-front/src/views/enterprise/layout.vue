@@ -8,26 +8,9 @@
         </a>
       </div>
       <el-menu :default-active="currentRoute" mode="horizontal" :ellipsis="false" router>
-        <el-menu-item v-if="appStore?.dictationInfo?.currentChapter" index="/home" @click="appStore.updateContinuePlayStatus(true)">
-          <!-- <el-icon><Headset /></el-icon> -->
-          听写
-        </el-menu-item>
-        <el-menu-item index="/main/book">
-          <!-- <el-icon><Memo /></el-icon> -->
-          单词书
-        </el-menu-item>
-        <el-menu-item index="/main/statistics">
-          <!-- <el-icon><DataLine /></el-icon> -->
-          统计
-        </el-menu-item>
-        <el-menu-item index="/main/errorbook">
-          <!-- <el-icon><DocumentDelete /></el-icon> -->
-          错词本
-        </el-menu-item>
-        <el-menu-item index="/main/user">
-          <!-- <el-icon><User /></el-icon> -->
-          我的
-        </el-menu-item>
+        <el-menu-item index="/company/index/class" @click="appStore.updateContinuePlayStatus(true)"> 班级 </el-menu-item>
+        <el-menu-item index="/company/index/library"> 资源库 </el-menu-item>
+        <el-menu-item index="/company/index/user"> 我的 </el-menu-item>
       </el-menu>
     </div>
   </div>

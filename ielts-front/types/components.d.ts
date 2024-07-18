@@ -37,6 +37,7 @@ declare module 'vue' {
     LastPage: typeof import('./../src/components/lastPage/index.vue')['default']
     Loading: typeof import('./../src/components/loading/index.vue')['default']
     Notice: typeof import('./../src/components/Notice/index.vue')['default']
+    QyTabbar: typeof import('./../src/components/tabBar/qy-tabbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./../src/components/sidebar/index.vue')['default']

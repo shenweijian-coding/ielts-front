@@ -14,11 +14,11 @@
     </div>
 
     <div
-      class="group flex lg:h-36 w-[46%] lg:w-50 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
+      class="group flex lg:h-36 w-[46%] lg:w-50 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10"
       @click="openTeaching"
     >
       <div class="relative lg:px-0 flex h-full w-full items-center justify-center"
-        ><h1 class="text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">新手教学视频</h1>
+        ><span class="text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">新手教学视频</span>
       </div>
     </div>
 

@@ -95,4 +95,31 @@ export default [
     },
     component: () => import('@/views/forgetPassword/index.vue'),
   },
+  {
+    path: '/company',
+    name: 'company',
+    meta: {
+      title: '爱听写-企业相关',
+    },
+    children: [{
+      path: 'applicat',
+      component: () => import('@/views/enterprise/companyInfo.vue')
+    },{
+      path: 'invite',
+      component: () => import('@/views/enterprise/invite.vue')
+    },{
+      path: 'index',
+      component: () => import('@/views/enterprise/layout.vue'),
+      children: [{
+        path: 'class',
+        component: () => import('@/views/enterprise/index/class/index.vue')  
+      },{
+        path: 'library',
+        component: () => import('@/views/enterprise/index/library/index.vue')  
+      },{
+        path: 'user',
+        component: () => import('@/views/enterprise/index/user/index.vue')  
+      }]
+    }]
+  }
 ];
