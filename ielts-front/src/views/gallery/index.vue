@@ -59,7 +59,7 @@
 <style lang="less" scoped>
   .general_header {
     width: 100vw;
-    height: 72px;
+    height: 60px;
     position: fixed;
     background-color: hsla(0, 0%, 100%, 0.49);
     -webkit-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
@@ -70,7 +70,7 @@
     z-index: 99;
   }
   .header-blank {
-    height: 68px;
+    height: 60px;
   }
   .el-menu-item {
     border: none !important;
