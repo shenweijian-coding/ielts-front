@@ -108,13 +108,20 @@ export default [
       path: 'invite',
       component: () => import('@/views/enterprise/invite.vue')
     },{
+      path: 'join',
+      component: () => import('@/views/enterprise/join.vue')
+    },{
       path: 'index',
       component: () => import('@/views/enterprise/layout.vue'),
       children: [{
         path: 'class',
+
         component: () => import('@/views/enterprise/index/class/index.vue')  
       },{
         path: 'classDetail',
+        meta: {
+          belong: '/company/index/class',
+        },
         component: () => import('@/views/enterprise/index/class/detail.vue')  
       },{
         path: 'library',
@@ -122,6 +129,12 @@ export default [
       },{
         path: 'user',
         component: () => import('@/views/enterprise/index/user/index.vue')  
+      },{
+        path: 'memberlist',
+        meta: {
+          belong: '/company/index/user',
+        },
+        component: () => import('@/views/enterprise/index/member/index.vue')  
       }]
     }]
   }

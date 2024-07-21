@@ -8,14 +8,37 @@
         >
       </div>
       <div class="card-info-get mt-7">
-        <el-input placeholder="请输入企业或组织名称" size="large" />
-        <el-input placeholder="请输入姓名" class="mt-6" size="large" />
-        <el-button class="w-full mt-10" type="primary" size="large">下一步</el-button>
+        <el-input placeholder="请输入企业或组织名称" size="large" v-model="state.enterprise_name" />
+        <el-input placeholder="请输入姓名" class="mt-6" size="large" v-model="state.name" />
+        <el-button class="w-full mt-10" type="primary" size="large" @click="apply">下一步</el-button>
       </div>
     </div>
   </div>
 </template>
-<script setup></script>
+<script setup>
+  import { addEnterpriseInfo } from '@/api/company/index';
+  import { ElMessage } from 'element-plus';
+  import { useRouter } from 'vue-router';
+
+  const router = useRouter();
+  const state = reactive({
+    enterprise_name: '',
+    name: '',
+  });
+  const apply = () => {
+    if (!state.enterprise_name || !state.name) {
+      ElMessage.warning('请填写信息');
+      return;
+    }
+    addEnterpriseInfo({
+      enterprise_name: state.enterprise_name,
+      name: state.name,
+    }).then((res) => {
+      ElMessage.success('申请成功');
+      router.push('/company/invite');
+    });
+  };
+</script>
 <style lang="less" scoped>
   .card-info {
     border: 1px solid var(#eaecf0);

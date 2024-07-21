@@ -18,7 +18,7 @@
   <div class="relative mt-auto flex w-full flex-1 flex-col overflow-y-auto lg:px-30 mb-10 md:mb-auto">
     <router-view />
   </div>
-  <Footer />
+  <!-- <Footer /> -->
 </template>
 <script setup>
   import Footer from '@/components/footer/index.vue';

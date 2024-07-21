@@ -1,97 +1,73 @@
 <template>
-  <div v-if="false" class="relative flex align-center pt-5 flex-col lg:flex-row">
-    <div
-      class="group flex lg:h-36 w-[46%] lg:w-74 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
-      @click="handleToBook"
-    >
-      <div
-        class="relative ml-1 px-3 lg:px-0 lg:mt-2 flex h-full w-full lg:flex-col lg:items-start items-center lg:justify-start justify-between"
-        ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">我的词书</h1>
-        <p class="mb-2 font-bold text-gray-600 dark:text-gray-200">共 {{ state.list.length }} 本</p>
-        <div class="w-full items-center hidden lg:flex"
-          ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20" /></div
-      ></div>
-    </div>
-
-    <div
-      class="group flex lg:h-36 w-[46%] lg:w-50 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10"
-      @click="openTeaching"
-    >
-      <div class="relative lg:px-0 flex h-full w-full items-center justify-center"
-        ><span class="text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">新手教学视频</span>
-      </div>
-    </div>
-
-    <div
-      class="group flex lg:h-36 w-[20%] lg:w-50 mt-10 lg:mt-0 w-full text-lg cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-white shadow-lg focus:outline-none bg-red-3 hover:bg-red-4 dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
-      @click="handleLogout"
-    >
-      退出登陆
-    </div>
-
-    <!-- <el-button @click="handleToBook" class="w-full">单词本{{ state.list.length }}本</el-button> -->
-    <!-- <el-button @click="handleLogout" type="" class="mt-5 w-full m-0">退出登陆</el-button> -->
-    <!-- <el-button @click="handleLogout" type="" class="mt-10">清除缓存</el-button>
-      <el-button @click="handleLogout" type="" class="mt-10">修改密码</el-button> -->
-    <tabbar />
-    <Teach ref="teachRef" />
-  </div>
-
   <div class="px-30">
     <div class="info-pc-header hidden lg:block">
-      <p  class="text-center text-lg text-white mt-10">
-        :) Hi~ {{ userStore.$state.id }}，新的一天又开始了，祝你过得快乐!
-      </p>
+      <p class="text-center text-lg text-white mt-10"> :) Hi~ {{ userStore.$state.id }}，新的一天又开始了，祝你过得快乐! </p>
     </div>
     <div class="lg:hidden h-16"></div>
     <div class="info-pc-header-info">
       <div class="flex justify-between items-center md:px-20">
-      <div>
-        <div class="user-info flex justify-start items-center border">
-          <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white">
-            {{ userStore.$state.id }}
-          </div>
-          <div class="ml-4 flex flex-col">
-            <div class="info-name">id：{{ userStore.$state.id }}</div> 
-            <div class="mt-2">phone：{{ userStore.$state.phone_number }}</div>
+        <div>
+          <div class="user-info flex justify-start items-center border">
+            <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white">
+              {{ userStore.$state.id }}
+            </div>
+            <div class="ml-4 flex flex-col">
+              <div class="info-name">id：{{ userStore.$state.id }}</div>
+              <div class="mt-2">phone：{{ userStore.$state.phone_number }}</div>
+            </div>
           </div>
         </div>
-      </div>
 
         <el-button size="small">切换企业版</el-button>
       </div>
       <div class="bg-white md:px-20 px-2 w-full m-auto mt-4">
-        <div class="menu-item flex items-center py-6 justify-between border-bottom" >
-          <div class="left"><span class="menu-title font-bold text-sm">单词本</span></div> 
+        <div class="menu-item flex items-center py-6 justify-between border-bottom">
+          <div class="left"><span class="menu-title font-bold text-sm">单词本</span></div>
           <div class="right" @click="handleToBook">
-            <span class="text-gray cursor-pointer flex items-center hover-text-theme">（共 {{ state.list.length }} 本）查看<el-icon><ArrowRight /></el-icon></span>
+            <span class="text-gray cursor-pointer flex items-center hover-text-theme"
+              >（共 {{ state.list.length }} 本）查看<el-icon><ArrowRight /></el-icon
+            ></span>
           </div>
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
-          <div class="left"><span class="menu-title font-bold text-sm">修改密码</span></div> 
-          <div class="right"><span class="text-gray cursor-pointer flex items-center hover-text-theme">去修改<el-icon><ArrowRight /></el-icon></span></div>
+          <div class="left"><span class="menu-title font-bold text-sm">修改密码</span></div>
+          <div class="right"
+            ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
+              >去修改<el-icon><ArrowRight /></el-icon></span
+          ></div>
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
-          <div class="left"><span class="menu-title font-bold text-sm">新手教学视频</span></div> 
-          <div class="right" @click="openTeaching"><span class="text-gray flex items-center cursor-pointer hover-text-theme">查看<el-icon><ArrowRight /></el-icon></span></div>
+          <div class="left"><span class="menu-title font-bold text-sm">新手教学视频</span></div>
+          <div class="right" @click="openTeaching"
+            ><span class="text-gray flex items-center cursor-pointer hover-text-theme"
+              >查看<el-icon><ArrowRight /></el-icon></span
+          ></div>
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
-          <div class="left"><span class="menu-title font-bold text-sm">企业账号</span></div> 
-          <div class="right"><span class="text-gray cursor-pointer flex items-center hover-text-theme">申请<el-icon><ArrowRight /></el-icon></span></div>
+          <div class="left"><span class="menu-title font-bold text-sm">企业账号</span></div>
+          <div class="right" @click="toNewRoute('/company/applicat')"
+            ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
+              >申请<el-icon><ArrowRight /></el-icon></span
+          ></div>
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
-          <div class="left"><span class="menu-title font-bold text-sm">注册时间</span></div> 
-          <div class="right"><span class="cursor-pointer flex items-center hover-text-theme text-gray">{{ userStore.$state.created_at }}</span></div>
+          <div class="left"><span class="menu-title font-bold text-sm">注册时间</span></div>
+          <div class="right"
+            ><span class="cursor-pointer flex items-center hover-text-theme text-gray">{{ userStore.$state.created_at }}</span></div
+          >
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
-          <div class="left"><span class="menu-title font-bold text-sm">退出登陆</span></div> 
-          <div class="right " @click="handleLogout"><span class="text-gray flex items-center cursor-pointer">登陆新的账号 <el-icon><ArrowRight /></el-icon></span></div>
+          <div class="left"><span class="menu-title font-bold text-sm">退出登陆</span></div>
+          <div class="right" @click="handleLogout"
+            ><span class="text-gray flex items-center cursor-pointer"
+              >登陆新的账号 <el-icon><ArrowRight /></el-icon></span
+          ></div>
         </div>
       </div>
-
     </div>
     <tabbar />
   </div>
+  <Teach ref="teachRef" />
 </template>
 <script setup>
   import { useUserStore } from '@/store';
@@ -120,9 +96,13 @@
     router.push('/main/vocabularyBook');
   };
   const openTeaching = () => {
-    teachRef.value.open();
+    console.log(teachRef.value);
+    teachRef.value && teachRef.value.open();
   };
 
+  const toNewRoute = (newRoute) => {
+    router.push(newRoute);
+  };
   const getBooks = (s_id) => {
     getGroupBooks({ s_id: s_id })
       .then((res) => {
@@ -166,7 +146,7 @@
     flex-wrap: wrap;
     margin: -50px auto 24px;
   }
-  .menu-item{
+  .menu-item {
     border-bottom: 1px solid #f7f7f7;
   }
 </style>

@@ -43,10 +43,15 @@
     <div v-if="state.activeTab == 1" class="flex justify-between">
       <div class="flex-1 px-4 bg-white">
         <el-table size="small" :data="state.students" highlight-current-row @row-click="rowClick">
-          <el-table-column prop="name" label="姓名" width="" align="center" />
-          <el-table-column prop="remark" label="备注" width="" align="center">
+          <el-table-column prop="name" label="" width="40" align="center">
             <template #default="scope">
-              <div class="flex items-center justify-center">
+              <el-icon class="cursor-pointer" @click="deleteStu(scope.row)" size="12"><Delete /></el-icon>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="姓名" width="" align="left" />
+          <el-table-column prop="remark" label="备注" width="" align="left">
+            <template #default="scope">
+              <div class="flex items-center">
                 <span v-if="!scope.row.isEdit">1</span>
                 <el-input
                   v-else
@@ -71,7 +76,7 @@
       <div class="w-2/7 ml-4 px-4 bg-white pt-2">
         <el-button :icon="Download" plain @click="handleDownloadExcel" size="small" class="float-right" />
 
-        <el-table>
+        <el-table size="small">
           <el-table-column prop="error_num" label="易错单词" width="" align="center" />
           <el-table-column prop="error_num" label="释义" width="110" align="center" />
           <el-table-column prop="error_num" label="错误次数" width="110" align="center" />
@@ -106,9 +111,11 @@
   </div>
 </template>
 <script setup>
-  import { EditPen, CircleCheck, Plus, Download } from '@element-plus/icons-vue';
+  import { EditPen, CircleCheck, Plus, Download, Delete } from '@element-plus/icons-vue';
   import { getGroupBooks } from '@/api/book/index';
   import booksDialog from './components/booksDialog.vue';
+  import { getStudentList } from '@/api/company/index';
+  import { ElMessageBox } from 'element-plus';
 
   const state = reactive({
     activeTab: 1,
@@ -146,9 +153,25 @@
       })
       .catch(() => {});
   };
+
+  const getStudentInfo = () => {
+    getStudentList({
+      type: state.form.type,
+      c_id: state.form.chapterId,
+      page: 1,
+      pagesize: 9999,
+    }).then((res) => {
+      console.log(res);
+      // state.students = res.data;
+    });
+  };
+  const deleteStu = () => {
+    ElMessageBox.confirm('确定移除吗', 'warning').then((res) => {});
+  };
   const openCustomDialog = () => {
     booksDialogRef.value.open();
   };
+  getStudentInfo();
   getBooks();
 </script>
 <style lang="less">
