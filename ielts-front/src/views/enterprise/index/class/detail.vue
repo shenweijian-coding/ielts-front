@@ -1,9 +1,15 @@
 <template>
   <div>
-    <el-tabs v-model="state.activeTab" @tab-click="handleTabClick" class="flex h-12 w-full items-center justify-between">
-      <el-tab-pane label="学生数据" :name="1" />
-      <el-tab-pane label="班级词书" :name="2" />
-    </el-tabs>
+    <div class="flex justify-between items-center">
+      <el-tabs v-model="state.activeTab" @tab-click="handleTabClick" class="flex h-12 w-full items-center justify-between">
+        <el-tab-pane label="学生数据" :name="1" />
+        <el-tab-pane label="班级词书" :name="2" />
+      </el-tabs>
+      <div class="flex">
+        <el-input size="small" style="width: 200px" readonly />
+        <el-button size="small" type="primary" plain>复制</el-button>
+      </div>
+    </div>
     <div v-if="state.activeTab == 1" class="mt-4">
       <el-form :model="state.form" size="small" label-width="70" :inline="true">
         <el-form-item>
@@ -114,9 +120,11 @@
   import { EditPen, CircleCheck, Plus, Download, Delete } from '@element-plus/icons-vue';
   import { getGroupBooks } from '@/api/book/index';
   import booksDialog from './components/booksDialog.vue';
-  import { getStudentList, updateStudentInfo, delStudent } from '@/api/company/index';
+  import { getStudentList, updateStudentInfo, delStudent, getInviteCode } from '@/api/company/index';
   import { ElMessageBox } from 'element-plus';
+  import { useRoute } from 'vue-router';
 
+  const route = useRoute();
   const state = reactive({
     activeTab: 1,
     form: {
@@ -143,17 +151,20 @@
   const editRowFinish = (row) => {
     updateStudentInfo({
       id: row.id,
-      name: row.name
-    }).then(res => {
+      name: row.name,
+    }).then((res) => {
       row.isEdit = false;
-      getStudentInfo()
-    })
+      getStudentInfo();
+    });
   };
   const rowClick = (row) => {
     console.log(row);
   };
   const getBooks = () => {
-    getGroupBooks({ s_id: 2 })
+    if (!route.query.id) {
+      return;
+    }
+    getGroupBooks({ s_id: 5, class_id: route.query.id })
       .then((res) => {
         state.booksList = res;
       })
@@ -174,14 +185,26 @@
   const deleteStu = (item) => {
     ElMessageBox.confirm('确定移除吗', 'warning').then((res) => {
       delStudent({
-        id: item.id
-      }).then(res => {
-        getStudentInfo()
-      })
+        id: item.id,
+      }).then((res) => {
+        getStudentInfo();
+      });
     });
   };
+  const getInviteClass = () => {
+    if (!route.query.id) {
+      return;
+    }
+    getInviteCode({
+      type: 'school_class',
+      foreign_id: route.query.id,
+    }).then((res) => {
+      console.log(res);
+    });
+  };
+  getInviteClass();
   const openCustomDialog = () => {
-    booksDialogRef.value.open();
+    booksDialogRef.value.open(route.query.id);
   };
   getStudentInfo();
   getBooks();

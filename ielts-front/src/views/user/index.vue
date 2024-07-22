@@ -51,6 +51,13 @@
           ></div>
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
+          <div class="left"><span class="menu-title font-bold text-sm">我的班级</span></div>
+          <div class="right" @click="toNewRoute('/company/applicat')"
+            ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
+              >退出班级<el-icon><ArrowRight /></el-icon></span
+          ></div>
+        </div>
+        <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">注册时间</span></div>
           <div class="right"
             ><span class="cursor-pointer flex items-center hover-text-theme text-gray">{{ userStore.$state.created_at }}</span></div

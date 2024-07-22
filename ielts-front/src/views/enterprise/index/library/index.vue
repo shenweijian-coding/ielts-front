@@ -29,6 +29,8 @@
       </div>
     </div>
     <Loading :loading="loading" />
+    <ImportDialog ref="ImportDialogRef" @ok="getBooks(4)" />
+
     <tabbar />
   </div>
 </template>
@@ -40,12 +42,14 @@
   import { Plus } from '@element-plus/icons-vue';
   import tabbar from '@/components/tabBar/index.vue';
   import { useRouter } from 'vue-router';
+  import ImportDialog from './import-dialog.vue';
 
   import { getSceneList, getGroupBooks, getLanguageList, getCategoryList, getChapterList } from '@/api/book/index';
 
   const { loading, setLoading } = useLoading();
   const router = useRouter();
   const ChapterDialogRef = ref(null);
+  const ImportDialogRef = ref(null);
 
   const galleryState = reactive({
     cuttentCID: '',
@@ -94,6 +98,10 @@
       .catch(() => {
         setLoading(false);
       });
+  };
+
+  const openCustomDialog = () => {
+    ImportDialogRef.value.open();
   };
 
   // const getScene = (l_id, c_id = galleryState.currentCategory) => {

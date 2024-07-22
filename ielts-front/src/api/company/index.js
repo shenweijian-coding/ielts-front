@@ -38,6 +38,15 @@ const updateStudentInfo = async (data) => post({ url: '/api/study/enterprise/v1/
 
 // 删除班级学生
 const delStudent = async (data) => post({ url: '/api/study/enterprise/v1/class/update/student/info', data });
+
+// 上传词书 资源库
+const enterpriseUpload = async (data) => post({ url: '/api/study/enterprise/v1/upload/book', data });
+
+// 新建班级
+const addClass = async (data) => post({ url: '/api/study/enterprise/v1/class/add', data });
+
+// 上传班级词书
+const uploadClassBook = async (data) => post({ url: '/api/study/enterprise/v1/class/upload/book', data });
 export {
   getInviteCode,
   addEnterpriseInfo,
@@ -51,5 +60,8 @@ export {
   getInviteInfo,
   getClassList,
   updateStudentInfo,
-  delStudent
+  delStudent,
+  enterpriseUpload,
+  addClass,
+  uploadClassBook,
 };

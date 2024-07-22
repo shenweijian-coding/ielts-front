@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="state.visable" width="500">
+  <el-dialog v-model="state.visable" width="500" :before-close="handleClose">
     <div>
       <el-tabs v-model="state.activeTab" @tab-click="handleTabClick" class="flex h-12 w-full items-center justify-between">
         <el-tab-pane label="企业资源库" :name="1" />
@@ -7,30 +7,32 @@
         <el-tab-pane label="自定义添加" :name="3" />
       </el-tabs>
 
-      <div v-if="state.activeTab == 1" class="h-100"> 企业资源库 </div>
-      <div v-if="state.activeTab == 2" class="h-100">
+      <!-- <div v-if="state.activeTab == 1" class="h-100"> 企业资源库 </div> -->
+      <div v-if="state.activeTab == 2 || state.activeTab == 1" class="h-100">
         <div>
-          <el-select
-            v-model="state.form.l_id"
-            placeholder="请选择"
-            style="width: 100px"
-            filterable
-            size="small"
-            @change="(c_id) => getScene(1, c_id)"
-          >
-            <el-option v-for="item in state.categoryList" :key="item.id" :label="item.name" :value="item.id" />
-          </el-select>
-          <el-select
-            v-model="state.form.c_id"
-            placeholder="请选择"
-            style="width: 180px"
-            filterable
-            size="small"
-            class="ml-2"
-            @change="(s_id) => getBooks(s_id)"
-          >
-            <el-option v-for="item in state.sceneList" :key="item.id" :label="item.name" :value="item.id" />
-          </el-select>
+          <template v-if="state.activeTab == 2">
+            <el-select
+              v-model="state.form.l_id"
+              placeholder="请选择"
+              style="width: 100px"
+              filterable
+              size="small"
+              @change="(c_id) => getScene(1, c_id)"
+            >
+              <el-option v-for="item in state.categoryList" :key="item.id" :label="item.name" :value="item.id" />
+            </el-select>
+            <el-select
+              v-model="state.form.c_id"
+              placeholder="请选择"
+              style="width: 180px"
+              filterable
+              size="small"
+              class="ml-2"
+              @change="(s_id) => getBooks(s_id)"
+            >
+              <el-option v-for="item in state.sceneList" :key="item.id" :label="item.name" :value="item.id" />
+            </el-select>
+          </template>
           <el-table class="mt-2" size="small" :data="state.booksList" height="320" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="30" />
             <el-table-column prop="name" label="书籍名" width="" align="center" />
@@ -38,7 +40,7 @@
             <el-table-column prop="word_total" label="总计次数" align="center" width="90" />
           </el-table>
           <div class="flex justify-end items-center mt-4">
-            <el-button type="primary" size="small">确认</el-button>
+            <el-button type="primary" size="small" @click="submit">确认</el-button>
           </div>
         </div>
       </div>
@@ -75,6 +77,8 @@
 </template>
 <script setup>
   import { getSceneList, getGroupBooks, getChapterList, getLanguageList, getCategoryList } from '@/api/book/index';
+  import { uploadClassBook } from '@/api/company/index';
+  import { ElMessage } from 'element-plus';
 
   const state = reactive({
     activeTab: 2,
@@ -94,12 +98,21 @@
     numOption: [15, 30, 50, 100, 200],
     selBooks: [],
     selWords: [],
+    class_id: '',
   });
 
-  const open = () => {
+  const open = (class_id) => {
+    state.class_id = class_id;
     state.visable = true;
   };
-  const handleTabClick = () => {};
+  const handleTabClick = ({ paneName }) => {
+    console.log(paneName);
+    if (paneName == 1) {
+      getBooks(4);
+    } else {
+      getBooks(state.form.c_id);
+    }
+  };
 
   const getCategory = (l_id = 1) => {
     getCategoryList({
@@ -138,8 +151,28 @@
       .catch(() => {});
   };
 
+  const handleClose = () => {
+    state.visable = false;
+    state.selBooks = [];
+  };
+  const submit = () => {
+    const typeMap = {
+      1: 'enterprise',
+      2: 'idictation',
+      3: 'custom',
+    };
+    const ids = state.selBooks.map((book) => book.id);
+    uploadClassBook({
+      type: typeMap[state.activeTab],
+      class_id: state.class_id,
+      group_ids: JSON.stringify(ids),
+    }).then((res) => {
+      handleClose();
+    });
+  };
+  // getCompanyBooks();
   const handleSelectionChange = (val) => {
-    state.selWords = val;
+    state.selBooks = val;
   };
   getCategory();
   defineExpose({
