@@ -132,7 +132,7 @@
   // };
 
   onMounted(() => {
-    getBooks(2);
+    getBooks(4);
   });
 </script>
 <style lang="less">

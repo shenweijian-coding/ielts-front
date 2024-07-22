@@ -2,8 +2,8 @@
   <div class="container mx-auto flex h-screen items-center justify-center">
     <div class="card md:w-120 w-4/5 p-6 rounded-lg bg-white card-info">
       <div class="card-content">
-        <h2 class="card-title text-xl font-bold text-center leading-10">。。。邀请你加入</h2>
-        <h2 class="card-title text-xl font-bold text-center leading-10">北京爱听写公司</h2>
+        <h2 class="card-title text-xl font-bold text-center leading-10">{{state.inviteInfo.manager_name}} 邀请你加入</h2>
+        <h2 class="card-title text-xl font-bold text-center leading-10">{{state.inviteInfo.nickname}}</h2>
         <!-- <span class="card-text text-gray-500 text-center text-df leading-5">北京爱听写公司</span> -->
       </div>
       <div class="card-info-get mt-7">
@@ -15,13 +15,17 @@
   </div>
 </template>
 <script setup>
-  import { joinEnterprise } from '@/api/company/index';
+  import { joinEnterprise, getInviteInfo } from '@/api/company/index';
   import { useRoute, useRouter } from 'vue-router';
   import { ElMessage } from 'element-plus';
 
   const state = reactive({
     name: '',
-    loading: false
+    loading: false,
+    inviteInfo: {
+      nickname: '',
+      manager_name: ''
+    }
   });
   const route = useRoute();
   const router = useRouter();
@@ -49,6 +53,12 @@
       state.loading = false
     });
   };
+  const getInfo = (code) => {
+    getInviteInfo({ code: route.query.code }).then(res => {
+      state.inviteInfo = res
+    })
+  }
+  getInfo()
 </script>
 <style lang="less" scoped>
   .card-info {

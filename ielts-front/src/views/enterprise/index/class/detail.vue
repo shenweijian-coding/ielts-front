@@ -48,15 +48,15 @@
               <el-icon class="cursor-pointer" @click="deleteStu(scope.row)" size="12"><Delete /></el-icon>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="姓名" width="" align="left" />
-          <el-table-column prop="remark" label="备注" width="" align="left">
+          <!-- <el-table-column prop="name" label="姓名" width="" align="left" /> -->
+          <el-table-column prop="name" label="备注" width="" align="left">
             <template #default="scope">
               <div class="flex items-center">
                 <span v-if="!scope.row.isEdit">1</span>
                 <el-input
                   v-else
                   size="small"
-                  v-model="scope.row.remark"
+                  v-model="scope.row.name"
                   @enter="editRowFinish(scope.row)"
                   style="width: 100px"
                   placeholder="请输入备注"
@@ -114,7 +114,7 @@
   import { EditPen, CircleCheck, Plus, Download, Delete } from '@element-plus/icons-vue';
   import { getGroupBooks } from '@/api/book/index';
   import booksDialog from './components/booksDialog.vue';
-  import { getStudentList } from '@/api/company/index';
+  import { getStudentList, updateStudentInfo, delStudent } from '@/api/company/index';
   import { ElMessageBox } from 'element-plus';
 
   const state = reactive({
@@ -141,7 +141,13 @@
     row.isEdit = true;
   };
   const editRowFinish = (row) => {
-    row.isEdit = false;
+    updateStudentInfo({
+      id: row.id,
+      name: row.name
+    }).then(res => {
+      row.isEdit = false;
+      getStudentInfo()
+    })
   };
   const rowClick = (row) => {
     console.log(row);
@@ -165,8 +171,14 @@
       // state.students = res.data;
     });
   };
-  const deleteStu = () => {
-    ElMessageBox.confirm('确定移除吗', 'warning').then((res) => {});
+  const deleteStu = (item) => {
+    ElMessageBox.confirm('确定移除吗', 'warning').then((res) => {
+      delStudent({
+        id: item.id
+      }).then(res => {
+        getStudentInfo()
+      })
+    });
   };
   const openCustomDialog = () => {
     booksDialogRef.value.open();

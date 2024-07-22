@@ -27,7 +27,17 @@ const updateManagerPermission = async (data) => post({ url: '/api/study/enterpri
 // 获取学生列表
 const getStudentList = async (data) => post({ url: '/api/study/enterprise/v1/class/student/list', data });
 
-//
+//获取邀请用户的信息
+const getInviteInfo = async (data) => post({ url: '/api/study/enterprise/v1/get/invite/info', data });
+
+// 获取班级列表
+const getClassList = async (data) => post({ url: '/api/study/enterprise/v1/class/list', data });
+
+// 修改用户备注
+const updateStudentInfo = async (data) => post({ url: '/api/study/enterprise/v1/class/update/student/info', data });
+
+// 删除班级学生
+const delStudent = async (data) => post({ url: '/api/study/enterprise/v1/class/update/student/info', data });
 export {
   getInviteCode,
   addEnterpriseInfo,
@@ -38,4 +48,8 @@ export {
   delManager,
   updateManagerPermission,
   getStudentList,
+  getInviteInfo,
+  getClassList,
+  updateStudentInfo,
+  delStudent
 };

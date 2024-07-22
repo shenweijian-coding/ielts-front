@@ -1,27 +1,27 @@
 <template>
-  <div class="px-30">
+  <div class="md:px-30">
     <div class="info-pc-header hidden lg:block">
       <p class="text-center text-lg text-white mt-10"> :) Hi~ 新的一天又开始了，祝你过得快乐! </p>
     </div>
     <div class="lg:hidden h-16"></div>
-    <div class="info-pc-header-info">
+    <div class="w-full md:w-4/5 info-pc-header-info p-2 pb-8">
       <div class="flex justify-between items-center md:px-20">
         <div>
           <div class="user-info flex justify-start items-center border">
-            <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white"> 伟建 </div>
+            <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white text-xl"> {{ userStore.$state.enterprise.user_name.slice(0,1) }} </div>
             <div class="ml-4 flex flex-col">
-              <div class="info-name">猿小申</div>
-              <div class="mt-2">phone：1834638245</div>
+              <div class="info-name">{{ userStore.$state.enterprise.user_name || '' }}</div>
+              <div class="mt-2">{{ userStore.$state.enterprise.enterprise_name || '' }}</div>
             </div>
           </div>
         </div>
 
-        <el-button size="small">切换个人版</el-button>
+        <el-button size="small" @click="toNewRoute('/main/user')">切换个人版</el-button>
       </div>
       <div class="bg-white md:px-20 px-2 w-full m-auto mt-4">
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">人员管理</span></div>
-          <div class="right" @click="toNewRoute">
+          <div class="right" @click="toNewRoute('/company/index/memberlist')">
             <span class="tips text-theme cursor-pointer">查看</span>
           </div>
         </div>
@@ -72,8 +72,8 @@
     });
   };
 
-  const toNewRoute = () => {
-    router.push('/company/index/memberlist');
+  const toNewRoute = (newRoute) => {
+    router.push(newRoute);
   };
 </script>
 <style lang="less" scoped>
@@ -94,12 +94,12 @@
     -webkit-box-align: start !important;
     -ms-flex-align: start !important;
     align-items: flex-start !important;
-    width: 85%;
+    // width: 85%;
     background-color: hsla(0, 0%, 100%, 0.5686274509803921);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-radius: 4px;
-    padding: 24px 24px 40px;
+    // padding: 24px 24px 40px;
     -webkit-box-shadow: 0 0 8px 0 hsla(0, 0%, 61.6%, 0.09019607843137255);
     box-shadow: 0 0 8px 0 hsla(0, 0%, 61.6%, 0.09019607843137255);
     -ms-flex-wrap: wrap;

@@ -42,11 +42,13 @@
 import tabbar from '@/components/tabBar/qy-tabbar.vue';
 import { Plus } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
+import { getClassList } from '@/api/company/index';
 
 const router = useRouter()
 
 const state = reactive({
-  dialogVisible: false
+  dialogVisible: false,
+  classList: []
 })
 
 const handleNewClass = () => {
@@ -55,6 +57,12 @@ const handleNewClass = () => {
 
 const addNewClass = () => {
 
+}
+
+const getClassInfo = () => {
+  getClassList().then(res => {
+    console.log(res);
+  })
 }
 
 const cancel = () => {

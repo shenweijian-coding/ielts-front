@@ -1,24 +1,24 @@
 <template>
-  <div class="px-30">
+  <div class="md:px-30">
     <div class="info-pc-header hidden lg:block">
       <p class="text-center text-lg text-white mt-10"> :) Hi~ {{ userStore.$state.id }}，新的一天又开始了，祝你过得快乐! </p>
     </div>
     <div class="lg:hidden h-16"></div>
-    <div class="info-pc-header-info">
+    <div class="w-full md:w-4/5 info-pc-header-info p-2 pb-8">
       <div class="flex justify-between items-center md:px-20">
         <div>
           <div class="user-info flex justify-start items-center border">
             <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white">
               {{ userStore.$state.id }}
             </div>
-            <div class="ml-4 flex flex-col">
+            <div class="hidden ml-4 md:flex flex-col">
               <div class="info-name">id：{{ userStore.$state.id }}</div>
               <div class="mt-2">phone：{{ userStore.$state.phone_number }}</div>
             </div>
           </div>
         </div>
 
-        <el-button v-if="userStore.$state.enterprise" size="small" @click="toNewRoute('/company/index/user')">切换企业版</el-button>
+        <el-button v-if="userStore.$state.is_enterprise" size="small" @click="toNewRoute('/company/index/user')">切换企业版</el-button>
       </div>
       <div class="bg-white md:px-20 px-2 w-full m-auto mt-4">
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
@@ -43,7 +43,7 @@
               >查看<el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
-        <div class="menu-item flex items-center py-6 justify-between border-bottom">
+        <div v-if="!userStore.$state.is_enterprise" class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">企业账号</span></div>
           <div class="right" @click="toNewRoute('/company/applicat')"
             ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
@@ -134,12 +134,12 @@
     -webkit-box-align: start !important;
     -ms-flex-align: start !important;
     align-items: flex-start !important;
-    width: 85%;
+    // width: 85%;
     background-color: hsla(0, 0%, 100%, 0.5686274509803921);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-radius: 4px;
-    padding: 24px 24px 40px;
+    // padding: 24px 24px 40px;
     -webkit-box-shadow: 0 0 8px 0 hsla(0, 0%, 61.6%, 0.09019607843137255);
     box-shadow: 0 0 8px 0 hsla(0, 0%, 61.6%, 0.09019607843137255);
     -ms-flex-wrap: wrap;
