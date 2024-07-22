@@ -23,6 +23,7 @@ export const useUserStore = defineStore('user', {
       is_new_user: false // 是否新用户
       // recent_collection_book_id: 0, // 最近一次收藏书ID
     },
+    enterprise: null
   }),
   persist: {
     storage: sessionStorage,

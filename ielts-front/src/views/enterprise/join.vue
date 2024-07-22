@@ -8,7 +8,7 @@
       </div>
       <div class="card-info-get mt-7">
         <el-input placeholder="请输入姓名" size="large" v-model="state.name" />
-        <el-button class="w-full mt-10" type="primary" size="large" @click="join">进入企业</el-button>
+        <el-button class="w-full mt-10" type="primary" size="large" @click="join" :loading="state.loading">进入企业</el-button>
         <!-- <el-button class="w-full mt-6" type="" size="large">进入企业</el-button> -->
       </div>
     </div>
@@ -21,12 +21,14 @@
 
   const state = reactive({
     name: '',
+    loading: false
   });
   const route = useRoute();
   const router = useRouter();
   const join = () => {
-    const code = route.params.code;
-    const sign = route.params.sign;
+    console.log(route);
+    const code = route.query.code;
+    const sign = route.query.sign;
     if (!code || !sign) {
       ElMessage.warning('缺少邀请参数');
       return;
@@ -35,12 +37,16 @@
       ElMessage.warning('请填写姓名');
       return;
     }
+    state.loading = true
     joinEnterprise({
       name: state.name,
       code: code,
       sign: sign,
     }).then((res) => {
+      state.loading = false
       router.replace('/main/book');
+    }).catch(err => {
+      state.loading = false
     });
   };
 </script>

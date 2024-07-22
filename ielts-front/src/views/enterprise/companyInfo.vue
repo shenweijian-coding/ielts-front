@@ -10,7 +10,7 @@
       <div class="card-info-get mt-7">
         <el-input placeholder="请输入企业或组织名称" size="large" v-model="state.enterprise_name" />
         <el-input placeholder="请输入姓名" class="mt-6" size="large" v-model="state.name" />
-        <el-button class="w-full mt-10" type="primary" size="large" @click="apply">下一步</el-button>
+        <el-button class="w-full mt-10" type="primary" size="large" @click="apply" :loading="state.loading">下一步</el-button>
       </div>
     </div>
   </div>
@@ -24,18 +24,23 @@
   const state = reactive({
     enterprise_name: '',
     name: '',
+    loading: false
   });
   const apply = () => {
     if (!state.enterprise_name || !state.name) {
       ElMessage.warning('请填写信息');
       return;
     }
+    state.loading = true
     addEnterpriseInfo({
       enterprise_name: state.enterprise_name,
       name: state.name,
     }).then((res) => {
+      state.loading = false
       ElMessage.success('申请成功');
       router.push('/company/invite');
+    }).catch(err => {
+      state.loading = false
     });
   };
 </script>

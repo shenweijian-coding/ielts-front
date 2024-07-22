@@ -11,7 +11,7 @@
             <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white"> 伟建 </div>
             <div class="ml-4 flex flex-col">
               <div class="info-name">猿小申</div>
-              <div class="mt-2">QID：1834638245</div>
+              <div class="mt-2">phone：1834638245</div>
             </div>
           </div>
         </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">邀请同事加入</span></div>
-          <div class="right"><span class="tips text-theme cursor-pointer">复制邀请链接</span></div>
+          <div class="right"><span class="tips text-theme cursor-pointer" @click="getCode">复制邀请链接</span></div>
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">退出登陆</span></div>
@@ -45,8 +45,32 @@
   import tabbar from '@/components/tabBar/qy-tabbar.vue';
   import { ArrowRight } from '@element-plus/icons-vue';
   import { useRouter } from 'vue-router';
+  import { getInviteCode } from '@/api/company/index';
+  import { ElMessage } from 'element-plus';
+  import { useUserStore } from '@/store';
 
   const router = useRouter();
+  const userStore = useUserStore();
+
+  // 复制文本到剪贴板的方法
+    const copyUrl = (copyText) => {
+    var textareaC = document.createElement('textarea');
+    textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
+    textareaC.value = copyText;
+    document.body.appendChild(textareaC); //将textarea添加为body子元素
+    textareaC.select();
+    var res = document.execCommand('copy');
+    document.body.removeChild(textareaC); //移除DOM元素
+    ElMessage.success('复制成功，快去分享吧！');
+  };
+
+  const getCode = () => {
+    getInviteCode().then((res) => {
+      if (res.code && res.sign) {
+        copyUrl(`${window.location.origin}/#/company/join?code=${res.code}&sign=${res.sign}`)
+      }
+    });
+  };
 
   const toNewRoute = () => {
     router.push('/company/index/memberlist');

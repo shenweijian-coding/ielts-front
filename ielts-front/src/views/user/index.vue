@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <el-button size="small">切换企业版</el-button>
+        <el-button v-if="userStore.$state.enterprise" size="small" @click="toNewRoute('/company/index/user')">切换企业版</el-button>
       </div>
       <div class="bg-white md:px-20 px-2 w-full m-auto mt-4">
         <div class="menu-item flex items-center py-6 justify-between border-bottom">

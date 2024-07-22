@@ -20,6 +20,7 @@
 
   const state = reactive({
     inviteUrl: '',
+    
   });
   const router = useRouter();
   const getCode = () => {
