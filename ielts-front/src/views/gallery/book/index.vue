@@ -13,7 +13,7 @@
         <!-- 选项 -->
 
         <el-tabs
-          v-if="galleryState.activeTab != 2"
+          v-if="galleryState.activeTab == 1"
           v-model="galleryState.currentCategory"
           @tab-click="handleCategorySel"
           class="flex h-16 w-full items-center justify-between"
@@ -32,7 +32,7 @@
           >
         </div> -->
 
-        <div v-if="galleryState.activeTab != 2" class="flex items-center overscroll-x-auto flex-wrap lg:mt-4">
+        <div v-if="galleryState.activeTab == 1" class="flex items-center overscroll-x-auto flex-wrap lg:mt-4">
           <div
             v-for="(item, index) in galleryState.sceneList"
             :key="index"
@@ -96,10 +96,13 @@
   import { Plus } from '@element-plus/icons-vue';
   import ImportDialog from './import-dialog.vue';
   import tabbar from '@/components/tabBar/index.vue';
+  import { useAppStore, useUserStore } from '@/store';
 
   import { getSceneList, getGroupBooks, getChapterList, getLanguageList, getCategoryList } from '@/api/book/index';
 
   const { loading, setLoading } = useLoading();
+  const appStore = useAppStore();
+  const userStore = useUserStore();
 
   const ChapterDialogRef = ref(null);
   const ImportDialogRef = ref(null);
@@ -123,12 +126,14 @@
 
   const openChapter = (item) => {
     setLoading(true);
-    getChapterList({ g_id: item.id })
+    // 是否是班级点开的
+    const s_id = galleryState.activeTab == 3 ? 5: null
+    getChapterList({ g_id: item.id, s_id: s_id })
       .then((res) => {
         galleryState.chapterList = res;
         if (res.length) {
           setLoading(false);
-          ChapterDialogRef.value.open(item, res);
+          ChapterDialogRef.value.open(item, res, s_id);
         } else {
           ElMessage.warning('未配置词库');
         }
@@ -141,8 +146,12 @@
 
   const getBooks = (s_id) => {
     setLoading(true);
-
-    getGroupBooks({ s_id: s_id })
+    const params = {s_id: s_id}
+    console.log(galleryState.activeTab);
+    if(galleryState.activeTab == 3) {
+      params.class_id = userStore.classInfo?.[0]?.class_id
+    }
+    getGroupBooks(params)
       .then((res) => {
         galleryState.booksList = res;
         setLoading(false);
@@ -189,6 +198,10 @@
   };
   const getLanguage = () => {
     getLanguageList().then((res) => {
+      // 判断是否加入班级
+      if(!userStore.classInfo?.length) {
+        res = res.filter(o => o.name != '班级词书')
+      }
       galleryState.languageList = res;
       getCategory(res[0].id);
       // getScene(res[0].id);
@@ -196,10 +209,13 @@
   };
 
   const handleTabClick = ({ paneName }) => {
+    galleryState.activeTab = paneName
     if (paneName == 2) {
       galleryState.sceneList = [];
       galleryState.booksList = [];
       getBooks(2);
+    } else if(paneName == 3) {
+      getBooks(5);
     } else {
       getScene(paneName);
     }

@@ -56,6 +56,7 @@ declare module 'vue-router/auto/routes' {
     '/enterprise/companyInfo': RouteRecordInfo<'/enterprise/companyInfo', '/enterprise/companyInfo', Record<never, never>, Record<never, never>>,
     '/enterprise/invite': RouteRecordInfo<'/enterprise/invite', '/enterprise/invite', Record<never, never>, Record<never, never>>,
     '/enterprise/join': RouteRecordInfo<'/enterprise/join', '/enterprise/join', Record<never, never>, Record<never, never>>,
+    '/enterprise/join-class': RouteRecordInfo<'/enterprise/join-class', '/enterprise/join-class', Record<never, never>, Record<never, never>>,
     '/enterprise/layout': RouteRecordInfo<'/enterprise/layout', '/enterprise/layout', Record<never, never>, Record<never, never>>,
     '/errorBook/': RouteRecordInfo<'/errorBook/', '/errorBook', Record<never, never>, Record<never, never>>,
     '/errorBook/components/collect-dialog': RouteRecordInfo<'/errorBook/components/collect-dialog', '/errorBook/components/collect-dialog', Record<never, never>, Record<never, never>>,

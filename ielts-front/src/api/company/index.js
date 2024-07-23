@@ -47,6 +47,13 @@ const addClass = async (data) => post({ url: '/api/study/enterprise/v1/class/add
 
 // 上传班级词书
 const uploadClassBook = async (data) => post({ url: '/api/study/enterprise/v1/class/upload/book', data });
+
+
+// 学生错词列表
+const getStudenErrWords = async (data) => post({ url: '/api/study/enterprise/v1/class/student/error/list', data });
+
+// 退出班级
+const classLogout = (data) => post({ url: '/api/study/enterprise/v1/class/logout', data });
 export {
   getInviteCode,
   addEnterpriseInfo,
@@ -64,4 +71,6 @@ export {
   enterpriseUpload,
   addClass,
   uploadClassBook,
+  getStudenErrWords,
+  classLogout
 };

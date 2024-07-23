@@ -9,7 +9,7 @@
         <div>
           <div class="user-info flex justify-start items-center border">
             <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white">
-              {{ userStore.$state.id }}
+              {{ userStore.$state.phone_number.slice(0,3) }}
             </div>
             <div class="hidden ml-4 md:flex flex-col">
               <div class="info-name">id：{{ userStore.$state.id }}</div>
@@ -31,7 +31,7 @@
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">修改密码</span></div>
-          <div class="right"
+          <div class="right" @click="toNewRoute('/forgetPassword')"
             ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
               >去修改<el-icon><ArrowRight /></el-icon></span
           ></div>
@@ -50,17 +50,17 @@
               >申请<el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
-        <div class="menu-item flex items-center py-6 justify-between border-bottom">
+        <div v-if="userStore.$state.school_class.length" class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">我的班级</span></div>
-          <div class="right" @click="toNewRoute('/company/applicat')"
+          <div class="right" @click="handleloyoutClass"
             ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
-              >退出班级<el-icon><ArrowRight /></el-icon></span
+              >退出班级({{ userStore.$state.school_class[0]?.class_name }})<el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">注册时间</span></div>
           <div class="right"
-            ><span class="cursor-pointer flex items-center hover-text-theme text-gray">{{ userStore.$state.created_at }}</span></div
+            ><span class="flex items-center text-gray">{{ userStore.$state.created_at }}</span></div
           >
         </div>
         <div class="menu-item flex items-center py-6 justify-between border-bottom">
@@ -81,9 +81,10 @@
   import tabbar from '@/components/tabBar/index.vue';
   import { useRouter } from 'vue-router';
   import { getGroupBooks } from '@/api/book/index';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage,ElMessageBox } from 'element-plus';
   import Teach from '@/components/teaching/index.vue';
   import { ArrowRight } from '@element-plus/icons-vue';
+  import { classLogout } from '@/api/company/index'
 
   const userStore = useUserStore();
   const router = useRouter();
@@ -110,6 +111,25 @@
   const toNewRoute = (newRoute) => {
     router.push(newRoute);
   };
+
+  const handleloyoutClass = () => {
+    ElMessageBox.confirm('确定退出班级吗', ``, {
+      confirmButtonText: '确定退出',
+      cancelButtonText: '取消',
+      type: 'warning',
+      distinguishCancelAndClose: true,
+      closeOnClickModal: false
+    })
+      .then(() => {
+        classLogout({
+          class_id: userStore.classInfo?.[0].class_id
+        }).then(res => {
+          userStore.info()
+        })
+      })
+      
+  }
+
   const getBooks = (s_id) => {
     getGroupBooks({ s_id: s_id })
       .then((res) => {
@@ -125,7 +145,7 @@
     margin-right: 0;
   }
   .info-pc-header {
-    background-image: url(https://c.wallhere.com/photos/55/03/abstract_digital_art_minimalism_Windows_11_dark_background_violet_color_simple_background-2234736.jpg!d);
+    background-image: url(https://img.alicdn.com/imgextra/i3/2217137022381/O1CN01euhAbT1TSY0TBBDfw_!!2217137022381.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     padding: 24px;

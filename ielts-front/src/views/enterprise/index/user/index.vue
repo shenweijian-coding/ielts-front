@@ -1,16 +1,16 @@
 <template>
   <div class="md:px-30">
     <div class="info-pc-header hidden lg:block">
-      <p class="text-center text-lg text-white mt-10"> :) Hi~ 新的一天又开始了，祝你过得快乐! </p>
+      <p class="text-center text-lg text-white mt-10"> :) Hi~ {{userStore.$state.enterprise.user_name}} 新的一天又开始了，祝你过得快乐! </p>
     </div>
     <div class="lg:hidden h-16"></div>
     <div class="w-full md:w-4/5 info-pc-header-info p-2 pb-8">
       <div class="flex justify-between items-center md:px-20">
         <div>
           <div class="user-info flex justify-start items-center border">
-            <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white text-xl"> {{ userStore.$state.enterprise.user_name.slice(0,1) }} </div>
+            <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white text-xl"> {{ userStore.$state.enterprise.user_name?.slice(0,1) }} </div>
             <div class="ml-4 flex flex-col">
-              <div class="info-name">{{ userStore.$state.enterprise.user_name || '' }}</div>
+              <div class="info-name text-bold">{{ userStore.$state.enterprise.user_name || '' }}（{{ userStore.$state.enterprise.role }}）</div>
               <div class="mt-2">{{ userStore.$state.enterprise.enterprise_name || '' }}</div>
             </div>
           </div>
@@ -48,29 +48,31 @@
   import { getInviteCode } from '@/api/company/index';
   import { ElMessage } from 'element-plus';
   import { useUserStore } from '@/store';
+  import { useInvite } from '../../useCommon.js'
 
   const router = useRouter();
   const userStore = useUserStore();
 
+  const { getCode } = useInvite()
   // 复制文本到剪贴板的方法
-    const copyUrl = (copyText) => {
-    var textareaC = document.createElement('textarea');
-    textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
-    textareaC.value = copyText;
-    document.body.appendChild(textareaC); //将textarea添加为body子元素
-    textareaC.select();
-    var res = document.execCommand('copy');
-    document.body.removeChild(textareaC); //移除DOM元素
-    ElMessage.success('复制成功，快去分享吧！');
-  };
+  // const copyUrl = (copyText) => {
+  //   var textareaC = document.createElement('textarea');
+  //   textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
+  //   textareaC.value = copyText;
+  //   document.body.appendChild(textareaC); //将textarea添加为body子元素
+  //   textareaC.select();
+  //   var res = document.execCommand('copy');
+  //   document.body.removeChild(textareaC); //移除DOM元素
+  //   ElMessage.success('复制成功，快去分享吧！');
+  // };
 
-  const getCode = () => {
-    getInviteCode().then((res) => {
-      if (res.code && res.sign) {
-        copyUrl(`${window.location.origin}/#/company/join?code=${res.code}&sign=${res.sign}`)
-      }
-    });
-  };
+  // const getCode = () => {
+  //   getInviteCode().then((res) => {
+  //     if (res.code && res.sign) {
+  //       copyUrl(`${window.location.origin}/#/company/join?code=${res.code}&sign=${res.sign}`)
+  //     }
+  //   });
+  // };
 
   const toNewRoute = (newRoute) => {
     router.push(newRoute);
@@ -78,7 +80,7 @@
 </script>
 <style lang="less" scoped>
   .info-pc-header {
-    background-image: url(https://c.wallhere.com/photos/55/03/abstract_digital_art_minimalism_Windows_11_dark_background_violet_color_simple_background-2234736.jpg!d);
+    background-image: url(https://img.alicdn.com/imgextra/i3/2217137022381/O1CN01euhAbT1TSY0TBBDfw_!!2217137022381.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     padding: 24px;

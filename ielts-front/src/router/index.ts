@@ -14,8 +14,7 @@ const router = createRouter({
 
 router.beforeEach(async (_to, _from, next) => {
   const user = useUserStore();
-  console.log(user);
-
+  
   const hasToken = !!user.token || getToken()
   console.log(hasToken);
 
@@ -30,6 +29,10 @@ router.beforeEach(async (_to, _from, next) => {
     if (routesWhiteList.includes(_to.path)) {
       next();
     } else {
+      // 如果用户未登录且尝试访问非登录页，存储目标URL并重定向到登录页
+      if(_to.name != 'login') {
+        localStorage.setItem('redirectUrl', _to.fullPath);
+      }
       next({ path: '/login', replace: true });
     }
   }

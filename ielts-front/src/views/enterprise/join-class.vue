@@ -8,7 +8,7 @@
       </div>
       <div class="card-info-get mt-7">
         <el-input placeholder="请输入姓名" size="large" v-model="state.name" />
-        <el-button class="w-full mt-10" type="primary" size="large" @click="join" :loading="state.loading">进入企业</el-button>
+        <el-button class="w-full mt-10" type="primary" size="large" @click="join" :loading="state.loading">进入班级</el-button>
         <!-- <el-button class="w-full mt-6" type="" size="large">进入企业</el-button> -->
       </div>
     </div>
@@ -51,7 +51,7 @@
       ElMessage.success('加入成功')
       setTimeout(() => {
         router.replace('/main/user');
-      },300)
+      }, 300);
     }).catch(err => {
       state.loading = false
     });

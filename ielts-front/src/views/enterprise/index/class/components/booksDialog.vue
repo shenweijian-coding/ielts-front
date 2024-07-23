@@ -102,6 +102,7 @@
   });
 
   const open = (class_id) => {
+    getCategory();
     state.class_id = class_id;
     state.visable = true;
   };
@@ -164,7 +165,7 @@
     const ids = state.selBooks.map((book) => book.id);
     uploadClassBook({
       type: typeMap[state.activeTab],
-      class_id: state.class_id,
+      class_id: +state.class_id,
       group_ids: JSON.stringify(ids),
     }).then((res) => {
       handleClose();
@@ -174,7 +175,6 @@
   const handleSelectionChange = (val) => {
     state.selBooks = val;
   };
-  getCategory();
   defineExpose({
     open,
   });

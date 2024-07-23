@@ -11,9 +11,9 @@
       >
         <h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">{{ item.name }}</h1>
         <p class="mb-2 font-bold text-gray-600 dark:text-gray-200">成员数量：{{ item.student_count }}</p>
-        <div class="w-full items-center hidden lg:flex"
-          ><img src="@/assets/images/book.png" class="absolute right-3 top-3 w-16 opacity-20"
-        /></div>
+        <div class="w-full items-center hidden lg:flex">
+          <img src="@/assets/images/class.png" class="absolute right-0 top-0 w-26 opacity-40"/>
+        </div>
       </div>
     </div>
 

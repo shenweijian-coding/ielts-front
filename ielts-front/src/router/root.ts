@@ -96,6 +96,14 @@ export default [
     component: () => import('@/views/forgetPassword/index.vue'),
   },
   {
+    path: '/jc',
+    name: 'joinClass',
+    meta: {
+      title: '爱听写-加入班级',
+    },
+    component: () => import('@/views/enterprise/join-class.vue'),
+  },
+  {
     path: '/company',
     name: 'company',
     meta: {
