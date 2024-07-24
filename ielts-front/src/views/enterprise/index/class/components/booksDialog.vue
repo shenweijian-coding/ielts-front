@@ -37,7 +37,7 @@
             <el-table-column type="selection" width="30" />
             <el-table-column prop="name" label="书籍名" width="" align="center" />
             <el-table-column prop="chapter_total" label="章节数" align="center" width="90" />
-            <el-table-column prop="word_total" label="总计次数" align="center" width="90" />
+            <el-table-column prop="word_total" label="总计词数" align="center" width="90" />
           </el-table>
           <div class="flex justify-end items-center mt-4">
             <el-button type="primary" size="small" @click="submit">确认</el-button>
@@ -80,6 +80,7 @@
   import { uploadClassBook } from '@/api/company/index';
   import { ElMessage } from 'element-plus';
 
+  const emits = defineEmits(['ok'])
   const state = reactive({
     activeTab: 2,
     visable: false,
@@ -169,6 +170,7 @@
       group_ids: JSON.stringify(ids),
     }).then((res) => {
       handleClose();
+      emits('ok')
     });
   };
   // getCompanyBooks();

@@ -12,8 +12,8 @@
               {{ userStore.$state.phone_number.slice(0,3) }}
             </div>
             <div class="hidden ml-4 md:flex flex-col">
-              <div class="info-name">id：{{ userStore.$state.id }}</div>
-              <div class="mt-2">phone：{{ userStore.$state.phone_number }}</div>
+              <!-- <div class="info-name">id：{{ userStore.$state.id }}</div>
+              <div class="mt-2">phone：{{ userStore.$state.phone_number }}</div> -->
             </div>
           </div>
         </div>
@@ -21,53 +21,53 @@
         <el-button v-if="userStore.$state.is_enterprise" size="small" @click="toNewRoute('/company/index/user')">切换企业版</el-button>
       </div>
       <div class="bg-white md:px-20 px-2 w-full m-auto mt-4">
-        <div class="menu-item flex items-center py-6 justify-between border-bottom">
+        <div class="menu-item flex items-center py-6 justify-between border-bottom" @click="handleToBook">
           <div class="left"><span class="menu-title font-bold text-sm">单词本</span></div>
-          <div class="right" @click="handleToBook">
+          <div class="right">
             <span class="text-gray cursor-pointer flex items-center hover-text-theme"
-              >（共 {{ state.list.length }} 本）查看<el-icon><ArrowRight /></el-icon
+              ><el-icon><ArrowRight /></el-icon
             ></span>
           </div>
         </div>
-        <div class="menu-item flex items-center py-6 justify-between border-bottom">
+        <!-- <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">修改密码</span></div>
           <div class="right" @click="toNewRoute('/forgetPassword')"
             ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
               >去修改<el-icon><ArrowRight /></el-icon></span
           ></div>
-        </div>
-        <div class="menu-item flex items-center py-6 justify-between border-bottom">
+        </div> -->
+        <div class="menu-item flex items-center py-6 justify-between border-bottom" @click="openTeaching">
           <div class="left"><span class="menu-title font-bold text-sm">新手教学视频</span></div>
-          <div class="right" @click="openTeaching"
+          <div class="right" 
             ><span class="text-gray flex items-center cursor-pointer hover-text-theme"
-              >查看<el-icon><ArrowRight /></el-icon></span
+              ><el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
-        <div v-if="!userStore.$state.is_enterprise" class="menu-item flex items-center py-6 justify-between border-bottom">
+        <div v-if="!userStore.$state.is_enterprise" class="menu-item flex items-center py-6 justify-between border-bottom" @click="toNewRoute('/company/applicat')">
           <div class="left"><span class="menu-title font-bold text-sm">企业账号</span></div>
-          <div class="right" @click="toNewRoute('/company/applicat')"
+          <div class="right" 
             ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
               >申请<el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
-        <div v-if="userStore.$state.school_class.length" class="menu-item flex items-center py-6 justify-between border-bottom">
+        <div v-if="userStore.$state.school_class.length" class="menu-item flex items-center py-6 justify-between border-bottom" @click="handleloyoutClass">
           <div class="left"><span class="menu-title font-bold text-sm">我的班级</span></div>
-          <div class="right" @click="handleloyoutClass"
+          <div class="right" 
             ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
-              >退出班级({{ userStore.$state.school_class[0]?.class_name }})<el-icon><ArrowRight /></el-icon></span
+              >退出班级<el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
-        <div class="menu-item flex items-center py-6 justify-between border-bottom">
+        <!-- <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">注册时间</span></div>
           <div class="right"
             ><span class="flex items-center text-gray">{{ userStore.$state.created_at }}</span></div
           >
-        </div>
-        <div class="menu-item flex items-center py-6 justify-between border-bottom">
+        </div> -->
+        <div class="menu-item flex items-center py-6 justify-between border-bottom" @click="handleLogout">
           <div class="left"><span class="menu-title font-bold text-sm">退出登陆</span></div>
-          <div class="right" @click="handleLogout"
+          <div class="right" 
             ><span class="text-gray flex items-center cursor-pointer"
-              >登陆新的账号 <el-icon><ArrowRight /></el-icon></span
+              ><el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
       </div>
@@ -97,10 +97,10 @@
     userStore.logout();
   };
   const handleToBook = () => {
-    if (!state.list.length) {
-      ElMessage.warning('无单词本');
-      return;
-    }
+    // if (!state.list.length) {
+    //   ElMessage.warning('无单词本');
+    //   return;
+    // }
     router.push('/main/vocabularyBook');
   };
   const openTeaching = () => {
@@ -130,14 +130,14 @@
       
   }
 
-  const getBooks = (s_id) => {
-    getGroupBooks({ s_id: s_id })
-      .then((res) => {
-        state.list = res;
-      })
-      .catch(() => {});
-  };
-  getBooks(2);
+  // const getBooks = (s_id) => {
+  //   getGroupBooks({ s_id: s_id })
+  //     .then((res) => {
+  //       state.list = res;
+  //     })
+  //     .catch(() => {});
+  // };
+  // getBooks(2);
 </script>
 <style lang="less" scoped>
   .el-button + .el-button {

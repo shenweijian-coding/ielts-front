@@ -111,7 +111,7 @@
     <Loading :loading="loading" />
     <ChapterDialog ref="ChapterDialogRef" />
 
-    <booksDialog ref="booksDialogRef" />
+    <booksDialog ref="booksDialogRef" @ok="getBooks"/>
   </div>
 </template>
 <script setup>

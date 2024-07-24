@@ -29,7 +29,7 @@
           <div class="left"><span class="menu-title font-bold text-sm">邀请同事加入</span></div>
           <div class="right"><span class="tips text-theme cursor-pointer" @click="getCode">复制邀请链接</span></div>
         </div>
-        <div class="menu-item flex items-center py-6 justify-between border-bottom">
+        <div class="menu-item flex items-center py-6 justify-between border-bottom" @click="handleLogout">
           <div class="left"><span class="menu-title font-bold text-sm">退出登陆</span></div>
           <div class="right"
             ><span class="tips flex items-center cursor-pointer"
@@ -73,7 +73,9 @@
   //     }
   //   });
   // };
-
+  const handleLogout = () => {
+    userStore.logout();
+  };
   const toNewRoute = (newRoute) => {
     router.push(newRoute);
   };
