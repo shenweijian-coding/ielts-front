@@ -33,7 +33,7 @@
           <div class="left"><span class="menu-title font-bold text-sm">退出登陆</span></div>
           <div class="right"
             ><span class="tips flex items-center cursor-pointer"
-              >登陆新的账号 <el-icon><ArrowRight /></el-icon></span
+              ><el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
       </div>

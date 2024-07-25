@@ -47,7 +47,7 @@
           <div class="left"><span class="menu-title font-bold text-sm">企业账号</span></div>
           <div class="right" 
             ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
-              >申请<el-icon><ArrowRight /></el-icon></span
+              ><el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
         <div v-if="userStore.$state.school_class.length" class="menu-item flex items-center py-6 justify-between border-bottom" @click="handleloyoutClass">

@@ -1,7 +1,24 @@
 <template>
-  <div class="lg:px-100 md:px-10 px-4">
+  <div class="md:px-10 px-4">
     <div class="flex items-center justify-between lg:mt-10 mt-4">
-      <div class="text-sm">{{state.managerList?.length}}名项目成员</div>
+      <div class="text-m flex">
+        {{state.managerList?.length}}名项目成员&nbsp;&nbsp;
+        <span class="text-gray flex items-center text-m">项目成员角色&nbsp;
+          <el-tooltip placement="bottom" effect="light">
+            <template #content>
+              <div class="text-m">
+                <b>管理员</b>
+                <p class="text-gray-400">可查看全部班级</p>
+              </div>
+              <div class="text-m">
+                <b>教师</b>
+                <p class="text-gray-400">仅可查看自己班级</p>
+              </div>
+            </template>
+            <el-icon><Warning /></el-icon>
+          </el-tooltip>
+          </span>
+      </div>
       <div class="flex items-center">
         <!-- <div class="mr-4 flex cursor-pointer items-center">
           <el-input size="small" placeholder="请输入姓名" v-model="state.searchName" @enter="search"/>&nbsp;&nbsp;
@@ -45,10 +62,10 @@
   </div>
 </template>
 <script setup>
-  import { Search, ArrowDown } from '@element-plus/icons-vue';
+  import { Search, ArrowDown, Warning } from '@element-plus/icons-vue';
   import { getManagerList, updateManagerRole, delManager, getRoles } from '@/api/company/index';
   import { ElMessage } from 'element-plus';
-  import tabbar from '@/components/tabBar/index.vue';
+  import tabbar from '@/components/tabBar/qy-tabbar.vue';
   import { useInvite } from '../../useCommon.js'
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';

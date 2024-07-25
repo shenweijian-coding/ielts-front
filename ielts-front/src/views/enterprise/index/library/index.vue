@@ -8,7 +8,7 @@
             v-for="item in galleryState.booksList"
             :key="item.id"
             class="group flex lg:h-36 w-[46%] lg:w-74 cursor-pointer items-center justify-center overflow-hidden rounded-lg lg:p-4 p-2 text-left shadow-lg focus:outline-none bg-zinc-50 hover:bg-white dark:bg-gray-800 dark:hover:bg-gray-700 lg:mr-6 md:mr-6 lg:mb-10 mb-4"
-            @click="toDetail(item)"
+            @click="openChapter(item)"
           >
             <div class="relative ml-1 lg:mt-2 flex h-full w-full flex-col items-start justify-start"
               ><h1 class="mb-1.5 text-xl font-normal text-gray-800 group-hover:color-theme dark:text-gray-200">{{ item.name }}</h1>
@@ -30,6 +30,7 @@
     </div>
     <Loading :loading="loading" />
     <ImportDialog ref="ImportDialogRef" @ok="getBooks(4)" />
+    <ChapterDialog ref="ChapterDialogRef" @ok="getBooks(4)"/>
 
     <tabbar />
   </div>
@@ -40,9 +41,10 @@
   import useLoading from '@/hooks/loading.ts';
   // import Footer from '@/components/footer/index.vue';
   import { Plus } from '@element-plus/icons-vue';
-  import tabbar from '@/components/tabBar/index.vue';
+  import tabbar from '@/components/tabBar/qy-tabbar.vue';
   import { useRouter } from 'vue-router';
   import ImportDialog from './import-dialog.vue';
+  import ChapterDialog from '@/views/gallery/book/chapter-dialog.vue';
 
   import { getSceneList, getGroupBooks, getLanguageList, getCategoryList, getChapterList } from '@/api/book/index';
 
