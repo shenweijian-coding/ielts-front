@@ -1,16 +1,22 @@
 <template>
   <div class="md:px-30">
     <div class="info-pc-header hidden lg:block">
-      <p class="text-center text-lg text-white mt-10"> :) Hi~ {{userStore.$state.enterprise.user_name}} 新的一天又开始了，祝你过得快乐! </p>
+      <p class="text-center text-lg text-white mt-10">
+        :) Hi~ {{ userStore.$state.enterprise.user_name }} 新的一天又开始了，祝你过得快乐!
+      </p>
     </div>
     <div class="lg:hidden h-16"></div>
     <div class="w-full md:w-4/5 info-pc-header-info p-2 pb-8">
       <div class="flex justify-between items-center md:px-20">
         <div>
           <div class="user-info flex justify-start items-center border">
-            <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white text-xl"> {{ userStore.$state.enterprise.user_name?.slice(0,1) }} </div>
+            <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white text-xl">
+              {{ userStore.$state.enterprise.user_name?.slice(0, 1) }}
+            </div>
             <div class="ml-4 flex flex-col">
-              <div class="info-name text-bold">{{ userStore.$state.enterprise.user_name || '' }}（{{ userStore.$state.enterprise.role }}）</div>
+              <div class="info-name text-bold"
+                >{{ userStore.$state.enterprise.user_name || '' }}（{{ userStore.$state.enterprise.role }}）</div
+              >
               <div class="mt-2">{{ userStore.$state.enterprise.enterprise_name || '' }}</div>
             </div>
           </div>
@@ -46,14 +52,14 @@
   import { ArrowRight } from '@element-plus/icons-vue';
   import { useRouter } from 'vue-router';
   import { getInviteCode } from '@/api/company/index';
-  import { ElMessage } from 'element-plus';
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import { useUserStore } from '@/store';
-  import { useInvite } from '../../useCommon.js'
+  import { useInvite } from '../../useCommon.js';
 
   const router = useRouter();
   const userStore = useUserStore();
 
-  const { getCode } = useInvite()
+  const { getCode } = useInvite();
   // 复制文本到剪贴板的方法
   // const copyUrl = (copyText) => {
   //   var textareaC = document.createElement('textarea');
@@ -74,7 +80,15 @@
   //   });
   // };
   const handleLogout = () => {
-    userStore.logout();
+    ElMessageBox.confirm('确定退出登录吗', ``, {
+      confirmButtonText: '确定退出',
+      cancelButtonText: '取消',
+      type: 'warning',
+      distinguishCancelAndClose: true,
+      closeOnClickModal: false,
+    }).then(() => {
+      userStore.logout();
+    });
   };
   const toNewRoute = (newRoute) => {
     router.push(newRoute);

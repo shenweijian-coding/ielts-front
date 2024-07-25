@@ -8,8 +8,8 @@
       <div class="flex justify-between items-center md:px-20">
         <div>
           <div class="user-info flex justify-start items-center border">
-            <div class="user-img h-18 w-18 border bg-theme rounded-full flex justify-center items-center text-white">
-              {{ userStore.$state.phone_number.slice(0,3) }}
+            <div class="user-img h-18 w-18 rounded-full flex justify-center items-center text-white">
+              <img src="@/assets/images/avatar.png" alt="" class="w-18 h-18 rounded-full" />
             </div>
             <div class="hidden ml-4 md:flex flex-col">
               <!-- <div class="info-name">id：{{ userStore.$state.id }}</div>
@@ -36,24 +36,32 @@
               >去修改<el-icon><ArrowRight /></el-icon></span
           ></div>
         </div> -->
-        <div class="menu-item flex items-center py-6 justify-between border-bottom" @click="openTeaching">
+        <div class="menu-item flex items-center py-6 justify-between border-bottom cursor-pointer" @click="openTeaching">
           <div class="left"><span class="menu-title font-bold text-sm">新手教学视频</span></div>
-          <div class="right" 
-            ><span class="text-gray flex items-center cursor-pointer hover-text-theme"
+          <div class="right"
+            ><span class="text-gray flex items-center hover-text-theme"
               ><el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
-        <div v-if="!userStore.$state.is_enterprise" class="menu-item flex items-center py-6 justify-between border-bottom" @click="toNewRoute('/company/applicat')">
+        <div
+          v-if="!userStore.$state.is_enterprise"
+          class="menu-item flex items-center py-6 justify-between border-bottom cursor-pointer"
+          @click="toNewRoute('/company/applicat')"
+        >
           <div class="left"><span class="menu-title font-bold text-sm">企业账号</span></div>
-          <div class="right" 
-            ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
+          <div class="right"
+            ><span class="text-gray flex items-center hover-text-theme"
               ><el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
-        <div v-if="userStore.$state.school_class.length" class="menu-item flex items-center py-6 justify-between border-bottom" @click="handleloyoutClass">
+        <div
+          v-if="userStore.$state.school_class.length"
+          class="menu-item flex items-center py-6 justify-between border-bottom cursor-pointer"
+          @click="handleloyoutClass"
+        >
           <div class="left"><span class="menu-title font-bold text-sm">我的班级</span></div>
-          <div class="right" 
-            ><span class="text-gray cursor-pointer flex items-center hover-text-theme"
+          <div class="right"
+            ><span class="text-gray flex items-center hover-text-theme"
               >退出班级<el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
@@ -63,10 +71,10 @@
             ><span class="flex items-center text-gray">{{ userStore.$state.created_at }}</span></div
           >
         </div> -->
-        <div class="menu-item flex items-center py-6 justify-between border-bottom" @click="handleLogout">
+        <div class="menu-item flex items-center py-6 justify-between border-bottom cursor-pointer" @click="handleLogout">
           <div class="left"><span class="menu-title font-bold text-sm">退出登陆</span></div>
-          <div class="right" 
-            ><span class="text-gray flex items-center cursor-pointer"
+          <div class="right"
+            ><span class="text-gray flex items-center"
               ><el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
@@ -81,10 +89,10 @@
   import tabbar from '@/components/tabBar/index.vue';
   import { useRouter } from 'vue-router';
   import { getGroupBooks } from '@/api/book/index';
-  import { ElMessage,ElMessageBox } from 'element-plus';
+  import { ElMessage, ElMessageBox } from 'element-plus';
   import Teach from '@/components/teaching/index.vue';
   import { ArrowRight } from '@element-plus/icons-vue';
-  import { classLogout } from '@/api/company/index'
+  import { classLogout } from '@/api/company/index';
 
   const userStore = useUserStore();
   const router = useRouter();
@@ -94,7 +102,15 @@
   });
   const teachRef = ref(null);
   const handleLogout = () => {
-    userStore.logout();
+    ElMessageBox.confirm('确定退出登录吗', ``, {
+      confirmButtonText: '确定退出',
+      cancelButtonText: '取消',
+      type: 'warning',
+      distinguishCancelAndClose: true,
+      closeOnClickModal: false,
+    }).then(() => {
+      userStore.logout();
+    });
   };
   const handleToBook = () => {
     // if (!state.list.length) {
@@ -118,17 +134,15 @@
       cancelButtonText: '取消',
       type: 'warning',
       distinguishCancelAndClose: true,
-      closeOnClickModal: false
-    })
-      .then(() => {
-        classLogout({
-          class_id: userStore.classInfo?.[0].class_id
-        }).then(res => {
-          userStore.info()
-        })
-      })
-      
-  }
+      closeOnClickModal: false,
+    }).then(() => {
+      classLogout({
+        class_id: userStore.classInfo?.[0].class_id,
+      }).then((res) => {
+        userStore.info();
+      });
+    });
+  };
 
   // const getBooks = (s_id) => {
   //   getGroupBooks({ s_id: s_id })
