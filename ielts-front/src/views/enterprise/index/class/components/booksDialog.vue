@@ -69,7 +69,7 @@
           </el-form>
         </div>
         <div class="flex justify-end items-center mt-4">
-          <el-button type="primary" size="small">确认</el-button>
+          <el-button type="primary" size="small" @click="customAddBook">确认</el-button>
         </div>
       </div>
     </div>
@@ -77,8 +77,10 @@
 </template>
 <script setup>
   import { getSceneList, getGroupBooks, getChapterList, getLanguageList, getCategoryList } from '@/api/book/index';
-  import { uploadClassBook } from '@/api/company/index';
+  import { uploadClassBook, enterpriseUpload } from '@/api/company/index';
   import { ElMessage } from 'element-plus';
+
+  const formRef = ref(null);
 
   const emits = defineEmits(['ok'])
   const state = reactive({
@@ -104,6 +106,7 @@
 
   const open = (class_id) => {
     getCategory();
+    state.activeTab = 2
     state.class_id = class_id;
     state.visable = true;
   };
@@ -177,6 +180,32 @@
   const handleSelectionChange = (val) => {
     state.selBooks = val;
   };
+  const customAddBook = ()=> {
+    formRef.value.validate((valid, fields) => {
+      if (valid) {
+        console.log('submit!');
+        const data = state.form2.data.split('\n');
+        enterpriseUpload({
+          title: state.form2.title,
+          word_count: state.form2.word_count,
+          data: data,
+        }).then((res) => {
+          // console.log(res);
+          ElMessage.success(`操作成功`);
+
+          uploadClassBook({
+            type: 'enterprise',
+            class_id: +state.class_id,
+            group_ids: JSON.stringify([res]),
+          }).then((res) => {
+            handleClose();
+            emits('ok')
+          });
+
+        });
+      }
+    });
+  }
   defineExpose({
     open,
   });

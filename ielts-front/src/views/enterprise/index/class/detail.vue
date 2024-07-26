@@ -126,7 +126,7 @@
           <el-icon size="40" color="gray">
             <Plus />
           </el-icon>
-          <div class="mt-4">添加自定义词书</div>
+          <div class="mt-4">添加词书</div>
         </div>
       </div>
     </div>
@@ -221,6 +221,7 @@
     getStudentList({
       type: state.form.type,
       c_id: state.form.chapterId,
+      class_id: +route.query.id,
       page: 1,
       pagesize: 9999,
     })
