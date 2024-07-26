@@ -79,13 +79,25 @@
             </template>
           </el-table-column>
           <template v-if="state.form.type == 1">
-            <el-table-column prop="today_time" label="今日时长" width="" align="center" />
-            <el-table-column prop="cumulative_time" label="累计时长" width="" align="center" />
+            <el-table-column prop="today_time" label="今日时长" width="" align="center">
+              <template #default="scope">
+                {{ Math.floor(scope.row.today_time / 60) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="cumulative_time" label="累计时长(分钟)" width="" align="center">
+              <template #default="scope">
+                {{ Math.floor(scope.row.cumulative_time / 60) }}
+              </template>
+            </el-table-column>
           </template>
           <template v-if="state.form.type == 2">
             <el-table-column prop="complete_lexicon_count" label="听写数量" width="110" align="center" />
-            <el-table-column prop="first_accuracy" label="第一次完成正确率" width="" align="center" />
-            <el-table-column prop="last_accuracy" label="最近一次正确率" width="110" align="center" />
+            <el-table-column prop="first_accuracy" label="第一次完成正确率" width="" align="center">
+              <template #default="scope"> {{ scope.row.first_accuracy }}% </template>
+            </el-table-column>
+            <el-table-column prop="last_accuracy" label="最近一次正确率" width="110" align="center">
+              <template #default="scope"> {{ scope.row.last_accuracy }}% </template>
+            </el-table-column>
           </template>
         </el-table>
       </div>
@@ -94,8 +106,9 @@
           <el-button v-if="state.errorWords?.length" :icon="Download" plain @click="handleDownloadExcel" size="small" class="float-right" />
 
           <el-table size="small" :data="state.errorWords">
-            <el-table-column prop="error_word" label="易错单词" width="" align="center" />
-            <el-table-column prop="lexicon.phonetic_transcriptions" label="释义" width="110" align="center" />
+            <el-table-column prop="word" label="单词" width="" align="center" />
+            <el-table-column prop="error_word" label="错误拼写" width="" align="center" />
+            <el-table-column prop="translate" label="释义" width="110" align="center" />
             <el-table-column prop="error_num" label="错误次数" width="110" align="center" />
           </el-table>
         </template>
