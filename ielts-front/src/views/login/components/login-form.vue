@@ -61,7 +61,15 @@
       if (valid) {
         await userStore.login(userFormData);
         ElMessage.success('登录成功');
-        router.push('/main');
+        // 获取存储的重定向URL并跳转
+        const redirectUrl = localStorage.getItem('redirectUrl');
+        if(redirectUrl) {
+          router.push(redirectUrl || '/');
+          // 清除重定向URL
+          localStorage.removeItem('redirectUrl');
+        }else {
+          router.push('/main');
+        }
       } else {
         ElMessage.error('错误信息:请填写手机号和密码');
       }

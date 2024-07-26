@@ -95,4 +95,55 @@ export default [
     },
     component: () => import('@/views/forgetPassword/index.vue'),
   },
+  {
+    path: '/jc',
+    name: 'joinClass',
+    meta: {
+      title: '爱听写-加入班级',
+    },
+    component: () => import('@/views/enterprise/join-class.vue'),
+  },
+  {
+    path: '/company',
+    name: 'company',
+    meta: {
+      title: '爱听写-企业相关',
+    },
+    children: [{
+      path: 'applicat',
+      component: () => import('@/views/enterprise/companyInfo.vue')
+    },{
+      path: 'invite',
+      component: () => import('@/views/enterprise/invite.vue')
+    },{
+      path: 'join',
+      component: () => import('@/views/enterprise/join.vue')
+    },{
+      path: 'index',
+      component: () => import('@/views/enterprise/layout.vue'),
+      children: [{
+        path: 'class',
+
+        component: () => import('@/views/enterprise/index/class/index.vue')  
+      },{
+        path: 'classDetail',
+        meta: {
+          belong: '/company/index/class',
+        },
+        component: () => import('@/views/enterprise/index/class/detail.vue')  
+      },{
+        path: 'library',
+        component: () => import('@/views/enterprise/index/library/index.vue')  
+      },{
+        path: 'user',
+        component: () => import('@/views/enterprise/index/user/index.vue')  
+      },{
+        path: 'memberlist',
+        meta: {
+          belong: '/company/index/user',
+        },
+        component: () => import('@/views/enterprise/index/member/index.vue')  
+      }]
+    }]
+  }
 ];

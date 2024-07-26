@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="1分钟了解爱听写功能" v-model="dialogVisible" :width="dialogWidth">
+  <el-dialog title="1分钟了解爱听写功能" v-model="dialogVisible" :width="dialogWidth" destroy-on-close>
     <div class="flex justify-center items-center py-4">
       <video src="http://cloud.video.taobao.com/play/u/null/p/1/e/6/t/1/471307749512.mp4" controls autoplay></video>
     </div>

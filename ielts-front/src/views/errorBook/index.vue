@@ -83,7 +83,7 @@
                 <div
                   class="text-left"
                   v-html="
-                    scope.row.lexicon?.translate?.replace(/([A-Za-z]+)\./g, function (match, p1, offset) {
+                    scope.row.lexicon?.translate?.replace(/(?<!&) ([A-Za-z]+)\./g, function (match, p1, offset) {
                       if (offset) {
                         return '<br>' + p1 + '.';
                       }
@@ -251,7 +251,7 @@
       .then((res) => {
         state.tableData = res.data;
         state.page.total = res.total;
-        if(!noRefresh && res.total) {
+        if (!noRefresh && res.total) {
           setTimeout(() => {
             tableRef.value.toggleAllSelection();
           });
@@ -305,7 +305,9 @@
       ElMessage.error('请选择错词');
       return;
     }
-    const errWords = state.selWords.filter(word=> word.lexicon).map((word) => {
+    const errWords = state.selWords
+      .filter((word) => word.lexicon)
+      .map((word) => {
         return {
           c_id: word?.c_id || 0,
           g_id: word?.g_id || 0,
@@ -316,7 +318,7 @@
           'phonetic-y': word?.lexicon?.['phonetic-y'],
           'phonetic-m': word?.lexicon?.['phonetic-m'],
         };
-    });
+      });
     await appStore.setErrWords(errWords);
     await appStore.toggleCurrentChapter(null);
     setTimeout(() => {
@@ -374,7 +376,7 @@
       })
         .then((res) => {
           ElMessage.success('单词标熟成功');
-          getErrorWords(true)
+          getErrorWords(true);
           setLoading(false);
         })
         .catch((err) => {
@@ -387,11 +389,15 @@
       ElMessageBox({
         title: ``,
         message: () => (
-          <div >
+          <div>
             <p style="fontSize: 22px">确定将选中的{state.selWords.length}个单词标为熟词吗？</p>
-            <p style="fontSize: 22px">单词标熟后<b>错词本不再展示</b>，听写时<b>自动跳过</b></p>
+            <p style="fontSize: 22px">
+              单词标熟后<b>错词本不再展示</b>，听写时<b>自动跳过</b>
+            </p>
             <br />
-            <el-checkbox onChange={(check) => (checked = check)} size="small">不再提醒</el-checkbox>
+            <el-checkbox onChange={(check) => (checked = check)} size="small">
+              不再提醒
+            </el-checkbox>
           </div>
         ),
         confirmButtonText: '标熟',

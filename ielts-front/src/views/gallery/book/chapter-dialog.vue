@@ -5,7 +5,7 @@
       <div class="absolute bottom-6 right-2">
         <div role="group" dir="ltr" class="flex items-center justify-center gap-1" tabindex="0" style="outline: none">
           <!-- <el-button @click="handleErrorBook">查看错题</el-button> -->
-          <el-button v-if="state.book.s_id == 2" @click="deleteBookClick" :icon="Delete" size="small">删除</el-button>
+          <el-button v-if="state.book.s_id == 2 || state.book.s_id == 4" @click="deleteBookClick" :icon="Delete" size="small">删除</el-button>
         </div>
       </div>
     </div>
@@ -68,6 +68,7 @@
   const state = reactive({
     list: [],
     book: null,
+    isClass: false,
     dialogVisible: false,
   });
   const dialogWidth = ref('60%');
@@ -84,9 +85,10 @@
       dialogWidth.value = '60%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
-  const open = (book, list) => {
+  const open = (book, list, isClass = false) => {
     state.list = list;
     state.book = book;
+    state.isClass = !!isClass;
     state.dialogVisible = true;
   };
   const handleClose = () => {
@@ -98,6 +100,7 @@
       currentChapter: item,
       chapterList: state.list,
       booInfo: state.book,
+      isClass: state.isClass
       // last_id: item?.last_id,
     });
   };

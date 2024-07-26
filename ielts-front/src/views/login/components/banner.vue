@@ -1,6 +1,8 @@
 <template>
   <div class="banner">
-    <div class="banner-inner"> </div>
+    <div class="banner-inner">
+      <img src="../../../assets/images/home-banner.png" alt="">
+    </div>
   </div>
 </template>
 

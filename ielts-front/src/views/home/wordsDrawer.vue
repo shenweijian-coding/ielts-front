@@ -13,11 +13,17 @@
           <div class="flex-1"
             ><p class="select-all font-mono text-xl font-normal leading-6 dark:text-gray-50 mb-2"
               >{{ item.word }} &nbsp;&nbsp;{{ item.phonetic_transcription }}</p
-            ><div class="mt-2 max-w font-sans text-sm text-gray-400" v-html="item.translate?.replace(/([A-Za-z]+)\./g, function (match, p1, offset) {
-                      if (offset) {
-                        return '<br>' + p1 + '.';
-                      }
-                      return p1 + '.' })"></div>
+            ><div
+              class="mt-2 max-w font-sans text-sm text-gray-400"
+              v-html="
+                item.translate?.replace(/(?<!&) ([A-Za-z]+)\./g, function (match, p1, offset) {
+                  if (offset) {
+                    return '<br>' + p1 + '.';
+                  }
+                  return p1 + '.';
+                })
+              "
+            ></div>
           </div>
           <div class="space-x-2 flex justify-center items-center">
             <button
@@ -130,11 +136,15 @@
         ElMessageBox({
           title: ``,
           message: () => (
-            <div >
+            <div>
               <p style="fontSize: 22px">确定将选中的单词标为熟词吗？</p>
-              <p style="fontSize: 22px">单词标熟后<b>错词本不再展示</b>，听写时<b>自动跳过</b></p>
+              <p style="fontSize: 22px">
+                单词标熟后<b>错词本不再展示</b>，听写时<b>自动跳过</b>
+              </p>
               <br />
-              <el-checkbox onChange={(check) => (checked = check)} size="small">不再提醒</el-checkbox>
+              <el-checkbox onChange={(check) => (checked = check)} size="small">
+                不再提醒
+              </el-checkbox>
             </div>
           ),
           confirmButtonText: '标熟',

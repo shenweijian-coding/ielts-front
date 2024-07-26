@@ -618,6 +618,7 @@
         c_id: appStore.dictationInfo.currentChapter.id,
         // continue_lexicon_id: appStore.dictationInfo.last_id,
         pagesize: 9999,
+        s_id: appStore.dictationInfo.isClass ? 5 : null
       })
         .then((res) => {
           if (res.data.length) {
@@ -806,6 +807,7 @@
       window.localStorage.setItem('oldUser', true);
     }
     reportLexiRes({
+      s_id: appStore.dictationInfo.isClass ? 5 : null,
       key: currentTestKey,
       ...data,
     })
