@@ -79,12 +79,12 @@
             </template>
           </el-table-column>
           <template v-if="state.form.type == 1">
-            <el-table-column prop="today_time" label="今日时长" width="" align="center">
+            <el-table-column prop="today_time" label="今日时长(min)" width="" align="center">
               <template #default="scope">
                 {{ Math.floor(scope.row.today_time / 60) }}
               </template>
             </el-table-column>
-            <el-table-column prop="cumulative_time" label="累计时长(分钟)" width="" align="center">
+            <el-table-column prop="cumulative_time" label="累计时长(min)" width="" align="center">
               <template #default="scope">
                 {{ Math.floor(scope.row.cumulative_time / 60) }}
               </template>

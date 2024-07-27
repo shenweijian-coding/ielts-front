@@ -1,9 +1,10 @@
 <template>
-  <div class="md:px-10 px-4">
-    <div class="flex items-center justify-between lg:mt-10 mt-4">
+  <div class="md:px-10 px-4 flex flex-col items-center">
+    <div class="flex items-center justify-between lg:mt-10 mt-4 lg:w-200 w-full">
       <div class="text-m flex">
-        {{state.managerList?.length}}名项目成员&nbsp;&nbsp;
-        <span class="text-gray flex items-center text-m">项目成员角色&nbsp;
+        {{ state.managerList?.length }}名项目成员&nbsp;&nbsp;
+        <span class="text-gray flex items-center text-m"
+          >项目成员角色&nbsp;
           <el-tooltip placement="bottom" effect="light">
             <template #content>
               <div class="text-m">
@@ -17,7 +18,7 @@
             </template>
             <el-icon><Warning /></el-icon>
           </el-tooltip>
-          </span>
+        </span>
       </div>
       <div class="flex items-center">
         <!-- <div class="mr-4 flex cursor-pointer items-center">
@@ -27,19 +28,19 @@
         <el-button type="primary" size="small" @click="getCode">复制邀请链接</el-button>
       </div>
     </div>
-    <div class="font-bold flex justify-between mt-6 mb-2">
+    <div class="font-bold flex justify-between mt-6 mb-2 lg:w-200 w-full">
       <div class="w-1/3">成员</div>
-      <div class="w-1/3 text-center">进入时间</div>
+      <!-- <div class="w-1/3 text-center">进入时间</div> -->
       <div class="w-1/3 text-right">项目角色</div>
     </div>
-    <div class="flex justify-between lg:py-3 py-2 text-xs items-center" v-for="(item,index) in state.managerList">
+    <div class="flex justify-between lg:py-3 py-2 text-xs items-center lg:w-200 w-full" v-for="(item, index) in state.managerList">
       <!-- <div class="w-1/3">
         <div class="h-8 w-8 bg-theme rounded-full text-white flex justify-center items-center">{{ item.name && item.name.slice(0, 1) }}</div>
       </div> -->
       <div class="w-1/3">{{ item.name }}</div>
-      <div class="w-1/3 text-center">{{ item.created_at }}</div>
+      <!-- <div class="w-1/3 text-center">{{ item.created_at }}</div> -->
       <div class="w-1/3 flex justify-end">
-        <span v-if="index ==0">{{ item.role.name }}</span>
+        <span v-if="index == 0">{{ item.role.name }}</span>
         <el-dropdown v-else size="small" trigger="click" @command="(sign) => permissionChange(item, sign)">
           <span>
             {{ item.role.name }}
@@ -58,7 +59,6 @@
     </div>
     <tabbar />
     <Loading :loading="loading" />
-
   </div>
 </template>
 <script setup>
@@ -66,30 +66,30 @@
   import { getManagerList, updateManagerRole, delManager, getRoles } from '@/api/company/index';
   import { ElMessage } from 'element-plus';
   import tabbar from '@/components/tabBar/qy-tabbar.vue';
-  import { useInvite } from '../../useCommon.js'
+  import { useInvite } from '../../useCommon.js';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
 
-  const { getCode } = useInvite()
-const { loading, setLoading } = useLoading();
+  const { getCode } = useInvite();
+  const { loading, setLoading } = useLoading();
 
   const state = reactive({
     managerList: [],
-    roleList: []
+    roleList: [],
   });
   const getManager = () => {
-    setLoading(true)
+    setLoading(true);
     getManagerList().then((res) => {
-      setLoading(false)
+      setLoading(false);
       console.log(res);
       state.managerList = res;
     });
   };
   const getInitData = () => {
-    getRoles().then(res => {
-      state.roleList = res
-    })
-  }
+    getRoles().then((res) => {
+      state.roleList = res;
+    });
+  };
   const permissionChange = (item, sign) => {
     if (sign == '移除') {
       delManager({
@@ -109,5 +109,5 @@ const { loading, setLoading } = useLoading();
     }
   };
   getManager();
-  getInitData()
+  getInitData();
 </script>
