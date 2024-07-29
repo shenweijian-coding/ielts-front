@@ -84,45 +84,6 @@
               </el-popover>
             </div>
           </el-tooltip>
-          <el-tooltip content="单词听写模式" placement="top" effect="light">
-            <div class="relative" data-headlessui-state="">
-              <button
-                class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                type="button"
-                aria-expanded="false"
-                @click="handleMode"
-              >
-                <div class="relative">
-                  <div :class="config.isSeries ? '' : 'line-through'">连听</div>
-                </div>
-              </button>
-            </div>
-          </el-tooltip>
-          <el-tooltip content="单词播放间隔" placement="top" effect="light">
-            <div class="relative" data-headlessui-state="">
-              <el-popover placement="bottom" :width="100" trigger="click">
-                <template #reference>
-                  <button
-                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                    type="button"
-                    aria-expanded="false"
-                  >
-                    <div class="relative">
-                      <div>{{ config.play_interval }} 秒</div>
-                    </div>
-                  </button>
-                </template>
-                <div>
-                  <el-radio-group v-model="config.play_interval" size="default" @change="(val) => handleConfigChange('play_interval', val)">
-                    <el-radio v-for="gap in config.gapList" :key="gap" :value="+gap" border :label="+gap" class="w-full mb-2 mr-0"
-                      >{{ gap }} 秒</el-radio
-                    >
-                  </el-radio-group>
-                </div>
-              </el-popover>
-            </div>
-          </el-tooltip>
-
           <el-tooltip content="单词重复次数" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <el-popover placement="bottom" :width="100" trigger="click">
@@ -147,6 +108,44 @@
                       border
                       class="w-full mb-2 mr-0"
                       >{{ repeat }} 遍</el-radio
+                    >
+                  </el-radio-group>
+                </div>
+              </el-popover>
+            </div>
+          </el-tooltip>
+          <el-tooltip content="单词听写模式" placement="top" effect="light">
+            <div class="relative" data-headlessui-state="">
+              <button
+                class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                type="button"
+                aria-expanded="false"
+                @click="handleMode"
+              >
+                <div class="relative">
+                  <div :class="config.isSeries ? '' : 'line-through'">连听</div>
+                </div>
+              </button>
+            </div>
+          </el-tooltip>
+          <el-tooltip v-if="+config.repetitions>1 || config.isSeries" content="单词播放间隔" placement="top" effect="light">
+            <div class="relative" data-headlessui-state="">
+              <el-popover placement="bottom" :width="100" trigger="click">
+                <template #reference>
+                  <button
+                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
+                    type="button"
+                    aria-expanded="false"
+                  >
+                    <div class="relative">
+                      <div>{{ config.play_interval }} 秒</div>
+                    </div>
+                  </button>
+                </template>
+                <div>
+                  <el-radio-group v-model="config.play_interval" size="default" @change="(val) => handleConfigChange('play_interval', val)">
+                    <el-radio v-for="gap in config.gapList" :key="gap" :value="+gap" border :label="+gap" class="w-full mb-2 mr-0"
+                      >{{ gap }} 秒</el-radio
                     >
                   </el-radio-group>
                 </div>
@@ -186,7 +185,7 @@
           </el-tooltip>
 
           <div class="flex items-center justify-center gap-2 space-x-2 lg:space-x-1">
-            <el-tooltip content="当前播放词库" placement="top" effect="light">
+            <el-tooltip content="当前播放词库" placement="top" effect="light" :visible="tooltipVisible">
               <div class="relative">
                 <div>
                   <div class="relative"
@@ -195,6 +194,7 @@
                       title="当前播放词库"
                       type="button"
                       @click="showWordsList"
+                      @mouseenter="tooltipVisible = true" @mouseleave="tooltipVisible = false"
                     >
                       <el-icon color="#2c3e50" :size="20"><List /></el-icon> </button
                   ></div>
@@ -537,6 +537,7 @@
   const canvasRef = ref(null);
   let audio = audioPlayer.value;
   var count = 0;
+  const tooltipVisible = ref(false)
 
   const nearWords = computed(() => {
     let lastWord = '';
@@ -1119,6 +1120,7 @@
 
   // 展示当前播放词库列表
   const showWordsList = () => {
+    
     wordslistRef.value.open(wordsData.wordsCopy, wordsData.words,wordsData.currentWord);
   };
 </script>
