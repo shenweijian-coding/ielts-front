@@ -1,20 +1,20 @@
 <template>
-  <el-drawer v-model="state.drawer" :title="appStore?.dictationInfo?.booInfo.remarks" :size="dialogWidth">
+  <el-drawer v-model="state.drawer" :title="appStore?.dictationInfo?.booInfo.remarks" :size="dialogWidth" custom-class="dialogstyle">
     <div class="min-width: 100%; display: table;">
       <div class="flex h-full w-full flex-col gap-1">
         <div
           v-for="item in state.list"
           :key="item.id"
-          class="mb-2 flex cursor-pointer select-text items-center rounded-xl py-2 px-4 shadow focus:outline-none dark:bg-opacity-20"
+          class="mb-2 flex cursor-pointer select-text items-center rounded-xl py-2 lg:px-4 px-2 shadow focus:outline-none dark:bg-opacity-20"
           :class="state.current.id == item.id ? 'bg-theme_hover current' : ''"
           :id="state.current.id == item.id ? 'current' : ''"
           @click="play(item)"
         >
           <div class="flex-1"
-            ><p class="select-all font-mono text-xl font-normal leading-6 dark:text-gray-50 mb-2"
-              >{{ item.word }} &nbsp;&nbsp;{{ item.phonetic_transcription }}</p
+            ><p class="text-sm select-all font-mono lg:text-lg font-normal leading-6 dark:text-gray-50 mb-2"
+              >{{ item.word }}&nbsp;<span class="text-gray lg:text-l text-m">/{{ item.phonetic_transcription }}/</span></p
             ><div
-              class="mt-2 max-w font-sans text-sm text-gray-400"
+              class="mt-2 max-w font-sans text-m text-gray-400"
               v-html="
                 item.translate?.replace(/(?<!&) ([A-Za-z]+)\./g, function (match, p1, offset) {
                   if (offset) {
@@ -25,7 +25,7 @@
               "
             ></div>
           </div>
-          <div class="space-x-2 flex justify-center items-center">
+          <div class="lg:space-x-2 space-x-1 flex justify-center items-center">
             <button
               @click="play(item)"
               class="focus:outline-none dark:fill-gray-400 dark:opacity-80 cursor-pointer text-gray-600 h-8 w-7"
@@ -79,7 +79,7 @@
 
     // 根据屏幕宽度计算Dialog的宽度
     if (screenWidth < 768) {
-      dialogWidth.value = '90%'; // 在小屏幕下设置Dialog宽度为90%
+      dialogWidth.value = '96%'; // 在小屏幕下设置Dialog宽度为90%
     } else if (screenWidth >= 768 && screenWidth < 1024) {
       dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
     } else {
@@ -204,3 +204,11 @@
     open,
   });
 </script>
+<style lang="less" scoped>
+  @media (max-width: 768px) {
+  /* 屏幕宽度小于或等于600px时应用的样式 */
+  .dialogstyle .el-drawer__body{
+    padding-right: 4px !important;
+  }
+}
+</style>
