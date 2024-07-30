@@ -11,8 +11,8 @@
           @click="play(item)"
         >
           <div class="flex-1"
-            ><p class="text-m select-all font-mono lg:text-lg font-normal leading-6 dark:text-gray-50 mb-2"
-              >{{ item.word }}&nbsp;<span class="text-gray lg:text-l text-sm">/{{ item.phonetic_transcription }}/</span></p
+            ><p class="text-sm select-all font-mono lg:text-lg font-normal leading-6 dark:text-gray-50 mb-2"
+              >{{ item.word }}&nbsp;<span class="text-gray lg:text-l text-m">/{{ item.phonetic_transcription }}/</span></p
             ><div
               class="mt-2 max-w font-sans text-m text-gray-400"
               v-html="
