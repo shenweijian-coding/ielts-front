@@ -15,14 +15,7 @@
               >{{ item.word }}&nbsp;<span class="text-gray lg:text-l text-m">/{{ item.phonetic_transcription }}/</span></p
             ><div
               class="mt-2 max-w font-sans text-m text-gray-400"
-              v-html="
-                item.translate?.replace(/(?<!&) ([A-Za-z]+)\./g, function (match, p1, offset) {
-                  if (offset) {
-                    return '<br>' + p1 + '.';
-                  }
-                  return p1 + '.';
-                })
-              "
+              v-html="replaceWithBr(item.translate || '')"
             ></div>
           </div>
           <div class="lg:space-x-2 space-x-1 flex justify-center items-center">
@@ -114,6 +107,14 @@
       state.list2.find((o) => o.id == id).is_proficient = is_proficient;
     });
   };
+  function replaceWithBr(str ='') {
+    return str.replace(/([^\s&])\s([A-Za-z]+)\./g, function (match, p1, p2) {
+      if (p1 !== '&') {
+        return p1 + '<br>' + p2 + '.';
+      }
+      return match;
+    });
+  }
   // 单词标熟
   const handleWordSign = (item, type) => {
     const requestWordLabel = () => {

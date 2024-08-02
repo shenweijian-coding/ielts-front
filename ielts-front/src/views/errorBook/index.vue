@@ -82,15 +82,9 @@
               <template v-if="!state.hideProps.translate">
                 <div
                   class="text-left"
-                  v-html="
-                    scope.row.lexicon?.translate?.replace(/(?<!&) ([A-Za-z]+)\./g, function (match, p1, offset) {
-                      if (offset) {
-                        return '<br>' + p1 + '.';
-                      }
-                      return p1 + '.';
-                    })
-                  "
+                  v-html="replaceWithBr(scope.row.lexicon?.translate || '')"
                 >
+                
                 </div>
               </template>
               <span v-else>***</span>
@@ -358,6 +352,14 @@
         setLoading(false);
       });
   };
+  function replaceWithBr(str ='') {
+    return str.replace(/([^\s&])\s([A-Za-z]+)\./g, function (match, p1, p2) {
+      if (p1 !== '&') {
+        return p1 + '<br>' + p2 + '.';
+      }
+      return match;
+    });
+  }
   // 单词标熟
   const handleWordSign = () => {
     if (!state.selWords.length) {

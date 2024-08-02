@@ -1,5 +1,5 @@
 <template>
-  <div class="dark:text-slate-400 dark:bg-slate-900 relative w-full">
+  <div class="dark:text-slate-400 dark:bg-slate-900 relative w-full" style="min-height: 95vh;">
     <div class="w-full flex justify-center items-center lg:px-30 flex-col">
       <a class="top-0 lg:left-30 text-theme lg:py-0 py-10" href="/">
         <SvgIcon name="atx" class="" width="120" height="80" />
