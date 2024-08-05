@@ -18,7 +18,7 @@ import { ConfigRestartPlugin } from './restart';
 import { ConfigProgressPlugin } from './progress';
 import { ConfigImageminPlugin } from './imagemin';
 import { ConfigUnocssPlugin } from './unocss';
-
+import legacy from '@vitejs/plugin-legacy'
 export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
   const { VITE_USE_MOCK, VITE_USE_COMPRESS } = viteEnv;
 
@@ -54,6 +54,8 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
 
   // vite-plugin-svg-icons
   vitePlugins.push(ConfigSvgIconsPlugin(isBuild));
+  
+  vitePlugins.push(legacy());
 
   // vite-plugin-mock
   VITE_USE_MOCK && vitePlugins.push(ConfigMockPlugin(isBuild));
