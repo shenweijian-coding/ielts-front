@@ -4,7 +4,6 @@ import router from './router';
 import piniaStore from './store';
 
 import '@/styles/index.less';
-import '@/styles/reset.less';
 import 'uno.css';
 import './styles/custom-theme.less'; // 引入自定义主题样式
 // 支持SVG
@@ -30,5 +29,6 @@ const app = createApp(App);
 app.use(router);
 app.use(piniaStore);
 app.use(Idux);
+import '@/styles/reset.less';
 
 app.mount('#app');

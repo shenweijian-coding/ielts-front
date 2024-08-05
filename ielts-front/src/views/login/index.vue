@@ -20,6 +20,8 @@
     </div>
   </div>
   <Footer />
+  <check/>
+
 </template>
 
 <script setup>
@@ -27,6 +29,7 @@
   import SignIn from './components/sign-in.vue';
   import SvgIcon from '@/components/SvgIcon/index.vue';
   import Footer from '@/components/footer/index.vue';
+  import check from '@/components/Notice/index2.vue'
 
   const theme = localStorage.getItem('theme');
 

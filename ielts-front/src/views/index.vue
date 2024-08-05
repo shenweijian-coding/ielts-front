@@ -35,6 +35,7 @@
   </div>
   <Teach ref="teachRef" />
   <Footer />
+  <check/>
 </template>
 
 <script setup>
@@ -42,6 +43,7 @@
   import Footer from '@/components/footer/index.vue';
   import { CaretRight } from '@element-plus/icons-vue';
   import Teach from '@/components/teaching/index.vue';
+  import check from '@/components/Notice/index2.vue'
 
   const teachRef = ref(null);
 
