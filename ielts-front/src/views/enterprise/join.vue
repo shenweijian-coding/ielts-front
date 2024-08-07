@@ -53,6 +53,7 @@
         router.replace('/main/user');
       },300)
     }).catch(err => {
+      console.log(err, '111');
       state.loading = false
     });
   };

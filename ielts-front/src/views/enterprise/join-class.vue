@@ -54,6 +54,9 @@
       }, 300);
     }).catch(err => {
       state.loading = false
+      if(err.message == '您已加入班级') {
+        router.replace('/main/book');
+      }
     });
   };
   const getInfo = (code) => {

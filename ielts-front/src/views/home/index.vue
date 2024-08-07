@@ -330,7 +330,7 @@
                           >{{ item }}</span
                         >
                       </p>
-                      <p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
+                      <p class="line-clamp-2 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
                         nearWords.lastWord.translate
                       }}</p></div
                     ></div

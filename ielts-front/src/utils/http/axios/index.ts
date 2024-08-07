@@ -44,7 +44,7 @@ service.interceptors.response.use(
       }
       if (response.data.status) {
         ElMessage.error(response.data.message);
-        return Promise.reject(response.values);
+        return Promise.reject(response.data);
       }
 
       // 统一处理 失败问题
