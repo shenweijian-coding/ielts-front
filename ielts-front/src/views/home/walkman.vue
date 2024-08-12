@@ -13,14 +13,13 @@
               <div>
                 <a
                   class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
-                  href="/#/main"
                 >
-                  {{ appStore?.dictationInfo?.booInfo.remarks || '前往书籍页' }}
+                  {{ appStore?.dictationInfo?.booInfo.name }} {{ appStore?.dictationInfo?.currentChapter?.name }}
                 </a>
               </div>
             </div>
           </el-tooltip>
-          <el-tooltip content="章节切换" placement="top" effect="light">
+          <!-- <el-tooltip content="章节切换" placement="top" effect="light">
             <div class="relative">
               <el-popover placement="bottom" :width="200" trigger="click">
                 <template #reference>
@@ -51,7 +50,7 @@
                 </div>
               </el-popover>
             </div>
-          </el-tooltip>
+          </el-tooltip> -->
         </div>
         <div class="flex space-x-2 lg:space-x-1">
           <el-tooltip content="单词播放速度" placement="top" effect="light">
@@ -114,7 +113,7 @@
               </el-popover>
             </div>
           </el-tooltip>
-          <el-tooltip content="单词听写模式" placement="top" effect="light">
+          <!-- <el-tooltip content="单词听写模式" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <button
                 class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
@@ -127,8 +126,8 @@
                 </div>
               </button>
             </div>
-          </el-tooltip>
-          <el-tooltip v-if="+config.repetitions > 1 || config.isSeries" content="单词播放间隔" placement="top" effect="light">
+          </el-tooltip> -->
+          <el-tooltip v-if="false" content="单词播放间隔" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <el-popover placement="bottom" :width="100" trigger="click">
                 <template #reference>
@@ -153,7 +152,7 @@
             </div>
           </el-tooltip>
 
-          <el-tooltip content="发音" placement="top" effect="light">
+          <!-- <el-tooltip content="发音" placement="top" effect="light">
             <div class="relative" data-headlessui-state="">
               <el-popover placement="bottom" :width="100" trigger="click">
                 <template #reference>
@@ -182,10 +181,10 @@
                 </div>
               </el-popover>
             </div>
-          </el-tooltip>
+          </el-tooltip> -->
 
           <div class="flex items-center justify-center gap-2 space-x-2 lg:space-x-1">
-            <el-tooltip content="当前播放词库" placement="top" effect="light" :visible="tooltipVisible">
+            <!-- <el-tooltip content="当前播放词库" placement="top" effect="light" :visible="tooltipVisible">
               <div class="relative">
                 <div>
                   <div class="relative"
@@ -206,14 +205,14 @@
                   <span class="tooltip">当前播放词库</span></div
                 >
               </div>
-            </el-tooltip>
+            </el-tooltip> -->
 
             <el-tooltip content="设置" placement="top" effect="light">
               <div class="relative">
                 <el-popover placement="bottom" :width="200" trigger="click">
                   <template #reference>
                     <button
-                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
+                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out ml-1"
                       title="设置"
                       type="button"
                     >
@@ -223,62 +222,30 @@
                   </template>
                   <div>
                     <div class="flex items-center justify-between">
-                      <div>乱序播放</div>
-                      <el-switch v-model="config.is_disorderly" @change="(val) => handleConfigChange('is_disorderly', val, true)" />
+                      <div>播放词义</div>
+                      <el-switch v-model="config.playMean" @change="(val) => handleConfigChange('playMean', val)" />
                     </div>
                     <!-- <span class="text-sm">开启后，单词播放顺序将会被打乱，下一章节/重新进入本章节 开始生效</span> -->
                     <div class="flex items-center justify-between mt-2">
-                      <div>忽略大小写</div>
-                      <el-switch v-model="config.ignore_case" />
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                      <div>拼写正确自动提交</div>
-                      <el-switch
-                        v-model="config.is_automatic_submit"
-                        @change="(val) => handleConfigChange('is_automatic_submit', val, false)"
-                      />
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                      <div>输入按键音效</div>
-                      <el-switch v-model="config.error_sound" />
+                      <div>播放单词拼写</div>
+                      <el-switch v-model="config.playSpell" @change="(val) => handleConfigChange('playMean', val)" />
                     </div>
                   </div>
                 </el-popover>
               </div>
             </el-tooltip>
 
-            <el-tooltip content="返回主页" placement="top" effect="light">
+            <el-tooltip content="返回" placement="top" effect="light">
               <div class="relative hidden sm:block">
-                <a href="/#/main/book">
-                  <button
-                    class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
-                    title="返回主页"
-                    type="button"
-                  >
-                    <el-icon color="#2c3e50" :size="20"><HomeFilled /></el-icon>
-                  </button>
-                </a>
-              </div>
-            </el-tooltip>
-
-            <el-tooltip v-if="false" content="错词本" placement="top" effect="light">
-              <div class="relative">
-                <div>
-                  <a href="/#/errorBook?from=home">
-                    <button
-                      type="button"
-                      class="flex items-center justify-center rounded p-[2px] text-lg outline-none transition-colors duration-300 ease-in-out"
-                      title="查看错题本"
-                    >
-                      <el-icon><HomeFilled /></el-icon>
-                    </button>
-                  </a>
-                </div>
-                <div
-                  class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
+                <button
+                  class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
+                  title="返回主页"
+                  type="button"
+                  @click="router.back()"
                 >
-                  <span class="tooltip">错题本</span></div
-                >
+                  <el-icon color="#2c3e50" :size="20"><CloseBold /></el-icon>
+                  <!-- <el-icon color="#2c3e50" :size="20"><CircleCloseFilled /></el-icon> -->
+                </button>
               </div>
             </el-tooltip>
 
@@ -309,61 +276,9 @@
     <div class="container relative mx-auto flex h-full flex-col items-center">
       <div class="container flex flex-grow items-center justify-center">
         <div class="container flex h-full w-full flex-col items-center justify-center">
-          <div class="container flex h-24 w-full shrink-0 grow-0 justify-between px-12 pt-0">
-            <el-tooltip content="快捷键 ctrl+j" placement="top" effect="light">
-              <div class="relative" @click="handleMove(-1)"
-                ><div
-                  ><div
-                    v-if="nearWords.lastWord"
-                    class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
-                  >
-                    <SvgIcon name="left" />
-                    <div class="grow-1 flex w-full flex-col ml-2">
-                      <p class="font-mono text-2xl font-normal tracking-normal mb-0">
-                        <template v-if="nearWords.lastWord.isOk">
-                          <span>{{ nearWords.lastWord.word }}</span>
-                        </template>
-                        <span
-                          v-else
-                          v-for="(item, index) in nearWords.lastWord.wordArr"
-                          :key="index"
-                          :class="{ 'text-red-600': nearWords.lastWord.inputWordArr[index] != item }"
-                          >{{ item }}</span
-                        >
-                      </p>
-                      <p class="line-clamp-2 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
-                        nearWords.lastWord.translate
-                      }}</p></div
-                    ></div
-                  ></div
-                ></div
-              >
-            </el-tooltip>
-
-            <div class="relative" @click="handleMove(1)"
-              ><div>
-                <div
-                  v-if="nearWords.nextWord"
-                  class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
-                  ><div class="grow-1 flex w-full flex-col items-end text-right mr-2">
-                    <!-- <p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0"> **** </p
-                    ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
-                      nearWords.nextWord.translate
-                    }}</p> -->
-                  </div>
-                  <!-- <SvgIcon name="right" />  -->
-                </div></div
-              ></div
-            ></div
-          >
+          <div class="container flex w-full shrink-0 grow-0 justify-between px-12 pt-0"> </div>
           <div class="container flex flex-grow flex-col items-center justify-center">
             <div class="relative flex w-full justify-center">
-              <!-- <div class="absolute flex h-full w-full justify-center">
-                  <div class="z-10 flex w-full items-center backdrop-blur-sm">
-                    <p class="w-full select-none text-center text-xl text-gray-600 dark:text-gray-50">按任意键开始</p>
-                  </div>
-                </div> -->
-
               <div class="relative w-full" v-if="wordsData.words.length">
                 <div lang="en" class="flex flex-col items-center justify-center pb-1 pt-4 w-full">
                   <!-- <div
@@ -381,7 +296,12 @@
                       </div>
                     </div> -->
                   <div class="user-input text-center flex flex-col items-center w-full">
-                    <input
+                    <b class="font-mono font-normal text-center text-5xl">{{ wordsData.currentWord.word }}</b>
+                    <b class="font-mono font-normal text-center text-xl text-gray mt-4"
+                      >/{{ wordsData.currentWord.phonetic_transcription }}/</b
+                    >
+                    <p class="mt-4">{{ wordsData.currentWord.translate }}</p>
+                    <!-- <input
                       :placeholder="!showPlaceholder ? '在此输入单词，点击Enter核对' : ''"
                       v-model="wordsData.currentWord.userInput"
                       :type="isMobile ? 'password' : 'text'"
@@ -395,15 +315,15 @@
                       @keydown="handleKeyDown"
                       @click="handleFocusClick"
                       @focus="handleFocus"
-                    />
-                    <div class="input-border w-4/5 lg:w-2/5"> </div>
+                    /> -->
+                    <!-- <div class="input-border w-4/5 lg:w-2/5"> </div> -->
                   </div>
-                  <div class="text-2xl font-bold text-gray count-down-box">
+                  <!-- <div class="text-2xl font-bold text-gray count-down-box">
                     <div v-if="countDown <= 2 && countDown > 0">
                       <span>{{ countDown }}</span
                       ><span class="text-m">s</span>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <!-- <div
                     class="space-x-5 text-center text-sm font-normal text-gray-600 transition-colors duration-300 dark:text-gray-400 false"
@@ -419,6 +339,11 @@
                   </div> -->
                 <div class="space-x-8 flex mt-10 duration-300 text-center justify-center transition-colors font-sans cursor-pointer">
                   <div>
+                    <el-tooltip content="列表页" placement="top" effect="light">
+                      <SvgIcon name="list" color="grey" @click="showWordsList" width="46" height="38"
+                    /></el-tooltip>
+                  </div>
+                  <div>
                     <el-tooltip content="回退上一个单词，快捷键 ctrl+j" placement="top" effect="light">
                       <SvgIcon name="play-left" color="grey" @click="handleMove(-1)" />
                     </el-tooltip>
@@ -430,8 +355,13 @@
                     </el-tooltip>
                   </div>
                   <div>
-                    <el-tooltip content="再读一遍，快捷键 ctrl+L" placement="top" effect="light">
-                      <SvgIcon @click="playAgain" name="play-again" color="grey" />
+                    <el-tooltip content="前进下一个单词，快捷键 Enter" placement="top" effect="light">
+                      <SvgIcon name="play-left" color="grey" @click="handleMove(1)" class="rotate-180" />
+                    </el-tooltip>
+                  </div>
+                  <div>
+                    <el-tooltip content="收藏" placement="top" effect="light">
+                      <SvgIcon name="collect-walk" color="grey" @click="handleCollect" width="27" />
                     </el-tooltip>
                   </div>
                 </div>
@@ -460,10 +390,12 @@
   </div>
   <mistakeDialog ref="mistakeRef" @next="handleNextChapter" />
   <Loading :loading="loading" />
-  <WordsDrawer ref="wordslistRef" @download="downloadTemp" />
+  <WordsDrawer ref="wordslistRef" />
   <audio ref="audioPlayer" controls style="display: none"></audio>
+  <audio ref="audioPlayer2" controls style="display: none"></audio>
   <canvas ref="canvasRef"></canvas>
-  <downTemplate ref="downTemplateRef" />
+  <collectDialog ref="collectRef" @addBook="addBook" @ok="collectFinish" />
+  <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
 </template>
 
 <script setup>
@@ -472,7 +404,7 @@
   import correct from '@/assets/correct.wav';
   import defaultAudio from '@/assets/Default.wav';
   import { ElMessage, ElMessageBox } from 'element-plus';
-  import { List, HomeFilled, Tools } from '@element-plus/icons-vue';
+  import { List, HomeFilled, Tools, StarFilled, CloseBold } from '@element-plus/icons-vue';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
   import mistakeDialog from './mistakeDialog.vue';
@@ -482,14 +414,13 @@
   import WordsDrawer from './wordsDrawer.vue';
   import { shuffleArray, debounce, deepClone } from '@/utils/index';
   import confetti from 'canvas-confetti';
-  import downTemplate from './down-template.vue';
+  import collectDialog from '../errorBook/components/collect-dialog.vue';
+  import ImportDialog from '../errorBook/components/import-dialog.vue';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
   const route = useRoute();
   const router = useRouter();
-
-  let canSubmit = true;
 
   const { loading, setLoading } = useLoading();
 
@@ -501,14 +432,14 @@
   const config = reactive({
     chapterId: appStore.chapterId,
     play_speed: userStore.getConfig.play_speed + '' || '1.0',
-    play_interval: userStore.getConfig.play_interval || '5',
+    play_interval: '0',
     repetitions: userStore.getConfig.repetitions + '' || '1',
     phonetic_type: userStore.getConfig.phonetic_type || 2,
     error_sound: userStore.getConfig.error_sound || false,
     ignore_case: userStore.getConfig.ignore_case || true,
     is_disorderly: userStore.getConfig.is_disorderly || false,
     is_automatic_submit: userStore.getConfig.is_automatic_submit || false,
-    isSeries: false,
+    isSeries: true,
     speedList: ['0.8', '1.0', '1.2', '1.4', '1.6'],
     gapList: ['1', '2', '3', '4', '5', '6', '7'],
     repeatList: ['1', '2', '3', '无限'],
@@ -516,6 +447,8 @@
       { name: '美音', id: 2 },
       { name: '英音', id: 1 },
     ],
+    playMean: true,
+    playSpell: true,
   });
 
   const wordsData = reactive({
@@ -537,11 +470,21 @@
   let currentTestKey = Date.now();
   const countDown = ref(0); // 倒计时
   const audioPlayer = ref(null);
+  const audioPlayer2 = ref(null);
   const canvasRef = ref(null);
   let audio = audioPlayer.value;
+  // let audio2 = audioPlayer2.value;
+  let audio2 = new Audio();
+  const ImportDialogRef = ref(null);
+
   var count = 0;
   const tooltipVisible = ref(false);
-  const downTemplateRef = ref(null);
+  const collectRef = ref(null);
+
+  let utterance = new SpeechSynthesisUtterance();
+  utterance.pitch = 1;
+  utterance.rate = 1;
+  utterance.volume = 1;
 
   const nearWords = computed(() => {
     let lastWord = '';
@@ -628,63 +571,63 @@
         .then((res) => {
           if (res.data.length) {
             // 是否开启乱序
-            if (config.is_disorderly) {
-              // 筛选出没有听写的单词
-              const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
-              const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));
-              // console.log(noRead, beanRead, '222');
-              if (noRead.length) {
-                wordsData.words = [...beanRead, ...shuffleArray(noRead)];
-              } else {
-                wordsData.words = shuffleArray(beanRead);
-              }
-            } else {
-              wordsData.words = res.data;
-            }
-            if (appStore.isContinuePlay) {
-              if (res?.existing_id?.length) {
-                wordsData.currentIndex = res?.existing_id.length || 0;
-                wordsData.currentWord = wordsData.words[wordsData.currentIndex];
-              }
-              if (res.last_key) {
-                currentTestKey = res.last_key;
-              }
-            } else {
-              // 是否继续上次播放
-              if (res?.existing_id?.length && !errSource.value) {
-                ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
-                  confirmButtonText: '继续听写',
-                  cancelButtonText: '重新开始',
-                  type: 'info',
-                  distinguishCancelAndClose: true,
-                })
-                  .then(() => {
-                    if (res?.existing_id?.length) {
-                      // 过滤一遍 防止有遗漏
-                      if (res?.existing_id?.length != res.data.length) {
-                        const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
-                        const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));
-                        wordsData.words = [...beanRead, ...noRead];
-                      }
+            // if (config.is_disorderly) {
+            //   // 筛选出没有听写的单词
+            //   const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
+            //   const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));
+            //   // console.log(noRead, beanRead, '222');
+            //   if (noRead.length) {
+            //     wordsData.words = [...beanRead, ...shuffleArray(noRead)];
+            //   } else {
+            //     wordsData.words = shuffleArray(beanRead);
+            //   }
+            // } else {
+            wordsData.words = res.data;
+            // }
+            // if (appStore.isContinuePlay) {
+            //   if (res?.existing_id?.length) {
+            //     wordsData.currentIndex = res?.existing_id.length || 0;
+            //     wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+            //   }
+            //   if (res.last_key) {
+            //     currentTestKey = res.last_key;
+            //   }
+            // } else {
+            //   // 是否继续上次播放
+            //   if (res?.existing_id?.length && !errSource.value) {
+            //     ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
+            //       confirmButtonText: '继续听写',
+            //       cancelButtonText: '重新开始',
+            //       type: 'info',
+            //       distinguishCancelAndClose: true,
+            //     })
+            //       .then(() => {
+            //         if (res?.existing_id?.length) {
+            //           // 过滤一遍 防止有遗漏
+            //           if (res?.existing_id?.length != res.data.length) {
+            //             const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
+            //             const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));
+            //             wordsData.words = [...beanRead, ...noRead];
+            //           }
 
-                      wordsData.currentIndex = res?.existing_id.length || 0;
-                      wordsData.currentWord = wordsData.words[wordsData.currentIndex];
-                      initWordsList();
-                    }
-                    if (res.last_key) {
-                      currentTestKey = res.last_key;
-                    }
-                  })
-                  .catch((action) => {
-                    if (action == 'cancel') {
-                      wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
-                      initWordsList();
-                    }
-                  });
-              } else {
-                wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
-              }
-            }
+            //           wordsData.currentIndex = res?.existing_id.length || 0;
+            //           wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+            //           initWordsList();
+            //         }
+            //         if (res.last_key) {
+            //           currentTestKey = res.last_key;
+            //         }
+            //       })
+            //       .catch((action) => {
+            //         if (action == 'cancel') {
+            //           wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+            //           initWordsList();
+            //         }
+            //       });
+            //   } else {
+            wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
+            //   }
+            // }
 
             initWordsList();
           } else {
@@ -697,15 +640,14 @@
           console.log(err);
         });
     }
-    canSubmit = true;
   };
 
   const initWordsList = () => {
     wordsData.wordsCopy = deepClone(wordsData.words);
     // 判断当前的单词有没有标熟 没有标熟可以听写 标熟的话 查找下一个
-    if (wordsData.currentWord.is_proficient) {
-      handleMove(1, false);
-    }
+    // if (wordsData.currentWord.is_proficient) {
+    //   handleMove(1, false);
+    // }
   };
 
   // 播放音频的方法
@@ -733,6 +675,14 @@
       audio.pause();
       // audio = null;
     }
+    if (audio2) {
+      audio2?.src && (audio2.src = '');
+      audio2.pause();
+      // audio = null;
+    }
+    if (utterance) {
+      window.speechSynthesis.cancel();
+    }
   };
   const getNoProficientWordIndex = (type) => {
     let nextIndex = wordsData.currentIndex;
@@ -757,12 +707,12 @@
     const sign = wordsData.currentIndex + type;
 
     if (sign < wordsData.words.length && sign >= 0) {
-      if (wordsData.currentIndex < wordsData.words.length) {
-        wordsData.lastIndex = wordsData.currentIndex;
-      }
-      wordsData.currentIndex = getNoProficientWordIndex(type);
+      // if (wordsData.currentIndex < wordsData.words.length) {
+      //   wordsData.lastIndex = wordsData.currentIndex;
+      // }
+      // wordsData.currentIndex = getNoProficientWordIndex(type);
 
-      // wordsData.currentIndex = sign;
+      wordsData.currentIndex = sign;
       if (wordsData.currentIndex < wordsData.words.length) {
         wordsData.currentWord = wordsData.words[wordsData.currentIndex];
       } else {
@@ -778,21 +728,31 @@
   // 开始听写
   const start = () => {
     playStatus.value = 1;
-    inputRef.value.focus();
+    // inputRef.value.focus();
     clearAudioCache();
     playWords();
+    // window.speechSynthesis.resume();
+    utterance.text = '';
+    window.speechSynthesis.speak(utterance);
   };
 
   // 暂停
   const stop = () => {
     count = 0;
     playStatus.value = 2;
-    inputRef.value && inputRef.value.blur();
+    // inputRef.value && inputRef.value.blur();
     countDown.value = 0;
     clearInterval(countdownInterval);
     if (audio) {
       audio?.src && (audio.src = '');
       audio.pause();
+    }
+    if (audio2) {
+      audio2?.src && (audio2.src = '');
+      audio2.pause();
+    }
+    if (utterance) {
+      window.speechSynthesis.cancel();
     }
     clearAudioCache();
   };
@@ -816,12 +776,8 @@
       key: currentTestKey,
       ...data,
     })
-      .then(() => {
-        canSubmit = true;
-      })
-      .catch(() => {
-        canSubmit = true;
-      });
+      .then(() => {})
+      .catch(() => {});
   };
   function fire(particleRatio, opts) {
     var count = 200;
@@ -834,101 +790,66 @@
       particleCount: Math.floor(count * particleRatio),
     });
   }
-  // 弹出效果
-  const handleEffectiveness = () => {
-    canvasRef.value.style.display = 'block';
-
-    fire(0.25, {
-      spread: 60,
-      startVelocity: 55,
-    });
-    fire(0.2, {
-      spread: 180,
-    });
-    fire(0.35, {
-      spread: 180,
-      decay: 0.91,
-      scalar: 0.8,
-    });
-    fire(0.1, {
-      spread: 180,
-      startVelocity: 25,
-      decay: 0.92,
-      scalar: 1.2,
-    });
-    fire(0.1, {
-      spread: 180,
-      startVelocity: 45,
-    });
-    setTimeout(() => {
-      canvasRef.value.style.display = 'none';
-    }, 4000);
-  };
   // 处理计算结果
   const handleResult = () => {
-    let accuracy = 0;
-    let correctness = 0;
-    wordsData.currentIndex = wordsData.words.length;
-    // 过略标熟的
-    const wordsRes = wordsData.words.filter((word) => !word.is_proficient) || [];
-    if (wordsRes.length) {
-      correctness = (wordsRes.filter((word) => word.isOk).length / wordsRes.length) * 100;
-    }
-    if (appStore?.dictationInfo?.currentChapter?.id && appStore?.dictationInfo?.currentChapter?.g_id) {
-      getChapterList({
-        id: appStore.dictationInfo.currentChapter.id,
-        g_id: appStore.dictationInfo.currentChapter.g_id,
-      }).then((res) => {
-        accuracy = (+res?.[0].accuracy || correctness).toFixed(2);
-        if (accuracy > 0) {
-          handleEffectiveness();
-        }
-        mistakeRef.value.open(accuracy);
-      });
-    } else {
-      accuracy = correctness.toFixed(2);
-      if (accuracy > 0) {
-        handleEffectiveness();
-      }
-      mistakeRef.value.open(accuracy);
-    }
+    ElMessage.success('当前章节已播放完毕');
+    // let accuracy = 0;
+    // let correctness = 0;
+    // wordsData.currentIndex = wordsData.words.length;
+    // // 过略标熟的
+    // const wordsRes = wordsData.words.filter((word) => !word.is_proficient) || [];
+    // if (wordsRes.length) {
+    //   correctness = (wordsRes.filter((word) => word.isOk).length / wordsRes.length) * 100;
+    // }
+    // if (appStore?.dictationInfo?.currentChapter?.id && appStore?.dictationInfo?.currentChapter?.g_id) {
+    //   getChapterList({
+    //     id: appStore.dictationInfo.currentChapter.id,
+    //     g_id: appStore.dictationInfo.currentChapter.g_id,
+    //   }).then((res) => {
+    //     accuracy = (+res?.[0].accuracy || correctness).toFixed(2);
+    //     if (accuracy > 0) {
+    //       handleEffectiveness();
+    //     }
+    //     mistakeRef.value.open(accuracy);
+    //   });
+    // } else {
+    //   accuracy = correctness.toFixed(2);
+    //   if (accuracy > 0) {
+    //     handleEffectiveness();
+    //   }
+    //   mistakeRef.value.open(accuracy);
+    // }
   };
   // 回车 播放下一个的方法
   const inputEnter = () => {
-    console.log(canSubmit, 'canSubmit1');
-    if (!canSubmit) {
-      return;
-    }
-    console.log(canSubmit, 'canSubmit2');
-    canSubmit = false;
     count = 0;
     clearAudioCache();
     if (!wordsData.words.length || playStatus.value != 1) {
       return;
     }
-    let { userInput = '', id } = wordsData.currentWord;
+    // let { userInput = '', id } = wordsData.currentWord;
     // if (config.ignore_case) {
     //   // 忽略大小写
     //   word = word.toLowerCase();
     //   other_word = other_word?.toLowerCase();
     //   userInput = userInput ? userInput.toLowerCase() : '';
     // }
-    if (checkWordsIsOk()) {
-      inputRef.value.style.color = 'green';
-      inputRef.value.style.borderColor = 'green';
-      correctRef.value.play();
-      wordsData.currentWord.isOk = true;
-      handleReport({ type: 'success', lexicon_id: id });
-    } else {
-      inputRef.value.style.color = 'red';
-      inputRef.value.style.borderColor = 'red';
-      beepRef.value.play();
-      wordsData.currentWord.isOk = false;
-      handleReport({ type: 'fail', error_word: userInput, lexicon_id: id });
-    }
+    // if (checkWordsIsOk()) {
+    //   inputRef.value.style.color = 'green';
+    //   inputRef.value.style.borderColor = 'green';
+    //   correctRef.value.play();
+    //   wordsData.currentWord.isOk = true;
+    //   handleReport({ type: 'success', lexicon_id: id });
+    // } else {
+    //   inputRef.value.style.color = 'red';
+    //   inputRef.value.style.borderColor = 'red';
+    //   beepRef.value.play();
+    //   wordsData.currentWord.isOk = false;
+    //   handleReport({ type: 'fail', error_word: userInput, lexicon_id: id });
+    // }
     setTimeout(() => {
-      inputRef.value.style.color = '';
-      inputRef.value.style.borderColor = '';
+      // inputRef.value.style.color = '';
+      // inputRef.value.style.borderColor = '';
       // 判断是不是最后一个单词
       if (wordsData.words.length <= wordsData.currentIndex + 1) {
         handleResult();
@@ -938,84 +859,224 @@
     }, 200);
   };
 
-  watch(
-    () => wordsData.currentWord?.userInput,
-    (newValue, oldValue) => {
-      console.log(`${oldValue} to ${newValue}`, canSubmit);
-      if (config.is_automatic_submit && checkWordsIsOk() && oldValue && newValue) {
-        inputEnter();
-      }
-    },
-  );
-
-  // 聚焦
-  const handleFocusClick = () => {
-    start();
-  };
-  const handleFocus = () => {
-    if (isMobile.value) {
-      setTimeout(() => {
-        inputRef.value.type = 'text';
-      }, 200);
-    }
-  };
-  // 失去焦点
-  const handleBlur = () => {
-    stop();
-  };
-
-  // 听写模式
-  const handleMode = () => {
-    config.isSeries = !config.isSeries;
-    ElMessage.success(`连读已 ${!config.isSeries ? '关闭' : '开启'}`);
-  };
-  const handleKeyDown = (event) => {
-    if (config.error_sound) {
-      const key = event.key.toLowerCase();
-      if (/^[a-z]$/.test(key)) {
-        defaultAudioRef.value.play();
-      }
-    }
-  };
+  function playAudio(audioUrl) {
+    return new Promise((resolve, reject) => {
+      audio2.src = audioUrl;
+      audio2.onended = resolve; // 当音频播放结束时，resolve Promise
+      audio2.onerror = reject; // 如果播放出错，reject Promise
+      audio2.play();
+    });
+  }
 
   function audioOver() {
-    console.log(Math.random(), count);
-    if (count < +config.repetitions || config.repetitions == '无限') {
-      count++;
-      // 这里是播放
-      audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+    // 单词播放完毕
+    // 播放单个单词
+    if (config.playSpell) {
+      // audio2.src = '';
 
-      timer = setTimeout(() => {
-        audio.play();
-      }, config.play_interval * 1000);
-    } else {
-      count = 0;
+      const playNextLetter = (word, index) => {
+        if (index >= word.length) {
+          playAudio(config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y']).then(() => {
+            if (config.playMean) {
+              // 监听 'onend' 事件，该事件在语音播放完毕后触发
+              utterance.onend = function (event) {
+                console.log('语音播放完毕');
+                // 这里可以执行播放完毕后的代码
+                console.log(Math.random(), count);
+                if (count < +config.repetitions || config.repetitions == '无限') {
+                  count++;
+                  // 这里是播放
+                  audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
 
-      // 所有单词都已播放完毕，停止播放
-      if (playStatus.value == 1 && config.isSeries) {
-        // timer = setTimeout(() => {
-        //   inputEnter();
-        // }, config.play_interval * 1000);
+                  timer = setTimeout(() => {
+                    audio.play();
+                  }, config.play_interval * 1000);
+                } else {
+                  count = 0;
 
-        countDown.value = config.play_interval;
-        console.log(countDown.value, 'countDown.value1');
-        countdownInterval = setInterval(() => {
-          console.log(countDown.value, 'countDown.value2');
-          countDown.value--;
-          if (countDown.value <= 0) {
-            clearInterval(countdownInterval);
-            // 播放下一个单词的逻辑
-            inputEnter();
+                  // 所有单词都已播放完毕，停止播放
+                  if (playStatus.value == 1 && config.isSeries) {
+                    // timer = setTimeout(() => {
+                    //   inputEnter();
+                    // }, config.play_interval * 1000);
+
+                    countDown.value = config.play_interval;
+                    console.log(countDown.value, 'countDown.value1');
+                    countdownInterval = setInterval(() => {
+                      console.log(countDown.value, 'countDown.value2');
+                      countDown.value--;
+                      if (countDown.value <= 0) {
+                        clearInterval(countdownInterval);
+                        // 播放下一个单词的逻辑
+                        inputEnter();
+                      }
+                    }, 1000);
+                  }
+                  // else {
+                  //   audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+                  //   timer = setTimeout(() => {
+                  //     audio.play();
+                  //   }, config.play_interval * 1000);
+                  // }
+                }
+              };
+              console.log('播放词义');
+
+              utterance.text = wordsData.currentWord['translate'];
+              window.speechSynthesis.speak(utterance);
+            } else {
+              if (count < +config.repetitions || config.repetitions == '无限') {
+                count++;
+                // 这里是播放
+                audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+                timer = setTimeout(() => {
+                  audio.play();
+                }, config.play_interval * 1000);
+              } else {
+                count = 0;
+
+                // 所有单词都已播放完毕，停止播放
+                if (playStatus.value == 1 && config.isSeries) {
+                  // timer = setTimeout(() => {
+                  //   inputEnter();
+                  // }, config.play_interval * 1000);
+
+                  countDown.value = config.play_interval;
+                  console.log(countDown.value, 'countDown.value1');
+                  countdownInterval = setInterval(() => {
+                    console.log(countDown.value, 'countDown.value2');
+                    countDown.value--;
+                    if (countDown.value <= 0) {
+                      clearInterval(countdownInterval);
+                      // 播放下一个单词的逻辑
+                      inputEnter();
+                    }
+                  }, 1000);
+                }
+                // else {
+                //   audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+                //   timer = setTimeout(() => {
+                //     audio.play();
+                //   }, config.play_interval * 1000);
+                // }
+              }
+            }
+          });
+
+          return;
+        }
+
+        const letter = word[index].toLowerCase();
+        const audioUrl = `https://dict.youdao.com/dictvoice?audio=${letter}`;
+
+        // const audioLetter = new Audio(audioUrl);
+        playAudio(audioUrl)
+          .then(() => {
+            // 播放当前字母后，递归播放下一个字母
+            playNextLetter(word, index + 1);
+          })
+          .catch((error) => {
+            console.error('Error playing audio:', error);
+          });
+      };
+
+      const playLettersSequentially = (word) => {
+        if (word.length === 0) return;
+
+        playNextLetter(word, 0);
+      };
+
+      playLettersSequentially(wordsData.currentWord.word);
+    } else if (!config.playSpell && config.playMean) {
+      // 监听 'onend' 事件，该事件在语音播放完毕后触发
+      utterance.onend = function (event) {
+        console.log('语音播放完毕');
+        // 这里可以执行播放完毕后的代码
+        console.log(Math.random(), count);
+        if (count < +config.repetitions || config.repetitions == '无限') {
+          count++;
+          // 这里是播放
+          audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+          timer = setTimeout(() => {
+            audio.play();
+          }, config.play_interval * 1000);
+        } else {
+          count = 0;
+
+          // 所有单词都已播放完毕，停止播放
+          if (playStatus.value == 1 && config.isSeries) {
+            // timer = setTimeout(() => {
+            //   inputEnter();
+            // }, config.play_interval * 1000);
+
+            countDown.value = config.play_interval;
+            console.log(countDown.value, 'countDown.value1');
+            countdownInterval = setInterval(() => {
+              console.log(countDown.value, 'countDown.value2');
+              countDown.value--;
+              if (countDown.value <= 0) {
+                clearInterval(countdownInterval);
+                // 播放下一个单词的逻辑
+                inputEnter();
+              }
+            }, 1000);
           }
-        }, 1000);
-      }
-      // else {
-      //   audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+          // else {
+          //   audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
 
-      //   timer = setTimeout(() => {
-      //     audio.play();
-      //   }, config.play_interval * 1000);
-      // }
+          //   timer = setTimeout(() => {
+          //     audio.play();
+          //   }, config.play_interval * 1000);
+          // }
+        }
+      };
+      console.log('播放词义');
+
+      utterance.text = wordsData.currentWord['translate'];
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.log(Math.random(), count);
+      if (count < +config.repetitions || config.repetitions == '无限') {
+        count++;
+        // 这里是播放
+        audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+        timer = setTimeout(() => {
+          audio.play();
+        }, config.play_interval * 1000);
+      } else {
+        count = 0;
+
+        // 所有单词都已播放完毕，停止播放
+        if (playStatus.value == 1 && config.isSeries) {
+          // timer = setTimeout(() => {
+          //   inputEnter();
+          // }, config.play_interval * 1000);
+
+          countDown.value = config.play_interval;
+          console.log(countDown.value, 'countDown.value1');
+          countdownInterval = setInterval(() => {
+            console.log(countDown.value, 'countDown.value2');
+            countDown.value--;
+            if (countDown.value <= 0) {
+              clearInterval(countdownInterval);
+              // 播放下一个单词的逻辑
+              inputEnter();
+            }
+          }, 1000);
+        }
+        // else {
+        //   audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+        //   timer = setTimeout(() => {
+        //     audio.play();
+        //   }, config.play_interval * 1000);
+        // }
+      }
     }
   }
 
@@ -1025,6 +1086,7 @@
     //   audio = new Audio();
     // }
     // 播放第一个单词
+    // window.speechSynthesis.resume();
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
     audio.playbackRate = +config.play_speed;
     // console.log(Math.random());
@@ -1101,16 +1163,8 @@
   };
 
   // 切换配置
-  const handleConfigChange = (p, val, isResetWord = false) => {
-    userStore.handleConfig(p, val);
-    if (val && isResetWord) {
-      appStore.updateContinuePlayStatus(true);
-      getWords();
-    }
-  };
-
-  const downloadTemp = () => {
-    downTemplateRef.value.open();
+  const handleConfigChange = (p, val) => {
+    config[p] = val;
   };
   onUnmounted(() => {
     if (audio) {
@@ -1128,7 +1182,26 @@
 
   // 展示当前播放词库列表
   const showWordsList = () => {
-    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord);
+    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, false);
+  };
+
+  const handleCollect = () => {
+    const id = wordsData.currentWord.id;
+    collectRef.value.open([id]);
+  };
+  const addBook = () => {
+    setTimeout(() => {
+      ImportDialogRef.value.open();
+    }, 200);
+  };
+  const addBookComplete = () => {
+    handleWordCollect();
+  };
+  const collectFinish = (ids, is_collection = true) => {
+    ids.forEach((id) => {
+      state.list.find((o) => o.id == id).is_collection = is_collection;
+      state.list2.find((o) => o.id == id).is_collection = is_collection;
+    });
   };
 </script>
 

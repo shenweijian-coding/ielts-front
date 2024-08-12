@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script src="https://cdn.jsdelivr.net/npm/pdfmake@0.2.11/build/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/vfs_fonts.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.js"></script>
+</head>
+ 
+<script type="text/javascript">
+//打印的动态信息
+var pdf_data = {
+	xfjName: '李二麻不服火车站扣脚被罚200元',
+	time:'2017年12月25日15时30分',
+	address:'英国伦敦唐宁街10号',
+	dcr:'斯密斯',
+	dcr_dw:'山东路123号6单元2门洞602室',
+	jlr:'汤姆',
+	jlr_dw:'中南海1号',
+	bdcr:'唐纳德·川普',
+	content:'问：说的是大家按时打卡打卡.\n答：时代精神的房东房客第三方接口货到付款'
+}
+var dd = {
+	pageSize:'A4',//纸张大小
+	pageOrientation:'portrait',//排版,默认:'portrait'(竖版),'landscape'(横板)
+	compress: true,//pdf压缩，默认:true
+	pageMargins: [ 40, 60, 40, 60 ],//页边距(左、上、右、下)
+	//pdf中内容的显示
+	content: [
+		{ text: pdf_data.xfjName + '信访事项复查（复核）调查（约谈）笔录', style: 'header' },
+		{ text: '时间：' + pdf_data.time, style: 'content' },
+		{ text: '调查地点：' + pdf_data.address, style: 'content' },
+		{ text: '调查人：' + pdf_data.dcr + '&#12288;&#12288;工作单位：' + pdf_data.dcr_dw, style: 'content' },
+		{ text: '记录人：' + pdf_data.jlr + '&#12288;&#12288;工作单位：' + pdf_data.jlr_dw, style: 'content' },
+		{ text: '被调查人：' + pdf_data.bdcr, style: 'content' },
+		{ text: pdf_data.content, style: 'content' }
+	],
+	//文字样式
+	styles: {
+		header: {
+			fontSize: 20,//字体大小
+			bold: true,//粗体(如果导入的字体库中没有相应文字的粗体，请不要加)
+			alignment:'center'//居中对齐
+		},
+		content: {
+			fontSize: 14,
+			italics: true,//字体的一种(如果导入的字体库中没有相应的字体，请不要加)
+			//alignment: 'right'//居右对齐
+		}
+	},
+	defaultStyle: {
+		font: 'fangsong'
+	}
+};
+pdfMake.fonts = {
+	fangsong: {
+		normal: 'fangsong.ttf',
+		bold: 'fangsong.ttf',
+		italics: 'fangsong.ttf',
+		bolditalics: 'fangsong.ttf'
+	}
+};
+$(function(){	
+	$("#btn_printtt").click(function(){
+		//pdfMake.createPdf(dd).download("名字没想好哦");//下载
+		//pdfMake.createPdf(dd).open();//打开 参数：window(本页打开)
+		// pdfMake.createPdf(dd).getBase64().then(function(data) {//将pdf转成base64
+		//  	alert(data);
+		// });
+        pdfMake.createPdf(dd).getDataUrl().then(function(pdf_url){
+        	$("#modal_data_pdf").modal({backdrop:'static'});//打开模态框
+            var targetElement = document.querySelector('#modal_data_body_pdf');
+            var iframe = document.querySelector('#iframe_pdf');
+            iframe.src = pdf_url;//给iframe设置src
+            $(iframe).css({height:'500px', width:'100%'});
+        });
+	});
+});
+</script>
+ 
+<body>
+    <!-- 查看pdf按钮-->
+    <button type="button" id="btn_printtt">查看ｐｄｆ</button>
+    <!-- ｐｄｆ显示位置-->
+    <div id="modal_data_body_pdf">
+        <iframe id="iframe_pdf"></iframe>
+    </div>
+</body>
+ 
+</html>

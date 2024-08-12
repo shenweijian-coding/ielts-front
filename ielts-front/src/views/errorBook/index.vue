@@ -1,9 +1,72 @@
 <template>
   <div class="flex w-full flex-1 select-text items-start justify-center overflow-hidden">
     <div class="flex h-full w-full flex-col">
-      <div class="pt-0">
+      <div class="pt-2">
         <el-form :model="state.form" :size="formSize" label-width="70" :inline="true">
           <el-form-item label="">
+            <el-select
+              v-model="state.form.error_dates"
+              :placeholder="'日期筛选'"
+              style="width: 140px"
+              @change="getErrorWords"
+              clearable
+              filterable
+              multiple
+              collapse-tags
+              collapse-tags-tooltip
+              :max-collapse-tags="0"
+            >
+              <el-option
+                v-for="item in state.optionsByDate"
+                :key="item.date"
+                :label="item.date + ' (' + item.lexicon_count + '词)'"
+                :value="item.date"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="">
+            <el-select
+              v-model="state.form.c_ids"
+              :placeholder="'章节筛选'"
+              style="width: 140px"
+              @change="getErrorWords"
+              clearable
+              filterable
+              multiple
+              collapse-tags
+              :max-collapse-tags="0"
+              collapse-tags-tooltip
+            >
+              <el-option
+                v-for="item in state.optionsByChapter"
+                :key="item.c_id"
+                :label="item.name + ' (' + item.lexicon_count + '词)'"
+                :value="item.c_id"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="">
+            <el-select
+              v-model="state.form.error_nums"
+              :placeholder="'错误次数'"
+              style="width: 140px"
+              @change="getErrorWords"
+              clearable
+              filterable
+              multiple
+              collapse-tags
+              :max-collapse-tags="0"
+              collapse-tags-tooltip
+            >
+              <el-option
+                v-for="item in state.optionsByNum"
+                :key="item.error_num"
+                :label="'错误 ' + item.error_num + ' 次' + ' (' + item.lexicon_count + '词)'"
+                :value="item.error_num"
+              />
+            </el-select>
+          </el-form-item>
+          <!-- <el-form-item label="">
             <el-radio-group v-model="state.form.errTime" @change="getErrorWords">
               <el-radio-button v-for="o in state.errTimeOption" :key="o.id" :value="o.id" :label="o.id">{{ o.name }}</el-radio-button>
             </el-radio-group>
@@ -24,51 +87,73 @@
             >
               <el-option v-for="item in chapterList" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
       </div>
-      <div class="px-4 bg-white lg:pt-2">
-        <div class="lg:flex justify-end pb-1 items-center">
+      <div class="px-4 bg-white">
+        <!-- <div class="lg:flex justify-end pb-1 items-center">
           <div class="space-x-2">
             <el-button :icon="Download" plain @click="handleDownloadExcel" size="small" />
             <el-button type="" :icon="Delete" plain @click="handleWordSign" size="small" />
             <el-button type="" :icon="Star" plain @click="handleWordCollect" size="small" />
             <el-button size="small" @click="handleSelWords" type="primary">听写已选中错词</el-button>
           </div>
-        </div>
+        </div> -->
         <el-table
           ref="tableRef"
           :data="state.tableData"
           style="width: 100%"
-          @selection-change="handleSelectionChange"
+          @selection-change="handleSelectionXChange"
           @sort-change="sortChange"
           :maxHeight="tableHeight"
           @row-click="rowClick"
+          :default-expand-all="true"
+          row-style="{padding:0}"
         >
           <el-table-column type="selection" width="30" />
-          <el-table-column prop="lexicon" label="单词" minWidth="140">
-            <template #header="scope">
-              <div class="flex items-center">
-                单词&nbsp;
-                <el-icon @click="troggleView('word')" class="cursor-pointer">
-                  <View v-if="state.hideProps.word" />
-                  <Hide v-else />
-                </el-icon>
-              </div>
-            </template>
-            <template #default="scope">
-              <template v-if="!state.hideProps.word">
-                <span class="flex items-center cursor-pointer"
-                  >{{ scope.row.lexicon?.word }}<el-icon @click="play(scope.row)" class="ml-2"><Headset /></el-icon>
-                </span>
-                <span v-if="scope.row.lexicon?.phonetic_transcription" class="flex items-center cursor-pointer"
-                  >{{ scope.row.lexicon?.phonetic_transcription }}
-                </span>
-              </template>
-              <span v-else>***</span>
+          <el-table-column type="expand">
+            <template #default="scopeX">
+              <el-table ref="tableRef" :data="scopeX.row.child" style="width: 100%" @row-click="rowClick" :show-header="false" fit>
+                <!-- <el-table-column type="selection" width="30" /> -->
+                <el-table-column>
+                  <template #default="scope">
+                    <div class="flex items-center cursor-pointer ml-4 text-xs"
+                      >{{ scope.row?.lexicon.word }}&nbsp;&nbsp;&nbsp;
+                      <span v-if="scope.row.lexicon?.phonetic_transcription" class="text-gray-400"
+                        >/{{ scope.row.lexicon?.phonetic_transcription }}/</span
+                      >&nbsp;&nbsp; &nbsp;<span class="text-red-300">{{ scope.row?.error_word }}</span>
+                      <!-- <el-icon @click="play(scope.row)" class="ml-2"><Headset /></el-icon> -->
+                      <!-- <el-icon @click="handleWordCollect(scope.row)" class="absolute right-5"><Star /></el-icon> -->
+                      <el-button
+                        class="absolute right-5"
+                        :type="scope.row.lexicon?.is_collection ? 'primary' : ''"
+                        :icon="Star"
+                        :plain="!scope.row.lexicon?.is_collection"
+                        round
+                        @click.stop="handleWordCollect(scope.row)"
+                        size="small"
+                      />
+                    </div>
+                    <template v-if="scope.row.lexicon?.translate">
+                      <div class="text-left ml-4 text-xs leading-4 mt-2" v-html="replaceWithBr(scope.row.lexicon?.translate || '')"> </div>
+                    </template>
+                  </template>
+                </el-table-column>
+              </el-table>
             </template>
           </el-table-column>
-          <el-table-column prop="lexicon" label="释义" align="center" minWidth="280">
+          <el-table-column prop="created_at">
+            <template #header>
+              <span class="text-gray-400 text-sm" v-if="state.selWords.length"
+                >已选中 <span class="color-theme">{{ state.selWords.length }}</span> 词</span
+              >
+            </template>
+            <template #default="scope">
+              <span class="text-gray-400">{{ scope.row.created_at }}</span
+              >&nbsp;&nbsp;<span class="text-gray-400">{{ scope.row.child.length }}词</span>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column prop="lexicon" label="释义" align="center" minWidth="280">
             <template #header="scope">
               <div class="flex items-center">
                 释义&nbsp;
@@ -80,42 +165,35 @@
             </template>
             <template #default="scope">
               <template v-if="!state.hideProps.translate">
-                <div
-                  class="text-left"
-                  v-html="replaceWithBr(scope.row.lexicon?.translate || '')"
-                >
-                
-                </div>
+                <div class="text-left" v-html="replaceWithBr(scope.row.lexicon?.translate || '')"> </div>
               </template>
               <span v-else>***</span>
             </template>
-          </el-table-column>
-          <el-table-column prop="error_num" label="错误次数" sortable="custom" width="110" align="center" />
-          <el-table-column prop="error_word" label="错误拼写" width="180" align="center" />
+          </el-table-column> -->
+          <!-- <el-table-column prop="error_num" label="错误次数" sortable="custom" width="110" align="center" /> -->
+          <!-- <el-table-column prop="error_word" label="错误拼写" width="180" align="center" /> -->
           <!-- <el-table-column prop="lexicon_group.name" label="词典" width="90" align="center" /> -->
-          <el-table-column prop="chapter.name" label="章节" width="80" align="center" />
+          <!-- <el-table-column prop="chapter.name" label="章节" width="80" align="center" />
           <el-table-column prop="updated_at" label="错误时间" sortable="custom" width="100" align="center">
             <template #default="scope">
               {{ scope.row.updated_at?.split(' ')[0] }}
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
-        <div class="py-2 flex justify-end items-center">
-          <div
-            >共{{ state.page.total }}个，当前已选 <span class="color-theme">{{ state.selWords.length }}</span> 个&nbsp;</div
-          >
-          <el-pagination
-            background
-            size="small"
-            :pager-count="4"
-            v-model:current-page="state.page.currentPage"
-            layout="pager"
-            :total="state.page.total"
-            :page-size="state.page.pageSize"
-            :page-sizes="[20, 50, 100]"
-            @current-change="getErrorWords"
-          />
-        </div>
+      </div>
+      <div class="pt-2 flex justify-center items-center">
+        <!-- <div>共 {{ state.page.total }} 个 </div>&nbsp; -->
+        <el-pagination
+          background
+          size="small"
+          :pager-count="4"
+          v-model:current-page="state.page.currentPage"
+          layout="prev,next"
+          :total="state.page.total"
+          :page-size="state.page.pageSize"
+          :page-sizes="[20, 50, 100]"
+          @current-change="getErrorWords"
+        />
       </div>
     </div>
     <!-- <LastPage /> -->
@@ -123,12 +201,33 @@
     <tabbar />
     <collectDialog ref="collectRef" @addBook="addBook" />
     <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
+    <div class="tools-box absolute flex bg-white px-3 py-1 bottom-20 transition-colors duration-300 space-x-6 rounded-xl">
+      <div class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded" @click="handleSelWords">
+        <el-icon class="mb-2" size="16"><EditPen /></el-icon>
+        <span>听写</span>
+      </div>
+      <div class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded" @click="handleWalkman">
+        <el-icon class="mb-2" size="16"><Headset /></el-icon>
+        <span>随身听</span>
+      </div>
+      <div class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded" @click="handleDownloadExcel">
+        <el-icon class="mb-2" size="16"><Download /></el-icon>
+        <span>下载</span>
+      </div>
+      <div
+        class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded"
+        @click="handleWordCollect('')"
+      >
+        <el-icon class="mb-2" size="16"><Star /></el-icon>
+        <span>收藏</span>
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="jsx">
   import { getErrorWordList, wordLabel } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
-  import { Headset, Download, Hide, View, Delete, Star } from '@element-plus/icons-vue';
+  import { Headset, Download, Hide, View, Delete, Star, EditPen } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import dayjs from 'dayjs';
@@ -163,9 +262,9 @@
   const tableHeight = computed(() => {
     if (screenWidth.value < 768) {
       // return 'small';
-      return screenHeight.value - 250;
+      return screenHeight.value - 200;
     } else {
-      return screenHeight.value - 230;
+      return screenHeight.value - 180;
       // return 'large';
     }
   });
@@ -176,6 +275,9 @@
       c_id: undefined,
       sort: undefined,
       sort_type: undefined,
+      error_dates: [],
+      c_ids: [],
+      error_nums: [],
     },
     errTimeOption: [
       { name: '全部', id: 0 },
@@ -200,6 +302,9 @@
       word: false,
       translate: false,
     },
+    optionsByDate: [],
+    optionsByNum: [],
+    optionsByChapter: [],
   });
   const chapterList = computed(() => {
     // let list = appStore?.dictationInfo?.chapterList || [];
@@ -233,6 +338,9 @@
     if (state.form.sort_type) {
       params.sort_type = state.form.sort_type;
     }
+    // params.error_dates = state.form.error_dates;
+    // params.c_ids = state.form.c_ids;
+    // params.error_nums = state.form.error_nums;
     return params;
   };
   const getErrorWords = (noRefresh = false) => {
@@ -243,13 +351,38 @@
     setLoading(true);
     getErrorWordList(params)
       .then((res) => {
-        state.tableData = res.data;
+        // 处理错误数据
+        // 转换数据结构
+        const transformedData = res.data.reduce((acc, item) => {
+          const date = item.created_at.split(' ')[0];
+          // 检查acc中是否已经存在该日期的条目
+          let dateItem = acc.find((i) => i.created_at.split(' ')[0] === date);
+
+          // 如果不存在，则创建一个新的条目
+          if (!dateItem) {
+            dateItem = { created_at: date, child: [] };
+            acc.push(dateItem);
+          }
+
+          // 将原始数据项添加到child数组中
+          dateItem.child.push({ ...item });
+
+          return acc;
+        }, []);
+
+        console.log(transformedData);
+        state.tableData = transformedData;
+
         state.page.total = res.total;
-        if (!noRefresh && res.total) {
-          setTimeout(() => {
-            tableRef.value.toggleAllSelection();
-          });
-        }
+        state.optionsByDate = res.error_date;
+        state.optionsByNum = res.error_number;
+        state.optionsByChapter = res.chapter_lexicons;
+
+        // if (!noRefresh && res.total) {
+        //   setTimeout(() => {
+        //     tableRef.value.toggleAllSelection();
+        //   });
+        // }
 
         if (res.chapters?.length) {
           state.chapterList = res.chapters;
@@ -264,6 +397,14 @@
   const handleSelectionChange = (val) => {
     // console.log(val);
     state.selWords = val;
+  };
+  const handleSelectionXChange = (val) => {
+    // console.log(val);
+    state.selWords = val.map((item) => item.child).flat(1);
+    console.log(state.selWords);
+  };
+  const handleSelectionYChange = (val) => {
+    console.log(val);
   };
   // const handleSizeChange = (size) => {
   //   console.log(size);
@@ -352,7 +493,32 @@
         setLoading(false);
       });
   };
-  function replaceWithBr(str ='') {
+
+  const handleWalkman = async () => {
+    if (!state.selWords.length) {
+      ElMessage.error('请选择错词');
+      return;
+    }
+    const errWords = state.selWords
+      .filter((word) => word.lexicon)
+      .map((word) => {
+        return {
+          c_id: word?.c_id || 0,
+          g_id: word?.g_id || 0,
+          id: word?.lexicon?.id || word.lexicon_id || 0,
+          word: word?.lexicon?.word,
+          translate: word.lexicon?.translate,
+          phonetic_transcription: word.lexicon?.phonetic_transcription,
+          'phonetic-y': word?.lexicon?.['phonetic-y'],
+          'phonetic-m': word?.lexicon?.['phonetic-m'],
+        };
+      });
+    await appStore.setErrWords(errWords);
+    await appStore.toggleCurrentChapter(null);
+    router.push('/walkman?source=err');
+  };
+
+  function replaceWithBr(str = '') {
     return str.replace(/([^\s&])\s([A-Za-z]+)\./g, function (match, p1, p2) {
       if (p1 !== '&') {
         return p1 + '<br>' + p2 + '.';
@@ -414,12 +580,16 @@
     }
   };
   // 单词收藏
-  const handleWordCollect = () => {
-    if (!state.selWords.length) {
-      ElMessage.error('请选择需要收藏的错词');
-      return;
+  const handleWordCollect = (row) => {
+    if (row) {
+      collectRef.value.open([row.lexicon_id]);
+    } else {
+      if (!state.selWords.length) {
+        ElMessage.error('请选择需要收藏的错词');
+        return;
+      }
+      collectRef.value.open(state.selWords.map((o) => o.lexicon_id));
     }
-    collectRef.value.open(state.selWords.map((o) => o.lexicon_id));
   };
   onMounted(() => {
     if (route.query?.from == 'result') {
@@ -459,7 +629,17 @@
   // getAllChapter();
 </script>
 <style lang="less" scoped>
+  /deep/.el-form-item--default {
+    margin-bottom: 6px;
+  }
   /deep/.el-table__cell .cell {
     padding: 0 6px;
+  }
+  .tools-box {
+    z-index: 99;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  }
+  /deep/.el-table__expand-column {
+    color: #fff;
   }
 </style>

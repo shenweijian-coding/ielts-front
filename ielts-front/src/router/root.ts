@@ -24,6 +24,14 @@ export default [
     component: () => import('@/views/home/index.vue'),
   },
   {
+    path: '/walkman',
+    name: 'walkman',
+    meta: {
+      title: '爱听写-随身听',
+    },
+    component: () => import('@/views/home/walkman.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     meta: {

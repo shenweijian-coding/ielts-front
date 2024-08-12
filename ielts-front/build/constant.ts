@@ -11,8 +11,8 @@ export const API_PREFIX = '/api';
 
 // serve
 export const API_BASE_URL = '/api';
-// export const API_TARGET_URL = 'http://idictation.cn:10000';
-export const API_TARGET_URL = 'https://idictation.cn';
+export const API_TARGET_URL = 'http://idictation.cn:10000';
+// export const API_TARGET_URL = 'https://idictation.cn';
 
 // mock
 export const MOCK_API_BASE_URL = '/mock/api';

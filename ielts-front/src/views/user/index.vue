@@ -21,14 +21,14 @@
         <el-button v-if="userStore.$state.is_enterprise" size="small" @click="toNewRoute('/company/index/user')">切换企业版</el-button>
       </div>
       <div class="bg-white md:px-20 px-2 w-full m-auto mt-4">
-        <div class="menu-item flex items-center py-6 justify-between border-bottom" @click="handleToBook">
+        <!-- <div class="menu-item flex items-center py-6 justify-between border-bottom" @click="handleToBook">
           <div class="left"><span class="menu-title font-bold text-sm">单词本</span></div>
           <div class="right">
             <span class="text-gray cursor-pointer flex items-center hover-text-theme"
               ><el-icon><ArrowRight /></el-icon
             ></span>
           </div>
-        </div>
+        </div> -->
         <!-- <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">修改密码</span></div>
           <div class="right" @click="toNewRoute('/forgetPassword')"
