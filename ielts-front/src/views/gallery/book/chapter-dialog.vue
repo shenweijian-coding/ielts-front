@@ -5,6 +5,7 @@
       <div class="absolute bottom-6 right-2">
         <div role="group" dir="ltr" class="flex items-center justify-center gap-1" tabindex="0" style="outline: none">
           <!-- <el-button @click="handleErrorBook">查看错题</el-button> -->
+          <el-button v-if="state.book.s_id == 2 || state.book.s_id == 4" @click="editBookClick" :icon="Edit" size="small">编辑</el-button>
           <el-button v-if="state.book.s_id == 2 || state.book.s_id == 4" @click="deleteBookClick" :icon="Delete" size="small">删除</el-button>
         </div>
       </div>
@@ -56,10 +57,10 @@
   import { useAppStore } from '@/store';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { useRouter } from 'vue-router';
-  import { Delete } from '@element-plus/icons-vue';
+  import { Delete,Edit } from '@element-plus/icons-vue';
   import { deleteBook } from '@/api/book/index';
 
-  const emits = defineEmits(['ok']);
+  const emits = defineEmits(['ok', 'updateBook']);
 
   const appStore = useAppStore();
 
@@ -180,6 +181,11 @@
         }
       });
   };
+
+  const editBookClick = () => {
+    state.dialogVisible = false
+    emits('updateBook', {list: state.list, book: state.book})
+  }
   onMounted(() => {
     window.addEventListener('resize', () => {
       windowSize();

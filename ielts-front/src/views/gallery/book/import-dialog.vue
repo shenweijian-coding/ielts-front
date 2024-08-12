@@ -31,13 +31,15 @@
   </el-dialog>
 </template>
 <script setup>
-  import { uploadBook } from '@/api/book/index';
+  import { uploadBook, updateBook, getWordList } from '@/api/book/index';
   import { ElMessage } from 'element-plus';
 
   const emits = defineEmits(['ok']);
   const formRef = ref(null);
   const state = reactive({
+    book: {},
     dialogVisible: false,
+    isEdit: false,
     form: {
       title: '',
       word_count: 15,
@@ -64,7 +66,17 @@
       dialogWidth.value = '40%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
-  const open = () => {
+  const open = (info) => {
+    if(info) {
+      state.book = info.book
+      state.isEdit = true
+      state.form.title = info.book.name
+      info.list.forEach(item => {
+        getWordList({ s_id: info.book.id, c_id: item.id }).then(res => {
+          state.form.data += res.data.map(word => word.word).join('\n')
+        })
+      });
+    }
     state.dialogVisible = true;
   };
   const handleClose = () => {
@@ -75,6 +87,7 @@
       word_count: 15,
       data: '',
     },
+    state.isEdit = true
     state.dialogVisible = false;
   };
   const handleConfirm = () => {
@@ -82,11 +95,12 @@
       if (valid) {
         console.log('submit!');
         const data = state.form.data.split('\n');
-        uploadBook({
+        const requestApi = state.isEdit ? updateBook : uploadBook
+        requestApi({
           title: state.form.title,
           word_count: state.form.word_count,
           data: data,
-        }).then(() => {
+        }, state.isEdit ? state.book.id : 0).then(() => {
           // console.log(res);
           ElMessage.success(`操作成功`);
           emits('ok');

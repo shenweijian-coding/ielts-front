@@ -77,7 +77,7 @@
       </div>
     </div>
     <Loading :loading="loading" />
-    <ChapterDialog ref="ChapterDialogRef" @ok="getBooks(2)" />
+    <ChapterDialog ref="ChapterDialogRef" @ok="getBooks(2)" @updateBook="updateBook"/>
     <ImportDialog ref="ImportDialogRef" @ok="getBooks(2)" />
     <tabbar />
   </div>
@@ -97,12 +97,13 @@
   import ImportDialog from './import-dialog.vue';
   import tabbar from '@/components/tabBar/index.vue';
   import { useAppStore, useUserStore } from '@/store';
-
-  import { getSceneList, getGroupBooks, getChapterList, getLanguageList, getCategoryList } from '@/api/book/index';
+  import { useRouter } from 'vue-router'
+  import { getSceneList, getGroupBooks, getChapterList, getLanguageList, getCategoryList, getBookInfoByChapter } from '@/api/book/index';
 
   const { loading, setLoading } = useLoading();
   const appStore = useAppStore();
   const userStore = useUserStore();
+  const router = useRouter()
 
   const ChapterDialogRef = ref(null);
   const ImportDialogRef = ref(null);
@@ -225,7 +226,42 @@
     ImportDialogRef.value.open();
   };
 
+  const updateBook = (data) => {
+    ImportDialogRef.value.open(data)
+  }
+
+  const handleUserContinuePlay = () => {
+    const isNav = sessionStorage.getItem('firstIn')
+    if(!userStore.getConfig.is_new_user && !isNav) {
+      sessionStorage.setItem('firstIn', 1)
+      getBookInfoByChapter({ c_id: userStore.getConfig.recent_chapter_id }).then(res => {
+        console.log(res);
+        getChapterList({ g_id: res.id }).then(chapterList => {
+          const currentChapter = chapterList.find(item => item.id == userStore.getConfig.recent_chapter_id)
+          if(!currentChapter.is_incomplete)  {
+            // 如果是老用户就跳转听写页面
+            appStore.setChapterInfo({
+              currentChapter: currentChapter,
+              chapterList: chapterList,
+              booInfo: {
+                name: res.name,
+                remarks: res.remarks,
+                id: res.s_id
+              },
+              isClass: false
+            });
+            appStore.updateContinuePlayStatus(true)
+            // sessionStorage.removeItem('firstIn')
+            router.push('/home')
+          }
+        })
+      })
+    }
+  }
+
   onMounted(() => {
+    // 获取用户是否继续听写
+    handleUserContinuePlay()
     getLanguage();
   });
 </script>

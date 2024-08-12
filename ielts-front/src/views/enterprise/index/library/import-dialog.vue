@@ -31,12 +31,15 @@
   </el-dialog>
 </template>
 <script setup>
-  import { enterpriseUpload } from '@/api/company/index';
+  import { enterpriseUpload, updateBook } from '@/api/company/index';
   import { ElMessage } from 'element-plus';
+  import { getWordList } from '@/api/book/index';
 
   const emits = defineEmits(['ok']);
   const formRef = ref(null);
   const state = reactive({
+    book: {},
+    isEdit: false,
     dialogVisible: false,
     form: {
       title: '',
@@ -64,10 +67,21 @@
       dialogWidth.value = '40%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
-  const open = () => {
+  const open = (info) => {
+    if(info) {
+      state.book = info.book
+      state.isEdit = true
+      state.form.title = info.book.name
+      info.list.forEach(item => {
+        getWordList({ s_id: info.book.id, c_id: item.id }).then(res => {
+          state.form.data += res.data.map(word => word.word).join('\n')
+        })
+      });
+    }
     state.dialogVisible = true;
   };
   const handleClose = () => {
+    state.isEdit = true
     // formRef.value && formRef.value.resetField()
     formRef.value && formRef.value.clearValidate();
     (state.form = {
@@ -82,11 +96,13 @@
       if (valid) {
         console.log('submit!');
         const data = state.form.data.split('\n');
-        enterpriseUpload({
+        const requestApi = state.isEdit ? updateBook : enterpriseUpload
+
+        requestApi({
           title: state.form.title,
           word_count: state.form.word_count,
           data: data,
-        }).then(() => {
+        }, state.isEdit ? state.book.id : 0).then(() => {
           // console.log(res);
           ElMessage.success(`操作成功`);
           emits('ok');

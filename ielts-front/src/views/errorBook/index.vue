@@ -16,6 +16,7 @@
               collapse-tags-tooltip
               :max-collapse-tags="0"
             >
+              <el-option label="最近1次听写" :value="1"></el-option>
               <el-option
                 v-for="item in state.optionsByDate"
                 :key="item.date"
@@ -131,6 +132,15 @@
                         :plain="!scope.row.lexicon?.is_collection"
                         round
                         @click.stop="handleWordCollect(scope.row)"
+                        size="small"
+                      />
+                      <el-button
+                        class="absolute right-15"
+                        :type="scope.row.lexicon?.is_proficient ? 'primary' : ''"
+                        :icon="Delete"
+                        :plain="!scope.row.lexicon?.is_proficient"
+                        round
+                        @click.stop="handleWordSign(scope.row)"
                         size="small"
                       />
                     </div>
@@ -315,20 +325,20 @@
   });
   const getParams = () => {
     const params = {};
-    if (state.form.errTime == 0) {
-      params.error_end_date = dayjs().format('YYYY-MM-DD HH:mm:ss');
-      params.error_start_date = dayjs('2024-01-01 00:00:00').format('YYYY-MM-DD HH:mm:ss');
-    } else if (state.form.errTime == 1) {
-      params.error_end_date = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss');
-      params.error_start_date = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss');
-    } else if (state.form.errTime == 2) {
-      const currentTime = dayjs();
-      params.error_end_date = currentTime.endOf('day').format('YYYY-MM-DD HH:mm:ss');
-      params.error_start_date = currentTime.subtract(6, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss');
-    } else if (state.form.errTime == 3) {
-      params.recently = true;
-    }
-    params.error_num = state.form.error_num;
+    // if (state.form.errTime == 0) {
+    //   params.error_end_date = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    //   params.error_start_date = dayjs('2024-01-01 00:00:00').format('YYYY-MM-DD HH:mm:ss');
+    // } else if (state.form.errTime == 1) {
+    //   params.error_end_date = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    //   params.error_start_date = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    // } else if (state.form.errTime == 2) {
+    //   const currentTime = dayjs();
+    //   params.error_end_date = currentTime.endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    //   params.error_start_date = currentTime.subtract(6, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    // } else if (state.form.errTime == 3) {
+    //   params.recently = true;
+    // }
+    params.error_num = null;
     params.c_id = state.form.c_id;
     // console.log(state.form.c_id, 'state.form.c_id');
 
@@ -338,9 +348,13 @@
     if (state.form.sort_type) {
       params.sort_type = state.form.sort_type;
     }
-    // params.error_dates = state.form.error_dates;
-    // params.c_ids = state.form.c_ids;
-    // params.error_nums = state.form.error_nums;
+    if(state.form.error_dates == 1) {
+      params.recently = true;
+    } else if(state.form.error_dates) {
+      params.error_dates = state.form.error_dates;
+    }
+    params.c_ids = state.form.c_ids;
+    params.error_nums = state.form.error_nums;
     return params;
   };
   const getErrorWords = (noRefresh = false) => {
@@ -527,16 +541,23 @@
     });
   }
   // 单词标熟
-  const handleWordSign = () => {
-    if (!state.selWords.length) {
-      ElMessage.error('请选择需要表熟的错词');
-      return;
+  const handleWordSign = (row) => {
+    let ids = [] 
+
+    if(row) {
+      ids = [row.id]
+    } else {
+      if (!state.selWords.length) {
+        ElMessage.error('请选择需要表熟的错词');
+        return;
+      }
+      ids = state.selWords.map((o) => o.lexicon_id);
     }
+
 
     let checked = false;
 
     const requestWordLabel = () => {
-      const ids = state.selWords.map((o) => o.lexicon_id);
       setLoading(true);
       wordLabel({
         type: 'proficient',

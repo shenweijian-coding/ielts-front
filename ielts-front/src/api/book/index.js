@@ -21,6 +21,8 @@ const getErrorWordList = async (data) => post({ url: '/api/study/lexicon/v1/erro
 
 const uploadBook = async (data) => post({ url: '/api/study/lexicon/v1/upload/book', data });
 
+const updateBook = async (data, id) => post({ url: '/api/study/lexicon/v1/upload/book/update/' + id, data });
+
 const getAnalysisData = async (data) => post({ url: '/api/study/lexicon/v1/data/analysis', data });
 
 const getCategoryList = async (data) => post({ url: '/api/study/lexicon/v1/v1/category/list', data });
@@ -30,6 +32,9 @@ const deleteBook = async (data) => post({ url: '/api/study/lexicon/v1/book/delet
 const wordLabel = async (data) => post({ url: '/api/study/lexicon/v1/label', data });
 
 const bookAdd = async (data) => post({ url: '/api/study/lexicon/v1/book/add', data });
+
+const getBookInfoByChapter = async(data) => post({ url: '/api/study/lexicon/v1/group/detail' , data})
+
 export {
   deleteBook,
   getBookList,
@@ -45,4 +50,6 @@ export {
   getCategoryList,
   wordLabel,
   bookAdd,
+  updateBook,
+  getBookInfoByChapter
 };

@@ -30,7 +30,7 @@
     </div>
     <Loading :loading="loading" />
     <ImportDialog ref="ImportDialogRef" @ok="getBooks(4)" />
-    <ChapterDialog ref="ChapterDialogRef" @ok="getBooks(4)"/>
+    <ChapterDialog ref="ChapterDialogRef" @ok="getBooks(4)" @updateBook="updateBook"/>
 
     <tabbar />
   </div>
@@ -140,7 +140,10 @@
   //     // getScene(res[0].id);
   //   });
   // };
-
+  const updateBook = (data) => {
+    ImportDialogRef.value.open(data)
+  }
+  
   onMounted(() => {
     getBooks(4);
   });

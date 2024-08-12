@@ -42,6 +42,9 @@ const delStudent = async (data) => post({ url: '/api/study/enterprise/v1/class/u
 // 上传词书 资源库
 const enterpriseUpload = async (data) => post({ url: '/api/study/enterprise/v1/upload/book', data });
 
+// 资源库编辑
+const updateBook = async (data, id) => post({ url: '/api/study/enterprise/v1/upload/book/update/' + id, data });
+
 // 新建班级
 const addClass = async (data) => post({ url: '/api/study/enterprise/v1/class/add', data });
 
@@ -72,5 +75,6 @@ export {
   addClass,
   uploadClassBook,
   getStudenErrWords,
-  classLogout
+  classLogout,
+  updateBook
 };

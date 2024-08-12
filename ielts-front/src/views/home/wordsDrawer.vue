@@ -1,6 +1,6 @@
 <template>
   <el-drawer v-model="state.drawer" :title="appStore?.dictationInfo?.booInfo.remarks" :size="dialogWidth" custom-class="dialogstyle">
-    <div v-if="state.isShowBtn" class="absolute right-20 top-5">
+    <div v-if="state.from == 'home'" class="absolute right-20 top-5">
       <el-button type="" :icon="Headset" size="small" round @click="towalkman">随身听</el-button>
       <el-button type="" :icon="Download" size="small" round @click="download">下载</el-button>
     </div>
@@ -12,11 +12,11 @@
           class="mb-2 flex cursor-pointer select-text items-center rounded-xl py-2 lg:px-4 px-2 shadow focus:outline-none dark:bg-opacity-20"
           :class="state.current.id == item.id ? 'bg-theme_hover current' : ''"
           :id="state.current.id == item.id ? 'current' : ''"
-          @click="play(item)"
+          @click="handleClick(item)"
         >
           <div class="flex-1"
             ><p class="text-sm select-all font-mono lg:text-lg font-normal leading-6 dark:text-gray-50 mb-2"
-              >{{ item.word }}&nbsp;<span class="text-gray lg:text-l text-m">/{{ item.phonetic_transcription }}/</span></p
+              >{{ item.word }}&nbsp;<span v-if="item.phonetic_transcription" class="text-gray lg:text-l text-m">/{{ item.phonetic_transcription }}/</span></p
             ><div class="mt-2 max-w font-sans text-m text-gray-400" v-html="replaceWithBr(item.translate || '')"></div>
           </div>
           <div class="lg:space-x-2 space-x-1 flex justify-center items-center">
@@ -61,13 +61,13 @@
   const userStore = useUserStore();
   const router = useRouter();
 
-  const emit = defineEmits(['download']);
+  const emit = defineEmits(['download', 'skip']);
   const state = reactive({
     drawer: false,
     list: [],
     list2: [],
     current: null,
-    isShowBtn: false,
+    from: 'home',
   });
   const dialogWidth = ref('50%');
   const collectRef = ref(null);
@@ -85,12 +85,12 @@
       dialogWidth.value = '50%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
-  const open = (list, list2, current, isShowBtn = true) => {
+  const open = (list, list2, current, from = 'home') => {
     state.drawer = true;
     state.list = list;
     state.list2 = list2;
     state.current = current;
-    state.isShowBtn = isShowBtn;
+    state.from = from;
     nextTick(() => {
       document.getElementById('current').scrollIntoView();
     });
@@ -102,6 +102,14 @@
     windowSize();
   });
   var audio = new Audio();
+
+  const handleClick = (row) => {
+    if(state.from == 'home') {
+      play(row)
+    } else if(state.from == 'walkman') {
+      emit('skip', row)
+    }
+  }
 
   const play = (row) => {
     const type = userStore.getConfig.phonetic_type == 1 ? 'phonetic-y' : 'phonetic-m';
@@ -185,7 +193,6 @@
         lexicon_ids: JSON.stringify([item.id]),
       })
         .then((res) => {
-          1;
           collectFinish([item.id], false);
           ElMessage.success('取消收藏成功');
         })
