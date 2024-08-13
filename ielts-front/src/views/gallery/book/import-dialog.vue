@@ -99,7 +99,7 @@
         requestApi({
           title: state.form.title,
           word_count: state.form.word_count,
-          data: data,
+          data: JSON.stringify(data),
         }, state.isEdit ? state.book.id : 0).then(() => {
           // console.log(res);
           ElMessage.success(`操作成功`);
