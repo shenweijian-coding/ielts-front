@@ -3,70 +3,94 @@
     <div class="flex h-full w-full flex-col">
       <div class="pt-2">
         <el-form :model="state.form" :size="formSize" label-width="70" :inline="true">
-          <el-form-item label="">
-            <el-select
-              v-model="state.form.error_dates"
-              :placeholder="'日期筛选'"
-              style="width: 140px"
-              @change="getErrorWords"
-              clearable
-              filterable
-              multiple
-              collapse-tags
-              collapse-tags-tooltip
-              :max-collapse-tags="0"
-            >
-              <el-option label="最近1次听写" :value="1"></el-option>
-              <el-option
-                v-for="item in state.optionsByDate"
-                :key="item.date"
-                :label="item.date + ' (' + item.lexicon_count + '词)'"
-                :value="item.date"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="">
-            <el-select
-              v-model="state.form.c_ids"
-              :placeholder="'章节筛选'"
-              style="width: 140px"
-              @change="getErrorWords"
-              clearable
-              filterable
-              multiple
-              collapse-tags
-              :max-collapse-tags="0"
-              collapse-tags-tooltip
-            >
-              <el-option
-                v-for="item in state.optionsByChapter"
-                :key="item.c_id"
-                :label="item.name + ' (' + item.lexicon_count + '词)'"
-                :value="item.c_id"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="">
-            <el-select
-              v-model="state.form.error_nums"
-              :placeholder="'错误次数'"
-              style="width: 140px"
-              @change="getErrorWords"
-              clearable
-              filterable
-              multiple
-              collapse-tags
-              :max-collapse-tags="0"
-              collapse-tags-tooltip
-            >
-              <el-option
-                v-for="item in state.optionsByNum"
-                :key="item.error_num"
-                :label="'错误 ' + item.error_num + ' 次' + ' (' + item.lexicon_count + '词)'"
-                :value="item.error_num"
-              />
-            </el-select>
-          </el-form-item>
+          <div class="hidden lg:block">
+            <el-form-item label="">
+              <el-select
+                v-model="state.form.error_dates"
+                :placeholder="'日期筛选'"
+                style="width: 140px"
+                @change="getErrorWords"
+                clearable
+                filterable
+                multiple
+                collapse-tags
+                collapse-tags-tooltip
+                :max-collapse-tags="0"
+              >
+                <el-option label="最近1次听写" :value="1" :key="1" />
+                <el-option
+                  v-for="item in state.optionsByDate"
+                  :key="item.date"
+                  :label="item.date + ' (' + item.lexicon_count + '词)'"
+                  :value="item.date"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="">
+              <el-select
+                v-model="state.form.c_ids"
+                :placeholder="'章节筛选'"
+                style="width: 140px"
+                @change="getErrorWords"
+                clearable
+                filterable
+                multiple
+                collapse-tags
+                :max-collapse-tags="0"
+                collapse-tags-tooltip
+              >
+                <el-option
+                  v-for="item in state.optionsByChapter"
+                  :key="item.c_id"
+                  :label="item.name + ' (' + item.lexicon_count + '词)'"
+                  :value="item.c_id"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="">
+              <el-select
+                v-model="state.form.error_nums"
+                :placeholder="'错误次数'"
+                style="width: 140px"
+                @change="getErrorWords"
+                clearable
+                filterable
+                multiple
+                collapse-tags
+                :max-collapse-tags="0"
+                collapse-tags-tooltip
+              >
+                <el-option
+                  v-for="item in state.optionsByNum"
+                  :key="item.error_num"
+                  :label="'错误 ' + item.error_num + ' 次' + ' (' + item.lexicon_count + '词)'"
+                  :value="item.error_num"
+                />
+              </el-select>
+            </el-form-item>
+          </div>
+          <div class="lg:hidden block pl-4">
+            <el-form-item>
+              <el-button
+                :type="state.form.error_dates.length ? 'primary' : ''"
+                @click="handleSelOption('error_dates', !state.form.error_dates.length)"
+                >{{ state.form.error_dates.length ? '清除' : '按照' }}日期筛选</el-button
+              >
+              <el-button :type="state.form.c_ids.length ? 'primary' : ''" @click="handleSelOption('c_ids', !state.form.c_ids.length)"
+                >{{ state.form.c_ids.length ? '清除' : '按照' }}章节筛选</el-button
+              >
+              <el-button
+                :type="state.form.error_nums.length ? 'primary' : ''"
+                @click="handleSelOption('error_nums', !state.form.error_nums.length)"
+                >{{ state.form.error_nums.length ? '清除' : '按照' }}次数筛选</el-button
+              >
+              <!-- <el-checkbox-group v-model="state.mobileForm">
+                <el-checkbox border value="error_dates" @click="handleSelOption('error_dates')">日期筛选</el-checkbox>
+                <el-checkbox border value="c_ids" @click="handleSelOption('c_ids')">章节筛选</el-checkbox>
+                <el-checkbox border value="error_nums" @click="handleSelOption('error_nums')">次数筛选</el-checkbox>
+              </el-checkbox-group> -->
+            </el-form-item>
+          </div>
           <!-- <el-form-item label="">
             <el-radio-group v-model="state.form.errTime" @change="getErrorWords">
               <el-radio-button v-for="o in state.errTimeOption" :key="o.id" :value="o.id" :label="o.id">{{ o.name }}</el-radio-button>
@@ -107,9 +131,8 @@
           @selection-change="handleSelectionXChange"
           @sort-change="sortChange"
           :maxHeight="tableHeight"
-          @row-click="rowClick"
           :default-expand-all="true"
-          row-style="{padding:0}"
+          :row-style="{ padding: 0 }"
         >
           <el-table-column type="selection" width="30" />
           <el-table-column type="expand">
@@ -211,33 +234,89 @@
     <tabbar />
     <collectDialog ref="collectRef" @addBook="addBook" />
     <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
-    <div class="tools-box absolute flex bg-white px-3 py-1 bottom-20 transition-colors duration-300 space-x-6 rounded-xl">
+    <div class="tools-box absolute flex bg-white px-3 py-1 bottom-20 transition-colors duration-300 space-x-2 lg:space-x-4 rounded-xl">
       <div class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded" @click="handleSelWords">
-        <el-icon class="mb-2" size="16"><EditPen /></el-icon>
+        <el-icon class="mb-1" size="16"><EditPen /></el-icon>
         <span>听写</span>
       </div>
       <div class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded" @click="handleWalkman">
-        <el-icon class="mb-2" size="16"><Headset /></el-icon>
+        <el-icon class="mb-1" size="16"><Headset /></el-icon>
         <span>随身听</span>
       </div>
       <div class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded" @click="handleDownloadExcel">
-        <el-icon class="mb-2" size="16"><Download /></el-icon>
+        <el-icon class="mb-1" size="16"><Download /></el-icon>
         <span>下载</span>
       </div>
       <div
+        v-show="!state.showMore"
+        class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded"
+        @click="handleMore"
+      >
+        <el-icon class="mb-1" size="16"><More /></el-icon>
+        <span>更多</span>
+      </div>
+      <div
+        v-show="state.showMore"
         class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded"
         @click="handleWordCollect('')"
       >
-        <el-icon class="mb-2" size="16"><Star /></el-icon>
+        <el-icon class="mb-1" size="16"><Star /></el-icon>
         <span>收藏</span>
       </div>
+      <div
+        v-show="state.showMore"
+        class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded"
+        @click="handleWordSign('')"
+      >
+        <el-icon class="mb-1" size="16"><Delete /></el-icon>
+        <span>标熟</span>
+      </div>
     </div>
+
+    <el-drawer v-model="state.optionVisable" size="100%" @close="drawerClose">
+      <div>
+        <el-checkbox-group
+          v-if="state.currentEditType == 'error_dates'"
+          v-model="state.form.error_dates"
+          class="flex flex-col"
+          size="large"
+        >
+          <el-checkbox
+            v-for="item in state.optionsByDate"
+            :label="item.date + ' (' + item.lexicon_count + '词)'"
+            :value="item.date"
+            :key="item.lexicon_count"
+          />
+        </el-checkbox-group>
+        <el-checkbox-group v-if="state.currentEditType == 'c_ids'" v-model="state.form.c_ids" class="flex flex-col" size="large">
+          <el-checkbox
+            v-for="item in state.optionsByChapter"
+            :label="item.name + ' (' + item.lexicon_count + '词)'"
+            :value="item.c_id"
+            :key="item.lexicon_count"
+          />
+        </el-checkbox-group>
+        <el-checkbox-group v-if="state.currentEditType == 'error_nums'" v-model="state.form.error_nums" class="flex flex-col" size="large">
+          <el-checkbox
+            v-for="item in state.optionsByNum"
+            :label="'错误 ' + item.error_num + ' 次' + ' (' + item.lexicon_count + '词)'"
+            :value="item.error_num"
+            :key="item.lexicon_count"
+          />
+        </el-checkbox-group>
+        <div class="py-6"></div>
+        <div class="fixed bottom-0 bg-white left-0 right-0 p-4 z-99 top-border flex justify-between shadow">
+          <el-button type="" @click="drawerClose">取消</el-button>
+          <el-button type="primary" @click="submit">确定</el-button>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 <script setup lang="jsx">
   import { getErrorWordList, wordLabel } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
-  import { Headset, Download, Hide, View, Delete, Star, EditPen } from '@element-plus/icons-vue';
+  import { Headset, Download, Hide, View, Delete, Star, EditPen, More } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import dayjs from 'dayjs';
@@ -272,13 +351,20 @@
   const tableHeight = computed(() => {
     if (screenWidth.value < 768) {
       // return 'small';
-      return screenHeight.value - 200;
+      return screenHeight.value - 160;
     } else {
       return screenHeight.value - 180;
       // return 'large';
     }
   });
   const state = reactive({
+    optionVisable: false,
+    mobileForm: {
+      error_dates: false,
+      c_ids: false,
+      error_nums: false,
+    },
+    currentEditType: '',
     form: {
       errTime: 0,
       error_num: 0,
@@ -315,6 +401,7 @@
     optionsByDate: [],
     optionsByNum: [],
     optionsByChapter: [],
+    showMore: false,
   });
   const chapterList = computed(() => {
     // let list = appStore?.dictationInfo?.chapterList || [];
@@ -348,9 +435,9 @@
     if (state.form.sort_type) {
       params.sort_type = state.form.sort_type;
     }
-    if(state.form.error_dates == 1) {
+    if (state.form.error_dates == 1) {
       params.recently = true;
-    } else if(state.form.error_dates) {
+    } else if (state.form.error_dates) {
       params.error_dates = state.form.error_dates;
     }
     params.c_ids = state.form.c_ids;
@@ -542,10 +629,10 @@
   }
   // 单词标熟
   const handleWordSign = (row) => {
-    let ids = [] 
+    let ids = [];
 
-    if(row) {
-      ids = [row.id]
+    if (row) {
+      ids = [row.id];
     } else {
       if (!state.selWords.length) {
         ElMessage.error('请选择需要表熟的错词');
@@ -553,7 +640,6 @@
       }
       ids = state.selWords.map((o) => o.lexicon_id);
     }
-
 
     let checked = false;
 
@@ -639,6 +725,31 @@
     handleWordCollect();
   };
 
+  const handleMore = () => {
+    state.showMore = true;
+  };
+
+  const handleSelOption = (val, type) => {
+    if (type) {
+      state.optionVisable = true;
+      state.mobileForm[val] = !state.mobileForm[val];
+      state.currentEditType = val;
+    } else {
+      state.form[val] = [];
+      getErrorWords();
+    }
+  };
+
+  const drawerClose = () => {
+    state.optionVisable = false;
+    // if (!state.form[state.currentEditType].length) {
+    //   state.mobileForm[state.currentEditType] = false;
+    // }
+  };
+  const submit = () => {
+    state.optionVisable = false;
+    getErrorWords();
+  };
   onUnmounted(() => {
     audio.pause(); // 先暂停播放
     audio.src = ''; // 清空src
@@ -662,5 +773,8 @@
   }
   /deep/.el-table__expand-column {
     color: #fff;
+  }
+  /deep/.el-drawer__header {
+    margin-bottom: 0px;
   }
 </style>
