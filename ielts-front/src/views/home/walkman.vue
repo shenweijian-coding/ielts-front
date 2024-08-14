@@ -13,7 +13,7 @@
                 <a
                   class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
                 >
-                  {{ appStore?.dictationInfo?.booInfo.name }} {{ appStore?.dictationInfo?.currentChapter?.name }}
+                  {{ errSource == 'err' ? `错词` : `${appStore?.dictationInfo?.booInfo.name}${appStore?.dictationInfo?.currentChapter?.name}` }}
                 </a>
               </div>
             </div>
@@ -295,7 +295,7 @@
                     </div> -->
                   <div class="user-input text-center flex flex-col items-center w-full">
                     <b class="font-mono font-normal text-center text-5xl">{{ wordsData.currentWord.word }}</b>
-                    <b class="font-mono font-normal text-center text-xl text-gray mt-4" 
+                    <b v-if="wordsData.currentWord?.phonetic_transcription" class="font-mono font-normal text-center text-xl text-gray mt-4" 
                       >/{{ wordsData.currentWord.phonetic_transcription || '--' }}/</b
                     >
                     <p class="mt-4">{{ wordsData.currentWord.translate }}</p>

@@ -9,7 +9,6 @@
                 v-model="state.form.error_dates"
                 :placeholder="'日期筛选'"
                 style="width: 140px"
-                @change="getErrorWords"
                 clearable
                 filterable
                 multiple
@@ -31,7 +30,6 @@
                 v-model="state.form.c_ids"
                 :placeholder="'章节筛选'"
                 style="width: 140px"
-                @change="getErrorWords"
                 clearable
                 filterable
                 multiple
@@ -52,7 +50,6 @@
                 v-model="state.form.error_nums"
                 :placeholder="'错误次数'"
                 style="width: 140px"
-                @change="getErrorWords"
                 clearable
                 filterable
                 multiple
@@ -67,6 +64,9 @@
                   :value="item.error_num"
                 />
               </el-select>
+            </el-form-item>
+            <el-form-item label="">
+              <el-button @click="getErrorWords">搜索</el-button>
             </el-form-item>
           </div>
           <div class="lg:hidden block pl-4">
@@ -131,8 +131,8 @@
           @selection-change="handleSelectionXChange"
           @sort-change="sortChange"
           :maxHeight="tableHeight"
+          row-class-name="rowClassName"
           :default-expand-all="true"
-          :row-style="{ padding: 0 }"
         >
           <el-table-column type="selection" width="30" />
           <el-table-column type="expand">
@@ -351,9 +351,9 @@
   const tableHeight = computed(() => {
     if (screenWidth.value < 768) {
       // return 'small';
-      return screenHeight.value - 160;
+      return screenHeight.value - 146;
     } else {
-      return screenHeight.value - 180;
+      return screenHeight.value - 146;
       // return 'large';
     }
   });
@@ -391,7 +391,7 @@
     selWords: [],
     page: {
       total: 0,
-      pageSize: 100,
+      pageSize: 1000,
       currentPage: 1,
     },
     hideProps: {
@@ -476,7 +476,7 @@
 
         state.page.total = res.total;
         state.optionsByDate = res.error_date;
-        state.optionsByNum = res.error_number;
+        state.optionsByNum = res.error_number.sort((a,b) => a.error_num - b.error_num);
         state.optionsByChapter = res.chapter_lexicons;
 
         // if (!noRefresh && res.total) {
@@ -632,7 +632,7 @@
     let ids = [];
 
     if (row) {
-      ids = [row.id];
+      ids = [row.lexicon_id];
     } else {
       if (!state.selWords.length) {
         ElMessage.error('请选择需要表熟的错词');
@@ -776,5 +776,14 @@
   }
   /deep/.el-drawer__header {
     margin-bottom: 0px;
+  }
+  /deep/.rowClassName{
+    td{
+      padding: 2px 0 !important;
+    }
+  }
+  /deep/.el-table__expanded-cell{
+    padding: 0;
+    border-bottom: none;
   }
 </style>
