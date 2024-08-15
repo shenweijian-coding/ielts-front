@@ -295,10 +295,10 @@
                     </div> -->
                   <div class="user-input text-center flex flex-col items-center w-full">
                     <b class="font-mono font-normal text-center text-5xl">{{ wordsData.currentWord.word }}</b>
-                    <b v-if="wordsData.currentWord?.phonetic_transcription" class="font-mono font-normal text-center text-xl text-gray mt-4" 
-                      >/{{ wordsData.currentWord.phonetic_transcription || '--' }}/</b
+                    <b class="h-10 font-mono font-normal text-center text-xl text-gray mt-4" 
+                      >{{ wordsData.currentWord.phonetic_transcription ? `/${wordsData.currentWord.phonetic_transcription}/` : '' }}</b
                     >
-                    <p class="mt-4">{{ wordsData.currentWord.translate }}</p>
+                    <p class="mt-4 h-10">{{ wordsData.currentWord.translate }}</p>
                     <!-- <input
                       :placeholder="!showPlaceholder ? '在此输入单词，点击Enter核对' : ''"
                       v-model="wordsData.currentWord.userInput"
@@ -420,7 +420,7 @@
   Object.keys(modules).forEach(key => {
     letterMp3[key] = new Audio(modules[key])
   })
-  console.log(letterMp3, '111');
+
   const appStore = useAppStore();
   const userStore = useUserStore();
   const route = useRoute();
@@ -654,6 +654,7 @@
     // if (wordsData.currentWord.is_proficient) {
     //   handleMove(1, false);
     // }
+    start()
   };
 
   // 播放音频的方法
@@ -714,7 +715,9 @@
     // }
     playStatus.value = 1;
     const sign = wordsData.currentIndex + type;
-
+    if(sign < 0) {
+      return
+    }
     wordsData.currentIndex = sign;
     if (sign < wordsData.words.length && sign >= 0) {
       // if (wordsData.currentIndex < wordsData.words.length) {
@@ -760,10 +763,10 @@
       audio2?.src && (audio2.src = '');
       audio2.pause();
     }
-    if (audio3) {
-      audio3?.src && (audio3.src = '');
-      audio3.pause();
-    }
+    Object.keys(modules).forEach(key => {
+      letterMp3[key]?.src && (audio.src = '');
+      letterMp3[key].pause();
+    })
     if (utterance) {
       window.speechSynthesis.cancel();
     }
@@ -883,8 +886,7 @@
   function playAudio2(audioObj) {
     return new Promise((resolve, reject) => {
       
-      audioObj.playbackRate = 1.6
-      audioObj.currentTime = 0.1
+      audioObj.playbackRate = 1
       audioObj.onended = resolve; // 当音频播放结束时，resolve Promise
       audioObj.onerror = reject; // 如果播放出错，reject Promise
       audioObj.play();
@@ -991,7 +993,7 @@
           return;
         }
 
-        const letter = word[index].toLowerCase();
+        const letter = word[index].toUpperCase();
         if(!/^[A-Za-z]+$/.test(letter)) {
           playNextLetter(word, index + 1);
         } else {

@@ -66,7 +66,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="">
-              <el-button @click="getErrorWords">搜索</el-button>
+              <el-button @click="getErrorWords" type="primary">搜索</el-button>
             </el-form-item>
           </div>
           <div class="lg:hidden block pl-4">
@@ -137,7 +137,7 @@
           <el-table-column type="selection" width="30" />
           <el-table-column type="expand">
             <template #default="scopeX">
-              <el-table ref="tableRef" :data="scopeX.row.child" style="width: 100%" @row-click="rowClick" :show-header="false" fit>
+              <el-table ref="tableRefChild" :data="scopeX.row.child" style="width: 100%" @row-click="rowClick" :show-header="false" fit>
                 <!-- <el-table-column type="selection" width="30" /> -->
                 <el-table-column>
                   <template #default="scope">
@@ -183,7 +183,7 @@
             </template>
             <template #default="scope">
               <span class="text-gray-400">{{ scope.row.created_at }}</span
-              >&nbsp;&nbsp;<span class="text-gray-400">{{ scope.row.child.length }}词</span>
+              >&nbsp;&nbsp;<span class="text-gray-400">{{ scope.row?.child?.length }}词</span>
             </template>
           </el-table-column>
           <!-- <el-table-column prop="lexicon" label="释义" align="center" minWidth="280">
@@ -214,8 +214,7 @@
           </el-table-column> -->
         </el-table>
       </div>
-      <div class="pt-2 flex justify-center items-center">
-        <!-- <div>共 {{ state.page.total }} 个 </div>&nbsp; -->
+      <!-- <div class="pt-2 flex justify-center items-center">
         <el-pagination
           background
           size="small"
@@ -227,7 +226,7 @@
           :page-sizes="[20, 50, 100]"
           @current-change="getErrorWords"
         />
-      </div>
+      </div> -->
     </div>
     <!-- <LastPage /> -->
     <Loading :loading="loading" />
@@ -340,7 +339,7 @@
   const ImportDialogRef = ref(null);
   const screenWidth = ref(window.innerWidth); // 获取当前屏幕宽度
   const screenHeight = ref(window.innerHeight); // 获取当前屏幕宽度
-
+  const tableHeight = ref(0)
   const formSize = computed(() => {
     if (screenWidth.value < 768) {
       return 'small';
@@ -348,15 +347,16 @@
       return 'default';
     }
   });
-  const tableHeight = computed(() => {
-    if (screenWidth.value < 768) {
-      // return 'small';
-      return screenHeight.value - 146;
-    } else {
-      return screenHeight.value - 146;
-      // return 'large';
-    }
-  });
+
+  const handleHeight = () => {
+    console.log('重新执行逻辑');
+    tableHeight.value = screenHeight.value - 146;
+    setTimeout(() => {
+      tableRef.value && tableRef.value.doLayout()
+    });
+  }
+  handleHeight()
+  window.addEventListener('resize', handleHeight)
   const state = reactive({
     optionVisable: false,
     mobileForm: {
@@ -391,7 +391,7 @@
     selWords: [],
     page: {
       total: 0,
-      pageSize: 1000,
+      pageSize: 100,
       currentPage: 1,
     },
     hideProps: {
@@ -471,14 +471,26 @@
           return acc;
         }, []);
 
-        console.log(transformedData);
-        state.tableData = transformedData;
+        state.tableData.push(...transformedData);
 
         state.page.total = res.total;
-        state.optionsByDate = res.error_date;
-        state.optionsByNum = res.error_number.sort((a,b) => a.error_num - b.error_num);
-        state.optionsByChapter = res.chapter_lexicons;
+        if(state.page.currentPage == 1) {
+          if(!state.optionsByDate?.length) {
+            state.optionsByDate = res.error_date;
+          }
+          if(!state.optionsByNum?.length) {
+            state.optionsByNum = res.error_number.sort((a,b) => a.error_num - b.error_num);
+          }
+          if(!state.optionsByChapter?.length) {
+            state.optionsByChapter = res.chapter_lexicons;
+          }
+        }
 
+        //还有更多数据的话
+        if(res.last_page > res.current_page) {
+          state.page.currentPage = state.page.currentPage + 1
+          getErrorWords()
+        }
         // if (!noRefresh && res.total) {
         //   setTimeout(() => {
         //     tableRef.value.toggleAllSelection();
