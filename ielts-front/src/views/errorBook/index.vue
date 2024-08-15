@@ -233,7 +233,7 @@
     <tabbar />
     <collectDialog ref="collectRef" @addBook="addBook" />
     <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
-    <div class="tools-box absolute flex bg-white px-3 py-1 bottom-20 transition-colors duration-300 space-x-2 lg:space-x-4 rounded-xl">
+    <div class="tools-box absolute flex bg-white px-3 py-1 bottom-30 transition-colors duration-300 space-x-2 lg:space-x-4 rounded-xl">
       <div class="flex flex-col items-center cursor-pointer hover:bg-theme px-3 py-2 hover:text-white rounded" @click="handleSelWords">
         <el-icon class="mb-1" size="16"><EditPen /></el-icon>
         <span>听写</span>
@@ -339,7 +339,7 @@
   const ImportDialogRef = ref(null);
   const screenWidth = ref(window.innerWidth); // 获取当前屏幕宽度
   const screenHeight = ref(window.innerHeight); // 获取当前屏幕宽度
-  const tableHeight = ref(0)
+  const tableHeight = ref(0);
   const formSize = computed(() => {
     if (screenWidth.value < 768) {
       return 'small';
@@ -349,14 +349,17 @@
   });
 
   const handleHeight = () => {
-    console.log('重新执行逻辑');
-    tableHeight.value = screenHeight.value - 146;
-    setTimeout(() => {
-      tableRef.value && tableRef.value.doLayout()
+    tableHeight.value = screenHeight.value - 116;
+    nextTick(() => {
+      // console.log(tableRef.value && tableRef.value.doLayout, '222');
+
+      tableRef.value && tableRef.value.doLayout();
     });
-  }
-  handleHeight()
-  window.addEventListener('resize', handleHeight)
+  };
+  handleHeight();
+  window.onresize = function () {
+    handleHeight();
+  };
   const state = reactive({
     optionVisable: false,
     mobileForm: {
@@ -474,22 +477,22 @@
         state.tableData.push(...transformedData);
 
         state.page.total = res.total;
-        if(state.page.currentPage == 1) {
-          if(!state.optionsByDate?.length) {
+        if (state.page.currentPage == 1) {
+          if (!state.optionsByDate?.length) {
             state.optionsByDate = res.error_date;
           }
-          if(!state.optionsByNum?.length) {
-            state.optionsByNum = res.error_number.sort((a,b) => a.error_num - b.error_num);
+          if (!state.optionsByNum?.length) {
+            state.optionsByNum = res.error_number.sort((a, b) => a.error_num - b.error_num);
           }
-          if(!state.optionsByChapter?.length) {
+          if (!state.optionsByChapter?.length) {
             state.optionsByChapter = res.chapter_lexicons;
           }
         }
 
         //还有更多数据的话
-        if(res.last_page > res.current_page) {
-          state.page.currentPage = state.page.currentPage + 1
-          getErrorWords()
+        if (res.last_page - 1 > res.current_page) {
+          state.page.currentPage = state.page.currentPage + 1;
+          getErrorWords();
         }
         // if (!noRefresh && res.total) {
         //   setTimeout(() => {
@@ -789,12 +792,12 @@
   /deep/.el-drawer__header {
     margin-bottom: 0px;
   }
-  /deep/.rowClassName{
-    td{
+  /deep/.rowClassName {
+    td {
       padding: 2px 0 !important;
     }
   }
-  /deep/.el-table__expanded-cell{
+  /deep/.el-table__expanded-cell {
     padding: 0;
     border-bottom: none;
   }

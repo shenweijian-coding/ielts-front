@@ -8,15 +8,17 @@
         class="my-card on element flex w-auto flex-col lg:flex-row content-center items-center justify-end space-x-3 rounded-xl bg-white lg:p-3 p-2 transition-colors duration-300 dark:bg-gray-800"
       >
         <div class="flex">
-            <div class="relative">
-              <div>
-                <a
-                  class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
-                >
-                  {{ errSource == 'err' ? `错词` : `${appStore?.dictationInfo?.booInfo.name}${appStore?.dictationInfo?.currentChapter?.name}` }}
-                </a>
-              </div>
+          <div class="relative">
+            <div>
+              <a
+                class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
+              >
+                {{
+                  errSource == 'err' ? `错词` : `${appStore?.dictationInfo?.booInfo.name}${appStore?.dictationInfo?.currentChapter?.name}`
+                }}
+              </a>
             </div>
+          </div>
           <!-- <el-tooltip content="章节切换" placement="top" effect="light">
             <div class="relative">
               <el-popover placement="bottom" :width="200" trigger="click">
@@ -234,7 +236,7 @@
             </el-tooltip>
 
             <el-tooltip content="返回" placement="top" effect="light">
-              <div class="relative hidden sm:block">
+              <div class="relative">
                 <button
                   class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
                   title="返回主页"
@@ -295,9 +297,9 @@
                     </div> -->
                   <div class="user-input text-center flex flex-col items-center w-full">
                     <b class="font-mono font-normal text-center text-5xl">{{ wordsData.currentWord.word }}</b>
-                    <b class="h-10 font-mono font-normal text-center text-xl text-gray mt-4" 
-                      >{{ wordsData.currentWord.phonetic_transcription ? `/${wordsData.currentWord.phonetic_transcription}/` : '' }}</b
-                    >
+                    <b class="h-10 font-mono font-normal text-center text-xl text-gray mt-4">{{
+                      wordsData.currentWord.phonetic_transcription ? `/${wordsData.currentWord.phonetic_transcription}/` : ''
+                    }}</b>
                     <p class="mt-4 h-10">{{ wordsData.currentWord.translate }}</p>
                     <!-- <input
                       :placeholder="!showPlaceholder ? '在此输入单词，点击Enter核对' : ''"
@@ -359,7 +361,13 @@
                   </div>
                   <div>
                     <el-tooltip :content="wordsData.currentWord.is_collection ? '取消收藏' : '收藏'" placement="top" effect="light">
-                      <SvgIcon name="collect-walk" :color="wordsData.currentWord.is_collection ? '#ff5c00' : 'grey'" :hoverColor="wordsData.currentWord.is_collection ? '#ff5c00' : 'grey'" @click="handleCollect" width="27"/>
+                      <SvgIcon
+                        name="collect-walk"
+                        :color="wordsData.currentWord.is_collection ? '#ff5c00' : 'grey'"
+                        :hoverColor="wordsData.currentWord.is_collection ? '#ff5c00' : 'grey'"
+                        @click="handleCollect"
+                        width="27"
+                      />
                     </el-tooltip>
                   </div>
                 </div>
@@ -388,12 +396,12 @@
   </div>
   <mistakeDialog ref="mistakeRef" @next="handleNextChapter" />
   <Loading :loading="loading" />
-  <WordsDrawer ref="wordslistRef" @skip="wordsSkip"/>
+  <WordsDrawer ref="wordslistRef" @skip="wordsSkip" />
   <audio ref="audioPlayer" controls style="display: none"></audio>
   <audio ref="audioPlayer2" controls style="display: none"></audio>
   <canvas ref="canvasRef"></canvas>
   <collectDialog ref="collectRef" @addBook="addBook" @ok="collectFinish" />
-  <ImportDialog ref="ImportDialogRef" @ok="addBookComplete"/>
+  <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
 </template>
 
 <script setup>
@@ -407,19 +415,19 @@
   import useLoading from '@/hooks/loading.ts';
   import mistakeDialog from './mistakeDialog.vue';
   import { useAppStore, useUserStore } from '@/store';
-  import { getWordList, reportLexiRes, getChapterList,wordLabel } from '@/api/book/index';
+  import { getWordList, reportLexiRes, getChapterList, wordLabel } from '@/api/book/index';
   import { useRouter, useRoute } from 'vue-router';
   import WordsDrawer from './wordsDrawer.vue';
   import { shuffleArray, debounce, deepClone } from '@/utils/index';
   import confetti from 'canvas-confetti';
   import collectDialog from '../errorBook/components/collect-dialog.vue';
   import ImportDialog from '../errorBook/components/import-dialog.vue';
-  import { modulesFiles,modules } from '@/assets/mp3/moduleMp3.js'
+  import { modulesFiles, modules } from '@/assets/mp3/moduleMp3.js';
 
-  const letterMp3 = reactive({})
-  Object.keys(modules).forEach(key => {
-    letterMp3[key] = new Audio(modules[key])
-  })
+  const letterMp3 = reactive({});
+  Object.keys(modules).forEach((key) => {
+    letterMp3[key] = new Audio(modules[key]);
+  });
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -654,7 +662,7 @@
     // if (wordsData.currentWord.is_proficient) {
     //   handleMove(1, false);
     // }
-    start()
+    start();
   };
 
   // 播放音频的方法
@@ -690,6 +698,10 @@
       audio3?.src && (audio3.src = '');
       audio3.pause();
     }
+    Object.keys(modules).forEach((key) => {
+      letterMp3[key]?.src && (audio.src = '');
+      letterMp3[key].pause();
+    });
     if (utterance) {
       window.speechSynthesis.cancel();
     }
@@ -715,11 +727,8 @@
     // }
     playStatus.value = 1;
     const sign = wordsData.currentIndex + type;
-    if(sign < 0) {
-      return
-    }
-    wordsData.currentIndex = sign;
     if (sign < wordsData.words.length && sign >= 0) {
+      wordsData.currentIndex = sign;
       // if (wordsData.currentIndex < wordsData.words.length) {
       //   wordsData.lastIndex = wordsData.currentIndex;
       // }
@@ -739,6 +748,9 @@
 
   // 开始听写
   const start = () => {
+    // Object.keys(modules).forEach((key) => {
+    //   letterMp3[key].load();
+    // });
     playStatus.value = 1;
     // inputRef.value.focus();
     clearAudioCache();
@@ -763,10 +775,6 @@
       audio2?.src && (audio2.src = '');
       audio2.pause();
     }
-    Object.keys(modules).forEach(key => {
-      letterMp3[key]?.src && (audio.src = '');
-      letterMp3[key].pause();
-    })
     if (utterance) {
       window.speechSynthesis.cancel();
     }
@@ -885,8 +893,7 @@
   }
   function playAudio2(audioObj) {
     return new Promise((resolve, reject) => {
-      
-      audioObj.playbackRate = 1
+      audioObj.playbackRate = 1;
       audioObj.onended = resolve; // 当音频播放结束时，resolve Promise
       audioObj.onerror = reject; // 如果播放出错，reject Promise
       audioObj.play();
@@ -897,7 +904,6 @@
     // 单词播放完毕
     // 播放单个单词
     if (config.playSpell) {
-
       const playNextLetter = (word, index) => {
         if (index >= word.length) {
           playAudio(config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y']).then(() => {
@@ -993,8 +999,8 @@
           return;
         }
 
-        const letter = word[index].toUpperCase();
-        if(!/^[A-Za-z]+$/.test(letter)) {
+        const letter = word[index].toLowerCase();
+        if (!/^[A-Za-z]+$/.test(letter)) {
           playNextLetter(word, index + 1);
         } else {
           playAudio2(letterMp3[letter])
@@ -1133,8 +1139,8 @@
     } else if (event.ctrlKey && event.key === 'p') {
       event.preventDefault();
       toggleStopAndStart();
-    }else if (event.keyCode ===13) {
-      handleMove(1)
+    } else if (event.keyCode === 13) {
+      handleMove(1);
     }
   };
 
@@ -1204,9 +1210,9 @@
   };
 
   const wordsSkip = (word) => {
-    wordsData.currentIndex = wordsData.words.findIndex(item => item.id == word.id)
-    wordsData.currentWord = word
-  }
+    wordsData.currentIndex = wordsData.words.findIndex((item) => item.id == word.id);
+    wordsData.currentWord = word;
+  };
   onUnmounted(() => {
     if (audio) {
       audio.pause(); // 先暂停播放
@@ -1227,7 +1233,6 @@
   };
 
   const handleCollect = () => {
-
     const id = wordsData.currentWord.id;
 
     if (!wordsData.currentWord.is_collection) {
@@ -1238,7 +1243,7 @@
         lexicon_ids: JSON.stringify([id]),
       })
         .then((res) => {
-          wordsData.currentWord.is_collection = false
+          wordsData.currentWord.is_collection = false;
           ElMessage.success('取消收藏成功');
         })
         .catch((err) => {});
