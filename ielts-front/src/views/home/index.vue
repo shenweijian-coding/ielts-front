@@ -645,6 +645,8 @@
               if (res?.existing_id?.length) {
                 wordsData.currentIndex = res?.existing_id.length || 0;
                 wordsData.currentWord = wordsData.words[wordsData.currentIndex];
+              } else {
+                wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
               }
               if (res.last_key) {
                 currentTestKey = res.last_key;
@@ -682,6 +684,7 @@
                     }
                   });
               } else {
+                console.log('我置顶了');
                 wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
               }
             }
