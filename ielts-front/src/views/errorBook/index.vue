@@ -313,7 +313,7 @@
   </div>
 </template>
 <script setup lang="jsx">
-  import { getErrorWordList, wordLabel } from '@/api/book/index';
+  import { getErrorWordList, wordLabel, errorListSearch } from '@/api/book/index';
   import { useAppStore, useUserStore } from '@/store';
   import { Headset, Download, Hide, View, Delete, Star, EditPen, More } from '@element-plus/icons-vue';
   import LastPage from '@/components/lastPage/index.vue';
@@ -406,13 +406,7 @@
     optionsByChapter: [],
     showMore: false,
   });
-  const chapterList = computed(() => {
-    // let list = appStore?.dictationInfo?.chapterList || [];
-    // if (!list.length) {
-    return state.chapterList;
-    // }
-    // return list;
-  });
+
   const getParams = () => {
     const params = {};
     // if (state.form.errTime == 0) {
@@ -477,18 +471,6 @@
         state.tableData.push(...transformedData);
 
         state.page.total = res.total;
-        if (state.page.currentPage == 1) {
-          if (!state.optionsByDate?.length) {
-            state.optionsByDate = res.error_date;
-          }
-          if (!state.optionsByNum?.length) {
-            state.optionsByNum = res.error_number.sort((a, b) => a.error_num - b.error_num);
-          }
-          if (!state.optionsByChapter?.length) {
-            state.optionsByChapter = res.chapter_lexicons;
-          }
-        }
-
         //还有更多数据的话
         if (res.last_page - 1 > res.current_page) {
           state.page.currentPage = state.page.currentPage + 1;
@@ -510,18 +492,13 @@
         setLoading(false);
       });
   };
-  const handleSelectionChange = (val) => {
-    // console.log(val);
-    state.selWords = val;
-  };
+
   const handleSelectionXChange = (val) => {
     // console.log(val);
     state.selWords = val.map((item) => item.child).flat(1);
     console.log(state.selWords);
   };
-  const handleSelectionYChange = (val) => {
-    console.log(val);
-  };
+
   // const handleSizeChange = (size) => {
   //   console.log(size);
   //   state.page.pageSize = size;
@@ -727,9 +704,7 @@
 
     getErrorWords();
   });
-  const troggleView = (field) => {
-    state.hideProps[field] = !state.hideProps[field];
-  };
+
   const addBook = () => {
     setTimeout(() => {
       ImportDialogRef.value.open();
@@ -773,6 +748,21 @@
     // 或者将音频对象赋值为null
     audio = null;
   });
+
+  const getSearchOptions = () => {
+    errorListSearch().then((res) => {
+      if (!state.optionsByDate?.length) {
+        state.optionsByDate = res.error_date;
+      }
+      if (!state.optionsByNum?.length) {
+        state.optionsByNum = res.error_number.sort((a, b) => a.error_num - b.error_num);
+      }
+      if (!state.optionsByChapter?.length) {
+        state.optionsByChapter = res.chapter_lexicons;
+      }
+    });
+  };
+  getSearchOptions();
   // getAllChapter();
 </script>
 <style lang="less" scoped>

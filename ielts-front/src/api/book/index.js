@@ -33,7 +33,9 @@ const wordLabel = async (data) => post({ url: '/api/study/lexicon/v1/label', dat
 
 const bookAdd = async (data) => post({ url: '/api/study/lexicon/v1/book/add', data });
 
-const getBookInfoByChapter = async(data) => post({ url: '/api/study/lexicon/v1/group/detail' , data})
+const getBookInfoByChapter = async (data) => post({ url: '/api/study/lexicon/v1/group/detail', data });
+
+const errorListSearch = async (data) => post({ url: '/api/study/lexicon/v1/error/list/search', data });
 
 export {
   deleteBook,
@@ -51,5 +53,6 @@ export {
   wordLabel,
   bookAdd,
   updateBook,
-  getBookInfoByChapter
+  getBookInfoByChapter,
+  errorListSearch,
 };
