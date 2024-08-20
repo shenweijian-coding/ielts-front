@@ -893,7 +893,7 @@
   }
   function playAudio2(audioObj) {
     return new Promise((resolve, reject) => {
-      audioObj.playbackRate = 1;
+      // audioObj.playbackRate = 1;
       audioObj.onended = resolve; // 当音频播放结束时，resolve Promise
       audioObj.onerror = reject; // 如果播放出错，reject Promise
       audioObj.play();
@@ -999,7 +999,7 @@
           return;
         }
 
-        const letter = word[index].toLowerCase();
+        const letter = word[index].toUpperCase();
         if (!/^[A-Za-z]+$/.test(letter)) {
           playNextLetter(word, index + 1);
         } else {

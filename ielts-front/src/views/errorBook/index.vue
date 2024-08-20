@@ -66,7 +66,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="">
-              <el-button @click="getErrorWords" type="primary">搜索</el-button>
+              <el-button @click="state.page.currentPage =1;getErrorWords(false,false)" type="primary">搜索</el-button>
             </el-form-item>
           </div>
           <div class="lg:hidden block pl-4">
@@ -82,7 +82,7 @@
               <el-button
                 :type="state.form.error_nums.length ? 'primary' : ''"
                 @click="handleSelOption('error_nums', !state.form.error_nums.length)"
-                >{{ state.form.error_nums.length ? '清除' : '按照' }}次数筛选</el-button
+                >{{ state.form.error_nums.length ? '清除' : '按照' }}错误次数筛选</el-button
               >
               <!-- <el-checkbox-group v-model="state.mobileForm">
                 <el-checkbox border value="error_dates" @click="handleSelOption('error_dates')">日期筛选</el-checkbox>
@@ -175,14 +175,14 @@
               </el-table>
             </template>
           </el-table-column>
-          <el-table-column prop="created_at">
+          <el-table-column prop="updated_at">
             <template #header>
               <span class="text-gray-400 text-sm" v-if="state.selWords.length"
                 >已选中 <span class="color-theme">{{ state.selWords.length }}</span> 词</span
               >
             </template>
             <template #default="scope">
-              <span class="text-gray-400">{{ scope.row.created_at }}</span
+              <span class="text-gray-400">{{ scope.row.updated_at }}</span
               >&nbsp;&nbsp;<span class="text-gray-400">{{ scope.row?.child?.length }}词</span>
             </template>
           </el-table-column>
@@ -394,7 +394,7 @@
     selWords: [],
     page: {
       total: 0,
-      pageSize: 100,
+      pageSize: 50,
       currentPage: 1,
     },
     hideProps: {
@@ -441,7 +441,7 @@
     params.error_nums = state.form.error_nums;
     return params;
   };
-  const getErrorWords = (noRefresh = false) => {
+  const getErrorWords = (noRefresh = false, isAdd = true) => {
     const params = getParams();
     params.page = state.page.currentPage;
     params.pagesize = state.page.pageSize;
@@ -452,13 +452,13 @@
         // 处理错误数据
         // 转换数据结构
         const transformedData = res.data.reduce((acc, item) => {
-          const date = item.created_at.split(' ')[0];
+          const date = item.updated_at.split(' ')[0];
           // 检查acc中是否已经存在该日期的条目
-          let dateItem = acc.find((i) => i.created_at.split(' ')[0] === date);
+          let dateItem = acc.find((i) => i.updated_at.split(' ')[0] === date);
 
           // 如果不存在，则创建一个新的条目
           if (!dateItem) {
-            dateItem = { created_at: date, child: [] };
+            dateItem = { updated_at: date, child: [] };
             acc.push(dateItem);
           }
 
@@ -468,13 +468,18 @@
           return acc;
         }, []);
 
-        state.tableData.push(...transformedData);
+        if(isAdd) {
+
+          state.tableData.push(...transformedData);
+        }else {
+          state.tableData = transformedData
+        }
 
         state.page.total = res.total;
         //还有更多数据的话
         if (res.last_page - 1 > res.current_page) {
           state.page.currentPage = state.page.currentPage + 1;
-          getErrorWords();
+          getErrorWords(false, true);
         }
         // if (!noRefresh && res.total) {
         //   setTimeout(() => {
@@ -643,7 +648,7 @@
       })
         .then((res) => {
           ElMessage.success('单词标熟成功');
-          getErrorWords(true);
+          getErrorWords(true, false);
           setLoading(false);
         })
         .catch((err) => {
@@ -726,7 +731,7 @@
       state.currentEditType = val;
     } else {
       state.form[val] = [];
-      getErrorWords();
+      getErrorWords(false,false);
     }
   };
 
@@ -738,7 +743,7 @@
   };
   const submit = () => {
     state.optionVisable = false;
-    getErrorWords();
+    getErrorWords(false,false);
   };
   onUnmounted(() => {
     audio.pause(); // 先暂停播放
