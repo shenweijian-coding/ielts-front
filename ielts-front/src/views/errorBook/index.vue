@@ -469,8 +469,14 @@
         }, []);
 
         if(isAdd) {
-
-          state.tableData.push(...transformedData);
+          transformedData.forEach(it => {
+            const currentRow = state.tableData.find(o => o.updated_at == it.updated_at)
+            if(currentRow) {
+              currentRow.child.push(...it.child)
+            } else {
+              state.tableData.push(it);
+            }
+          });
         }else {
           state.tableData = transformedData
         }
@@ -648,6 +654,7 @@
       })
         .then((res) => {
           ElMessage.success('单词标熟成功');
+          state.page.currentPage = 1
           getErrorWords(true, false);
           setLoading(false);
         })

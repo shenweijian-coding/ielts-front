@@ -699,7 +699,7 @@
       audio3.pause();
     }
     Object.keys(modules).forEach((key) => {
-      letterMp3[key]?.src && (audio.src = '');
+      letterMp3[key]?.src && (letterMp3[key].src = '');
       letterMp3[key].pause();
     });
     if (utterance) {
@@ -1222,6 +1222,18 @@
       // 或者将音频对象赋值为null
       audio = null;
     }
+    if (audio) {
+      audio?.src && (audio.src = '');
+      audio.pause();
+    }
+    if (audio2) {
+      audio2?.src && (audio2.src = '');
+      audio2.pause();
+    }
+    if (utterance) {
+      window.speechSynthesis.cancel();
+    }
+    clearAudioCache();
     if (!errSource.value) {
       appStore.setLastId(wordsData?.currentWord.id || null);
     }

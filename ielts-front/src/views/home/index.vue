@@ -1131,7 +1131,7 @@
 
   // 展示当前播放词库列表
   const showWordsList = () => {
-    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord);
+    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'home', 2);
   };
 </script>
 

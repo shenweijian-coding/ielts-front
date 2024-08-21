@@ -68,6 +68,7 @@
     list2: [],
     current: null,
     from: 'home',
+    type: 1
   });
   const dialogWidth = ref('50%');
   const collectRef = ref(null);
@@ -85,12 +86,14 @@
       dialogWidth.value = '50%'; // 在大屏幕下设置Dialog宽度为50%
     }
   };
-  const open = (list, list2, current, from = 'home') => {
+  // type = 1是章节 type = 2是错词
+  const open = (list, list2, current, from = 'home', type = 1) => {
     state.drawer = true;
     state.list = list;
     state.list2 = list2;
     state.current = current;
     state.from = from;
+    state.type = type
     nextTick(() => {
       document.getElementById('current').scrollIntoView();
     });
@@ -207,8 +210,27 @@
   const addBookComplete = () => {
     handleWordCollect();
   };
-  const towalkman = () => {
-    router.push('/walkman');
+  const towalkman = async () => {
+    if(state.type == 2) {
+      const errWords = state.list
+      .map((word) => {
+        return {
+          c_id: word?.c_id || 0,
+          g_id: word?.g_id || 0,
+          id: word?.id || 0,
+          word: word?.word,
+          translate: word?.translate,
+          phonetic_transcription: word?.phonetic_transcription,
+          'phonetic-y': word?.['phonetic-y'],
+          'phonetic-m': word?.['phonetic-m'],
+        };
+      });
+    await appStore.setErrWords(errWords);
+    await appStore.toggleCurrentChapter(null);
+    router.push('/walkman?source=err');
+    }else {
+      router.push('/walkman');
+    }
   };
   const download = () => {
     // state.drawer = false;
@@ -222,7 +244,8 @@
     const workBook = XLSX.utils.book_new();
     const workSheet = XLSX.utils.json_to_sheet(exportData);
     XLSX.utils.book_append_sheet(workBook, workSheet);
-    XLSX.writeFile(workBook, `${appStore?.dictationInfo?.booInfo.name}_${appStore?.dictationInfo.currentChapter.name}.xlsx`, {
+    const fileName = appStore?.dictationInfo?.currentChapter.name ? `${appStore?.dictationInfo?.booInfo.name}_${appStore?.dictationInfo.currentChapter.name}.xlsx` : '错词练习'
+    XLSX.writeFile(workBook, fileName, {
       bookType: 'xlsx',
     });
     // emit('download');
