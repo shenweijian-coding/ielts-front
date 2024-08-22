@@ -338,7 +338,7 @@
   const collectRef = ref(null);
   const ImportDialogRef = ref(null);
   const screenWidth = ref(window.innerWidth); // 获取当前屏幕宽度
-  const screenHeight = ref(window.innerHeight); // 获取当前屏幕宽度
+  // const screenHeight = ref(window.innerHeight); // 获取当前屏幕宽度
   const tableHeight = ref(0);
   const formSize = computed(() => {
     if (screenWidth.value < 768) {
@@ -349,7 +349,8 @@
   });
 
   const handleHeight = () => {
-    tableHeight.value = screenHeight.value - 116;
+
+    tableHeight.value = window.innerHeight - 116;
     nextTick(() => {
       // console.log(tableRef.value && tableRef.value.doLayout, '222');
 
