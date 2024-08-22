@@ -699,7 +699,7 @@
       audio3.pause();
     }
     Object.keys(modules).forEach((key) => {
-      letterMp3[key]?.src && (letterMp3[key].src = '');
+      // letterMp3[key]?.src && (letterMp3[key].src = '');
       letterMp3[key].pause();
     });
     if (utterance) {
@@ -816,7 +816,7 @@
   }
   // 处理计算结果
   const handleResult = () => {
-    stop()
+    stop();
     ElMessage.success('当前章节已播放完毕');
     // let accuracy = 0;
     // let correctness = 0;
@@ -893,6 +893,8 @@
     });
   }
   function playAudio2(audioObj) {
+    console.log(audioObj, 'audioObj');
+
     return new Promise((resolve, reject) => {
       // audioObj.playbackRate = 1;
       audioObj.onended = resolve; // 当音频播放结束时，resolve Promise
@@ -1000,11 +1002,12 @@
           return;
         }
 
-        const letter = word[index].toUpperCase();
-        if (!/^[A-Za-z]+$/.test(letter)) {
+        const letterLower = word[index].toLowerCase();
+        const letterUpper = word[index].toUpperCase();
+        if (!/^[A-Za-z]+$/.test(letterLower || letterUpper)) {
           playNextLetter(word, index + 1);
         } else {
-          playAudio2(letterMp3[letter])
+          playAudio2(letterMp3[letterLower] || letterMp3[letterUpper])
             .then(() => {
               // 播放当前字母后，递归播放下一个字母
               playNextLetter(word, index + 1);
@@ -1211,10 +1214,10 @@
   };
 
   const wordsSkip = (word) => {
-    stop()
+    stop();
     wordsData.currentIndex = wordsData.words.findIndex((item) => item.id == word.id);
     wordsData.currentWord = word;
-    start()
+    start();
   };
   onUnmounted(() => {
     if (audio) {

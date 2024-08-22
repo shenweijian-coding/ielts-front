@@ -66,7 +66,14 @@
               </el-select>
             </el-form-item>
             <el-form-item label="">
-              <el-button @click="state.page.currentPage =1;getErrorWords(false,false)" type="primary">搜索</el-button>
+              <el-button
+                @click="
+                  state.page.currentPage = 1;
+                  getErrorWords(false, false);
+                "
+                type="primary"
+                >搜索</el-button
+              >
             </el-form-item>
           </div>
           <div class="lg:hidden block pl-4">
@@ -349,7 +356,6 @@
   });
 
   const handleHeight = () => {
-
     tableHeight.value = window.innerHeight - 116;
     nextTick(() => {
       // console.log(tableRef.value && tableRef.value.doLayout, '222');
@@ -469,17 +475,17 @@
           return acc;
         }, []);
 
-        if(isAdd) {
-          transformedData.forEach(it => {
-            const currentRow = state.tableData.find(o => o.updated_at == it.updated_at)
-            if(currentRow) {
-              currentRow.child.push(...it.child)
+        if (isAdd) {
+          transformedData.forEach((it) => {
+            const currentRow = state.tableData.find((o) => o.updated_at == it.updated_at);
+            if (currentRow) {
+              currentRow.child.push(...it.child);
             } else {
               state.tableData.push(it);
             }
           });
-        }else {
-          state.tableData = transformedData
+        } else {
+          state.tableData = transformedData;
         }
 
         state.page.total = res.total;
@@ -655,7 +661,7 @@
       })
         .then((res) => {
           ElMessage.success('单词标熟成功');
-          state.page.currentPage = 1
+          state.page.currentPage = 1;
           getErrorWords(true, false);
           setLoading(false);
         })
@@ -739,7 +745,7 @@
       state.currentEditType = val;
     } else {
       state.form[val] = [];
-      getErrorWords(false,false);
+      getErrorWords(false, false);
     }
   };
 
@@ -751,7 +757,8 @@
   };
   const submit = () => {
     state.optionVisable = false;
-    getErrorWords(false,false);
+    state.page.currentPage = 1;
+    getErrorWords(false, false);
   };
   onUnmounted(() => {
     audio.pause(); // 先暂停播放
@@ -765,7 +772,14 @@
   const getSearchOptions = () => {
     errorListSearch().then((res) => {
       if (!state.optionsByDate?.length) {
-        state.optionsByDate = res.error_date;
+        state.optionsByDate = res.error_date.sort((a, b) => {
+          // 将日期字符串转换为日期对象
+          let dateA = new Date(a.date);
+          let dateB = new Date(b.date);
+
+          // 比较日期，返回值决定排序
+          return dateB - dateA; // 倒序排列
+        });
       }
       if (!state.optionsByNum?.length) {
         state.optionsByNum = res.error_number.sort((a, b) => a.error_num - b.error_num);

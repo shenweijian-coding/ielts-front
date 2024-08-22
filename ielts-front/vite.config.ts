@@ -40,5 +40,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       host: '0.0.0.0', // IP配置，支持从IP启动
       proxy,
     },
+    esbuild: {
+      drop: ['console', 'debugger'],
+    }
   };
 };
