@@ -1124,14 +1124,14 @@
       // 或者将音频对象赋值为null
       audio = null;
     }
-    if (!errSource.value) {
-      appStore.setLastId(wordsData?.currentWord.id || null);
-    }
+    // if (!errSource.value) {
+    //   appStore.setLastId(wordsData?.currentWord.id || null);
+    // }
   });
 
   // 展示当前播放词库列表
   const showWordsList = () => {
-    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'home', 2);
+    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'home', errSource == 'err' ? 2 : 1);
   };
 </script>
 

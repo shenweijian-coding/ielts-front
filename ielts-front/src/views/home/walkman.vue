@@ -816,6 +816,7 @@
   }
   // 处理计算结果
   const handleResult = () => {
+    stop()
     ElMessage.success('当前章节已播放完毕');
     // let accuracy = 0;
     // let correctness = 0;
@@ -1210,8 +1211,10 @@
   };
 
   const wordsSkip = (word) => {
+    stop()
     wordsData.currentIndex = wordsData.words.findIndex((item) => item.id == word.id);
     wordsData.currentWord = word;
+    start()
   };
   onUnmounted(() => {
     if (audio) {

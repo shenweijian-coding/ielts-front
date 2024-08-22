@@ -244,7 +244,7 @@
     const workBook = XLSX.utils.book_new();
     const workSheet = XLSX.utils.json_to_sheet(exportData);
     XLSX.utils.book_append_sheet(workBook, workSheet);
-    const fileName = appStore?.dictationInfo?.currentChapter.name ? `${appStore?.dictationInfo?.booInfo.name}_${appStore?.dictationInfo.currentChapter.name}.xlsx` : '错词练习'
+    const fileName = appStore?.dictationInfo?.currentChapter.name ? `${appStore?.dictationInfo?.booInfo.name}_${appStore?.dictationInfo.currentChapter.name}.xlsx` : '错词练习.xlsx'
     XLSX.writeFile(workBook, fileName, {
       bookType: 'xlsx',
     });
