@@ -87,7 +87,7 @@
       word_count: 15,
       data: '',
     },
-    state.isEdit = true
+    state.isEdit = false
     state.dialogVisible = false;
   };
   const handleConfirm = () => {
@@ -99,7 +99,7 @@
         requestApi({
           title: state.form.title,
           word_count: state.form.word_count,
-          data: JSON.stringify(data),
+          data: data,
         }, state.isEdit ? state.book.id : 0).then(() => {
           // console.log(res);
           ElMessage.success(`操作成功`);

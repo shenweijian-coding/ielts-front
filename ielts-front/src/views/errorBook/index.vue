@@ -251,7 +251,7 @@
       <div>
         <el-checkbox-group v-if="state.currentEditType == 'error_dates'" v-model="state.form.error_dates"
           class="flex flex-col" size="large">
-          <el-checkbox label="最近1次听写" v-model="state.form.recently">最近一次听写</el-checkbox>
+          <el-checkbox v-model="state.form.recently">最近一次听写</el-checkbox>
 
           <el-checkbox v-for="item in state.optionsByDate" :label="item.date + ' (' + item.lexicon_count + '词)'"
             :value="item.date" :key="item.lexicon_count" />
@@ -425,7 +425,7 @@ const getErrorWords = (noRefresh = false, isAdd = true) => {
 
         // 如果不存在，则创建一个新的条目
         if (!dateItem) {
-          dateItem = { updated_at: date, child: [] };
+          dateItem = { updated_at: date, child: [], checked: false, indeterminate: false };
           acc.push(dateItem);
         }
 
@@ -720,6 +720,7 @@ const handleSelOption = (val, type) => {
     state.currentEditType = val;
   } else {
     state.form[val] = [];
+    state.page.currentPage = 1
     getErrorWords(false, false);
   }
 };
