@@ -1247,7 +1247,7 @@
 
   // 展示当前播放词库列表
   const showWordsList = () => {
-    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'walkman');
+    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'walkman',errSource.value == 'err' ? 2 : 1);
   };
 
   const handleCollect = () => {
