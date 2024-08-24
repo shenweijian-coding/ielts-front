@@ -703,6 +703,8 @@
       letterMp3[key].pause();
     });
     if (utterance) {
+      utterance.text = '';
+      window.speechSynthesis.speak(utterance);
       window.speechSynthesis.cancel();
     }
   };
@@ -756,8 +758,8 @@
     clearAudioCache();
     playWords();
     // window.speechSynthesis.resume();
-    utterance.text = '';
-    window.speechSynthesis.speak(utterance);
+    // utterance.text = '';
+    // window.speechSynthesis.speak(utterance);
   };
 
   // 暂停
@@ -775,9 +777,7 @@
       audio2?.src && (audio2.src = '');
       audio2.pause();
     }
-    if (utterance) {
-      window.speechSynthesis.cancel();
-    }
+
     clearAudioCache();
   };
 
@@ -956,7 +956,7 @@
               };
               console.log('播放词义');
 
-              utterance.text = wordsData.currentWord?.['translate'].split(';')[0]?.replace(/[a-zA-Z]+[.]+/g, '');
+              utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+|[^a-zA-Z0-9\s]/g, '');
               window.speechSynthesis.speak(utterance);
             } else {
               if (count < +config.repetitions || config.repetitions == '无限') {
@@ -1071,7 +1071,7 @@
       };
       console.log('播放词义');
 
-      utterance.text = wordsData.currentWord?.['translate'].split(';')[0]?.replace(/[a-zA-Z]+[.]+/g, '');
+      utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+|[^a-zA-Z0-9\s]/g, '');
       window.speechSynthesis.speak(utterance);
     } else {
       console.log(Math.random(), count);
@@ -1247,7 +1247,7 @@
 
   // 展示当前播放词库列表
   const showWordsList = () => {
-    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'walkman',errSource.value == 'err' ? 2 : 1);
+    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'walkman', errSource.value == 'err' ? 2 : 1);
   };
 
   const handleCollect = () => {

@@ -36,7 +36,7 @@
     "dayjs": "^1.11.10",
     "devui-theme": "^0.0.4",
     "echarts": "^5.4.2",
-    "element-plus": "^2.3.7",
+    "element-plus": "^2.6.0",
     "mitt": "^3.0.0",
     "naive-ui": "^2.34.3",
     "pinia": "^2.1.3",

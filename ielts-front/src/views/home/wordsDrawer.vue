@@ -16,12 +16,14 @@
         >
           <div class="flex-1"
             ><p class="text-sm select-all font-mono lg:text-lg font-normal leading-6 dark:text-gray-50 mb-2"
-              >{{ item.word }}&nbsp;<span v-if="item.phonetic_transcription" class="text-gray lg:text-l text-m">/{{ item.phonetic_transcription }}/</span></p
+              >{{ item.word }}&nbsp;<span v-if="item.phonetic_transcription" class="text-gray lg:text-l text-m"
+                >/{{ item.phonetic_transcription }}/</span
+              ></p
             ><div class="mt-2 max-w font-sans text-m text-gray-400" v-html="replaceWithBr(item.translate || '')"></div>
           </div>
           <div class="lg:space-x-2 space-x-1 flex justify-center items-center">
             <button
-              @click="play(item)"
+              @click.stop="play(item)"
               class="focus:outline-none dark:fill-gray-400 dark:opacity-80 cursor-pointer text-gray-600 h-8 w-7"
               type="button"
             >
@@ -68,7 +70,7 @@
     list2: [],
     current: null,
     from: 'home',
-    type: 1
+    type: 1,
   });
   const dialogWidth = ref('50%');
   const collectRef = ref(null);
@@ -93,7 +95,7 @@
     state.list2 = list2;
     state.current = current;
     state.from = from;
-    state.type = type
+    state.type = type;
     nextTick(() => {
       document.getElementById('current').scrollIntoView();
     });
@@ -107,12 +109,12 @@
   var audio = new Audio();
 
   const handleClick = (row) => {
-    if(state.from == 'home') {
-      play(row)
-    } else if(state.from == 'walkman') {
-      emit('skip', row)
+    if (state.from == 'home') {
+      play(row);
+    } else if (state.from == 'walkman') {
+      emit('skip', row);
     }
-  }
+  };
 
   const play = (row) => {
     const type = userStore.getConfig.phonetic_type == 1 ? 'phonetic-y' : 'phonetic-m';
@@ -211,9 +213,8 @@
     handleWordCollect();
   };
   const towalkman = async () => {
-    if(state.type == 2) {
-      const errWords = state.list
-      .map((word) => {
+    if (state.type == 2) {
+      const errWords = state.list.map((word) => {
         return {
           c_id: word?.c_id || 0,
           g_id: word?.g_id || 0,
@@ -225,10 +226,10 @@
           'phonetic-m': word?.['phonetic-m'],
         };
       });
-    await appStore.setErrWords(errWords);
-    await appStore.toggleCurrentChapter(null);
-    router.push('/walkman?source=err');
-    }else {
+      await appStore.setErrWords(errWords);
+      await appStore.toggleCurrentChapter(null);
+      router.push('/walkman?source=err');
+    } else {
       router.push('/walkman');
     }
   };
@@ -244,7 +245,9 @@
     const workBook = XLSX.utils.book_new();
     const workSheet = XLSX.utils.json_to_sheet(exportData);
     XLSX.utils.book_append_sheet(workBook, workSheet);
-    const fileName = appStore?.dictationInfo?.currentChapter.name ? `${appStore?.dictationInfo?.booInfo.name}_${appStore?.dictationInfo.currentChapter.name}.xlsx` : '错词练习.xlsx'
+    const fileName = appStore?.dictationInfo?.currentChapter.name
+      ? `${appStore?.dictationInfo?.booInfo.name}_${appStore?.dictationInfo.currentChapter.name}.xlsx`
+      : '错词练习.xlsx';
     XLSX.writeFile(workBook, fileName, {
       bookType: 'xlsx',
     });
