@@ -238,7 +238,7 @@
         console.log(res);
         getChapterList({ g_id: res.id }).then(chapterList => {
           const currentChapter = chapterList.find(item => item.id == userStore.getConfig.recent_chapter_id)
-          if(!currentChapter?.is_incomplete)  {
+          if(currentChapter?.is_incomplete)  {
             // 如果是老用户就跳转听写页面
             appStore.setChapterInfo({
               currentChapter: currentChapter,
