@@ -21,12 +21,12 @@ export const useUserStore = defineStore('user', {
       proficient_tip: 0, // 标熟是否提示
       default_collection_book: 0, // 是否自动收藏至上次添加单词本
       recent_chapter_id: 0, // 最近1次听写章节ID
-      is_new_user: false // 是否新用户
+      is_new_user: false, // 是否新用户
       // recent_collection_book_id: 0, // 最近一次收藏书ID
     },
     is_enterprise: false, // 是否加入企业
     enterprise: null,
-    school_class: []
+    school_class: [],
   }),
   persist: {
     storage: sessionStorage,
@@ -41,17 +41,11 @@ export const useUserStore = defineStore('user', {
     getConfig(state) {
       return state.config;
     },
-    classInfo(state){
+    classInfo(state) {
       return state.school_class;
-    }
+    },
   },
   actions: {
-    // switchRoles() {
-    //   return new Promise((resolve) => {
-    //     this.role = this.role === 'user' ? 'user' : 'admin';
-    //     resolve(this.role);
-    //   });
-    // },
     // 设置用户的信息
     setInfo(partial) {
       this.$patch(partial);
@@ -72,16 +66,14 @@ export const useUserStore = defineStore('user', {
     // 获取用户信息
     async info() {
       const result = await getUserProfile();
-      console.log(result);
-
       this.setInfo(result);
     },
     async handleConfig(p, val) {
       this.config[p] = val;
-      const data = JSON.parse(JSON.stringify(this.config))
-      delete data.recent_collection_book_id
-      delete data.recent_chapter_id
-      delete data.is_new_user
+      const data = JSON.parse(JSON.stringify(this.config));
+      delete data.recent_collection_book_id;
+      delete data.recent_chapter_id;
+      delete data.is_new_user;
       updateConfig(data);
     },
     // 异步登录并存储token

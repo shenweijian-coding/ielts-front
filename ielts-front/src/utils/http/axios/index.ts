@@ -7,8 +7,6 @@ import { clearToken } from '@/utils/auth';
 import { useUserStore } from '@/store';
 import { useRouter } from 'vue-router';
 
-console.log(import.meta.env);
-
 const service: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 10000,

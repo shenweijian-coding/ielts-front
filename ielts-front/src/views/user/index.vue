@@ -43,6 +43,7 @@
               ><el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
+
         <div
           v-if="!userStore.$state.is_enterprise"
           class="menu-item flex items-center py-6 justify-between border-bottom cursor-pointer"
@@ -54,6 +55,7 @@
               ><el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
+
         <div
           v-if="userStore.$state.school_class.length"
           class="menu-item flex items-center py-6 justify-between border-bottom cursor-pointer"
@@ -65,6 +67,7 @@
               >退出班级<el-icon><ArrowRight /></el-icon></span
           ></div>
         </div>
+
         <!-- <div class="menu-item flex items-center py-6 justify-between border-bottom">
           <div class="left"><span class="menu-title font-bold text-sm">注册时间</span></div>
           <div class="right"
@@ -88,8 +91,7 @@
   import { useUserStore } from '@/store';
   import tabbar from '@/components/tabBar/index.vue';
   import { useRouter } from 'vue-router';
-  import { getGroupBooks } from '@/api/book/index';
-  import { ElMessage, ElMessageBox } from 'element-plus';
+  import { ElMessageBox } from 'element-plus';
   import Teach from '@/components/teaching/index.vue';
   import { ArrowRight } from '@element-plus/icons-vue';
   import { classLogout } from '@/api/company/index';
@@ -97,9 +99,9 @@
   const userStore = useUserStore();
   const router = useRouter();
 
-  const state = reactive({
-    list: [],
-  });
+  // const state = reactive({
+  //   list: [],
+  // });
   const teachRef = ref(null);
   const handleLogout = () => {
     ElMessageBox.confirm('确定退出登录吗', ``, {
@@ -112,13 +114,13 @@
       userStore.logout();
     });
   };
-  const handleToBook = () => {
-    // if (!state.list.length) {
-    //   ElMessage.warning('无单词本');
-    //   return;
-    // }
-    router.push('/main/vocabularyBook');
-  };
+  // const handleToBook = () => {
+  //   if (!state.list.length) {
+  //     ElMessage.warning('无单词本');
+  //     return;
+  //   }
+  //   router.push('/main/vocabularyBook');
+  // };
   const openTeaching = () => {
     console.log(teachRef.value);
     teachRef.value && teachRef.value.open();
@@ -138,20 +140,11 @@
     }).then(() => {
       classLogout({
         class_id: userStore.classInfo?.[0].class_id,
-      }).then((res) => {
+      }).then(() => {
         userStore.info();
       });
     });
   };
-
-  // const getBooks = (s_id) => {
-  //   getGroupBooks({ s_id: s_id })
-  //     .then((res) => {
-  //       state.list = res;
-  //     })
-  //     .catch(() => {});
-  // };
-  // getBooks(2);
 </script>
 <style lang="less" scoped>
   .el-button + .el-button {

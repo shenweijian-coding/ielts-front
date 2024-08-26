@@ -38,6 +38,7 @@ declare module 'vue' {
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     Footer: typeof import('./../src/components/footer/index.vue')['default']
     Header: typeof import('./../src/components/Header/index.vue')['default']
+    HomeFilled: typeof import('@ant-design/icons-vue')['HomeFilled']
     Index2: typeof import('./../src/components/Notice/index2.vue')['default']
     LastPage: typeof import('./../src/components/lastPage/index.vue')['default']
     Loading: typeof import('./../src/components/loading/index.vue')['default']

@@ -1,309 +1,5 @@
 <template>
-  <header class="container z-20 mx-auto w-full lg:px-10 py-8 px-4">
-    <div class="flex w-full flex-col items-center justify-between space-y-3 lg:flex-row lg:space-y-0"
-      ><a class="flex items-center text-2xl font-bold text-theme no-underline hover:no-underline lg:text-4xl" href="/#/main/book">
-        <SvgIcon name="atx" class="hidden md:block" width="120" height="80" />
-      </a>
-      <nav
-        class="my-card on element flex w-auto flex-col lg:flex-row content-center items-center justify-end space-x-3 rounded-xl bg-white lg:p-3 p-2 transition-colors duration-300 dark:bg-gray-800"
-      >
-        <div class="flex">
-          <el-tooltip content="词典切换" placement="top" effect="light">
-            <div class="relative">
-              <div>
-                <a
-                  class="text-black block rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
-                  href="/#/main"
-                >
-                  {{ appStore?.dictationInfo?.booInfo.remarks || '前往书籍页' }}
-                </a>
-              </div>
-            </div>
-          </el-tooltip>
-          <el-tooltip content="章节切换" placement="top" effect="light">
-            <div class="relative">
-              <el-popover placement="bottom" :width="200" trigger="click">
-                <template #reference>
-                  <button
-                    class="rounded-lg px-3 py-1 text-lg transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100"
-                    id="headlessui-listbox-button-:rdb:"
-                    type="button"
-                    aria-haspopup="listbox"
-                    aria-expanded="false"
-                    data-headlessui-state=""
-                    >{{
-                      errSource == 'err' ? '错词练习' : errSource == 'collect' ? '听写练习' : appStore?.dictationInfo?.currentChapter?.name
-                    }}</button
-                  >
-                </template>
-                <div class="h-50 overflow-y-auto">
-                  <el-radio-group v-model="config.chapterId" size="default" @change="chapterChange">
-                    <el-radio
-                      v-for="chapter in chapterList"
-                      :key="chapter.id"
-                      :value="chapter.id"
-                      :label="chapter.id"
-                      border
-                      class="w-full mb-2 mr-0"
-                      >{{ chapter.name }}</el-radio
-                    >
-                  </el-radio-group>
-                </div>
-              </el-popover>
-            </div>
-          </el-tooltip>
-        </div>
-        <div class="flex space-x-2 lg:space-x-1">
-          <el-tooltip content="单词播放速度" placement="top" effect="light">
-            <div class="relative" data-headlessui-state="">
-              <el-popover placement="bottom" :width="100" trigger="click">
-                <template #reference>
-                  <button
-                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                    type="button"
-                    aria-expanded="false"
-                  >
-                    <div class="relative">
-                      <div>x{{ config.play_speed }} 倍</div>
-                    </div>
-                  </button>
-                </template>
-                <div>
-                  <el-radio-group v-model="config.play_speed" size="default" @change="(val) => handleConfigChange('play_speed', val)">
-                    <el-radio
-                      v-for="(speed, index) in config.speedList"
-                      :key="index"
-                      :value="speed"
-                      :label="speed"
-                      border
-                      class="w-full mb-2 mr-0"
-                      >{{ speed }} 倍</el-radio
-                    >
-                  </el-radio-group>
-                </div>
-              </el-popover>
-            </div>
-          </el-tooltip>
-          <el-tooltip content="单词重复次数" placement="top" effect="light">
-            <div class="relative" data-headlessui-state="">
-              <el-popover placement="bottom" :width="100" trigger="click">
-                <template #reference>
-                  <button
-                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                    type="button"
-                    aria-expanded="false"
-                  >
-                    <div class="relative">
-                      <div>{{ config.repetitions }} 遍</div>
-                    </div>
-                  </button>
-                </template>
-                <div>
-                  <el-radio-group v-model="config.repetitions" size="default" @change="(val) => handleConfigChange('repetitions', val)">
-                    <el-radio
-                      v-for="repeat in config.repeatList"
-                      :key="repeat"
-                      :value="repeat"
-                      :label="repeat"
-                      border
-                      class="w-full mb-2 mr-0"
-                      >{{ repeat }} 遍</el-radio
-                    >
-                  </el-radio-group>
-                </div>
-              </el-popover>
-            </div>
-          </el-tooltip>
-          <el-tooltip content="单词听写模式" placement="top" effect="light">
-            <div class="relative" data-headlessui-state="">
-              <button
-                class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                type="button"
-                aria-expanded="false"
-                @click="handleMode"
-              >
-                <div class="relative">
-                  <div :class="config.isSeries ? '' : 'line-through'">连听</div>
-                </div>
-              </button>
-            </div>
-          </el-tooltip>
-          <el-tooltip v-if="+config.repetitions > 1 || config.isSeries" content="单词播放间隔" placement="top" effect="light">
-            <div class="relative" data-headlessui-state="">
-              <el-popover placement="bottom" :width="100" trigger="click">
-                <template #reference>
-                  <button
-                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                    type="button"
-                    aria-expanded="false"
-                  >
-                    <div class="relative">
-                      <div>{{ config.play_interval }} 秒</div>
-                    </div>
-                  </button>
-                </template>
-                <div>
-                  <el-radio-group v-model="config.play_interval" size="default" @change="(val) => handleConfigChange('play_interval', val)">
-                    <el-radio v-for="gap in config.gapList" :key="gap" :value="+gap" border :label="+gap" class="w-full mb-2 mr-0"
-                      >{{ gap }} 秒</el-radio
-                    >
-                  </el-radio-group>
-                </div>
-              </el-popover>
-            </div>
-          </el-tooltip>
-
-          <el-tooltip content="发音" placement="top" effect="light">
-            <div class="relative" data-headlessui-state="">
-              <el-popover placement="bottom" :width="100" trigger="click">
-                <template #reference>
-                  <button
-                    class="flex h-8 min-w-max cursor-pointer items-center justify-center rounded-md px-1 transition-colors duration-300 ease-in-out hover:bg-theme hover:text-white focus:outline-none dark:text-white dark:text-opacity-60 dark:hover:text-opacity-100 bg-transparent"
-                    type="button"
-                    aria-expanded="false"
-                  >
-                    <div class="relative">
-                      <div>{{ config.pronounceList.find((o) => o.id == config.phonetic_type).name }}</div>
-                    </div>
-                  </button>
-                </template>
-                <div>
-                  <el-radio-group v-model="config.phonetic_type" size="default" @change="(val) => handleConfigChange('phonetic_type', val)">
-                    <el-radio
-                      v-for="pronounce in config.pronounceList"
-                      :key="pronounce.id"
-                      :value="pronounce.id"
-                      :label="pronounce.id"
-                      border
-                      class="w-full mb-2 mr-0"
-                      >{{ pronounce.name }}</el-radio
-                    >
-                  </el-radio-group>
-                </div>
-              </el-popover>
-            </div>
-          </el-tooltip>
-
-          <div class="flex items-center justify-center gap-2 space-x-2 lg:space-x-1">
-            <el-tooltip content="当前播放词库" placement="top" effect="light" :visible="tooltipVisible">
-              <div class="relative">
-                <div>
-                  <div class="relative"
-                    ><button
-                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out hover:text-white"
-                      title="当前播放词库"
-                      type="button"
-                      @click="showWordsList"
-                      @mouseenter="tooltipVisible = true"
-                      @mouseleave="tooltipVisible = false"
-                    >
-                      <el-icon color="#2c3e50" :size="20"><List /></el-icon> </button
-                  ></div>
-                </div>
-                <div
-                  class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
-                >
-                  <span class="tooltip">当前播放词库</span></div
-                >
-              </div>
-            </el-tooltip>
-
-            <el-tooltip content="设置" placement="top" effect="light">
-              <div class="relative">
-                <el-popover placement="bottom" :width="200" trigger="click">
-                  <template #reference>
-                    <button
-                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
-                      title="设置"
-                      type="button"
-                    >
-                      <!-- <SvgIcon name="setting" prefix="icon-svg" width="23" height="23" color="#2c3e50" /> -->
-                      <el-icon color="#2c3e50" :size="20"><Tools /></el-icon>
-                    </button>
-                  </template>
-                  <div>
-                    <div class="flex items-center justify-between">
-                      <div>乱序播放</div>
-                      <el-switch v-model="config.is_disorderly" @change="(val) => handleConfigChange('is_disorderly', val, true)" />
-                    </div>
-                    <!-- <span class="text-sm">开启后，单词播放顺序将会被打乱，下一章节/重新进入本章节 开始生效</span> -->
-                    <div class="flex items-center justify-between mt-2">
-                      <div>忽略大小写</div>
-                      <el-switch v-model="config.ignore_case" />
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                      <div>拼写正确自动提交</div>
-                      <el-switch
-                        v-model="config.is_automatic_submit"
-                        @change="(val) => handleConfigChange('is_automatic_submit', val, false)"
-                      />
-                    </div>
-                    <div class="flex items-center justify-between mt-2">
-                      <div>输入按键音效</div>
-                      <el-switch v-model="config.error_sound" />
-                    </div>
-                  </div>
-                </el-popover>
-              </div>
-            </el-tooltip>
-
-            <el-tooltip content="返回主页" placement="top" effect="light">
-              <div class="relative hidden sm:block">
-                <a href="/#/main/book">
-                  <button
-                    class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
-                    title="返回主页"
-                    type="button"
-                  >
-                    <el-icon color="#2c3e50" :size="20"><HomeFilled /></el-icon>
-                  </button>
-                </a>
-              </div>
-            </el-tooltip>
-
-            <el-tooltip v-if="false" content="错词本" placement="top" effect="light">
-              <div class="relative">
-                <div>
-                  <a href="/#/errorBook?from=home">
-                    <button
-                      type="button"
-                      class="flex items-center justify-center rounded p-[2px] text-lg outline-none transition-colors duration-300 ease-in-out"
-                      title="查看错题本"
-                    >
-                      <el-icon><HomeFilled /></el-icon>
-                    </button>
-                  </a>
-                </div>
-                <div
-                  class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
-                >
-                  <span class="tooltip">错题本</span></div
-                >
-              </div>
-            </el-tooltip>
-
-            <!-- <div class="relative">
-              <div>
-                <el-popover placement="bottom" :width="50" trigger="hover" popper-class="popperClass">
-                  <template #reference>
-                    <button
-                      type="button"
-                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
-                    >
-                      <el-icon color="#2c3e50" :size="19"><UserFilled /></el-icon>
-                    </button>
-                  </template>
-                  <div class="full-w text-center">
-                    <el-button type="text" @click="handleLogout">退出登录</el-button>
-                  </div>
-                </el-popover>
-              </div>
-            </div> -->
-          </div>
-        </div>
-      </nav>
-    </div>
-  </header>
+  <Header @getWords="getWords" @showWordsList="showWordsList" :config="config" />
 
   <div class="container mx-auto flex h-full flex-1 flex-col items-center justify-center pb-5">
     <div class="container relative mx-auto flex h-full flex-col items-center">
@@ -311,9 +7,9 @@
         <div class="container flex h-full w-full flex-col items-center justify-center">
           <div class="container flex h-24 w-full shrink-0 grow-0 justify-between px-12 pt-0">
             <el-tooltip content="快捷键 ctrl+j" placement="top" effect="light">
-              <div class="relative" @click="handleMove(-1)"
-                ><div
-                  ><div
+              <div class="relative" @click="handleMove(-1)">
+                <div>
+                  <div
                     v-if="nearWords.lastWord"
                     class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
                   >
@@ -333,56 +29,32 @@
                       </p>
                       <p class="line-clamp-2 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
                         nearWords.lastWord.translate
-                      }}</p></div
-                    ></div
-                  ></div
-                ></div
-              >
+                      }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </el-tooltip>
 
-            <div class="relative" @click="handleMove(1)"
-              ><div>
+            <div class="relative" @click="handleMove(1)">
+              <div>
                 <div
                   v-if="nearWords.nextWord"
                   class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
-                  ><div class="grow-1 flex w-full flex-col items-end text-right mr-2">
-                    <!-- <p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0"> **** </p
-                    ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
-                      nearWords.nextWord.translate
-                    }}</p> -->
-                  </div>
-                  <!-- <SvgIcon name="right" />  -->
-                </div></div
-              ></div
-            ></div
-          >
+                >
+                  <div class="grow-1 flex w-full flex-col items-end text-right mr-2"> </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="container flex flex-grow flex-col items-center justify-center">
             <div class="relative flex w-full justify-center">
-              <!-- <div class="absolute flex h-full w-full justify-center">
-                  <div class="z-10 flex w-full items-center backdrop-blur-sm">
-                    <p class="w-full select-none text-center text-xl text-gray-600 dark:text-gray-50">按任意键开始</p>
-                  </div>
-                </div> -->
-
               <div class="relative w-full" v-if="wordsData.words.length">
                 <div lang="en" class="flex flex-col items-center justify-center pb-1 pt-4 w-full">
-                  <!-- <div
-                      class="tooltip-info relative w-fit bg-transparent p-0 leading-normal shadow-none dark:bg-transparent"
-                      data-tip="按 Tab 快捷键显示完整单词"
-                    >
-                      <div class="flex items-center false justify-center">
-                        <span
-                          v-for="word in wordsData.currentWord.word"
-                          :key="word + Math.random()"
-                          class="m-0 p-0 font-mono font-normal text-gray-600 dark:text-gray-50 pr-0.8 duration-0 dark:text-opacity-80"
-                          style="font-size: 48px"
-                          >{{ word }}</span
-                        >
-                      </div>
-                    </div> -->
                   <div class="user-input text-center flex flex-col items-center w-full">
                     <input
-                      :placeholder="!showPlaceholder ? '在此输入单词，点击Enter核对' : ''"
+                      :placeholder="userStore.getConfig.is_new_user ? '在此输入单词，点击Enter核对' : ''"
                       v-model="wordsData.currentWord.userInput"
                       :type="isMobile ? 'password' : 'text'"
                       ref="inputRef"
@@ -405,18 +77,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- <div
-                    class="space-x-5 text-center text-sm font-normal text-gray-600 transition-colors duration-300 dark:text-gray-400 false"
-                  >
-                    <span>{{ wordsData.currentWord.phonetic_transcription }}</span></div
-                  >
-                  <div class="flex items-center justify-center pb-4 pt-5">
-                    <span
-                      class="max-w-4xl text-center font-sans transition-colors duration-300 dark:text-white dark:text-opacity-80 false false"
-                      style="font-size: 18px"
-                      >{{ wordsData.currentWord.translate }}</span
-                    >
-                  </div> -->
                 <div class="space-x-8 flex mt-10 duration-300 text-center justify-center transition-colors font-sans cursor-pointer">
                   <div>
                     <el-tooltip content="回退上一个单词，快捷键 ctrl+j" placement="top" effect="light">
@@ -438,16 +98,9 @@
               </div>
             </div>
           </div>
-          <div class="relative w-1/4 pt-1 mb-10 mt-auto opacity-0">
-            <div class="mb-4 flex h-2 overflow-hidden rounded-xl bg-indigo-100 text-xs transition-all duration-300 dark:bg-indigo-200">
-              <div
-                class="flex flex-col justify-center whitespace-nowrap rounded-xl text-center text-white shadow-none transition-all duration-300 bg-indigo-200 dark:bg-indigo-300"
-                style="width: 0%"
-              ></div>
-            </div>
-          </div>
         </div>
       </div>
+
       <div
         class="my-card flex lg:w-3/5 w-90 rounded-xl bg-white p-4 py-10 opacity-50 transition-colors duration-300 dark:bg-gray-800"
         v-if="wordsData.words.length"
@@ -458,6 +111,7 @@
       </div>
     </div>
   </div>
+
   <mistakeDialog ref="mistakeRef" @next="handleNextChapter" />
   <Loading :loading="loading" />
   <WordsDrawer ref="wordslistRef" @download="downloadTemp" />
@@ -480,9 +134,10 @@
   import { getWordList, reportLexiRes, getChapterList } from '@/api/book/index';
   import { useRouter, useRoute } from 'vue-router';
   import WordsDrawer from './wordsDrawer.vue';
-  import { shuffleArray, debounce, deepClone } from '@/utils/index';
+  import { shuffleArray, deepClone } from '@/utils/index';
   import confetti from 'canvas-confetti';
   import downTemplate from './down-template.vue';
+  import Header from './components/header.vue';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -526,7 +181,6 @@
     lastIndex: 0, // 上一个单词的ID
   });
 
-  var myConfetti = null;
   const playStatus = ref(0); // 0-未开始 1-播放中 2-已暂停
   const inputRef = ref(null); // 输入框聚焦
   const beepRef = ref(new Audio(beep));
@@ -534,14 +188,17 @@
   const defaultAudioRef = ref(new Audio(defaultAudio));
   const mistakeRef = ref(null);
   const wordslistRef = ref(null);
-  let currentTestKey = Date.now();
   const countDown = ref(0); // 倒计时
   const audioPlayer = ref(null);
   const canvasRef = ref(null);
-  let audio = audioPlayer.value;
-  var count = 0;
-  const tooltipVisible = ref(false);
   const downTemplateRef = ref(null);
+
+  let myConfetti = null;
+  let currentTestKey = Date.now();
+  let audio = audioPlayer.value;
+  let count = 0;
+  let timer = null;
+  let countdownInterval = null;
 
   const nearWords = computed(() => {
     let lastWord = '';
@@ -571,24 +228,9 @@
     };
   });
 
-  const inputStyle = computed(() => {
-    const baseWidth = 300; // 设置一个基础宽度
-    const additionalWidth = 30; // 每个字符增加的宽度
-    const width1 = wordsData?.currentWord?.userInput?.length * additionalWidth || 0;
-    const width2 = wordsData?.currentWord?.word?.length * additionalWidth || 0;
-    console.log(wordsData?.currentWord?.word, wordsData?.currentWord?.userInput);
-    return {
-      width: `${Math.max(baseWidth, width1, width2)}px`,
-    };
-  });
-
   // 判断单词是否输入正确
   const checkWordsIsOk = () => {
     let { word, userInput = '', other_word = '' } = wordsData.currentWord;
-    // console.log(word, userInput, 'word, userInput');
-    // if (userInput?.length != word?.length) {
-    //   return false;
-    // }
     if (config.ignore_case) {
       // 忽略大小写
       word = word.toLowerCase();
@@ -597,15 +239,6 @@
     }
     return word === userInput || (other_word && other_word == userInput);
   };
-
-  const chapterList = computed(() => {
-    return appStore?.dictationInfo?.chapterList || [];
-  });
-  // const currentChapter = computed(() => {
-  //   return appStore.dictationInfo.currentChapter;
-  // });
-
-  const showPlaceholder = ref(window.localStorage.getItem('oldUser'));
 
   const getWords = () => {
     if (errSource.value) {
@@ -711,10 +344,6 @@
     }
   };
 
-  // 播放音频的方法
-  // let audio = null;
-  var timer = null;
-  let countdownInterval = null;
   // 重新播放
   const playAgain = () => {
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
@@ -737,13 +366,13 @@
       // audio = null;
     }
   };
+
   const getNoProficientWordIndex = (type) => {
     let nextIndex = wordsData.currentIndex;
     nextIndex = nextIndex + type; // 如果当前单词标熟，继续查找下一个
     while (nextIndex < wordsData.words.length && nextIndex >= 0) {
       // 如果当前单词未标熟，返回当前索引
       if (!wordsData.words[nextIndex]?.is_proficient) {
-        console.log(`找到未标熟的单词：${wordsData.words[nextIndex].word}`);
         break; // 跳出循环
       }
       nextIndex = nextIndex + type; // 如果当前单词标熟，继续查找下一个
@@ -752,10 +381,6 @@
   };
 
   const handleMove = (type, isPlay = true) => {
-    // 如果已经在播放状态，直接返回，避免重复调用
-    // if (playStatus.value === 1) {
-    //   return;
-    // }
     playStatus.value = 1;
     const sign = wordsData.currentIndex + type;
 
@@ -808,12 +433,9 @@
       start();
     }
   };
+
   // 上报听写配置
   const handleReport = (data) => {
-    if (!showPlaceholder.value) {
-      showPlaceholder.value = true;
-      window.localStorage.setItem('oldUser', true);
-    }
     reportLexiRes({
       s_id: appStore?.dictationInfo?.isClass ? 5 : null,
       key: currentTestKey,
@@ -826,6 +448,7 @@
         canSubmit = true;
       });
   };
+
   function fire(particleRatio, opts) {
     var count = 200;
     var defaults = {
@@ -837,10 +460,10 @@
       particleCount: Math.floor(count * particleRatio),
     });
   }
+
   // 弹出效果
   const handleEffectiveness = () => {
     canvasRef.value.style.display = 'block';
-
     fire(0.25, {
       spread: 60,
       startVelocity: 55,
@@ -867,6 +490,7 @@
       canvasRef.value.style.display = 'none';
     }, 4000);
   };
+
   // 处理计算结果
   const handleResult = () => {
     let accuracy = 0;
@@ -896,13 +520,12 @@
       mistakeRef.value.open(accuracy);
     }
   };
+
   // 回车 播放下一个的方法
   const inputEnter = () => {
-    console.log(canSubmit, 'canSubmit1');
     if (!canSubmit) {
       return;
     }
-    console.log(canSubmit, 'canSubmit2');
     canSubmit = false;
     count = 0;
     clearAudioCache();
@@ -910,12 +533,6 @@
       return;
     }
     let { userInput = '', id } = wordsData.currentWord;
-    // if (config.ignore_case) {
-    //   // 忽略大小写
-    //   word = word.toLowerCase();
-    //   other_word = other_word?.toLowerCase();
-    //   userInput = userInput ? userInput.toLowerCase() : '';
-    // }
     if (checkWordsIsOk()) {
       inputRef.value.style.color = 'green';
       inputRef.value.style.borderColor = 'green';
@@ -944,7 +561,6 @@
   watch(
     () => wordsData.currentWord?.userInput,
     (newValue, oldValue) => {
-      console.log(`${oldValue} to ${newValue}`, canSubmit);
       if (config.is_automatic_submit && checkWordsIsOk() && oldValue && newValue) {
         inputEnter();
       }
@@ -955,6 +571,7 @@
   const handleFocusClick = () => {
     start();
   };
+
   const handleFocus = () => {
     if (isMobile.value) {
       setTimeout(() => {
@@ -967,11 +584,6 @@
     stop();
   };
 
-  // 听写模式
-  const handleMode = () => {
-    config.isSeries = !config.isSeries;
-    ElMessage.success(`连读已 ${!config.isSeries ? '关闭' : '开启'}`);
-  };
   const handleKeyDown = (event) => {
     if (config.error_sound) {
       const key = event.key.toLowerCase();
@@ -1024,13 +636,9 @@
 
   // 播放单词的方法
   const playWords = () => {
-    // if (!audio) {
-    //   audio = new Audio();
-    // }
     // 播放第一个单词
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
     audio.playbackRate = +config.play_speed;
-    // console.log(Math.random());
     audio.play();
     count++;
 
@@ -1088,9 +696,6 @@
       wordsData.currentIndex = 0;
     });
   };
-  const handleLogout = () => {
-    userStore.logout();
-  };
 
   // 听写下一章
   const handleNextChapter = () => {
@@ -1100,15 +705,6 @@
       chapterChange(chapterList.value[nextChapterIndex].id);
     } else {
       ElMessage.error('已经是最后一章啦');
-    }
-  };
-
-  // 切换配置
-  const handleConfigChange = (p, val, isResetWord = false) => {
-    userStore.handleConfig(p, val);
-    if (val && isResetWord) {
-      appStore.updateContinuePlayStatus(true);
-      getWords();
     }
   };
 
@@ -1136,11 +732,6 @@
 </script>
 
 <style scoped lang="less">
-  .my-card {
-    box-shadow: 0 100px 80px #814c2e12, 0 41.7776px 33.4221px #814c2e0d, 0 22.3363px 17.869px #814c2e12, 0 12.5216px 10.0172px #814c2e0d,
-      0 6.6501px 5.32008px #814c2e12, 0 2.76726px 2.21381px #814c2e0d;
-  }
-
   .el-radio {
     margin-right: 0;
   }
@@ -1151,19 +742,25 @@
       background-color: #000;
       // border-bottom: 2px solid ;
     }
+
     input {
       font-size: 3rem;
       // border-bottom: 2px solid ;
       padding: 10px 0;
       width: 100%;
     }
+
     input::placeholder {
-      color: #999; /* 灰色 */
+      color: #999;
+      /* 灰色 */
       font-size: 20px;
     }
+
     input:focus::placeholder {
-      color: transparent; /* 使placeholder在聚焦时消失 */
+      color: transparent;
+      /* 使placeholder在聚焦时消失 */
     }
+
     .error {
       border-bottom: 2px solid red;
     }
@@ -1172,6 +769,7 @@
       border-bottom: 2px solid green;
     }
   }
+
   .count-down-box {
     position: absolute;
     right: 3rem;
@@ -1180,6 +778,7 @@
     line-height: 32px;
     opacity: 0.4;
   }
+
   canvas {
     width: 80%;
     height: 100%;

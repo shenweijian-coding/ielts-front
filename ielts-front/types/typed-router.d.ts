@@ -40,12 +40,10 @@ import type {
 declare module 'vue-router/auto/routes' {
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
-    '/component/': RouteRecordInfo<'/component/', '/component', Record<never, never>, Record<never, never>>,
     '/contain/': RouteRecordInfo<'/contain/', '/contain', Record<never, never>, Record<never, never>>,
     '/contain/components/layout': RouteRecordInfo<'/contain/components/layout', '/contain/components/layout', Record<never, never>, Record<never, never>>,
     '/contain/components/main': RouteRecordInfo<'/contain/components/main', '/contain/components/main', Record<never, never>, Record<never, never>>,
     '/contain/components/subAside': RouteRecordInfo<'/contain/components/subAside', '/contain/components/subAside', Record<never, never>, Record<never, never>>,
-    '/demo/': RouteRecordInfo<'/demo/', '/demo', Record<never, never>, Record<never, never>>,
     '/enterprise//class/': RouteRecordInfo<'/enterprise//class/', '/enterprise/class', Record<never, never>, Record<never, never>>,
     '/enterprise//class/components/booksDialog': RouteRecordInfo<'/enterprise//class/components/booksDialog', '/enterprise/class/components/booksDialog', Record<never, never>, Record<never, never>>,
     '/enterprise//class/detail': RouteRecordInfo<'/enterprise//class/detail', '/enterprise/class/detail', Record<never, never>, Record<never, never>>,
@@ -67,6 +65,7 @@ declare module 'vue-router/auto/routes' {
     '/gallery/book/chapter-dialog': RouteRecordInfo<'/gallery/book/chapter-dialog', '/gallery/book/chapter-dialog', Record<never, never>, Record<never, never>>,
     '/gallery/book/import-dialog': RouteRecordInfo<'/gallery/book/import-dialog', '/gallery/book/import-dialog', Record<never, never>, Record<never, never>>,
     '/home/': RouteRecordInfo<'/home/', '/home', Record<never, never>, Record<never, never>>,
+    '/home/components/header': RouteRecordInfo<'/home/components/header', '/home/components/header', Record<never, never>, Record<never, never>>,
     '/home/down-template': RouteRecordInfo<'/home/down-template', '/home/down-template', Record<never, never>, Record<never, never>>,
     '/home/mistakeDialog': RouteRecordInfo<'/home/mistakeDialog', '/home/mistakeDialog', Record<never, never>, Record<never, never>>,
     '/home/walkman': RouteRecordInfo<'/home/walkman', '/home/walkman', Record<never, never>, Record<never, never>>,

@@ -1,0 +1,2 @@
+function useDictate() {}
+export { useDictate };
