@@ -39,7 +39,6 @@
 
   const windowSize = () => {
     const screenWidth = window.innerWidth; // 获取当前屏幕宽度
-
     // 根据屏幕宽度计算Dialog的宽度
     if (screenWidth < 768) {
       dialogWidth.value = '90%'; // 在小屏幕下设置Dialog宽度为90%

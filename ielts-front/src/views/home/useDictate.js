@@ -1,2 +1,4 @@
-function useDictate() {}
+function useDictate() {
+  function 
+}
 export { useDictate };

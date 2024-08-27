@@ -56,12 +56,13 @@
   import { wordLabel } from '@/api/book/index';
   import collectDialog from '../errorBook/components/collect-dialog.vue';
   import ImportDialog from '../errorBook/components/import-dialog.vue';
-  import { useRouter } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
   import * as XLSX from 'xlsx';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
   const router = useRouter();
+  const route = useRoute();
 
   const emit = defineEmits(['download', 'skip']);
   const state = reactive({
@@ -70,7 +71,6 @@
     list2: [],
     current: null,
     from: 'home',
-    type: 1,
   });
   const dialogWidth = ref('50%');
   const collectRef = ref(null);
@@ -89,13 +89,12 @@
     }
   };
   // type = 1是章节 type = 2是错词
-  const open = (list, list2, current, from = 'home', type = 1) => {
+  const open = (list, list2, current, from = 'home') => {
     state.drawer = true;
     state.list = list;
     state.list2 = list2;
     state.current = current;
     state.from = from;
-    state.type = type;
     nextTick(() => {
       document.getElementById('current').scrollIntoView();
     });
@@ -213,28 +212,9 @@
     handleWordCollect();
   };
   const towalkman = async () => {
-    if (state.type == 2) {
-      const errWords = state.list.map((word) => {
-        return {
-          c_id: word?.c_id || 0,
-          g_id: word?.g_id || 0,
-          id: word?.id || 0,
-          word: word?.word,
-          translate: word?.translate,
-          phonetic_transcription: word?.phonetic_transcription,
-          'phonetic-y': word?.['phonetic-y'],
-          'phonetic-m': word?.['phonetic-m'],
-        };
-      });
-      await appStore.setErrWords(errWords);
-      await appStore.toggleCurrentChapter(null);
-      router.push('/walkman?source=err');
-    } else {
-      router.push('/walkman');
-    }
+    router.push(route.query?.source ? '/walkman?source=err' : '/walkman');
   };
   const download = () => {
-    // state.drawer = false;
     const exportData = state.list.map((item) => {
       return {
         单词: item?.word,
@@ -245,13 +225,12 @@
     const workBook = XLSX.utils.book_new();
     const workSheet = XLSX.utils.json_to_sheet(exportData);
     XLSX.utils.book_append_sheet(workBook, workSheet);
-    const fileName = appStore?.dictationInfo?.currentChapter.name
+    const fileName = appStore?.dictationInfo?.currentChapter?.name
       ? `${appStore?.dictationInfo?.booInfo.name}_${appStore?.dictationInfo.currentChapter.name}.xlsx`
       : '错词练习.xlsx';
     XLSX.writeFile(workBook, fileName, {
       bookType: 'xlsx',
     });
-    // emit('download');
   };
   onUnmounted(() => {
     audio.pause(); // 先暂停播放
