@@ -36,7 +36,7 @@
           <div
             v-for="(item, index) in galleryState.sceneList"
             :key="index"
-            class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 false border-color-theme mr-4 mb-2"
+            class="cursor-pointer whitespace-nowrap rounded-[3rem] px-4 py-2 false border-color-theme mr-1 md:mr-4 mb-2"
             :class="galleryState.currentScene == item.id ? 'bg-theme text-white' : 'bg-white text-black hover:bg-theme_hover'"
             @click="handleSceneSel(item)"
             ><span class="font-normal">{{ item.name }}</span></div
@@ -230,38 +230,7 @@
     ImportDialogRef.value.open(data)
   }
 
-  const handleUserContinuePlay = () => {
-    const isNav = sessionStorage.getItem('firstIn')
-    if(!userStore.getConfig.is_new_user && !isNav) {
-      sessionStorage.setItem('firstIn', 1)
-      getBookInfoByChapter({ c_id: userStore.getConfig.recent_chapter_id }).then(res => {
-        console.log(res);
-        getChapterList({ g_id: res.id }).then(chapterList => {
-          const currentChapter = chapterList.find(item => item.id == userStore.getConfig.recent_chapter_id)
-          if(!currentChapter?.is_incomplete)  {
-            // 如果是老用户就跳转听写页面
-            appStore.setChapterInfo({
-              currentChapter: currentChapter,
-              chapterList: chapterList,
-              booInfo: {
-                name: res.name,
-                remarks: res.remarks,
-                id: res.s_id
-              },
-              isClass: false
-            });
-            appStore.updateContinuePlayStatus(true)
-            // sessionStorage.removeItem('firstIn')
-            router.push('/home')
-          }
-        })
-      })
-    }
-  }
-
   onMounted(() => {
-    // 获取用户是否继续听写
-    handleUserContinuePlay()
     getLanguage();
   });
 </script>

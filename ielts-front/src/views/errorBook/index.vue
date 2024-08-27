@@ -261,14 +261,14 @@
     <div
       ref="draggableElement"
       v-if="state.tableData.length"
-      class="tools-box absolute flex flex-col justify-center bg-white px-3 lg:px-5 py-2 lg:py-3 bottom-33 transition-colors duration-300 rounded-xl"
+      class="tools-box md:scale-80 absolute flex flex-col justify-center bg-white px-4 py-1 lg:px-2 lg:py-2 bottom-33 transition-colors duration-300 rounded-xl"
     >
       <p class="text-center text-base tracking-wide"
         >对已选中的 <b class="text-theme text-xl text-bold">{{ selWordCount }}</b> 个错词进行</p
       >
-      <div class="flex lg:mt-2 space-x-5">
+      <div class="flex lg:mt-2 space-x-3 md:space-x-2">
         <div
-          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 px-3 lg:px-6 py-2 text-theme rounded"
+          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 lg:px-6 px-2 py-2 text-theme rounded"
           @click="handleSelWords"
         >
           <el-icon class="mb-1 lg:mb-3" size="25">
@@ -276,14 +276,14 @@
           </el-icon>
           <span class="text-black">听写</span>
         </div>
-        <div class="flex flex-col items-center cursor-pointer hover:bg-gray-50 px-3 lg:px-6 py-2 text-theme rounded" @click="handleWalkman">
+        <div class="flex flex-col items-center cursor-pointer hover:bg-gray-50 lg:px-6 px-2 py-2 text-theme rounded" @click="handleWalkman">
           <el-icon class="mb-1 lg:mb-3" size="25">
             <Headset />
           </el-icon>
           <span class="text-black">随身听</span>
         </div>
         <div
-          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 px-3 lg:px-6 py-2 text-theme rounded"
+          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 lg:px-6 px-2 py-2 text-theme rounded"
           @click="handleDownloadExcel"
         >
           <el-icon class="mb-1 lg:mb-3" size="25">
@@ -293,7 +293,7 @@
         </div>
         <div
           v-show="!state.showMore"
-          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 px-3 lg:px-6 py-2 text-theme rounded"
+          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 lg:px-6 px-2 py-2 text-theme rounded"
           @click="handleMore"
         >
           <el-icon class="mb-1 lg:mb-3" size="25">
@@ -303,7 +303,7 @@
         </div>
         <div
           v-show="state.showMore"
-          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 px-3 lg:px-6 py-2 text-theme rounded"
+          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 lg:px-6 px-2 py-2 text-theme rounded"
           @click="handleWordCollect('')"
         >
           <el-icon class="mb-1 lg:mb-3" size="25">
@@ -313,7 +313,7 @@
         </div>
         <div
           v-show="state.showMore"
-          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 px-3 lg:px-6 py-2 text-theme rounded"
+          class="flex flex-col items-center cursor-pointer hover:bg-gray-50 lg:px-6 px-2 py-2 text-theme rounded"
           @click="handleWordSign('')"
         >
           <el-icon class="mb-1 lg:mb-3" size="25">
