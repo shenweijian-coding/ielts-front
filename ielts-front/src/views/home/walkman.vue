@@ -467,161 +467,225 @@
     });
   }
 
+  // function audioOver() {
+  //   if (config.playSpell) { // 播放单词拼写
+  //     const playNextLetter = (word, index) => {
+  //       if (index >= word.length) {
+  //         playAudio(config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y']).then(() => {
+  //           if (config.playMean) {
+  //             // 监听 'onend' 事件，该事件在语音播放完毕后触发
+  //             utterance.onend = function (event) {
+  //               console.log('语音播放完毕');
+  //               // 这里可以执行播放完毕后的代码
+  //               console.log(Math.random(), count);
+  //               if (count < +config.repetitions || config.repetitions == '无限') {
+  //                 count++;
+  //                 // 这里是播放
+  //                 audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+  //                 timer = setTimeout(() => {
+  //                   audio.play();
+  //                 }, config.play_interval * 1000);
+  //               } else {
+  //                 count = 0;
+  //                 if (playStatus.value == 1 && config.isSeries) {
+  //                   countDown.value = config.play_interval;
+  //                   console.log(countDown.value, 'countDown.value1');
+  //                   countdownInterval = setInterval(() => {
+  //                     console.log(countDown.value, 'countDown.value2');
+  //                     countDown.value--;
+  //                     if (countDown.value <= 0) {
+  //                       clearInterval(countdownInterval);
+  //                       // 播放下一个单词的逻辑
+  //                       inputEnter();
+  //                     }
+  //                   }, 100);
+  //                 }
+  //               }
+  //             };
+  //             console.log('播放词义');
+
+  //             utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+/g, '');
+  //             window.speechSynthesis.speak(utterance);
+  //           } else {
+  //             if (count < +config.repetitions || config.repetitions == '无限') {
+  //               count++;
+  //               // 这里是播放
+  //               audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+  //               timer = setTimeout(() => {
+  //                 audio.play();
+  //               }, config.play_interval * 1000);
+  //             } else {
+  //               count = 0;
+
+  //               if (playStatus.value == 1 && config.isSeries) {
+  //                 countDown.value = config.play_interval;
+  //                 console.log(countDown.value, 'countDown.value1');
+  //                 countdownInterval = setInterval(() => {
+  //                   console.log(countDown.value, 'countDown.value2');
+  //                   countDown.value--;
+  //                   if (countDown.value <= 0) {
+  //                     clearInterval(countdownInterval);
+  //                     // 播放下一个单词的逻辑
+  //                     inputEnter();
+  //                   }
+  //                 }, 100);
+  //               }
+  //             }
+  //           }
+  //         });
+
+  //         return;
+  //       }
+
+  //       const letterLower = word[index].toLowerCase();
+  //       const letterUpper = word[index].toUpperCase();
+  //       if (!/^[A-Za-z]+$/.test(letterLower || letterUpper)) {
+  //         playNextLetter(word, index + 1);
+  //       } else {
+  //         playLetter(letterMp3[letterLower] || letterMp3[letterUpper])
+  //           .then(() => {
+  //             // 播放当前字母后，递归播放下一个字母
+  //             playNextLetter(word, index + 1);
+  //           })
+  //           .catch((error) => {
+  //             console.error('Error playing audio:', error);
+  //           });
+  //       }
+  //     };
+  //     const playLettersSequentially = (word) => {
+  //       if (word.length === 0) return;
+  //       playNextLetter(word, 0);
+  //     };
+  //     playLettersSequentially(wordsData.currentWord.word);
+  //   } else if (!config.playSpell && config.playMean) {
+  //     // 监听 'onend' 事件，该事件在语音播放完毕后触发
+  //     utterance.onend = function (event) {
+  //       console.log('语音播放完毕');
+  //       // 这里可以执行播放完毕后的代码
+  //       console.log(Math.random(), count);
+  //       if (count < +config.repetitions || config.repetitions == '无限') {
+  //         count++;
+  //         // 这里是播放
+  //         audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+  //         timer = setTimeout(() => {
+  //           audio.play();
+  //         }, config.play_interval * 1000);
+  //       } else {
+  //         count = 0;
+
+  //         if (playStatus.value == 1 && config.isSeries) {
+  //           countDown.value = config.play_interval;
+  //           console.log(countDown.value, 'countDown.value1');
+  //           countdownInterval = setInterval(() => {
+  //             console.log(countDown.value, 'countDown.value2');
+  //             countDown.value--;
+  //             if (countDown.value <= 0) {
+  //               clearInterval(countdownInterval);
+  //               // 播放下一个单词的逻辑
+  //               inputEnter();
+  //             }
+  //           }, 100);
+  //         }
+  //       }
+  //     };
+
+  //     utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+/g, '');
+  //     window.speechSynthesis.speak(utterance);
+  //   } else {
+  //     console.log(Math.random(), count);
+  //     if (count < +config.repetitions || config.repetitions == '无限') {
+  //       count++;
+  //       // 这里是播放
+  //       audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
+
+  //       timer = setTimeout(() => {
+  //         audio.play();
+  //       }, config.play_interval * 1000);
+  //     } else {
+  //       count = 0;
+
+  //       // 所有单词都已播放完毕，停止播放
+  //       if (playStatus.value == 1 && config.isSeries) {
+  //         countDown.value = config.play_interval;
+  //         console.log(countDown.value, 'countDown.value1');
+  //         countdownInterval = setInterval(() => {
+  //           console.log(countDown.value, 'countDown.value2');
+  //           countDown.value--;
+  //           if (countDown.value <= 0) {
+  //             clearInterval(countdownInterval);
+  //             // 播放下一个单词的逻辑
+  //             inputEnter();
+  //           }
+  //         }, 100);
+  //       }
+  //     }
+  //   }
+  // }
+
   function audioOver() {
-    if (config.playSpell) { // 播放单词拼写
+    const shouldRepeat = () => {
+      return count < +config.repetitions || config.repetitions === '无限';
+    };
+
+    const startCountdown = () => {
+      countDown.value = config.play_interval;
+      const countdownInterval = setInterval(() => {
+        countDown.value--;
+        if (countDown.value <= 0) {
+          clearInterval(countdownInterval);
+          inputEnter();
+        }
+      }, 100);
+    };
+
+    const handleEndOfPlayback = () => {
+      count = 0;
+      if (playStatus.value === 1 && config.isSeries) {
+        startCountdown();
+      }
+    };
+
+    const playWord = async (word) => {
+      if (!config.playSpell) {
+        count++
+        await playAudio(config.phonetic_type === 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y']);
+      }
+
+      if (config.playMean) {
+        utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+/g, '');
+        window.speechSynthesis.speak(utterance);
+      }
+
+      if (shouldRepeat()) {
+        setTimeout(() => {
+          playWord(word);
+        }, config.play_interval * 1000);
+      } else {
+        handleEndOfPlayback();
+      }
+    };
+
+    if (config.playSpell) {
       const playNextLetter = (word, index) => {
         if (index >= word.length) {
-          playAudio(config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y']).then(() => {
-            if (config.playMean) {
-              // 监听 'onend' 事件，该事件在语音播放完毕后触发
-              utterance.onend = function (event) {
-                console.log('语音播放完毕');
-                // 这里可以执行播放完毕后的代码
-                console.log(Math.random(), count);
-                if (count < +config.repetitions || config.repetitions == '无限') {
-                  count++;
-                  // 这里是播放
-                  audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
-
-                  timer = setTimeout(() => {
-                    audio.play();
-                  }, config.play_interval * 1000);
-                } else {
-                  count = 0;
-                  if (playStatus.value == 1 && config.isSeries) {
-                    countDown.value = config.play_interval;
-                    console.log(countDown.value, 'countDown.value1');
-                    countdownInterval = setInterval(() => {
-                      console.log(countDown.value, 'countDown.value2');
-                      countDown.value--;
-                      if (countDown.value <= 0) {
-                        clearInterval(countdownInterval);
-                        // 播放下一个单词的逻辑
-                        inputEnter();
-                      }
-                    }, 100);
-                  }
-                }
-              };
-              console.log('播放词义');
-
-              utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+/g, '');
-              window.speechSynthesis.speak(utterance);
-            } else {
-              if (count < +config.repetitions || config.repetitions == '无限') {
-                count++;
-                // 这里是播放
-                audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
-
-                timer = setTimeout(() => {
-                  audio.play();
-                }, config.play_interval * 1000);
-              } else {
-                count = 0;
-
-                if (playStatus.value == 1 && config.isSeries) {
-                  countDown.value = config.play_interval;
-                  console.log(countDown.value, 'countDown.value1');
-                  countdownInterval = setInterval(() => {
-                    console.log(countDown.value, 'countDown.value2');
-                    countDown.value--;
-                    if (countDown.value <= 0) {
-                      clearInterval(countdownInterval);
-                      // 播放下一个单词的逻辑
-                      inputEnter();
-                    }
-                  }, 100);
-                }
-              }
-            }
-          });
-
+          playWord(wordsData.currentWord.word);
           return;
         }
 
-        const letterLower = word[index].toLowerCase();
-        const letterUpper = word[index].toUpperCase();
-        if (!/^[A-Za-z]+$/.test(letterLower || letterUpper)) {
-          playNextLetter(word, index + 1);
-        } else {
-          playLetter(letterMp3[letterLower] || letterMp3[letterUpper])
-            .then(() => {
-              // 播放当前字母后，递归播放下一个字母
-              playNextLetter(word, index + 1);
-            })
-            .catch((error) => {
-              console.error('Error playing audio:', error);
-            });
-        }
-      };
-      const playLettersSequentially = (word) => {
-        if (word.length === 0) return;
-        playNextLetter(word, 0);
-      };
-      playLettersSequentially(wordsData.currentWord.word);
-    } else if (!config.playSpell && config.playMean) {
-      // 监听 'onend' 事件，该事件在语音播放完毕后触发
-      utterance.onend = function (event) {
-        console.log('语音播放完毕');
-        // 这里可以执行播放完毕后的代码
-        console.log(Math.random(), count);
-        if (count < +config.repetitions || config.repetitions == '无限') {
-          count++;
-          // 这里是播放
-          audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
-
-          timer = setTimeout(() => {
-            audio.play();
-          }, config.play_interval * 1000);
-        } else {
-          count = 0;
-
-          if (playStatus.value == 1 && config.isSeries) {
-            countDown.value = config.play_interval;
-            console.log(countDown.value, 'countDown.value1');
-            countdownInterval = setInterval(() => {
-              console.log(countDown.value, 'countDown.value2');
-              countDown.value--;
-              if (countDown.value <= 0) {
-                clearInterval(countdownInterval);
-                // 播放下一个单词的逻辑
-                inputEnter();
-              }
-            }, 100);
-          }
-        }
+        const letter = word[index].toLowerCase() || word[index].toUpperCase();
+        playLetter(letterMp3[letter])
+          .then(() => {
+            playNextLetter(word, index + 1);
+          })
+          .catch(console.error);
       };
 
-      utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+/g, '');
-      window.speechSynthesis.speak(utterance);
+      playNextLetter(wordsData.currentWord.word, 0);
     } else {
-      console.log(Math.random(), count);
-      if (count < +config.repetitions || config.repetitions == '无限') {
-        count++;
-        // 这里是播放
-        audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
-
-        timer = setTimeout(() => {
-          audio.play();
-        }, config.play_interval * 1000);
-      } else {
-        count = 0;
-
-        // 所有单词都已播放完毕，停止播放
-        if (playStatus.value == 1 && config.isSeries) {
-          countDown.value = config.play_interval;
-          console.log(countDown.value, 'countDown.value1');
-          countdownInterval = setInterval(() => {
-            console.log(countDown.value, 'countDown.value2');
-            countDown.value--;
-            if (countDown.value <= 0) {
-              clearInterval(countdownInterval);
-              // 播放下一个单词的逻辑
-              inputEnter();
-            }
-          }, 100);
-        }
-      }
+      playWord(wordsData.currentWord.word);
     }
   }
 
