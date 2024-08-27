@@ -51,7 +51,6 @@ const addClass = async (data) => post({ url: '/api/study/enterprise/v1/class/add
 // 上传班级词书
 const uploadClassBook = async (data) => post({ url: '/api/study/enterprise/v1/class/upload/book', data });
 
-
 // 学生错词列表
 const getStudenErrWords = async (data) => post({ url: '/api/study/enterprise/v1/class/student/error/list', data });
 
@@ -76,5 +75,5 @@ export {
   uploadClassBook,
   getStudenErrWords,
   classLogout,
-  updateBook
+  updateBook,
 };

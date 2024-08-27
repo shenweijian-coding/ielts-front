@@ -44,7 +44,7 @@
   import tabbar from '@/components/tabBar/qy-tabbar.vue';
   import { useRouter } from 'vue-router';
   import ImportDialog from './import-dialog.vue';
-  import ChapterDialog from '@/views/gallery/book/chapter-dialog.vue';
+  import ChapterDialog from '@/views/gallery/chapter-dialog.vue';
 
   import { getSceneList, getGroupBooks, getLanguageList, getCategoryList, getChapterList } from '@/api/book/index';
 

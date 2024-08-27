@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="state.dialogVisible" :title="state.book?.name" :width="dialogWidth" :before-close="handleClose">
+  <el-dialog v-model="state.dialogVisible" :title="state.book?.name" :width="({1: '90%',2: '70%',3: '60%'})[deviceSize]" :before-close="handleClose">
     <div class="text relative flex h-10 flex-col gap-2">
       <p class="mt-1">{{ state.book.chapter_total }} 章节 &nbsp;&nbsp;{{ state.book.word_total }} 词</p>
       <div class="absolute bottom-6 right-2">
@@ -53,18 +53,20 @@
 </template>
 <script setup>
   import { reactive } from 'vue';
-  import SvgIcon from '@/components/SvgIcon/index.vue';
-  import { useAppStore } from '@/store';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { useRouter } from 'vue-router';
   import { Delete,Edit } from '@element-plus/icons-vue';
+
+  import SvgIcon from '@/components/SvgIcon/index.vue';
+  import { useAppStore } from '@/store';
   import { deleteBook } from '@/api/book/index';
+  import { useDrawerWith } from '@/views/home/useLogic.js'
 
   const emits = defineEmits(['ok', 'updateBook']);
 
   const appStore = useAppStore();
-
   const router = useRouter();
+  const { deviceSize, countWidth } = useDrawerWith()
 
   const state = reactive({
     list: [],
@@ -72,26 +74,14 @@
     isClass: false,
     dialogVisible: false,
   });
-  const dialogWidth = ref('60%');
 
-  const windowSize = () => {
-    const screenWidth = window.innerWidth; // 获取当前屏幕宽度
-
-    // 根据屏幕宽度计算Dialog的宽度
-    if (screenWidth < 768) {
-      dialogWidth.value = '90%'; // 在小屏幕下设置Dialog宽度为90%
-    } else if (screenWidth >= 768 && screenWidth < 1024) {
-      dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
-    } else {
-      dialogWidth.value = '60%'; // 在大屏幕下设置Dialog宽度为50%
-    }
-  };
   const open = (book, list, isClass = false) => {
     state.list = list;
     state.book = book;
     state.isClass = !!isClass;
     state.dialogVisible = true;
   };
+
   const handleClose = () => {
     state.dialogVisible = false;
   };
@@ -102,7 +92,6 @@
       chapterList: state.list,
       booInfo: state.book,
       isClass: state.isClass
-      // last_id: item?.last_id,
     });
   };
 
@@ -112,44 +101,8 @@
       return;
     }
     appStore.updateContinuePlayStatus(false);
-    // if (item.is_incomplete) {
-    //   ElMessageBox.confirm('上次有未听写完成的单词，要从中断的单词继续听写吗', '', {
-    //     confirmButtonText: '继续听写',
-    //     cancelButtonText: '重新开始',
-    //     type: 'info',
-    //     distinguishCancelAndClose: true,
-    //   })
-    //     .then(() => {
-    //       // appStore.setChapterInfo({
-    //       //   currentChapter: item,
-    //       //   chapterList: state.list,
-    //       //   booInfo: state.book,
-    //       //   last_id: item.last_id,
-    //       // });
-    //       setChapterInfo(item);
-    //       router.push('/home');
-    //     })
-    //     .catch((action) => {
-    //       if (action == 'cancel') {
-    //         // appStore.setChapterInfo({
-    //         //   currentChapter: item,
-    //         //   chapterList: state.list,
-    //         //   booInfo: state.book,
-    //         // });
-    //         setChapterInfo(item);
-    //         router.push('/home');
-    //       }
-    //     });
-    // } else {
-    // appStore.setChapterInfo({
-    //   currentChapter: item,
-    //   chapterList: state.list,
-    //   booInfo: state.book,
-    // });
     setChapterInfo(item);
-
     router.push('/home');
-    // }
   };
 
   const handleErrorBook = () => {
@@ -166,10 +119,6 @@
       closeOnClickModal: false
     })
       .then(() => {
-        // ElMessage({
-        //   type: 'success',
-        //   message: 'Delete completed',
-        // });
       })
       .catch((action) => {
         if (action == 'cancel') {
@@ -186,12 +135,7 @@
     state.dialogVisible = false
     emits('updateBook', {list: state.list, book: state.book})
   }
-  onMounted(() => {
-    window.addEventListener('resize', () => {
-      windowSize();
-    });
-    windowSize();
-  });
+  
   defineExpose({
     open,
   });

@@ -31,9 +31,7 @@
                     aria-haspopup="listbox"
                     aria-expanded="false"
                     data-headlessui-state=""
-                    >{{
-                      errSource == 'err' ? '错词练习' : errSource == 'collect' ? '听写练习' : appStore?.dictationInfo?.currentChapter?.name
-                    }}</button
+                    >{{ errSource ? '错词练习' : appStore?.dictationInfo?.currentChapter?.name }}</button
                   >
                 </template>
                 <div class="h-50 overflow-y-auto">
@@ -197,14 +195,16 @@
                       @mouseenter="tooltipVisible = true"
                       @mouseleave="tooltipVisible = false"
                     >
-                      <el-icon color="#2c3e50" :size="20"><List /></el-icon> </button
+                      <el-icon color="#2c3e50" :size="20">
+                        <List />
+                      </el-icon> </button
                   ></div>
                 </div>
                 <div
                   class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
                 >
-                  <span class="tooltip">当前播放词库</span></div
-                >
+                  <span class="tooltip">当前播放词库</span>
+                </div>
               </div>
             </el-tooltip>
 
@@ -217,8 +217,9 @@
                       title="设置"
                       type="button"
                     >
-                      <!-- <SvgIcon name="setting" prefix="icon-svg" width="23" height="23" color="#2c3e50" /> -->
-                      <el-icon color="#2c3e50" :size="20"><Tools /></el-icon>
+                      <el-icon color="#2c3e50" :size="20">
+                        <Tools />
+                      </el-icon>
                     </button>
                   </template>
                   <div>
@@ -226,7 +227,6 @@
                       <div>乱序播放</div>
                       <el-switch v-model="config.is_disorderly" @change="(val) => handleConfigChange('is_disorderly', val, true)" />
                     </div>
-                    <!-- <span class="text-sm">开启后，单词播放顺序将会被打乱，下一章节/重新进入本章节 开始生效</span> -->
                     <div class="flex items-center justify-between mt-2">
                       <div>忽略大小写</div>
                       <el-switch v-model="config.ignore_case" />
@@ -255,7 +255,9 @@
                     title="返回主页"
                     type="button"
                   >
-                    <el-icon color="#2c3e50" :size="20"><HomeFilled /></el-icon>
+                    <el-icon color="#2c3e50" :size="20">
+                      <HomeFilled />
+                    </el-icon>
                   </button>
                 </a>
               </div>
@@ -270,35 +272,19 @@
                       class="flex items-center justify-center rounded p-[2px] text-lg outline-none transition-colors duration-300 ease-in-out"
                       title="查看错题本"
                     >
-                      <el-icon><HomeFilled /></el-icon>
+                      <el-icon>
+                        <HomeFilled />
+                      </el-icon>
                     </button>
                   </a>
                 </div>
                 <div
                   class="opacity-0 bottom-full pb-2 pointer-events-none absolute left-1/2 flex -translate-x-1/2 transform items-center justify-center transition-opacity"
                 >
-                  <span class="tooltip">错题本</span></div
-                >
+                  <span class="tooltip">错题本</span>
+                </div>
               </div>
             </el-tooltip>
-
-            <!-- <div class="relative">
-              <div>
-                <el-popover placement="bottom" :width="50" trigger="hover" popper-class="popperClass">
-                  <template #reference>
-                    <button
-                      type="button"
-                      class="flex items-center justify-center rounded p-[2px] text-lg text-indigo-500 outline-none transition-colors duration-300 ease-in-out"
-                    >
-                      <el-icon color="#2c3e50" :size="19"><UserFilled /></el-icon>
-                    </button>
-                  </template>
-                  <div class="full-w text-center">
-                    <el-button type="text" @click="handleLogout">退出登录</el-button>
-                  </div>
-                </el-popover>
-              </div>
-            </div> -->
           </div>
         </div>
       </nav>
@@ -311,9 +297,9 @@
         <div class="container flex h-full w-full flex-col items-center justify-center">
           <div class="container flex h-24 w-full shrink-0 grow-0 justify-between px-12 pt-0">
             <el-tooltip content="快捷键 ctrl+j" placement="top" effect="light">
-              <div class="relative" @click="handleMove(-1)"
-                ><div
-                  ><div
+              <div class="relative" @click="handleMove(-1)">
+                <div>
+                  <div
                     v-if="nearWords.lastWord"
                     class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
                   >
@@ -333,53 +319,28 @@
                       </p>
                       <p class="line-clamp-2 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
                         nearWords.lastWord.translate
-                      }}</p></div
-                    ></div
-                  ></div
-                ></div
-              >
+                      }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </el-tooltip>
 
-            <div class="relative" @click="handleMove(1)"
-              ><div>
+            <div class="relative" @click="handleMove(1)">
+              <div>
                 <div
                   v-if="nearWords.nextWord"
                   class="flex max-w-xs cursor-pointer select-none items-center text-gray-700 opacity-60 duration-200 ease-in-out hover:opacity-100 dark:text-gray-400"
-                  ><div class="grow-1 flex w-full flex-col items-end text-right mr-2">
-                    <!-- <p class="font-mono text-2xl font-normal text-gray-700 dark:text-gray-400 tracking-normal mb-0"> **** </p
-                    ><p class="line-clamp-1 max-w-full text-sm font-normal text-gray-600 dark:text-gray-500">{{
-                      nearWords.nextWord.translate
-                    }}</p> -->
-                  </div>
-                  <!-- <SvgIcon name="right" />  -->
-                </div></div
-              ></div
-            ></div
-          >
+                >
+                  <div class="grow-1 flex w-full flex-col items-end text-right mr-2"> </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="container flex flex-grow flex-col items-center justify-center">
             <div class="relative flex w-full justify-center">
-              <!-- <div class="absolute flex h-full w-full justify-center">
-                  <div class="z-10 flex w-full items-center backdrop-blur-sm">
-                    <p class="w-full select-none text-center text-xl text-gray-600 dark:text-gray-50">按任意键开始</p>
-                  </div>
-                </div> -->
-
               <div class="relative w-full" v-if="wordsData.words.length">
                 <div lang="en" class="flex flex-col items-center justify-center pb-1 pt-4 w-full">
-                  <!-- <div
-                      class="tooltip-info relative w-fit bg-transparent p-0 leading-normal shadow-none dark:bg-transparent"
-                      data-tip="按 Tab 快捷键显示完整单词"
-                    >
-                      <div class="flex items-center false justify-center">
-                        <span
-                          v-for="word in wordsData.currentWord.word"
-                          :key="word + Math.random()"
-                          class="m-0 p-0 font-mono font-normal text-gray-600 dark:text-gray-50 pr-0.8 duration-0 dark:text-opacity-80"
-                          style="font-size: 48px"
-                          >{{ word }}</span
-                        >
-                      </div>
-                    </div> -->
                   <div class="user-input text-center flex flex-col items-center w-full">
                     <input
                       :placeholder="!showPlaceholder ? '在此输入单词，点击Enter核对' : ''"
@@ -391,9 +352,9 @@
                       autocorrect="off"
                       spellcheck="false"
                       @keydown.enter="inputEnter"
-                      @blur="handleBlur"
+                      @blur="stop"
                       @keydown="handleKeyDown"
-                      @click="handleFocusClick"
+                      @click="start"
                       @focus="handleFocus"
                     />
                     <div class="input-border w-4/5 lg:w-2/5"> </div>
@@ -405,18 +366,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- <div
-                    class="space-x-5 text-center text-sm font-normal text-gray-600 transition-colors duration-300 dark:text-gray-400 false"
-                  >
-                    <span>{{ wordsData.currentWord.phonetic_transcription }}</span></div
-                  >
-                  <div class="flex items-center justify-center pb-4 pt-5">
-                    <span
-                      class="max-w-4xl text-center font-sans transition-colors duration-300 dark:text-white dark:text-opacity-80 false false"
-                      style="font-size: 18px"
-                      >{{ wordsData.currentWord.translate }}</span
-                    >
-                  </div> -->
                 <div class="space-x-8 flex mt-10 duration-300 text-center justify-center transition-colors font-sans cursor-pointer">
                   <div>
                     <el-tooltip content="回退上一个单词，快捷键 ctrl+j" placement="top" effect="light">
@@ -467,36 +416,33 @@
 </template>
 
 <script setup>
-  import SvgIcon from '@/components/SvgIcon/index.vue';
+  import { ElMessage, ElMessageBox } from 'element-plus';
+  import { List, HomeFilled, Tools } from '@element-plus/icons-vue';
+  import { useRouter, useRoute } from 'vue-router';
+
+  import { useAppStore, useUserStore } from '@/store';
+  import { getWordList, reportLexiRes, getChapterList } from '@/api/book/index';
+
   import beep from '@/assets/beep.wav';
   import correct from '@/assets/correct.wav';
   import defaultAudio from '@/assets/Default.wav';
-  import { ElMessage, ElMessageBox } from 'element-plus';
-  import { List, HomeFilled, Tools } from '@element-plus/icons-vue';
-  import Loading from '@/components/loading/index.vue';
+
   import useLoading from '@/hooks/loading.ts';
   import mistakeDialog from './mistakeDialog.vue';
-  import { useAppStore, useUserStore } from '@/store';
-  import { getWordList, reportLexiRes, getChapterList } from '@/api/book/index';
-  import { useRouter, useRoute } from 'vue-router';
-  import WordsDrawer from './wordsDrawer.vue';
-  import { shuffleArray, debounce, deepClone } from '@/utils/index';
+
+  import { shuffleArray, deepClone } from '@/utils/index';
   import confetti from 'canvas-confetti';
+  import WordsDrawer from './wordsDrawer.vue';
   import downTemplate from './down-template.vue';
+  import SvgIcon from '@/components/SvgIcon/index.vue';
+  import Loading from '@/components/loading/index.vue';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
   const route = useRoute();
   const router = useRouter();
 
-  let canSubmit = true;
-
   const { loading, setLoading } = useLoading();
-
-  // 有道的翻译api
-  // const YDAPI = 'https://dict.youdao.com/dictvoice?audio=';
-  const errSource = ref(''); // 默认空，错词表来的  err
-  const isMobile = ref(window.innerWidth <= 768);
 
   const config = reactive({
     chapterId: appStore.chapterId,
@@ -526,7 +472,8 @@
     lastIndex: 0, // 上一个单词的ID
   });
 
-  var myConfetti = null;
+  const errSource = ref(false); // 默认空，听写错词为true
+  const isMobile = ref(window.innerWidth <= 768);
   const playStatus = ref(0); // 0-未开始 1-播放中 2-已暂停
   const inputRef = ref(null); // 输入框聚焦
   const beepRef = ref(new Audio(beep));
@@ -534,14 +481,19 @@
   const defaultAudioRef = ref(new Audio(defaultAudio));
   const mistakeRef = ref(null);
   const wordslistRef = ref(null);
-  let currentTestKey = Date.now();
   const countDown = ref(0); // 倒计时
   const audioPlayer = ref(null);
   const canvasRef = ref(null);
-  let audio = audioPlayer.value;
-  var count = 0;
   const tooltipVisible = ref(false);
   const downTemplateRef = ref(null);
+
+  let myConfetti = null;
+  let currentTestKey = Date.now();
+  let audio = audioPlayer.value;
+  let count = 0;
+  let canSubmit = true;
+  let timer = null;
+  let countdownInterval = null;
 
   const nearWords = computed(() => {
     let lastWord = '';
@@ -571,24 +523,9 @@
     };
   });
 
-  const inputStyle = computed(() => {
-    const baseWidth = 300; // 设置一个基础宽度
-    const additionalWidth = 30; // 每个字符增加的宽度
-    const width1 = wordsData?.currentWord?.userInput?.length * additionalWidth || 0;
-    const width2 = wordsData?.currentWord?.word?.length * additionalWidth || 0;
-    console.log(wordsData?.currentWord?.word, wordsData?.currentWord?.userInput);
-    return {
-      width: `${Math.max(baseWidth, width1, width2)}px`,
-    };
-  });
-
   // 判断单词是否输入正确
   const checkWordsIsOk = () => {
     let { word, userInput = '', other_word = '' } = wordsData.currentWord;
-    // console.log(word, userInput, 'word, userInput');
-    // if (userInput?.length != word?.length) {
-    //   return false;
-    // }
     if (config.ignore_case) {
       // 忽略大小写
       word = word.toLowerCase();
@@ -601,9 +538,6 @@
   const chapterList = computed(() => {
     return appStore?.dictationInfo?.chapterList || [];
   });
-  // const currentChapter = computed(() => {
-  //   return appStore.dictationInfo.currentChapter;
-  // });
 
   const showPlaceholder = ref(window.localStorage.getItem('oldUser'));
 
@@ -621,7 +555,6 @@
       setLoading(true);
       getWordList({
         c_id: appStore.dictationInfo.currentChapter.id,
-        // continue_lexicon_id: appStore.dictationInfo.last_id,
         pagesize: 9999,
         s_id: appStore?.dictationInfo?.isClass ? 5 : null,
       })
@@ -632,7 +565,6 @@
               // 筛选出没有听写的单词
               const noRead = res.data.filter((o) => !res.existing_id.includes(o.id));
               const beanRead = res.data.filter((o) => res.existing_id.includes(o.id));
-              // console.log(noRead, beanRead, '222');
               if (noRead.length) {
                 wordsData.words = [...beanRead, ...shuffleArray(noRead)];
               } else {
@@ -684,7 +616,6 @@
                     }
                   });
               } else {
-                console.log('我置顶了');
                 wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
               }
             }
@@ -711,16 +642,10 @@
     }
   };
 
-  // 播放音频的方法
-  // let audio = null;
-  var timer = null;
-  let countdownInterval = null;
   // 重新播放
   const playAgain = () => {
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
-
     audio.playbackRate = +config.play_speed;
-
     audio.play();
   };
 
@@ -734,9 +659,10 @@
     if (audio) {
       audio?.src && (audio.src = '');
       audio.pause();
-      // audio = null;
     }
   };
+
+  // 找到下一个未标熟的位置
   const getNoProficientWordIndex = (type) => {
     let nextIndex = wordsData.currentIndex;
     nextIndex = nextIndex + type; // 如果当前单词标熟，继续查找下一个
@@ -751,11 +677,8 @@
     return nextIndex;
   };
 
+  // 前后移动
   const handleMove = (type, isPlay = true) => {
-    // 如果已经在播放状态，直接返回，避免重复调用
-    // if (playStatus.value === 1) {
-    //   return;
-    // }
     playStatus.value = 1;
     const sign = wordsData.currentIndex + type;
 
@@ -764,8 +687,6 @@
         wordsData.lastIndex = wordsData.currentIndex;
       }
       wordsData.currentIndex = getNoProficientWordIndex(type);
-
-      // wordsData.currentIndex = sign;
       if (wordsData.currentIndex < wordsData.words.length) {
         wordsData.currentWord = wordsData.words[wordsData.currentIndex];
       } else {
@@ -793,21 +714,14 @@
     inputRef.value && inputRef.value.blur();
     countDown.value = 0;
     clearInterval(countdownInterval);
-    if (audio) {
-      audio?.src && (audio.src = '');
-      audio.pause();
-    }
     clearAudioCache();
   };
 
   // 切换暂停和播放
   const toggleStopAndStart = () => {
-    if (playStatus.value == 1) {
-      stop();
-    } else {
-      start();
-    }
+    playStatus.value == 1 ? stop() : start()
   };
+
   // 上报听写配置
   const handleReport = (data) => {
     if (!showPlaceholder.value) {
@@ -826,6 +740,8 @@
         canSubmit = true;
       });
   };
+
+  // 烟花效果
   function fire(particleRatio, opts) {
     var count = 200;
     var defaults = {
@@ -837,10 +753,10 @@
       particleCount: Math.floor(count * particleRatio),
     });
   }
+
   // 弹出效果
   const handleEffectiveness = () => {
     canvasRef.value.style.display = 'block';
-
     fire(0.25, {
       spread: 60,
       startVelocity: 55,
@@ -867,6 +783,7 @@
       canvasRef.value.style.display = 'none';
     }, 4000);
   };
+
   // 处理计算结果
   const handleResult = () => {
     let accuracy = 0;
@@ -896,6 +813,7 @@
       mistakeRef.value.open(accuracy);
     }
   };
+
   // 回车 播放下一个的方法
   const inputEnter = () => {
     console.log(canSubmit, 'canSubmit1');
@@ -910,12 +828,6 @@
       return;
     }
     let { userInput = '', id } = wordsData.currentWord;
-    // if (config.ignore_case) {
-    //   // 忽略大小写
-    //   word = word.toLowerCase();
-    //   other_word = other_word?.toLowerCase();
-    //   userInput = userInput ? userInput.toLowerCase() : '';
-    // }
     if (checkWordsIsOk()) {
       inputRef.value.style.color = 'green';
       inputRef.value.style.borderColor = 'green';
@@ -941,20 +853,17 @@
     }, 200);
   };
 
+  // 输入正确自动提交
   watch(
     () => wordsData.currentWord?.userInput,
     (newValue, oldValue) => {
-      console.log(`${oldValue} to ${newValue}`, canSubmit);
       if (config.is_automatic_submit && checkWordsIsOk() && oldValue && newValue) {
         inputEnter();
       }
     },
   );
 
-  // 聚焦
-  const handleFocusClick = () => {
-    start();
-  };
+  // 处理手机调用密码的键盘
   const handleFocus = () => {
     if (isMobile.value) {
       setTimeout(() => {
@@ -962,16 +871,13 @@
       }, 200);
     }
   };
-  // 失去焦点
-  const handleBlur = () => {
-    stop();
-  };
 
   // 听写模式
   const handleMode = () => {
     config.isSeries = !config.isSeries;
-    ElMessage.success(`连读已 ${!config.isSeries ? '关闭' : '开启'}`);
   };
+
+  // 按键音效
   const handleKeyDown = (event) => {
     if (config.error_sound) {
       const key = event.key.toLowerCase();
@@ -981,8 +887,8 @@
     }
   };
 
+  // 音频播放完毕的方法
   function audioOver() {
-    console.log(Math.random(), count);
     if (count < +config.repetitions || config.repetitions == '无限') {
       count++;
       // 这里是播放
@@ -993,13 +899,8 @@
       }, config.play_interval * 1000);
     } else {
       count = 0;
-
       // 所有单词都已播放完毕，停止播放
       if (playStatus.value == 1 && config.isSeries) {
-        // timer = setTimeout(() => {
-        //   inputEnter();
-        // }, config.play_interval * 1000);
-
         countDown.value = config.play_interval;
         console.log(countDown.value, 'countDown.value1');
         countdownInterval = setInterval(() => {
@@ -1012,25 +913,13 @@
           }
         }, 1000);
       }
-      // else {
-      //   audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
-
-      //   timer = setTimeout(() => {
-      //     audio.play();
-      //   }, config.play_interval * 1000);
-      // }
     }
   }
 
   // 播放单词的方法
   const playWords = () => {
-    // if (!audio) {
-    //   audio = new Audio();
-    // }
-    // 播放第一个单词
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
     audio.playbackRate = +config.play_speed;
-    // console.log(Math.random());
     audio.play();
     count++;
 
@@ -1053,23 +942,18 @@
   };
 
   onMounted(() => {
-    console.log(appStore.dictationInfo);
-    console.log(route);
     audio = new Audio();
-    errSource.value = route.query?.source || '';
-
+    errSource.value = !!route.query?.source;
     document.addEventListener('keydown', handleAllKeyDown);
     if (!appStore?.dictationInfo?.currentChapter && !appStore?.errWords?.length) {
       router.push('/main');
       return;
     }
     getWords();
-
     myConfetti = confetti.create(canvasRef.value, {
       resize: true,
       useWorker: true,
     });
-    // handleEffectiveness();
   });
 
   // 章节切换
@@ -1087,9 +971,6 @@
       wordsData.words = [];
       wordsData.currentIndex = 0;
     });
-  };
-  const handleLogout = () => {
-    userStore.logout();
   };
 
   // 听写下一章
@@ -1112,38 +993,31 @@
     }
   };
 
+  // 还没做
   const downloadTemp = () => {
     downTemplateRef.value.open();
   };
+
+  // 页面卸载
   onUnmounted(() => {
     if (audio) {
       audio.pause(); // 先暂停播放
       audio.src = ''; // 清空src
       audio.remove(); // 移除音频对象
-
       // 或者将音频对象赋值为null
       audio = null;
     }
-    // if (!errSource.value) {
-    //   appStore.setLastId(wordsData?.currentWord.id || null);
-    // }
   });
 
   // 展示当前播放词库列表
   const showWordsList = () => {
-    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'home', errSource.value == 'err' ? 2 : 1);
+    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'home');
   };
+
 </script>
 
 <style scoped lang="less">
-  .my-card {
-    box-shadow: 0 100px 80px #814c2e12, 0 41.7776px 33.4221px #814c2e0d, 0 22.3363px 17.869px #814c2e12, 0 12.5216px 10.0172px #814c2e0d,
-      0 6.6501px 5.32008px #814c2e12, 0 2.76726px 2.21381px #814c2e0d;
-  }
-
-  .el-radio {
-    margin-right: 0;
-  }
+  @import './base.less';
 
   .user-input {
     .input-border {
@@ -1151,19 +1025,25 @@
       background-color: #000;
       // border-bottom: 2px solid ;
     }
+
     input {
       font-size: 3rem;
       // border-bottom: 2px solid ;
       padding: 10px 0;
       width: 100%;
     }
+
     input::placeholder {
-      color: #999; /* 灰色 */
+      color: #999;
+      /* 灰色 */
       font-size: 20px;
     }
+
     input:focus::placeholder {
-      color: transparent; /* 使placeholder在聚焦时消失 */
+      color: transparent;
+      /* 使placeholder在聚焦时消失 */
     }
+
     .error {
       border-bottom: 2px solid red;
     }
@@ -1172,6 +1052,7 @@
       border-bottom: 2px solid green;
     }
   }
+
   .count-down-box {
     position: absolute;
     right: 3rem;
@@ -1180,6 +1061,7 @@
     line-height: 32px;
     opacity: 0.4;
   }
+
   canvas {
     width: 80%;
     height: 100%;

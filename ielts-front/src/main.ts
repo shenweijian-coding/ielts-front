@@ -9,19 +9,16 @@ import './styles/custom-theme.less'; // 引入自定义主题样式
 // 支持SVG
 import 'virtual:svg-icons-register';
 import '@arco-design/web-vue/dist/arco.css';
-// DevUI
-// import 'vue-devui/style.css';
-// import '@devui-design/icons/icomoon/devui-icon.css';
 
 // elementUI
 import 'element-plus/dist/index.css';
 
-import { ThemeServiceInit, devuiDarkTheme } from 'devui-theme';
+// import { ThemeServiceInit, devuiDarkTheme } from 'devui-theme';
 import Idux from '@/config/idux';
 
-const themeService = ThemeServiceInit({ devuiDarkTheme }, 'infinityTheme');
+// const themeService = ThemeServiceInit({ devuiDarkTheme }, 'infinityTheme');
 
-themeService?.applyTheme(devuiDarkTheme);
+// themeService?.applyTheme(devuiDarkTheme);
 
 //vue3的挂载方式
 const app = createApp(App);

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="state.dialogVisible" :width="dialogWidth" :before-close="handleClose">
+  <el-dialog v-model="state.dialogVisible" :width="({1: '90%',2: '70%',3: '26%'})[deviceSize]" :before-close="handleClose">
     <div class="text-center p-6">
       <div class="text-theme-color text-6xl">{{ state.correctness }}%</div>
       <div class="mt-4 text-2xl text-black">本次正确听写率</div>
@@ -18,10 +18,11 @@
 <script setup>
   import { reactive } from 'vue';
   import { useAppStore } from '@/store';
+  import { useDrawerWith } from '@/views/home/useLogic.js'
 
+  const { deviceSize, countWidth } = useDrawerWith()
   const appStore = useAppStore();
 
-  const dialogWidth = ref('40%');
   const emit = defineEmits(['next']);
   const state = reactive({
     dialogVisible: false,
@@ -32,22 +33,10 @@
     state.dialogVisible = true;
     state.correctness = data;
   };
+
   const handleClose = () => {
     state.dialogVisible = false;
     state.correctness = 0;
-  };
-
-  const windowSize = () => {
-    const screenWidth = window.innerWidth; // 获取当前屏幕宽度
-
-    // 根据屏幕宽度计算Dialog的宽度
-    if (screenWidth < 768) {
-      dialogWidth.value = '90%'; // 在小屏幕下设置Dialog宽度为90%
-    } else if (screenWidth >= 768 && screenWidth < 1024) {
-      dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
-    } else {
-      dialogWidth.value = '26%'; // 在大屏幕下设置Dialog宽度为50%
-    }
   };
 
   const nextChapter = () => {
@@ -56,7 +45,6 @@
       handleClose();
     });
   };
-  windowSize();
   defineExpose({
     open,
   });

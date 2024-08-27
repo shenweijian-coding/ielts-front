@@ -7,19 +7,11 @@ export default [
     },
     component: () => import('@/views/index.vue'),
   },
-  // {
-  //   path: '/stop',
-  //   name: 'stop',
-  //   meta: {
-  //     title: '爱听写-维护',
-  //   },
-  //   component: () => import('@/views/stop/index.vue'),
-  // },
   {
     path: '/home',
     name: 'home',
     meta: {
-      title: '爱听写-听写页',
+      title: '爱听写-听写',
     },
     component: () => import('@/views/home/index.vue'),
   },
@@ -53,11 +45,11 @@ export default [
     meta: {
       title: '爱听写-书籍页',
     },
-    component: () => import('@/views/gallery/index.vue'),
+    component: () => import('@/layout/head-layout.vue'),
     children: [
       {
         path: 'book',
-        component: () => import('@/views/gallery/book/index.vue')
+        component: () => import('@/views/gallery/index.vue')
       },
       {
         path: 'statistics',
@@ -115,7 +107,7 @@ export default [
     path: '/company',
     name: 'company',
     meta: {
-      title: '爱听写-企业相关',
+      title: '爱听写-企业',
     },
     children: [{
       path: 'applicat',
@@ -131,7 +123,6 @@ export default [
       component: () => import('@/views/enterprise/layout.vue'),
       children: [{
         path: 'class',
-
         component: () => import('@/views/enterprise/index/class/index.vue')  
       },{
         path: 'classDetail',
