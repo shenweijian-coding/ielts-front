@@ -41,19 +41,53 @@
   import Footer from '@/components/footer/index.vue';
   import { Memo, Headset, DataLine, DocumentDelete, User } from '@element-plus/icons-vue';
   import { useAppStore, useUserStore } from '@/store';
-  import { useRoute } from 'vue-router';
+  import { useRoute, useRouter } from 'vue-router';
+  import { getBookInfoByChapter, getChapterList } from '@/api/book/index';
 
   const appStore = useAppStore();
   const userStore = useUserStore();
   const route = useRoute();
+  const router = useRouter()
   const currentRoute = ref('/main/book');
+
+  const handleUserContinuePlay = () => {
+    const isNav = sessionStorage.getItem('firstIn')
+    if(!userStore.getConfig.is_new_user && !isNav) {
+      sessionStorage.setItem('firstIn', 1)
+      getBookInfoByChapter({ c_id: userStore.getConfig.recent_chapter_id }).then(res => {
+        console.log(res);
+        getChapterList({ g_id: res.id }).then(chapterList => {
+          const currentChapter = chapterList.find(item => item.id == userStore.getConfig.recent_chapter_id)
+          if(currentChapter?.is_incomplete)  {
+            // 如果是老用户就跳转听写页面
+            appStore.setChapterInfo({
+              currentChapter: currentChapter,
+              chapterList: chapterList,
+              booInfo: {
+                name: res.name,
+                remarks: res.remarks,
+                id: res.s_id
+              },
+              isClass: false
+            });
+            appStore.updateContinuePlayStatus(true)
+            // sessionStorage.removeItem('firstIn')
+            router.push('/home')
+          }
+        })
+      })
+    }
+  }
+
   onMounted(() => {
     if (route.meta.belong) {
       currentRoute.value = route.meta.belong;
     } else {
       currentRoute.value = route.path;
     }
-    userStore.info();
+    userStore.info().then(res => {
+      handleUserContinuePlay()
+    });
   });
 </script>
 <style lang="less" scoped>

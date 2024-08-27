@@ -956,7 +956,7 @@
               };
               console.log('播放词义');
 
-              utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+|[^a-zA-Z0-9\s]/g, '');
+              utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+/g, '');
               window.speechSynthesis.speak(utterance);
             } else {
               if (count < +config.repetitions || config.repetitions == '无限') {
@@ -1071,7 +1071,7 @@
       };
       console.log('播放词义');
 
-      utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+|[^a-zA-Z0-9\s]/g, '');
+      utterance.text = wordsData.currentWord?.['translate'].split(/；|;/)[0]?.replace(/[a-zA-Z]+[.]+/g, '');
       window.speechSynthesis.speak(utterance);
     } else {
       console.log(Math.random(), count);
