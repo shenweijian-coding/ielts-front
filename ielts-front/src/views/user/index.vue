@@ -12,8 +12,6 @@
               <img src="@/assets/images/avatar.png" alt="" class="w-18 h-18 rounded-full" />
             </div>
             <div class="hidden ml-4 md:flex flex-col">
-              <!-- <div class="info-name">id：{{ userStore.$state.id }}</div>
-              <div class="mt-2">phone：{{ userStore.$state.phone_number }}</div> -->
             </div>
           </div>
         </div>
@@ -89,20 +87,19 @@
 </template>
 <script setup>
   import { useUserStore } from '@/store';
-  import tabbar from '@/components/tabBar/index.vue';
   import { useRouter } from 'vue-router';
   import { ElMessageBox } from 'element-plus';
-  import Teach from '@/components/teaching/index.vue';
   import { ArrowRight } from '@element-plus/icons-vue';
+  
+  import tabbar from '@/components/tabBar/index.vue';
+  import Teach from '@/components/teaching/index.vue';
   import { classLogout } from '@/api/company/index';
 
   const userStore = useUserStore();
   const router = useRouter();
 
-  // const state = reactive({
-  //   list: [],
-  // });
   const teachRef = ref(null);
+
   const handleLogout = () => {
     ElMessageBox.confirm('确定退出登录吗', ``, {
       confirmButtonText: '确定退出',
@@ -114,13 +111,7 @@
       userStore.logout();
     });
   };
-  // const handleToBook = () => {
-  //   if (!state.list.length) {
-  //     ElMessage.warning('无单词本');
-  //     return;
-  //   }
-  //   router.push('/main/vocabularyBook');
-  // };
+
   const openTeaching = () => {
     console.log(teachRef.value);
     teachRef.value && teachRef.value.open();

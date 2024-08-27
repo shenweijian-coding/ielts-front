@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="state.dialogVisible" title="将单词书收藏至" :width="dialogWidth" :before-close="handleClose" center>
+  <el-dialog v-model="state.dialogVisible" title="将单词书收藏至" :width="({1:'90%',2: '70%',3: '360px'})[deviceSize]" :before-close="handleClose" center>
     <div class="overflow-y-auto max-h-60">
       <div v-for="(item, index) in state.list" :key="item.id" class="book-item">
         <div class="flex items-center justify-evenly px-10 py-2">
@@ -10,11 +10,8 @@
           </div>
           <span class="cursor-pointer">
             <SvgIcon name="collect" color="grey" width="20" height="20" @click="handleCollect(item)" />
-            <!-- <SvgIcon name="collect-active" width="21" height="21" @click="handleCollect(item)" /> -->
-            <!-- <el-button size="small" @click="handleCollect(item)">收藏</el-button> -->
           </span>
         </div>
-        <!-- <div class="bottom-border"></div> -->
       </div>
     </div>
     <div class="px-10 pt-2 flex items-center" @click="handleAdd">
@@ -33,11 +30,16 @@
 </template>
 <script setup lang="jsx">
   import SvgIcon from '@/components/SvgIcon/index.vue';
-  import { wordLabel, getGroupBooks } from '@/api/book/index';
   import { Plus } from '@element-plus/icons-vue';
+  
+  import { wordLabel, getGroupBooks } from '@/api/book/index';
+  
   import { ElMessage, ElNotification } from 'element-plus';
   import { useUserStore } from '@/store';
   import { h } from 'vue';
+  import { useDrawerWith } from '@/views/home/useLogic.js'
+
+  const { deviceSize, countWidth } = useDrawerWith()
 
   const state = reactive({
     list: [],
@@ -49,22 +51,10 @@
   });
 
   const emits = defineEmits(['addBook', 'ok']);
-  const dialogWidth = ref('360px');
+
   const userStore = useUserStore();
   let flag = false; // 去修改打开的
-  const windowSize = () => {
-    const screenWidth = window.innerWidth; // 获取当前屏幕宽度
 
-    // 根据屏幕宽度计算Dialog的宽度
-    if (screenWidth < 768) {
-      dialogWidth.value = '90%'; // 在小屏幕下设置Dialog宽度为90%
-    } else if (screenWidth >= 768 && screenWidth < 1024) {
-      dialogWidth.value = '70%'; // 在中等屏幕下设置Dialog宽度为70%
-    } else {
-      dialogWidth.value = '360px'; // 在大屏幕下设置Dialog宽度为50%
-    }
-  };
-  windowSize();
   const handleClose = () => {
     flag = false;
     state.dialogVisible = false;
@@ -74,16 +64,16 @@
     state.dialogVisible = false;
     emits('addBook');
   };
+
   const collectAuto = (val) => {
     userStore.handleConfig('default_collection_book', Number(val));
-    // if (val) {
-    //   userStore.handleConfig('recent_collection_book_id', val);
-    // }
   };
+
   const getBooks = async (s_id) => {
     const res = await getGroupBooks({ s_id: s_id });
     state.list = res;
   };
+
   const open = async (ids, lastBookId) => {
     await getBooks(2);
     state.message && state.message.close();
@@ -102,6 +92,7 @@
     }
     state.dialogVisible = true;
   };
+
   const handleCollect = (item) => {
     // 通过去修改进来的
     if (flag) {
@@ -145,6 +136,7 @@
         handleClose();
       });
   };
+
   const handleCancelCollect = () => {
     wordLabel({
       type: 'update_collection',
@@ -152,6 +144,7 @@
       book_id: state.lastBookId,
     }).then((res) => {});
   };
+
   defineExpose({
     open,
   });

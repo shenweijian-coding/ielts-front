@@ -45,11 +45,11 @@ export default [
     meta: {
       title: '爱听写-书籍页',
     },
-    component: () => import('@/views/gallery/index.vue'),
+    component: () => import('@/layout/head-layout.vue'),
     children: [
       {
         path: 'book',
-        component: () => import('@/views/gallery/book/index.vue')
+        component: () => import('@/views/gallery/index.vue')
       },
       {
         path: 'statistics',

@@ -354,7 +354,7 @@
                       @keydown.enter="inputEnter"
                       @blur="stop"
                       @keydown="handleKeyDown"
-                      @click="handleFocusClick"
+                      @click="start"
                       @focus="handleFocus"
                     />
                     <div class="input-border w-4/5 lg:w-2/5"> </div>
@@ -662,6 +662,7 @@
     }
   };
 
+  // 找到下一个未标熟的位置
   const getNoProficientWordIndex = (type) => {
     let nextIndex = wordsData.currentIndex;
     nextIndex = nextIndex + type; // 如果当前单词标熟，继续查找下一个
@@ -676,6 +677,7 @@
     return nextIndex;
   };
 
+  // 前后移动
   const handleMove = (type, isPlay = true) => {
     playStatus.value = 1;
     const sign = wordsData.currentIndex + type;
@@ -712,20 +714,12 @@
     inputRef.value && inputRef.value.blur();
     countDown.value = 0;
     clearInterval(countdownInterval);
-    if (audio) {
-      audio?.src && (audio.src = '');
-      audio.pause();
-    }
     clearAudioCache();
   };
 
   // 切换暂停和播放
   const toggleStopAndStart = () => {
-    if (playStatus.value == 1) {
-      stop();
-    } else {
-      start();
-    }
+    playStatus.value == 1 ? stop() : start()
   };
 
   // 上报听写配置
@@ -747,6 +741,7 @@
       });
   };
 
+  // 烟花效果
   function fire(particleRatio, opts) {
     var count = 200;
     var defaults = {
@@ -858,6 +853,7 @@
     }, 200);
   };
 
+  // 输入正确自动提交
   watch(
     () => wordsData.currentWord?.userInput,
     (newValue, oldValue) => {
@@ -867,11 +863,7 @@
     },
   );
 
-  // 聚焦
-  const handleFocusClick = () => {
-    start();
-  };
-
+  // 处理手机调用密码的键盘
   const handleFocus = () => {
     if (isMobile.value) {
       setTimeout(() => {
@@ -885,6 +877,7 @@
     config.isSeries = !config.isSeries;
   };
 
+  // 按键音效
   const handleKeyDown = (event) => {
     if (config.error_sound) {
       const key = event.key.toLowerCase();
@@ -894,6 +887,7 @@
     }
   };
 
+  // 音频播放完毕的方法
   function audioOver() {
     if (count < +config.repetitions || config.repetitions == '无限') {
       count++;
@@ -905,7 +899,6 @@
       }, config.play_interval * 1000);
     } else {
       count = 0;
-
       // 所有单词都已播放完毕，停止播放
       if (playStatus.value == 1 && config.isSeries) {
         countDown.value = config.play_interval;
@@ -927,7 +920,6 @@
   const playWords = () => {
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
     audio.playbackRate = +config.play_speed;
-    // console.log(Math.random());
     audio.play();
     count++;
 
@@ -958,7 +950,6 @@
       return;
     }
     getWords();
-
     myConfetti = confetti.create(canvasRef.value, {
       resize: true,
       useWorker: true,
@@ -1002,15 +993,17 @@
     }
   };
 
+  // 还没做
   const downloadTemp = () => {
     downTemplateRef.value.open();
   };
+
+  // 页面卸载
   onUnmounted(() => {
     if (audio) {
       audio.pause(); // 先暂停播放
       audio.src = ''; // 清空src
       audio.remove(); // 移除音频对象
-
       // 或者将音频对象赋值为null
       audio = null;
     }
@@ -1020,6 +1013,7 @@
   const showWordsList = () => {
     wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'home');
   };
+
 </script>
 
 <style scoped lang="less">

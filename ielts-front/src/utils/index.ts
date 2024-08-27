@@ -36,3 +36,12 @@ export function deepClone(obj, hash = new WeakMap()) {
   }
   return cloneObj;
 }
+
+export function replaceWithBr(str = '') {
+  return str.replace(/([^\s&])\s([A-Za-z]+)\./g, function (match, p1, p2) {
+    if (p1 !== '&') {
+      return p1 + '<br>' + p2 + '.';
+    }
+    return match;
+  });
+}

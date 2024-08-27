@@ -153,7 +153,7 @@
     <div class="container relative mx-auto flex h-full flex-col items-center">
       <div class="container flex flex-grow items-center justify-center">
         <div class="container flex h-full w-full flex-col items-center justify-center">
-          <div class="container flex w-full shrink-0 grow-0 justify-between px-12 pt-0"> </div>
+          <div class="container flex w-full h-24 shrink-0 grow-0 justify-between px-12 pt-0"> </div>
           <div class="container flex flex-grow flex-col items-center justify-center">
             <div class="relative flex w-full justify-center">
               <div class="relative w-full" v-if="wordsData.words.length">
@@ -226,10 +226,8 @@
   <Loading :loading="loading" />
   <WordsDrawer ref="wordslistRef" @skip="wordsSkip" />
   <audio ref="audioPlayer" controls style="display: none"></audio>
-  <audio ref="audioPlayer2" controls style="display: none"></audio>
-  <canvas ref="canvasRef"></canvas>
   <collectDialog ref="collectRef" @addBook="addBook" @ok="collectFinish" />
-  <ImportDialog ref="ImportDialogRef" @ok="addBookComplete" />
+  <ImportDialog ref="addBookRef" @ok="handleWordCollect" />
 </template>
 
 <script setup>
@@ -252,11 +250,7 @@
   import { shuffleArray, deepClone } from '@/utils/index';
   import confetti from 'canvas-confetti';
   import { modulesFiles, modules } from '@/assets/mp3/moduleMp3.js';
-
-  const letterMp3 = reactive({});
-  Object.keys(modules).forEach((key) => {
-    letterMp3[key] = new Audio(modules[key]);
-  });
+  import { useCollect } from '@/views/home/useLogic.js'
 
   const appStore = useAppStore();
   const userStore = useUserStore();
@@ -264,10 +258,17 @@
   const router = useRouter();
 
   const { loading, setLoading } = useLoading();
+  const { handleWordCancelCollect, collectRef, handleWordCollect, addBookRef, addBook } = useCollect()
 
   // 有道的翻译api
   // const YDAPI = 'https://dict.youdao.com/dictvoice?audio=';
   const errSource = ref(false); // 默认空，错词表来的  err
+
+  // 预加载一下字母的音频
+  const letterMp3 = reactive({});
+  Object.keys(modules).forEach((key) => {
+    letterMp3[key] = new Audio(modules[key]);
+  });
 
   const config = reactive({
     chapterId: appStore.chapterId,
@@ -293,26 +294,21 @@
 
   const wordsData = reactive({
     words: [],
-    wordsCopy: [],
     currentWord: { translate: '', word: '', phonetic_transcription: '', userInput: '' },
     currentIndex: 0,
-    lastIndex: 0, // 上一个单词的ID
   });
 
   const playStatus = ref(0); // 0-未开始 1-播放中 2-已暂停
   const wordslistRef = ref(null);
   const countDown = ref(0); // 倒计时
   const audioPlayer = ref(null);
-  const audioPlayer2 = ref(null);
-  const canvasRef = ref(null);
   let audio = audioPlayer.value;
   let audio2 = new Audio();
   let audio3 = new Audio();
-  const ImportDialogRef = ref(null);
 
-  var count = 0;
-  const collectRef = ref(null);
-
+  let count = 0;
+  let timer = null;
+  let countdownInterval = null;
   let utterance = new SpeechSynthesisUtterance();
   utterance.pitch = 1;
   utterance.rate = 1;
@@ -327,7 +323,7 @@
         wordsData.words = copyWords;
       }
       wordsData.currentWord = copyWords[wordsData.currentIndex];
-      initWordsList();
+      start()
     } else {
       setLoading(true);
       getWordList({
@@ -339,11 +335,11 @@
           if (res.data.length) {
             wordsData.words = res.data;
             wordsData.currentWord = wordsData.words[wordsData.currentIndex > -1 ? wordsData.currentIndex : 0];
-            initWordsList();
           } else {
             ElMessage.error('当前章节未配置词库');
           }
           setLoading(false);
+          start()
         })
         .catch((err) => {
           setLoading(false);
@@ -352,13 +348,6 @@
     }
   };
 
-  const initWordsList = () => {
-    wordsData.wordsCopy = deepClone(wordsData.words);
-    start();
-  };
-
-  var timer = null;
-  let countdownInterval = null;
   // 重新播放
   const playAgain = () => {
     audio.src = config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y'];
@@ -376,7 +365,6 @@
     if (audio) {
       audio?.src && (audio.src = '');
       audio.pause();
-      // audio = null;
     }
     if (audio2) {
       audio2?.src && (audio2.src = '');
@@ -439,11 +427,7 @@
 
   // 切换暂停和播放
   const toggleStopAndStart = () => {
-    if (playStatus.value == 1) {
-      stop();
-    } else {
-      start();
-    }
+    playStatus.value == 1 ? stop() : start()
   };
 
   const handleResult = () => {
@@ -475,9 +459,8 @@
       audio2.play();
     });
   }
-  function playAudio2(audioObj) {
+  function playLetter(audioObj) {
     return new Promise((resolve, reject) => {
-      // audioObj.playbackRate = 1;
       audioObj.onended = resolve; // 当音频播放结束时，resolve Promise
       audioObj.onerror = reject; // 如果播放出错，reject Promise
       audioObj.play();
@@ -485,9 +468,7 @@
   }
 
   function audioOver() {
-    // 单词播放完毕
-    // 播放单个单词
-    if (config.playSpell) {
+    if (config.playSpell) { // 播放单词拼写
       const playNextLetter = (word, index) => {
         if (index >= word.length) {
           playAudio(config.phonetic_type == 2 ? wordsData.currentWord['phonetic-m'] : wordsData.currentWord['phonetic-y']).then(() => {
@@ -563,7 +544,7 @@
         if (!/^[A-Za-z]+$/.test(letterLower || letterUpper)) {
           playNextLetter(word, index + 1);
         } else {
-          playAudio2(letterMp3[letterLower] || letterMp3[letterUpper])
+          playLetter(letterMp3[letterLower] || letterMp3[letterUpper])
             .then(() => {
               // 播放当前字母后，递归播放下一个字母
               playNextLetter(word, index + 1);
@@ -573,13 +554,10 @@
             });
         }
       };
-
       const playLettersSequentially = (word) => {
         if (word.length === 0) return;
-
         playNextLetter(word, 0);
       };
-
       playLettersSequentially(wordsData.currentWord.word);
     } else if (!config.playSpell && config.playMean) {
       // 监听 'onend' 事件，该事件在语音播放完毕后触发
@@ -676,8 +654,6 @@
   };
 
   onMounted(() => {
-    console.log(appStore.dictationInfo);
-    console.log(route);
     audio = new Audio();
     errSource.value = !!route.query?.source;
 
@@ -703,64 +679,32 @@
 
   onUnmounted(() => {
     if (audio) {
-      audio.pause(); // 先暂停播放
-      audio.src = ''; // 清空src
-      audio.remove(); // 移除音频对象
-
-      // 或者将音频对象赋值为null
+      audio.pause();
+      audio.src = '';
+      audio.remove();
       audio = null;
     }
-    if (audio) {
-      audio?.src && (audio.src = '');
-      audio.pause();
-    }
-    if (audio2) {
-      audio2?.src && (audio2.src = '');
-      audio2.pause();
-    }
-    if (utterance) {
-      window.speechSynthesis.cancel();
-    }
     clearAudioCache();
-    if (!errSource.value) {
-      appStore.setLastId(wordsData?.currentWord.id || null);
-    }
   });
 
   // 展示当前播放词库列表
   const showWordsList = () => {
-    wordslistRef.value.open(wordsData.wordsCopy, wordsData.words, wordsData.currentWord, 'walkman');
+    wordslistRef.value.open(wordsData.words, wordsData.words, wordsData.currentWord, 'walkman');
   };
 
+  // 收藏的逻辑
   const handleCollect = () => {
     const id = wordsData.currentWord.id;
-
     if (!wordsData.currentWord.is_collection) {
-      collectRef.value.open([id]);
+      handleWordCollect([id])
     } else {
-      wordLabel({
-        type: 'update_collection',
-        lexicon_ids: JSON.stringify([id]),
-      })
-        .then((res) => {
-          wordsData.currentWord.is_collection = false;
-          ElMessage.success('取消收藏成功');
-        })
-        .catch((err) => {});
+      handleWordCancelCollect({ids: [id], callback: () => wordsData.currentWord.is_collection = false})
     }
   };
-  const addBook = () => {
-    setTimeout(() => {
-      ImportDialogRef.value.open();
-    }, 200);
-  };
-  const addBookComplete = () => {
-    handleWordCollect();
-  };
+
   const collectFinish = (ids, is_collection = true) => {
     ids.forEach((id) => {
       wordsData.words.find((o) => o.id == id).is_collection = is_collection;
-      wordsData.wordsCopy.find((o) => o.id == id).is_collection = is_collection;
     });
   };
 </script>

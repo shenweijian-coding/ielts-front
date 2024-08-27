@@ -158,7 +158,7 @@
   import { useRoute } from 'vue-router';
   import Loading from '@/components/loading/index.vue';
   import useLoading from '@/hooks/loading.ts';
-  import ChapterDialog from '@/views/gallery/book/chapter-dialog.vue';
+  import ChapterDialog from '@/views/gallery/chapter-dialog.vue';
   import { useInvite } from '../../useCommon.js';
   import * as XLSX from 'xlsx';
 

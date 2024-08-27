@@ -51,21 +51,21 @@
 
 <script setup>
   import { ElMessage } from 'element-plus';
-  import { sendyzm, signup } from '@/api/user/index';
   import { useRouter } from 'vue-router';
+  import { sendyzm, signup } from '@/api/user/index';
 
   const router = useRouter();
   const errorMessage = ref('');
   const countdown = ref(60);
+  const countingDown = ref(false);
+  const ruleFormRef = ref();
 
   const userFormData = reactive({
     phone_number: '',
     code: '',
     password: '',
   });
-  const countingDown = ref(false);
 
-  const ruleFormRef = ref();
   const rules = reactive({
     phone_number: [
       {

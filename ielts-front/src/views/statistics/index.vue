@@ -44,13 +44,11 @@
 </template>
 <script setup>
   import { Chart, registerables } from 'chart.js';
-  // import { useAppStore } from '@/store';
   import { getAnalysisData } from '@/api/book/index';
   import tabbar from '@/components/tabBar/index.vue';
   import useLoading from '@/hooks/loading.ts';
   import Loading from '@/components/loading/index.vue';
 
-  // const appStore = useAppStore();
   const { loading, setLoading } = useLoading();
 
   Chart.register(...registerables);
@@ -61,14 +59,14 @@
     detail: {},
     data: {},
     chartData: {
-      labels: [], // 横轴标签
+      labels: [],
       datasets: [
         {
-          label: '练习次数正确率', // 数据集的名称，将显示在图例中
-          data: [], // 数据集的具体数据
-          backgroundColor: 'rgba(0, 123, 255, 0.5)', // 数据集的填充颜色
-          borderColor: 'rgba(0, 123, 255, 1)', // 数据集的边框颜色
-          borderWidth: 1, // 数据集的边框宽度
+          label: '练习次数正确率',
+          data: [],
+          backgroundColor: 'rgba(0, 123, 255, 0.5)',
+          borderColor: 'rgba(0, 123, 255, 1)',
+          borderWidth: 1,
         },
       ],
     },
